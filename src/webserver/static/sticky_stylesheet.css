@@ -1,0 +1,81 @@
+html, body, span, div, h1, h2, h3, h4, h5, h6, p, pre, a, code, img, b, u, i, ul, ol, li, table, tbody, thead, tfoot, tr, th, td {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+#main-content {
+    background-color: #333333;
+}
+
+body {
+    font-family: sans-serif;
+    color: #ccddcc;
+    background-color: #222222;
+    margin: 0px auto 0px auto;
+}
+
+a {
+    color: #70a0ff;
+}
+
+#topbar {
+    font-size: 140%;
+    position: sticky;
+    background-color: #111111;
+    padding: 10px;
+    margin: auto;
+    top: 0;
+    height: 20px;
+}
+
+#playlist {
+    position: absolute;
+    background-color: #111111;
+    right: 0;
+}
+
+#bottombar {
+    display: flex;
+    position: sticky;
+    padding: 10px;
+    background-color: #111111;
+    margin: auto;
+    bottom: 10px;
+    height: 20px;
+}
+
+.screen-splitter {
+    not-display: flex;
+}
+
+.screen-splitter * {
+    not-display: inline;
+}
+
+#centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tree {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.tree-alphabet {
+    margin-left: 20px;
+}
+
+.tree-artist {
+    margin-left: 40px;
+}
+
+.tree-album {
+    margin-left: 60px;
+}
+
+.tree-track {
+    margin-left: 80px;
+}
