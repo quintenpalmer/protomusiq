@@ -274,13 +274,13 @@ pub fn compute_playlist_thumbnail<'a>(
         };
 
         Container::new(row)
-        .align_x(iced::Align::Center)
-        .align_y(iced::Align::Center)
-        .width(Length::Units(80))
-        .height(Length::Units(80))
     } else {
         Container::new(bright_paragraph("<?>"))
     }
+    .align_x(iced::Align::Center)
+    .align_y(iced::Align::Center)
+    .width(Length::Units(80))
+    .height(Length::Units(80))
 }
 
 fn empty_album_space(album_size: model::AlbumSize) -> iced::Space {
