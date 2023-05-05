@@ -1,0 +1,320 @@
+use iced::{self, button, Button, Column, Container, Element, Length, Row, Scrollable, Space};
+
+use crate::model;
+
+use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::state::{self, PlayQueueInfoState};
+
+use super::super::consts;
+
+use super::super::super::common;
+use super::super::super::elements::*;
+
+pub fn artist_list<'a>(
+    library: &'a model::LibraryState,
+    play_queue_info: &PlayQueueInfoState,
+    state: &'a mut state::ArtistListState,
+) -> (
+    Vec<(&'a mut button::State, String, Message)>,
+    Container<'a, Message>,
+) {
+    match state {
+        state::ArtistListState {
+            page,
+            sort_key,
+            sort_order,
+            artist_list_breadcrumb,
+            sort_order_regular_button,
+            sort_order_reverse_button,
+            sort_by_name_button,
+            sort_by_play_count_button,
+            sort_by_album_count_button,
+            sort_by_track_count_button,
+            sort_by_track_duration_button,
+            sort_by_duration_played_button,
+            sort_random_button,
+            nav_first_button,
+            nav_back_button,
+            nav_forward_button,
+            nav_last_button,
+            artist_buttons,
+            artist_scroll,
+        } => (
+            vec![(
+                artist_list_breadcrumb,
+                "Artists".to_string(),
+                user_nav_message(NavMessage::ArtistList(
+                    0,
+                    sort_key.clone(),
+                    sort_order.clone(),
+                )),
+            )],
+            {
+                let page: usize = page.clone();
+
+                let indices = common::get_page(
+                    library.artist_sorts.from_sort_key(&sort_key, &sort_order),
+                    page,
+                    consts::PAGE_SIZE,
+                );
+
+                let mut paged_artists: Vec<musiqlibrary::ArtistInfo> = Vec::new();
+                for index in indices.iter() {
+                    paged_artists.push(library.get_artist_info(index.clone()));
+                }
+
+                let mut buttons: Vec<Button<Message>> = Vec::new();
+
+                for (artist_button, artist) in
+                    artist_buttons.iter_mut().zip(paged_artists.into_iter())
+                {
+                    buttons.push(
+                        dark_button(
+                            artist_button,
+                            bottom_label(
+                                album_image(
+                                    library.get_artists_first_album_cover(
+                                        model::AlbumSize::Small,
+                                        artist.artist_id.clone(),
+                                    ),
+                                    model::AlbumSize::Small,
+                                )
+                                .into(),
+                                bright_paragraph(common::abr_str(
+                                    artist.artist_name.clone(),
+                                    consts::ICON_STR_LENGTH,
+                                )),
+                            ),
+                        )
+                        .on_press(user_nav_message(
+                            NavMessage::ArtistView(artist.artist_id.clone()),
+                        )),
+                    );
+                }
+
+                let mut columns: Column<Message> = Column::new();
+                if play_queue_info.play_queue_visible {
+                    for _i in 0..(consts::GRID_LAYOUT_HEIGHT * 2) {
+                        let mut rows = Row::new();
+                        for _j in 0..(consts::GRID_LAYOUT_WIDTH / 2) {
+                            if buttons.len() > 0 {
+                                let button = buttons.remove(0);
+                                rows = rows.push(button);
+                            }
+                        }
+                        columns = columns.push(rows);
+                    }
+                } else {
+                    for _i in 0..consts::GRID_LAYOUT_HEIGHT {
+                        let mut rows = Row::new();
+                        for _j in 0..consts::GRID_LAYOUT_WIDTH {
+                            if buttons.len() > 0 {
+                                let button = buttons.remove(0);
+                                rows = rows.push(button);
+                            }
+                        }
+                        columns = columns.push(rows);
+                    }
+                }
+                let grid: Element<Message> = columns.into();
+
+                let scrollable = Scrollable::new(artist_scroll).push(grid);
+                let first_page = 0;
+                let back_page = {
+                    if page == 0 {
+                        0
+                    } else {
+                        page - 1
+                    }
+                };
+                let forward_page = {
+                    if ((page + 1) * consts::PAGE_SIZE) >= library.get_artist_map().keys().len() {
+                        page
+                    } else {
+                        page + 1
+                    }
+                };
+                let last_page = {
+                    let maybe_last_page = library.get_artist_map().keys().len() / consts::PAGE_SIZE;
+                    if maybe_last_page * consts::PAGE_SIZE >= library.get_artist_map().keys().len()
+                    {
+                        maybe_last_page - 1
+                    } else {
+                        maybe_last_page
+                    }
+                };
+                Container::new(
+                    Column::new()
+                        .spacing(10)
+                        .push(h1("Artists"))
+                        .push(
+                            line_row().push(
+                                line_row()
+                                    .push(paragraph("Sort By: "))
+                                    .push(
+                                        dark_button(sort_by_name_button, bright_paragraph("Name"))
+                                            .on_press(user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByName,
+                                                model::SortOrder::Regular,
+                                            ))),
+                                    )
+                                    .push(
+                                        dark_button(sort_random_button, bright_paragraph("Random"))
+                                            .on_press(user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::Random,
+                                                model::SortOrder::Regular,
+                                            ))),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            sort_by_play_count_button,
+                                            bright_paragraph("Play Count"),
+                                        )
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByPlayCount,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            sort_by_album_count_button,
+                                            bright_paragraph("Album Count"),
+                                        )
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByAlbumCount,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            sort_by_track_count_button,
+                                            bright_paragraph("Track Count"),
+                                        )
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByTrackCount,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            sort_by_track_duration_button,
+                                            bright_paragraph("Track Duration"),
+                                        )
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByTrackDuration,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            sort_by_duration_played_button,
+                                            bright_paragraph("Duration Played"),
+                                        )
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistList(
+                                                0,
+                                                model::ArtistSortKey::ByPlayedDuration,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    ),
+                            ),
+                        )
+                        .push(
+                            line_row()
+                                .push(
+                                    line_row()
+                                        .push(
+                                            dark_button(nav_first_button, bright_paragraph("<<"))
+                                                .on_press(user_nav_message(
+                                                    NavMessage::ArtistList(
+                                                        first_page,
+                                                        sort_key.clone(),
+                                                        sort_order.clone(),
+                                                    ),
+                                                )),
+                                        )
+                                        .push(
+                                            dark_button(nav_back_button, bright_paragraph("<"))
+                                                .on_press(user_nav_message(
+                                                    NavMessage::ArtistList(
+                                                        back_page,
+                                                        sort_key.clone(),
+                                                        sort_order.clone(),
+                                                    ),
+                                                )),
+                                        )
+                                        .push(bright_paragraph(page.to_string()))
+                                        .push(
+                                            dark_button(nav_forward_button, bright_paragraph(">"))
+                                                .on_press(user_nav_message(
+                                                    NavMessage::ArtistList(
+                                                        forward_page,
+                                                        sort_key.clone(),
+                                                        sort_order.clone(),
+                                                    ),
+                                                )),
+                                        )
+                                        .push(
+                                            dark_button(nav_last_button, bright_paragraph(">>"))
+                                                .on_press(user_nav_message(
+                                                    NavMessage::ArtistList(
+                                                        last_page,
+                                                        sort_key.clone(),
+                                                        sort_order.clone(),
+                                                    ),
+                                                )),
+                                        ),
+                                )
+                                .push(Space::with_width(Length::Fill))
+                                .push(
+                                    line_row()
+                                        .push(paragraph("Order: "))
+                                        .push(
+                                            dark_button(
+                                                sort_order_reverse_button,
+                                                bright_paragraph("^"),
+                                            )
+                                            .on_press(
+                                                user_nav_message(NavMessage::ArtistList(
+                                                    0,
+                                                    sort_key.clone(),
+                                                    model::SortOrder::Reversed,
+                                                )),
+                                            ),
+                                        )
+                                        .push(
+                                            dark_button(
+                                                sort_order_regular_button,
+                                                bright_paragraph("v"),
+                                            )
+                                            .on_press(
+                                                user_nav_message(NavMessage::ArtistList(
+                                                    0,
+                                                    sort_key.clone(),
+                                                    model::SortOrder::Regular,
+                                                )),
+                                            ),
+                                        ),
+                                ),
+                        )
+                        .push(scrollable),
+                )
+            },
+        ),
+    }
+}
