@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use iced::{self, button, Column, Container, Length, Row, Scrollable, Space, TextInput};
+use iced::{self, button, Column, Container, Length, Row, Scrollable, TextInput};
 
 use crate::model;
 
@@ -50,25 +50,27 @@ pub fn playlist_list_view<'a>(
                 {
                     let mut row = line_row();
                     row = row.push(
-                        Row::new()
-                            .push(
-                                compute_playlist_thumbnail(&library, &user_playlist.tracks)
-                            )
-                            .push(Column::new()
-                                .push(dark_button(
-                                    link_to_playlist_button,
-                                    h2(user_playlist.name.clone()),
-                                )
-                                .on_press(user_nav_message(
-                                    message::NavMessage::PlaylistView(user_playlist.id),
-                                )))
+                        dark_button(
+                            link_to_playlist_button,
+                            Row::new()
                                 .push(
-                                    bright_paragraph(format!("{} tracks", user_playlist.tracks.len()))
+                                    compute_playlist_thumbnail(&library, &user_playlist.tracks)
                                 )
-                            )
-                            .align_items(iced::Align::Center),
+                                .push(Column::new()
+                                    .push(
+                                        h2(user_playlist.name.clone()),
+                                    )
+                                    .push(
+                                        bright_paragraph(format!("{} tracks", user_playlist.tracks.len()))
+                                    )
+                                )
+                                .align_items(iced::Align::Center),
+                        )
+                        .on_press(user_nav_message(
+                            message::NavMessage::PlaylistView(user_playlist.id),
+                        ))
+                        .width(Length::Fill)
                     );
-                    row = row.push(Space::with_width(Length::Fill));
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
                         row = row.push(bright_paragraph("-"));
                         row = row.push(bright_paragraph("* (selected)").width(Length::Units(150)));
