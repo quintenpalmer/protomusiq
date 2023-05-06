@@ -75,7 +75,7 @@ pub fn playlist_list_view<'a>(
                             ),
                         );
                         row = row.push(
-                            dark_button(make_default_button, bright_paragraph("make default"))
+                            dark_button(make_default_button, bright_paragraph("Make\nDefault"))
                                 .on_press(message::Message::Action(
                                     message::Action::MakePlaylistDefault(user_playlist.id),
                                 ))
