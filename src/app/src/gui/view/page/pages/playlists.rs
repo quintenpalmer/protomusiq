@@ -72,8 +72,8 @@ pub fn playlist_list_view<'a>(
                         .width(Length::Fill)
                     );
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
-                        row = row.push(bright_paragraph("-").width(Length::Units(15)));
-                        row = row.push(bright_paragraph("* (selected)").width(Length::Units(70)));
+                        row = row.push(bright_paragraph("*").width(Length::Units(15)));
+                        row = row.push(bright_paragraph("(selected)").width(Length::Units(70)));
                     } else {
                         row = row.push(
                             dark_button(delete_playlist_button, bright_paragraph("-")).on_press(
