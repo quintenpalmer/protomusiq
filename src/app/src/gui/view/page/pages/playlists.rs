@@ -34,6 +34,28 @@ pub fn playlist_list_view<'a>(
             {
                 let mut page = Column::new().push(h1("Playlists"));
 
+                page = page.push(
+                    Row::new()
+                        .push(
+                            TextInput::new(
+                                new_playlist_text_input,
+                                "Create New Playlist...",
+                                new_playlist_name,
+                                |s| Message::Action(message::Action::UpdateText(s)),
+                            )
+                            .on_submit(message::Message::Action(
+                                message::Action::CreateNewPlaylist(new_playlist_name.clone()),
+                            )),
+                        )
+                        .push(
+                            dark_button(new_playlist_button, bright_paragraph("+")).on_press(
+                                message::Message::Action(message::Action::CreateNewPlaylist(
+                                    new_playlist_name.clone(),
+                                )),
+                            ),
+                        ),
+                );
+
                 let mut playlists = Column::new();
                 let mut stripe_marker = false;
                 for (
@@ -102,27 +124,7 @@ pub fn playlist_list_view<'a>(
                     playlists = playlists.push(striped_container);
                 }
                 page = page.push(Scrollable::new(playlist_scroll).push(playlists));
-                page = page.push(
-                    Row::new()
-                        .push(
-                            TextInput::new(
-                                new_playlist_text_input,
-                                "Create New Playlist...",
-                                new_playlist_name,
-                                |s| Message::Action(message::Action::UpdateText(s)),
-                            )
-                            .on_submit(message::Message::Action(
-                                message::Action::CreateNewPlaylist(new_playlist_name.clone()),
-                            )),
-                        )
-                        .push(
-                            dark_button(new_playlist_button, bright_paragraph("+")).on_press(
-                                message::Message::Action(message::Action::CreateNewPlaylist(
-                                    new_playlist_name.clone(),
-                                )),
-                            ),
-                        ),
-                );
+
                 Container::new(page)
             },
         ),
