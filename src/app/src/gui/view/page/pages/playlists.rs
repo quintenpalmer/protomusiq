@@ -62,7 +62,7 @@ pub fn playlist_list_view<'a>(
                         )),
                     );
                     row = row.push(Space::with_width(Length::Fill));
-                    row = row.push(bright_paragraph(format!("{}", user_playlist.tracks.len())));
+                    row = row.push(bright_paragraph(format!("{} tracks", user_playlist.tracks.len())));
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
                         row = row.push(bright_paragraph("-"));
                         row = row.push(bright_paragraph("* (selected)").width(Length::Units(150)));
