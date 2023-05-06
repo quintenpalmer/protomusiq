@@ -56,7 +56,7 @@ pub fn playlist_list_view<'a>(
                         Column::new()
                             .push(dark_button(
                                 link_to_playlist_button,
-                                bright_paragraph(user_playlist.name.clone()),
+                                h2(user_playlist.name.clone()),
                             )
                             .on_press(user_nav_message(
                                 message::NavMessage::PlaylistView(user_playlist.id),
