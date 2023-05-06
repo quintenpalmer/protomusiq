@@ -121,3 +121,14 @@ impl container::StyleSheet for ContainerPopMidForward {
         }
     }
 }
+
+pub struct ContainerDarkInset;
+
+impl container::StyleSheet for ContainerDarkInset {
+    fn style(&self) -> container::Style {
+        container::Style {
+            background: Some(Background::Color(Color::from_rgb8(0x13, 0x13, 0x13))),
+            ..container::Style::default()
+        }
+    }
+}

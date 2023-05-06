@@ -289,6 +289,7 @@ pub fn compute_playlist_thumbnail<'a>(
     .align_y(iced::Align::Center)
     .width(Length::Units(80))
     .height(Length::Units(80))
+    .style(style::ContainerDarkInset)
 }
 
 fn empty_album_space(album_size: model::AlbumSize) -> iced::Space {
