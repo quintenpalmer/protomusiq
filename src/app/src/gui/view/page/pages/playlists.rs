@@ -73,7 +73,7 @@ pub fn playlist_list_view<'a>(
                     );
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
                         row = row.push(bright_paragraph("-").width(Length::Units(15)));
-                        row = row.push(bright_paragraph("* (selected)").width(Length::Units(150)));
+                        row = row.push(bright_paragraph("* (selected)").width(Length::Units(70)));
                     } else {
                         row = row.push(
                             dark_button(delete_playlist_button, bright_paragraph("-")).on_press(
@@ -87,7 +87,7 @@ pub fn playlist_list_view<'a>(
                                 .on_press(message::Message::Action(
                                     message::Action::MakePlaylistDefault(user_playlist.id),
                                 ))
-                                .width(Length::Units(150)),
+                                .width(Length::Units(70)),
                         );
                     }
 
