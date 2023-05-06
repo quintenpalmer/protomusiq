@@ -50,20 +50,23 @@ pub fn playlist_list_view<'a>(
                 {
                     let mut row = line_row();
                     row = row.push(
-                        compute_playlist_thumbnail(&library, &user_playlist.tracks)
-                    );
-                    row = row.push(
-                        Column::new()
-                            .push(dark_button(
-                                link_to_playlist_button,
-                                h2(user_playlist.name.clone()),
-                            )
-                            .on_press(user_nav_message(
-                                message::NavMessage::PlaylistView(user_playlist.id),
-                            )))
+                        Row::new()
                             .push(
-                                bright_paragraph(format!("{} tracks", user_playlist.tracks.len()))
-                            ),
+                                compute_playlist_thumbnail(&library, &user_playlist.tracks)
+                            )
+                            .push(Column::new()
+                                .push(dark_button(
+                                    link_to_playlist_button,
+                                    h2(user_playlist.name.clone()),
+                                )
+                                .on_press(user_nav_message(
+                                    message::NavMessage::PlaylistView(user_playlist.id),
+                                )))
+                                .push(
+                                    bright_paragraph(format!("{} tracks", user_playlist.tracks.len()))
+                                )
+                            )
+                            .align_items(iced::Align::Center),
                     );
                     row = row.push(Space::with_width(Length::Fill));
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
