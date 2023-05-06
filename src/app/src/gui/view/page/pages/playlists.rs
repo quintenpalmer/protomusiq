@@ -32,7 +32,9 @@ pub fn playlist_list_view<'a>(
                 user_nav_message(NavMessage::PlaylistList("".to_string())),
             )],
             {
-                let mut playlists = Column::new().push(h1("Playlists"));
+                let mut page = Column::new().push(h1("Playlists"));
+
+                let mut playlists = Column::new();
                 let mut stripe_marker = false;
                 for (
                     user_playlist,
@@ -99,7 +101,8 @@ pub fn playlist_list_view<'a>(
 
                     playlists = playlists.push(striped_container);
                 }
-                playlists = playlists.push(
+                page = page.push(Scrollable::new(playlist_scroll).push(playlists));
+                page = page.push(
                     Row::new()
                         .push(
                             TextInput::new(
@@ -120,7 +123,7 @@ pub fn playlist_list_view<'a>(
                             ),
                         ),
                 );
-                Container::new(Scrollable::new(playlist_scroll).push(playlists))
+                Container::new(page)
             },
         ),
     }
