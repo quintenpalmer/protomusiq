@@ -72,7 +72,7 @@ pub fn playlist_list_view<'a>(
                         .width(Length::Fill)
                     );
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
-                        row = row.push(bright_paragraph("-"));
+                        row = row.push(bright_paragraph("-").width(Length::Units(15)));
                         row = row.push(bright_paragraph("* (selected)").width(Length::Units(150)));
                     } else {
                         row = row.push(
@@ -80,7 +80,7 @@ pub fn playlist_list_view<'a>(
                                 message::Message::Action(message::Action::DeletePlaylist(
                                     user_playlist.id,
                                 )),
-                            ),
+                            ).width(Length::Units(15)),
                         );
                         row = row.push(
                             dark_button(make_default_button, bright_paragraph("Make\nDefault"))
