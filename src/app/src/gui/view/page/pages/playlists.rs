@@ -53,16 +53,19 @@ pub fn playlist_list_view<'a>(
                         compute_playlist_thumbnail(&library, &user_playlist.tracks)
                     );
                     row = row.push(
-                        dark_button(
-                            link_to_playlist_button,
-                            bright_paragraph(user_playlist.name.clone()),
-                        )
-                        .on_press(user_nav_message(
-                            message::NavMessage::PlaylistView(user_playlist.id),
-                        )),
+                        Column::new()
+                            .push(dark_button(
+                                link_to_playlist_button,
+                                bright_paragraph(user_playlist.name.clone()),
+                            )
+                            .on_press(user_nav_message(
+                                message::NavMessage::PlaylistView(user_playlist.id),
+                            )))
+                            .push(
+                                bright_paragraph(format!("{} tracks", user_playlist.tracks.len()))
+                            ),
                     );
                     row = row.push(Space::with_width(Length::Fill));
-                    row = row.push(bright_paragraph(format!("{} tracks", user_playlist.tracks.len())));
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
                         row = row.push(bright_paragraph("-"));
                         row = row.push(bright_paragraph("* (selected)").width(Length::Units(150)));
