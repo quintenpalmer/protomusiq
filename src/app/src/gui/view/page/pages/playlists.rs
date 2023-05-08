@@ -93,6 +93,7 @@ pub fn playlist_list_view<'a>(
                         .on_press(user_nav_message(
                             message::NavMessage::PlaylistView(user_playlist.id),
                         ))
+                        .padding(8)
                         .width(Length::Fill)
                     );
                     if library.user_playlists.is_default_playlist(user_playlist.id) {
