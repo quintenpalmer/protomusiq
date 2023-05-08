@@ -6,7 +6,7 @@ use serde_json;
 
 use musiqlibrary;
 
-use crate::datastore::jsonbacked::{self, tracker};
+use crate::datastore::jsonbacked::{self, tracker, playlists as userplaylists};
 use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;
 
@@ -171,7 +171,12 @@ fn prompt_for_tracks(
         "album" => prompt_for_album(&raw_library),
         "track" => prompt_for_track(&raw_library).map(|x| vec![x]),
         "disc" => prompt_for_disc(&raw_library),
-        _ => prompt_for_tracks(&raw_library),
+        "playlist" => {
+            let playlist_data = userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
+
+            prompt_for_playlist(&raw_library, &playlist_data)
+        },
+        _ => prompt_for_tracks(&config_state, &raw_library),
     }?;
 
     let mut more = prompt_for_tracks(&config_state, &raw_library)?;
@@ -433,4 +438,87 @@ fn select_track(
             select_track(tracks)
         }
     }
+}
+
+fn prompt_for_playlist(
+    raw_library: &musiqlibrary::RawLibrary,
+    playlist_data: &userplaylists::PlaylistData,
+) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
+    println!("type search query for a playlist");
+
+    let mut input = String::new();
+
+    io::stdin().read_line(&mut input).unwrap();
+    input = input.trim_end().to_string();
+
+    if input == "abort" {
+        return Err(());
+    }
+
+    let mut playlists = Vec::new();
+    for p in playlist_data.to_vec().into_iter() {
+        if p.name.to_lowercase().contains(&input.to_lowercase()) {
+            playlists.push(p);
+        }
+    }
+
+    if playlists.len() > 9 {
+        println!("try a more narrow search query");
+        return prompt_for_playlist(&raw_library, &playlist_data);
+    }
+    if playlists.len() <= 0 {
+        println!("couldn't find anything with that search query; try again");
+        return prompt_for_playlist(&raw_library, &playlist_data);
+    }
+
+    select_playlist(&raw_library, playlists)
+}
+
+fn select_playlist(
+    raw_library: &musiqlibrary::RawLibrary,
+    playlists: Vec<jsonbacked::playlists::PlaylistEntry>,
+) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
+    for (i, playlist) in playlists.iter().enumerate() {
+        println!(
+            "{}:	{}",
+            i, playlist.name
+        );
+    }
+
+    println!("select a playlist from above (0-9)");
+
+    let mut input = String::new();
+
+    io::stdin().read_line(&mut input).unwrap();
+    input = input.trim_end().to_string();
+
+    if input == "abort" {
+        return Err(());
+    }
+
+    match input.parse::<usize>() {
+        Ok(i) => {
+            if i < playlists.len() {
+                Ok(playlist_full_track_metadata(&raw_library, &playlists[i]))
+            } else {
+                println!("number must be within range of playlists found");
+                select_playlist(&raw_library, playlists)
+            }
+        }
+        Err(_) => {
+            println!("must input a number");
+            select_playlist(&raw_library, playlists)
+        }
+    }
+}
+
+fn playlist_full_track_metadata(
+    raw_library: &musiqlibrary::RawLibrary,
+    playlist: &jsonbacked::playlists::PlaylistEntry,
+) -> Vec<musiqlibrary::FullTrackMetadata> {
+    playlist
+        .tracks
+        .iter()
+        .map(|key| raw_library.get_track(&key).clone())
+        .collect()
 }
