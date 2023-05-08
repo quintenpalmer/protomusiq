@@ -11,6 +11,7 @@ use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;
 
 use crate::config;
+use crate::model;
 
 #[derive(Debug)]
 pub enum TrackerError {
@@ -59,7 +60,7 @@ fn report_tracks_with_io() -> io::Result<()> {
             }
         };
 
-        let tracks = match prompt_for_tracks(&raw_library) {
+        let tracks = match prompt_for_tracks(&config_state, &raw_library) {
             Ok(t) => t,
             Err(_e) => {
                 running = false;
@@ -148,6 +149,7 @@ fn prompt_for_date() -> Result<DateTime<Local>, ()> {
 }
 
 fn prompt_for_tracks(
+    config_state: &model::AppConfigState,
     raw_library: &musiqlibrary::RawLibrary,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     println!("are you adding an `album`, `track`, or `playlist` (enter one)");
@@ -172,7 +174,7 @@ fn prompt_for_tracks(
         _ => prompt_for_tracks(&raw_library),
     }?;
 
-    let mut more = prompt_for_tracks(&raw_library)?;
+    let mut more = prompt_for_tracks(&config_state, &raw_library)?;
 
     current_collection.append(&mut more);
 
