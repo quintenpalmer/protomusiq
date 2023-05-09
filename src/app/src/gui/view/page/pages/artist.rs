@@ -55,7 +55,7 @@ pub fn artist_list<'a>(
                 let indices = common::get_page(
                     library.artist_sorts.from_sort_key(&sort_key, &sort_order),
                     page,
-                    consts::PAGE_SIZE,
+                    library.grid_info.get_page_size_usize(),
                 );
 
                 let mut paged_artists: Vec<musiqlibrary::ArtistInfo> = Vec::new();
@@ -94,9 +94,9 @@ pub fn artist_list<'a>(
 
                 let mut columns: Column<Message> = Column::new();
                 if play_queue_info.play_queue_visible {
-                    for _i in 0..(consts::GRID_LAYOUT_HEIGHT * 2) {
+                    for _i in 0..(library.grid_info.get_layout_height() * 2) {
                         let mut rows = Row::new();
-                        for _j in 0..(consts::GRID_LAYOUT_WIDTH / 2) {
+                        for _j in 0..(library.grid_info.get_layout_width() / 2) {
                             if buttons.len() > 0 {
                                 let button = buttons.remove(0);
                                 rows = rows.push(button);
@@ -105,9 +105,9 @@ pub fn artist_list<'a>(
                         columns = columns.push(rows);
                     }
                 } else {
-                    for _i in 0..consts::GRID_LAYOUT_HEIGHT {
+                    for _i in 0..library.grid_info.get_layout_height() {
                         let mut rows = Row::new();
-                        for _j in 0..consts::GRID_LAYOUT_WIDTH {
+                        for _j in 0..library.grid_info.get_layout_width() {
                             if buttons.len() > 0 {
                                 let button = buttons.remove(0);
                                 rows = rows.push(button);
@@ -128,15 +128,15 @@ pub fn artist_list<'a>(
                     }
                 };
                 let forward_page = {
-                    if ((page + 1) * consts::PAGE_SIZE) >= library.get_artist_map().keys().len() {
+                    if ((page + 1) * library.grid_info.get_page_size_usize()) >= library.get_artist_map().keys().len() {
                         page
                     } else {
                         page + 1
                     }
                 };
                 let last_page = {
-                    let maybe_last_page = library.get_artist_map().keys().len() / consts::PAGE_SIZE;
-                    if maybe_last_page * consts::PAGE_SIZE >= library.get_artist_map().keys().len()
+                    let maybe_last_page = library.get_artist_map().keys().len() / library.grid_info.get_page_size_usize();
+                    if maybe_last_page * library.grid_info.get_page_size_usize() >= library.get_artist_map().keys().len()
                     {
                         maybe_last_page - 1
                     } else {

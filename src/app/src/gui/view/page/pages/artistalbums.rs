@@ -111,9 +111,9 @@ pub fn artist_album_list<'a>(
                     let mut row_length = 0;
                     loop {
                         let desired_length = if play_queue_info.play_queue_visible {
-                            consts::GRID_LAYOUT_WIDTH / 2
+                            library.grid_info.get_layout_width() / 2
                         } else {
-                            consts::GRID_LAYOUT_WIDTH
+                            library.grid_info.get_layout_width()
                         };
                         if row_length == desired_length {
                             album_grid_columns = album_grid_columns.push(album_grid_rows);

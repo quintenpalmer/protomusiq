@@ -5,8 +5,6 @@ use crate::model;
 use crate::gui::message::{user_nav_message, Message, NavMessage};
 use crate::state;
 
-use super::super::consts;
-
 use super::super::super::common;
 use super::super::super::elements::*;
 
@@ -52,7 +50,7 @@ pub fn track_list<'a>(
                 let indices = common::get_page(
                     library.track_sorts.from_sort_key(&sort_key, &sort_order),
                     page,
-                    consts::PAGE_SIZE,
+                    library.grid_info.get_page_size_usize(),
                 );
 
                 let mut paged_tracks: Vec<model::AugmentedTrack> = Vec::new();
@@ -104,7 +102,7 @@ pub fn track_list<'a>(
                 }
 
                 let mut columns: Column<Message> = Column::new();
-                for _i in 0..consts::PAGE_SIZE {
+                for _i in 0..library.grid_info.get_page_size_usize() {
                     if buttons.len() > 0 {
                         let button = buttons.remove(0);
                         columns = columns.push(button);
@@ -133,15 +131,15 @@ pub fn track_list<'a>(
                     }
                 };
                 let forward_page = {
-                    if ((page + 1) * consts::PAGE_SIZE) >= total_tracks {
+                    if ((page + 1) * library.grid_info.get_page_size_usize()) >= total_tracks {
                         page
                     } else {
                         page + 1
                     }
                 };
                 let last_page = {
-                    let maybe_last_page = total_tracks / consts::PAGE_SIZE;
-                    if maybe_last_page * consts::PAGE_SIZE >= total_tracks {
+                    let maybe_last_page = total_tracks / library.grid_info.get_page_size_usize();
+                    if maybe_last_page * library.grid_info.get_page_size_usize() >= total_tracks {
                         maybe_last_page - 1
                     } else {
                         maybe_last_page
