@@ -29,6 +29,7 @@ pub fn artist_album_view_state<'a>(
             artist_id,
             album_id,
             album_size,
+            maybe_selected_track,
             toggle_image_size_button,
             entire_track_list_buttons,
             all_disc_buttons,
@@ -79,6 +80,7 @@ pub fn artist_album_view_state<'a>(
                         artist_id.clone(),
                         album_id.clone(),
                         model::AlbumSize::Regular,
+                        None,
                     )),
                 ),
             ];
@@ -106,6 +108,7 @@ pub fn artist_album_view_state<'a>(
                                     artist_id.clone(),
                                     album_id.clone(),
                                     toggle_to,
+                                    maybe_selected_track.clone(),
                                 )))
                             })
                             .push(

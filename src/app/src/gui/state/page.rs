@@ -243,6 +243,7 @@ pub struct ArtistAlbumViewState {
     pub album_size: model::AlbumSize,
     pub artist_id: musiqlibrary::ID,
     pub album_id: musiqlibrary::ID,
+    pub maybe_selected_track: Option<musiqlibrary::TrackUniqueIdentifier>,
 }
 
 #[derive(Debug)]

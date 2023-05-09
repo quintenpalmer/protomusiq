@@ -133,6 +133,7 @@ pub fn search_page<'a>(
                                                                 result.first.artist.artist_id.clone(),
                                                                 result.first.album.album_id.clone(),
                                                                 model::AlbumSize::Regular,
+                                                                None,
                                                             ),
                                                         )),
                                                     )
@@ -189,6 +190,12 @@ pub fn search_page<'a>(
                                                                     .clone(),
                                                                 result.first.metadata.album_id.clone(),
                                                                 model::AlbumSize::Regular,
+                                                                Some(
+                                                                    musiqlibrary::TrackUniqueIdentifier::from_track(&result
+                                                                        .first
+                                                                        .metadata
+                                                                     )
+                                                                )
                                                             ),
                                                         )),
                                                     )
@@ -251,6 +258,12 @@ pub fn search_page<'a>(
                                                                     .clone(),
                                                                 result.first.metadata.album_id.clone(),
                                                                 model::AlbumSize::Regular,
+                                                                Some(
+                                                                    musiqlibrary::TrackUniqueIdentifier::from_track(&result
+                                                                        .first
+                                                                        .metadata
+                                                                     )
+                                                                )
                                                             ),
                                                         )),
                                                     )

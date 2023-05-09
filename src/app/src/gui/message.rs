@@ -90,7 +90,7 @@ pub enum NavMessage {
         model::ArtistTrackSortKey,
         model::SortOrder,
     ),
-    ArtistAlbumView(musiqlibrary::ID, musiqlibrary::ID, model::AlbumSize),
+    ArtistAlbumView(musiqlibrary::ID, musiqlibrary::ID, model::AlbumSize, Option<musiqlibrary::TrackUniqueIdentifier>),
 }
 
 #[derive(Debug, Clone)]

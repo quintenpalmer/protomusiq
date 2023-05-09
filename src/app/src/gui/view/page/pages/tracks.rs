@@ -96,6 +96,12 @@ pub fn track_list<'a>(
                                 info.metadata.album_artist_id.clone(),
                                 info.metadata.album_id.clone(),
                                 model::AlbumSize::Regular,
+                                Some(
+                                    musiqlibrary::TrackUniqueIdentifier::from_track(
+                                        &info
+                                        .metadata
+                                     )
+                                )
                             ),
                         )),
                     );

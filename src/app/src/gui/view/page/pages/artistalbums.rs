@@ -90,6 +90,7 @@ pub fn artist_album_list<'a>(
                                     artist.artist_info.artist_id.clone(),
                                     album.album_info.album_id.clone(),
                                     model::AlbumSize::Regular,
+                                    None,
                                 ),
                             )),
                         ))

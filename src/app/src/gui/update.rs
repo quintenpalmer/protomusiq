@@ -871,7 +871,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_order: sort_order,
             });
         }
-        NavMessage::ArtistAlbumView(artist_id, album_id, album_size) => {
+        NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.rest.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                 artist_list_breadcrumb: button::State::default(),
                 artist_view_breadcrumb: button::State::default(),
@@ -879,6 +879,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 artist_id: artist_id.clone(),
                 album_id: album_id.clone(),
                 album_size: album_size,
+                maybe_selected_track: maybe_selected_track,
                 toggle_image_size_button: button::State::default(),
                 entire_track_list_buttons: state::TrackLineItemButtons {
                     play_button: button::State::default(),

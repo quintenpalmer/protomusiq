@@ -99,6 +99,7 @@ pub fn album_list<'a>(
                                 info.artist.artist_id.clone(),
                                 info.album.album_id.clone(),
                                 model::AlbumSize::Regular,
+                                None,
                             ),
                         )),
                     );
