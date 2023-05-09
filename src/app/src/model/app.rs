@@ -10,6 +10,8 @@ pub struct AppConfigState {
     pub app_data_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+    pub grid_layout_width: u32,
+    pub grid_layout_height: u32,
 }
 
 impl AppConfigState {
@@ -26,6 +28,8 @@ pub struct RawAppConfigState {
     pub library_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+    pub grid_layout_width: u32,
+    pub grid_layout_height: u32,
 }
 
 impl RawAppConfigState {
@@ -35,6 +39,8 @@ impl RawAppConfigState {
             app_data_path: app_data_path.as_ref().to_path_buf(),
             hostname: self.hostname,
             load_mode: self.load_mode,
+            grid_layout_width: self.grid_layout_width,
+            grid_layout_height: self.grid_layout_height,
         }
     }
 }

@@ -104,6 +104,11 @@ pub fn initialize_everything() -> state::App {
         }
     };
 
+    let grid_info = model::GridInfo::new(
+        config_state.grid_layout_width,
+        config_state.grid_layout_height,
+    );
+
     let augmented_library =
         model::augmented_from_raw(loaded_library, read_only_tracker, historical_reporter);
     logger.print_elapsed("augmenting raw library");
@@ -205,6 +210,8 @@ pub fn initialize_everything() -> state::App {
                 artist_sorts: artist_sorts,
                 album_sorts: album_sorts,
                 track_sorts: track_sorts,
+
+                grid_info: grid_info,
 
                 album_art: loaded_images,
             },

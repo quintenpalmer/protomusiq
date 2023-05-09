@@ -130,7 +130,35 @@ pub struct LibraryState {
     pub album_sorts: AlbumSorts,
     pub track_sorts: TrackSorts,
 
+    pub grid_info: GridInfo,
+
     pub album_art: AlbumArt,
+}
+
+pub struct GridInfo {
+    layout_width: u32,
+    layout_height: u32,
+}
+
+impl GridInfo {
+    pub fn new(width: u32, height: u32) -> Self {
+        GridInfo {
+            layout_width: width,
+            layout_height: height,
+        }
+    }
+
+    pub fn get_layout_width(&self) -> u32 {
+        self.layout_width
+    }
+
+    pub fn get_layout_height(&self) -> u32 {
+        self.layout_height
+    }
+
+    pub fn get_page_size_usize(&self) -> usize {
+        (self.layout_width * self.layout_height) as usize
+    }
 }
 
 impl LibraryState {
