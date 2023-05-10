@@ -192,7 +192,47 @@ pub fn playlist_view<'a>(
                         .push(
                             line_row()
                                 .spacing(5)
+                                .push(
+                                    bright_paragraph(track.augmented.play_count.to_string())
+                                        .width(Length::Units(40)),
+                                )
+                                .push(
+                                    ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Units(50)),
+                                )
+                                .push(
+                                    dark_button(insert_button, bright_paragraph(">|"))
+                                        .on_press(Message::PlaybackRequest(
+                                            message::PlaybackRequest::InsertSongs(
+                                                vec![track.clone()],
+                                                false,
+                                            ),
+                                        )),
+                                )
+                                .push(
+                                    dark_button(append_button, bright_paragraph("|>"))
+                                        .on_press(Message::PlaybackRequest(
+                                            message::PlaybackRequest::AppendSongs(
+                                                vec![track.clone()],
+                                                false,
+                                            ),
+                                        )),
+                                ),
+                        )
+                        .push({
+                            let text_to_show =
+                                common::format_duration(track.metadata.duration.as_secs());
 
+                            match player_info.get_maybe_current_playback_track() {
+                                Some(c) if (*track == c.clone()) => {
+                                    bright_paragraph(text_to_show)
+                                }
+                                _ => dark_paragraph(text_to_show),
+                            }
+                            .width(Length::Units(60))
+                            .horizontal_alignment(iced::HorizontalAlignment::Right)
+                        })
+                        .push(
+                            line_row()
                                 .push(
                                     dark_button(
                                         move_up_in_playlist_button,
@@ -244,45 +284,7 @@ pub fn playlist_view<'a>(
                                         ),
                                     ),
                                 )
-                                .push(
-                                    bright_paragraph(track.augmented.play_count.to_string())
-                                        .width(Length::Units(40)),
-                                )
-                                .push(
-                                    ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Units(50)),
-                                )
-                                .push(
-                                    dark_button(insert_button, bright_paragraph(">|"))
-                                        .on_press(Message::PlaybackRequest(
-                                            message::PlaybackRequest::InsertSongs(
-                                                vec![track.clone()],
-                                                false,
-                                            ),
-                                        )),
-                                )
-                                .push(
-                                    dark_button(append_button, bright_paragraph("|>"))
-                                        .on_press(Message::PlaybackRequest(
-                                            message::PlaybackRequest::AppendSongs(
-                                                vec![track.clone()],
-                                                false,
-                                            ),
-                                        )),
-                                ),
                         )
-                        .push({
-                            let text_to_show =
-                                common::format_duration(track.metadata.duration.as_secs());
-
-                            match player_info.get_maybe_current_playback_track() {
-                                Some(c) if (*track == c.clone()) => {
-                                    bright_paragraph(text_to_show)
-                                }
-                                _ => dark_paragraph(text_to_show),
-                            }
-                            .width(Length::Units(60))
-                            .horizontal_alignment(iced::HorizontalAlignment::Right)
-                        })
                         .push(Space::with_width(Length::Units(5))),
                 )
                 .style(style::get_potential_current_stripe_style(
