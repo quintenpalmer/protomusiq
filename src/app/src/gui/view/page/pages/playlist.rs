@@ -35,6 +35,7 @@ pub fn playlist_view<'a>(
                 .unwrap_or(0);
 
             let mut column = Column::new()
+                .spacing(10)
                 .push(h1("Playlist"))
                 .push(h2(playlist.name.clone()))
                 .push(
