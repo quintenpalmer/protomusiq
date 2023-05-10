@@ -78,7 +78,7 @@ pub fn playlist_list_view<'a>(
                             link_to_playlist_button,
                             Row::new()
                                 .push(
-                                    components::compute_playlist_thumbnail(&library, &user_playlist.tracks)
+                                    components::compute_playlist_thumbnail(&library, &user_playlist.tracks, components::PlaylistIconSize::Small)
                                 )
                                 .push(Column::new()
                                     .push(

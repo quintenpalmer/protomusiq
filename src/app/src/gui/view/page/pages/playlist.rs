@@ -42,7 +42,7 @@ pub fn playlist_view<'a>(
                 .push(
                     line_row()
                       .push(
-                          components::compute_playlist_thumbnail(&library, &playlist.tracks)
+                          components::compute_playlist_thumbnail(&library, &playlist.tracks, components::PlaylistIconSize::Large)
                       )
                       .push(h2(playlist.name.clone()))
                 )

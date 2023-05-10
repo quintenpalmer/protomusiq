@@ -9,10 +9,22 @@ use crate::gui::message::{Message};
 use super::elements::*;
 use super::style;
 
+pub enum PlaylistIconSize {
+    Small,
+    Large,
+}
+
 pub fn compute_playlist_thumbnail<'a>(
     library: &'a model::LibraryState,
     tracks: &Vec<musiqlibrary::TrackUniqueIdentifier>,
+    icon_size: PlaylistIconSize,
 ) -> iced::Container<'a, Message> {
+    let (small_album_size, large_album_size) = match icon_size {
+        PlaylistIconSize::Small => (model::AlbumSize::Micro, model::AlbumSize::Mini),
+        PlaylistIconSize::Large => (model::AlbumSize::Mini, model::AlbumSize::Small),
+    };
+
+
     if tracks.len() > 0 {
         let mut album_counts = BTreeMap::new();
         for track in tracks.iter() {
@@ -59,11 +71,11 @@ pub fn compute_playlist_thumbnail<'a>(
                     .spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
-                        model::AlbumSize::Mini,
+                        large_album_size.clone(),
                         first_key.artist_id.clone(),
                         first_key.album_id.clone(),
                     ),
-                    model::AlbumSize::Mini,
+                    large_album_size.clone(),
                 ));
                 Column::new().spacing(3).push(row)
             },
@@ -74,25 +86,25 @@ pub fn compute_playlist_thumbnail<'a>(
                     .spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
-                        model::AlbumSize::Micro,
+                        small_album_size.clone(),
                         first_key.artist_id.clone(),
                         first_key.album_id.clone(),
                     ),
-                    model::AlbumSize::Micro,
+                    small_album_size.clone(),
                 ));
-                row = row.push(empty_album_space(model::AlbumSize::Micro));
+                row = row.push(empty_album_space(small_album_size.clone()));
                 column = column.push(row);
 
                 let mut second_row = Row::new()
                     .spacing(3);
-                second_row = second_row.push(empty_album_space(model::AlbumSize::Micro));
+                second_row = second_row.push(empty_album_space(small_album_size.clone()));
                 second_row = second_row.push(album_image(
                     library.get_album_cover(
-                        model::AlbumSize::Micro,
+                        small_album_size.clone(),
                         second_key.artist_id.clone(),
                         second_key.album_id.clone(),
                     ),
-                    model::AlbumSize::Micro,
+                    small_album_size.clone(),
                 ));
                 column = column.push(second_row);
 
@@ -105,21 +117,21 @@ pub fn compute_playlist_thumbnail<'a>(
                     .spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
-                        model::AlbumSize::Micro,
+                        small_album_size.clone(),
                         first_key.artist_id.clone(),
                         first_key.album_id.clone(),
                     ),
-                    model::AlbumSize::Micro,
+                    small_album_size.clone(),
                 ));
                 match second_key {
                     Some(second_key) => {
                         row = row.push(album_image(
                             library.get_album_cover(
-                                model::AlbumSize::Micro,
+                                small_album_size.clone(),
                                 second_key.artist_id.clone(),
                                 second_key.album_id.clone(),
                             ),
-                            model::AlbumSize::Micro,
+                            small_album_size.clone(),
                         ));
 
                         column = column.push(row);
@@ -130,22 +142,22 @@ pub fn compute_playlist_thumbnail<'a>(
                                 .spacing(3);
                                 second_row = second_row.push(album_image(
                                     library.get_album_cover(
-                                        model::AlbumSize::Micro,
+                                        small_album_size.clone(),
                                         third_key.artist_id.clone(),
                                         third_key.album_id.clone(),
                                     ),
-                                    model::AlbumSize::Micro,
+                                    small_album_size.clone(),
                                 ));
 
                                 match fourth_key {
                                     Some(fourth_key) => {
                                         second_row = second_row.push(album_image(
                                             library.get_album_cover(
-                                                model::AlbumSize::Micro,
+                                                small_album_size.clone(),
                                                 fourth_key.artist_id.clone(),
                                                 fourth_key.album_id.clone(),
                                             ),
-                                            model::AlbumSize::Micro,
+                                            small_album_size.clone(),
                                         ));
 
                                         column = column.push(second_row);
