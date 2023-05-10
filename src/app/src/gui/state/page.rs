@@ -109,6 +109,7 @@ pub struct PlaylistViewState {
 #[derive(Debug)]
 pub struct PlaylistTrackLineItemButtons {
     pub play_button: button::State,
+    pub link_button: button::State,
     pub remove_from_playlist_button: button::State,
     pub move_up_in_playlist_button: button::State,
     pub move_down_in_playlist_button: button::State,

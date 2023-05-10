@@ -131,6 +131,7 @@ pub fn playlist_view<'a>(
                 track_id,
                 state::PlaylistTrackLineItemButtons {
                     play_button,
+                    link_button,
                     remove_from_playlist_button,
                     move_down_in_playlist_button,
                     move_up_in_playlist_button,
@@ -158,7 +159,30 @@ pub fn playlist_view<'a>(
                             )),
                         ))
                         .push(
-                            bright_paragraph(track.metadata.title.clone()).width(Length::Fill),
+                            Container::new(
+                                dark_button(
+                                    link_button,
+                                    bright_paragraph(track.metadata.title.clone()),
+                                )
+                                .on_press(
+                                    user_nav_message(
+                                        NavMessage::ArtistAlbumView(
+                                            track
+                                                .metadata
+                                                .album_artist_id
+                                                .clone(),
+                                            track.metadata.album_id.clone(),
+                                            model::AlbumSize::Regular,
+                                            Some(
+                                                musiqlibrary::TrackUniqueIdentifier::from_track(&track
+                                                    .metadata
+                                                 )
+                                            )
+                                        ),
+                                    )
+                                )
+                            )
+                            .width(Length::Fill)
                         )
                         .push(
                             line_row()

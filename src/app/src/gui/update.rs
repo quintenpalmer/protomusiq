@@ -554,6 +554,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                     .iter()
                     .map(|_| state::PlaylistTrackLineItemButtons {
                         play_button: button::State::default(),
+                        link_button: button::State::default(),
                         remove_from_playlist_button: button::State::default(),
                         move_down_in_playlist_button: button::State::default(),
                         move_up_in_playlist_button: button::State::default(),
