@@ -105,6 +105,8 @@ pub fn playlist_view<'a>(
                 None => None,
             };
 
+            let mut tracks_column = Column::new();
+
             for (
                 track_id,
                 state::PlaylistTrackLineItemButtons {
@@ -240,8 +242,10 @@ pub fn playlist_view<'a>(
                     &current_track,
                     &None,
                 ));
-                column = column.push(row);
+                tracks_column = tracks_column.push(row);
             }
+
+            column = column.push(tracks_column);
             (
                 vec![
                     (
