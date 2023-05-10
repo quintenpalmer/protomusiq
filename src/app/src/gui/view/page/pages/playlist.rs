@@ -245,7 +245,7 @@ pub fn playlist_view<'a>(
                 tracks_column = tracks_column.push(row);
             }
 
-            column = column.push(tracks_column);
+            column = column.push(Scrollable::new(track_scroll).push(tracks_column));
             (
                 vec![
                     (
@@ -259,7 +259,7 @@ pub fn playlist_view<'a>(
                         user_nav_message(NavMessage::PlaylistView(playlist_id.clone())),
                     ),
                 ],
-                Container::new(Scrollable::new(track_scroll).push(column))
+                Container::new(column)
             )
         },
     }
