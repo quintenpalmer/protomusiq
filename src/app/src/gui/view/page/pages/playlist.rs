@@ -46,6 +46,7 @@ pub fn playlist_view<'a>(
                 .spacing(10)
                 .push(h2("Playlist"))
                 .push(
+                    Container::new(
                     line_row()
                       .push(
                           components::compute_playlist_thumbnail(&library, &playlist.tracks, components::PlaylistIconSize::Large)
@@ -114,6 +115,12 @@ pub fn playlist_view<'a>(
                                         ),
                                     )
                           )
+                      )
+                      )
+                      .padding(10)
+                      .width(Length::Fill)
+                      .style(
+                          style::ContainerPopForward,
                       )
                 );
             let mut stripe_marker = true;
