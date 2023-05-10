@@ -382,7 +382,12 @@ pub fn artist_album_view_state<'a>(
                                                     Some(ref c) if (track == c) => {
                                                         bright_paragraph(text_to_show)
                                                     },
-                                                    _ => dark_paragraph(text_to_show)
+                                                    _ => match maybe_selected_track {
+                                                        Some(ref selected) if (musiqlibrary::TrackUniqueIdentifier::from_track(&track.metadata) == *selected) => {
+                                                            bright_paragraph(text_to_show)
+                                                        },
+                                                        _ => dark_paragraph(text_to_show),
+                                                    },
                                                 }.width(Length::Units(60))
                                                 .horizontal_alignment(iced::HorizontalAlignment::Right)
                                             })
