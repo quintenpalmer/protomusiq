@@ -35,7 +35,7 @@ pub fn artist_track_view_state<'a>(
             sort_order_regular_button,
             sort_order_reverse_button,
 
-            track_buttons: _track_buttons, //BTreeMap<musiqlibrary::ID, button::State>,
+            track_buttons,
             track_scroll,
 
             artist_id,
@@ -177,7 +177,7 @@ pub fn artist_track_view_state<'a>(
                     ),
                 );
 
-            for track in tracks.into_iter() {
+            for (track_button, track) in track_buttons.iter_mut().zip(tracks.into_iter()) {
                 stripe_marker = !stripe_marker;
 
                 let track_maybe_with_track_artist =
@@ -188,43 +188,59 @@ pub fn artist_track_view_state<'a>(
                     };
 
                 let row = Container::new(
-                    line_row()
-                        .spacing(5)
-                        .push(album_image(
-                            library.get_album_cover(
+                    dark_button(
+                        track_button,
+                        line_row()
+                            .spacing(5)
+                            .push(album_image(
+                                library.get_album_cover(
+                                    model::AlbumSize::Micro,
+                                    track.metadata.album_artist_id.clone(),
+                                    track.metadata.album_id.clone(),
+                                ),
                                 model::AlbumSize::Micro,
-                                track.metadata.album_artist_id.clone(),
-                                track.metadata.album_id.clone(),
-                            ),
-                            model::AlbumSize::Micro,
-                        ))
-                        .push(
-                            bright_paragraph(track.metadata.track.to_string())
-                                .width(Length::Units(40)),
-                        )
-                        .push(bright_paragraph(track_maybe_with_track_artist).width(Length::Fill))
-                        .push(
-                            bright_paragraph(track.augmented.play_count.to_string())
-                                .width(Length::Units(40)),
-                        )
-                        .push(
-                            ProgressBar::new(
-                                0.0..=(greatest_play_count as f32),
-                                track.augmented.play_count as f32,
+                            ))
+                            .push(
+                                bright_paragraph(track.metadata.track.to_string())
+                                    .width(Length::Units(40)),
                             )
-                            .width(Length::Units(50)),
-                        )
-                        .push({
-                            let text_to_show =
-                                common::format_duration(track.metadata.duration.as_secs());
-                            match current_track {
-                                Some(ref c) if (track == c) => bright_paragraph(text_to_show),
-                                _ => dark_paragraph(text_to_show),
-                            }
-                            .width(Length::Units(60))
-                            .horizontal_alignment(iced::HorizontalAlignment::Right)
-                        })
-                        .push(Space::with_width(Length::Units(5))),
+                            .push(bright_paragraph(track_maybe_with_track_artist).width(Length::Fill))
+                            .push(
+                                bright_paragraph(track.augmented.play_count.to_string())
+                                    .width(Length::Units(40)),
+                            )
+                            .push(
+                                ProgressBar::new(
+                                    0.0..=(greatest_play_count as f32),
+                                    track.augmented.play_count as f32,
+                                )
+                                .width(Length::Units(50)),
+                            )
+                            .push({
+                                let text_to_show =
+                                    common::format_duration(track.metadata.duration.as_secs());
+                                match current_track {
+                                    Some(ref c) if (track == c) => bright_paragraph(text_to_show),
+                                    _ => dark_paragraph(text_to_show),
+                                }
+                                .width(Length::Units(60))
+                                .horizontal_alignment(iced::HorizontalAlignment::Right)
+                            })
+                            .push(Space::with_width(Length::Units(5))),
+                    )
+                    .on_press(user_nav_message(
+                        NavMessage::ArtistAlbumView(
+                            track.metadata.album_artist_id.clone(),
+                            track.metadata.album_id.clone(),
+                            model::AlbumSize::Regular,
+                            Some(
+                                musiqlibrary::TrackUniqueIdentifier::from_track(
+                                    &track
+                                    .metadata
+                                 )
+                            )
+                        ),
+                    )),
                 )
                 .style(style::get_potential_current_stripe_style(
                     stripe_marker,
