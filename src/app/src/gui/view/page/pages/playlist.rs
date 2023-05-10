@@ -51,7 +51,7 @@ pub fn playlist_view<'a>(
                         .push(
                             dark_button(
                                 &mut playlist_play_queue_buttons.play_button,
-                                bright_paragraph("> Play All Songs"),
+                                bright_paragraph("> Play All"),
                             )
                             .on_press(
                                 Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
@@ -66,7 +66,7 @@ pub fn playlist_view<'a>(
                         .push(
                             dark_button(
                                 &mut playlist_play_queue_buttons.insert_button,
-                                bright_paragraph(">| Insert All into Play Queue"),
+                                bright_paragraph(">| Insert All Next"),
                             )
                             .on_press(
                                 Message::PlaybackRequest(
@@ -86,7 +86,7 @@ pub fn playlist_view<'a>(
                         .push(
                             dark_button(
                                 &mut playlist_play_queue_buttons.append_button,
-                                bright_paragraph("|> Append All to Play Queue"),
+                                bright_paragraph("|> Append All"),
                             )
                             .on_press(
                                 Message::PlaybackRequest(
