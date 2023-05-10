@@ -159,27 +159,25 @@ pub fn playlist_view<'a>(
                             )),
                         ))
                         .push(
-                            Container::new(
-                                dark_button(
-                                    link_button,
-                                    bright_paragraph(track.metadata.title.clone()),
-                                )
-                                .on_press(
-                                    user_nav_message(
-                                        NavMessage::ArtistAlbumView(
-                                            track
+                            dark_button(
+                                link_button,
+                                bright_paragraph(track.metadata.title.clone()),
+                            )
+                            .on_press(
+                                user_nav_message(
+                                    NavMessage::ArtistAlbumView(
+                                        track
+                                            .metadata
+                                            .album_artist_id
+                                            .clone(),
+                                        track.metadata.album_id.clone(),
+                                        model::AlbumSize::Regular,
+                                        Some(
+                                            musiqlibrary::TrackUniqueIdentifier::from_track(&track
                                                 .metadata
-                                                .album_artist_id
-                                                .clone(),
-                                            track.metadata.album_id.clone(),
-                                            model::AlbumSize::Regular,
-                                            Some(
-                                                musiqlibrary::TrackUniqueIdentifier::from_track(&track
-                                                    .metadata
-                                                 )
-                                            )
-                                        ),
-                                    )
+                                             )
+                                        )
+                                    ),
                                 )
                             )
                             .width(Length::Fill)
