@@ -1,5 +1,6 @@
 use std::env;
 use std::path;
+use std::time;
 
 use serde::{Deserialize, Serialize};
 
@@ -175,4 +176,12 @@ pub fn tracks_after_including(
     }
 
     ret
+}
+
+pub fn compute_track_list_duration(tracks: &Vec<musiqlibrary::FullTrackMetadata>) -> time::Duration {
+    let mut duration = time::Duration::new(0, 0);
+    for track in tracks.iter() {
+        duration += track.duration;
+    }
+    duration
 }

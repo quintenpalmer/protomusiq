@@ -30,6 +30,12 @@ pub fn playlist_view<'a>(
         } => {
             let playlist = library.user_playlists.get(*playlist_id).unwrap();
 
+            let full_tracks = playlist
+                .tracks
+                .iter()
+                .map(|track| library.get_track(track).metadata.clone())
+                .collect();
+
             let greatest_play_count = playlist.tracks
                 .iter()
                 .map(|track| library.get_track(track).augmented.play_count)
@@ -49,6 +55,7 @@ pub fn playlist_view<'a>(
                             .padding(10)
                             .spacing(10)
                             .push(h1(playlist.name.clone()))
+                            .push(bright_paragraph(common::format_duration(model::compute_track_list_duration(&full_tracks).as_secs())))
                             .push(
                                 Row::new()
                                     .push(
