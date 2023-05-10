@@ -12,6 +12,7 @@ pub struct AppConfigState {
     pub load_mode: Option<LoadMode>,
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
+    pub grid_layout_track_multiplier: u32,
 }
 
 impl AppConfigState {
@@ -30,6 +31,7 @@ pub struct RawAppConfigState {
     pub load_mode: Option<LoadMode>,
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
+    pub grid_layout_track_multiplier: u32,
 }
 
 impl RawAppConfigState {
@@ -41,6 +43,7 @@ impl RawAppConfigState {
             load_mode: self.load_mode,
             grid_layout_width: self.grid_layout_width,
             grid_layout_height: self.grid_layout_height,
+            grid_layout_track_multiplier: self.grid_layout_track_multiplier,
         }
     }
 }

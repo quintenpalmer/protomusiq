@@ -107,6 +107,7 @@ pub fn initialize_everything() -> state::App {
     let grid_info = model::GridInfo::new(
         config_state.grid_layout_width,
         config_state.grid_layout_height,
+        config_state.grid_layout_track_multiplier,
     );
 
     let augmented_library =
