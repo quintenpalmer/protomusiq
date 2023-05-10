@@ -153,7 +153,7 @@ pub fn track_list<'a>(
                 };
                 Container::new(
                     Column::new()
-                        .spacing(10)
+                        .spacing(6)
                         .push(h1("Tracks"))
                         .push(
                             line_row().push(
