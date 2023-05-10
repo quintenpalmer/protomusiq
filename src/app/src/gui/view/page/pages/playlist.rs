@@ -38,71 +38,76 @@ pub fn playlist_view<'a>(
 
             let mut column = Column::new()
                 .spacing(10)
-                .push(h1("Playlist"))
+                .push(h2("Playlist"))
                 .push(
                     line_row()
                       .push(
                           components::compute_playlist_thumbnail(&library, &playlist.tracks, components::PlaylistIconSize::Large)
                       )
-                      .push(h2(playlist.name.clone()))
-                )
-                .push(
-                    Row::new()
-                        .push(
-                            dark_button(
-                                &mut playlist_play_queue_buttons.play_button,
-                                bright_paragraph("> Play All"),
-                            )
-                            .on_press(
-                                Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
-                                    playlist
-                                        .tracks
-                                        .iter()
-                                        .map(|track_id| library.get_track(&track_id).clone())
-                                        .collect(),
-                                )),
-                            ),
-                        )
-                        .push(
-                            dark_button(
-                                &mut playlist_play_queue_buttons.insert_button,
-                                bright_paragraph(">| Insert All Next"),
-                            )
-                            .on_press(
-                                Message::PlaybackRequest(
-                                    message::PlaybackRequest::InsertSongs(
-                                        playlist
-                                            .tracks
-                                            .iter()
-                                            .map(|track_id| {
-                                                library.get_track(&track_id).clone()
-                                            })
-                                            .collect(),
-                                        false,
-                                    ),
-                                ),
-                            ),
-                        )
-                        .push(
-                            dark_button(
-                                &mut playlist_play_queue_buttons.append_button,
-                                bright_paragraph("|> Append All"),
-                            )
-                            .on_press(
-                                Message::PlaybackRequest(
-                                    message::PlaybackRequest::AppendSongs(
-                                        playlist
-                                            .tracks
-                                            .iter()
-                                            .map(|track_id| {
-                                                library.get_track(&track_id).clone()
-                                            })
-                                            .collect(),
-                                        false,
-                                    ),
-                                ),
-                            ),
-                        ),
+                      .push(
+                          Column::new()
+                            .padding(10)
+                            .spacing(10)
+                            .push(h1(playlist.name.clone()))
+                            .push(
+                                Row::new()
+                                    .push(
+                                        dark_button(
+                                            &mut playlist_play_queue_buttons.play_button,
+                                            bright_paragraph("> Play All"),
+                                        )
+                                        .on_press(
+                                            Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
+                                                playlist
+                                                    .tracks
+                                                    .iter()
+                                                    .map(|track_id| library.get_track(&track_id).clone())
+                                                    .collect(),
+                                            )),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            &mut playlist_play_queue_buttons.insert_button,
+                                            bright_paragraph(">| Insert All Next"),
+                                        )
+                                        .on_press(
+                                            Message::PlaybackRequest(
+                                                message::PlaybackRequest::InsertSongs(
+                                                    playlist
+                                                        .tracks
+                                                        .iter()
+                                                        .map(|track_id| {
+                                                            library.get_track(&track_id).clone()
+                                                        })
+                                                        .collect(),
+                                                    false,
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button(
+                                            &mut playlist_play_queue_buttons.append_button,
+                                            bright_paragraph("|> Append All"),
+                                        )
+                                        .on_press(
+                                            Message::PlaybackRequest(
+                                                message::PlaybackRequest::AppendSongs(
+                                                    playlist
+                                                        .tracks
+                                                        .iter()
+                                                        .map(|track_id| {
+                                                            library.get_track(&track_id).clone()
+                                                        })
+                                                        .collect(),
+                                                    false,
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                          )
+                      )
                 );
             let mut stripe_marker = true;
             let current_track = match player_info.current_playback {
