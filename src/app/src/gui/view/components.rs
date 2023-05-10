@@ -170,8 +170,8 @@ pub fn compute_playlist_thumbnail<'a>(
     }
     .align_x(iced::Align::Center)
     .align_y(iced::Align::Center)
-    .width(Length::Units(80))
-    .height(Length::Units(80))
+    .width(Length::Units(large_album_size.width() + 10))
+    .height(Length::Units(large_album_size.height() + 10))
     .style(style::ContainerDarkInset)
 }
 
