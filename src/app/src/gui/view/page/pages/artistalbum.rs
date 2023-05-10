@@ -186,18 +186,23 @@ pub fn artist_album_view_state<'a>(
                                             .spacing(5)
                                             .push(
                                                 match library.user_playlists.get_default_playlist_id() {
-                                                    Some(default_playlist_id) => Container::new(dark_button(
-                                                            &mut entire_track_list_buttons.add_to_default_playlist_button,
-                                                            bright_paragraph("+ Add All to Default Playlist"),
+                                                    Some(default_playlist_id) => {
+                                                        let default_playlist = library.user_playlists.get(default_playlist_id).unwrap();
+                                                        Container::new(dark_button(
+                                                                &mut entire_track_list_buttons.add_to_default_playlist_button,
+                                                                bright_paragraph(format!("+ Add All to:\n\"{}\"", default_playlist.name)),
+                                                            )
+                                                            .on_press(Message::Action(message::Action::AddTracksToPlaylist(
+                                                                default_playlist_id,
+                                                                tracks
+                                                                    .iter()
+                                                                    .map(|track|
+                                                                        musiqlibrary::TrackUniqueIdentifier::from_track(&track.metadata)
+                                                                    ).collect()
+                                                                ))
+                                                            )
                                                         )
-                                                        .on_press(Message::Action(message::Action::AddTracksToPlaylist(
-                                                            default_playlist_id,
-                                                            tracks
-                                                                .iter()
-                                                                .map(|track|
-                                                                    musiqlibrary::TrackUniqueIdentifier::from_track(&track.metadata)
-                                                                ).collect()
-                                                        )))),
+                                                    },
                                                     None => Container::new(bright_paragraph("(Create Default Playlist)")),
                                                 }
                                             )
