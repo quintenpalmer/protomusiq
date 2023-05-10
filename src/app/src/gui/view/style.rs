@@ -1,5 +1,7 @@
 use iced::{button, container, Background, Color};
 
+use musiqlibrary;
+
 use crate::model;
 
 pub struct DarkButton {}
@@ -29,16 +31,29 @@ pub fn get_potential_current_stripe_style(
     stripe_marker: bool,
     display_track: &model::AugmentedTrack,
     maybe_currently_playing: &Option<model::AugmentedTrack>,
+    maybe_selected: &Option<musiqlibrary::TrackUniqueIdentifier>,
 ) -> Box<dyn container::StyleSheet> {
-    match maybe_currently_playing {
-        Some(currently_playing) => {
-            if display_track == currently_playing {
-                Box::new(ContainerStripeHighlight)
-            } else {
-                get_stripe_style(stripe_marker)
-            }
+    let is_playing = match maybe_currently_playing {
+        Some(currently_playing) => currently_playing == display_track,
+        None => false,
+    };
+    let is_selected = match maybe_selected {
+        Some(selected) => &musiqlibrary::TrackUniqueIdentifier::from_track(&display_track.metadata) == selected,
+        None => false,
+    };
+
+    if is_playing {
+        if is_selected {
+            Box::new(ContainerStripeHighlightAndSelected)
+        } else {
+            Box::new(ContainerStripeHighlight)
         }
-        None => get_stripe_style(stripe_marker),
+    } else {
+        if is_selected {
+            Box::new(ContainerStripeSelected)
+        } else {
+            get_stripe_style(stripe_marker)
+        }
     }
 }
 
@@ -72,6 +87,30 @@ impl container::StyleSheet for ContainerStripeHighlight {
     fn style(&self) -> container::Style {
         container::Style {
             background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0x82))),
+            text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
+            ..container::Style::default()
+        }
+    }
+}
+
+pub struct ContainerStripeSelected;
+
+impl container::StyleSheet for ContainerStripeSelected {
+    fn style(&self) -> container::Style {
+        container::Style {
+            background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0xc2))),
+            text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
+            ..container::Style::default()
+        }
+    }
+}
+
+pub struct ContainerStripeHighlightAndSelected;
+
+impl container::StyleSheet for ContainerStripeHighlightAndSelected {
+    fn style(&self) -> container::Style {
+        container::Style {
+            background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0xa2))),
             text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
             ..container::Style::default()
         }

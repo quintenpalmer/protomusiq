@@ -393,6 +393,7 @@ pub fn artist_album_view_state<'a>(
                                             stripe_marker,
                                             &track,
                                             &current_track,
+                                            &maybe_selected_track,
                                         ),
                                     ),
                                 )

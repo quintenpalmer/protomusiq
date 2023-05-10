@@ -237,6 +237,7 @@ pub fn playlist_view<'a>(
                     stripe_marker,
                     &track,
                     &current_track,
+                    &None,
                 ));
                 column = column.push(row);
             }

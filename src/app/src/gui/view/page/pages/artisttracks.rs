@@ -230,6 +230,7 @@ pub fn artist_track_view_state<'a>(
                     stripe_marker,
                     &track,
                     &current_track,
+                    &None,
                 ));
 
                 tracks_table = tracks_table.push(row);
