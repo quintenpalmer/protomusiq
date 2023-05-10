@@ -271,7 +271,7 @@ pub fn playlist_view<'a>(
                                 .push(
                                     dark_button(
                                         remove_from_playlist_button,
-                                        bright_paragraph("-"),
+                                        bright_paragraph(" - "),
                                     )
                                     .on_press(
                                         Message::Action(
