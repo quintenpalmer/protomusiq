@@ -5,6 +5,8 @@ use crate::model;
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state::{self, PlayerInfoState};
 
+use crate::gui::view::components;
+
 use super::super::super::common;
 use super::super::super::elements::*;
 use super::super::super::style;
@@ -37,7 +39,13 @@ pub fn playlist_view<'a>(
             let mut column = Column::new()
                 .spacing(10)
                 .push(h1("Playlist"))
-                .push(h2(playlist.name.clone()))
+                .push(
+                    line_row()
+                      .push(
+                          components::compute_playlist_thumbnail(&library, &playlist.tracks)
+                      )
+                      .push(h2(playlist.name.clone()))
+                )
                 .push(
                     Row::new()
                         .push(
