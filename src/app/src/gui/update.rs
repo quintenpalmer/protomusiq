@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use iced::{button, scrollable, text_input, Command};
 
 use crate::model;
@@ -825,7 +823,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
             });
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-            let mut track_buttons = BTreeMap::new();
+            let mut track_buttons = Vec::new();
             for album in app
                 .rest
                 .library
@@ -836,9 +834,8 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 .values()
             {
                 for disc in album.discs.values() {
-                    for track in disc.tracks.values() {
-                        track_buttons.insert(
-                            musiqlibrary::TrackUniqueIdentifier::from_track(&track.metadata),
+                    for _track in disc.tracks.values() {
+                        track_buttons.push(
                             button::State::default(),
                         );
                     }
@@ -862,7 +859,6 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_order_reverse_button: button::State::default(),
 
                 track_buttons: track_buttons,
-                //track_buttons: BTreeMap<musiqlibrary::ID, button::State>,
                 track_scroll: scrollable::State::default(),
 
                 artist_id: artist_id.clone(),

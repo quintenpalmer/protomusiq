@@ -220,7 +220,7 @@ pub struct ArtistTrackViewState {
     pub sort_order_regular_button: button::State,
     pub sort_order_reverse_button: button::State,
 
-    pub track_buttons: BTreeMap<musiqlibrary::TrackUniqueIdentifier, button::State>,
+    pub track_buttons: Vec<button::State>,
     pub track_scroll: scrollable::State,
 
     pub artist_id: musiqlibrary::ID,
