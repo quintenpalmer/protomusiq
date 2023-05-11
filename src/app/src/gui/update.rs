@@ -130,18 +130,6 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 };
                 Command::none()
             }
-            message::Action::UpdateText(new_text) => {
-                match &mut app.rest.current_page {
-                    state::Page::Search(search_page_state) => search_page_state.query = new_text,
-                    state::Page::PlaylistList(playlist_page_state) => {
-                        playlist_page_state.new_playlist_name = new_text
-                    }
-                    no_text_input_page => {
-                        println!("no text to update for page: {:?}", no_text_input_page)
-                    }
-                };
-                Command::none()
-            }
             message::Action::Close => {
                 app.rest.should_close = true;
                 Command::batch(vec![
@@ -166,6 +154,18 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             message::Action::TogglePlayQueueVisible => {
                 app.rest.play_queue_info.rest.play_queue_visible =
                     !app.rest.play_queue_info.rest.play_queue_visible;
+                Command::none()
+            }
+            message::Action::UpdateText(new_text) => {
+                match &mut app.rest.current_page {
+                    state::Page::Search(search_page_state) => search_page_state.query = new_text,
+                    state::Page::PlaylistList(playlist_page_state) => {
+                        playlist_page_state.new_playlist_name = new_text
+                    }
+                    no_text_input_page => {
+                        println!("no text to update for page: {:?}", no_text_input_page)
+                    }
+                };
                 Command::none()
             }
             message::Action::PerformSearch(query) => match app.rest.current_page {
