@@ -130,27 +130,6 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 };
                 Command::none()
             }
-            message::Action::Close => {
-                app.rest.should_close = true;
-                Command::batch(vec![
-                    Command::perform(
-                        mpris_sender(
-                            app.rest.player_info.rest.mpris_message_sender.clone(),
-                            shared::MprisMessage::Close,
-                        )
-                        .send_message(),
-                        Message::ErrorResponse,
-                    ),
-                    Command::perform(
-                        sink_sender(
-                            app.rest.player_info.rest.sink_message_sender.clone(),
-                            shared::SinkMessage::Close,
-                        )
-                        .send_message(),
-                        Message::ErrorResponse,
-                    ),
-                ])
-            }
             message::Action::TogglePlayQueueVisible => {
                 app.rest.play_queue_info.rest.play_queue_visible =
                     !app.rest.play_queue_info.rest.play_queue_visible;
@@ -173,6 +152,27 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     inner: message::user_nav_message(message::NavMessage::SearchPage(query, true)),
                 }),
                 _ => Command::none(),
+            }
+            message::Action::Close => {
+                app.rest.should_close = true;
+                Command::batch(vec![
+                    Command::perform(
+                        mpris_sender(
+                            app.rest.player_info.rest.mpris_message_sender.clone(),
+                            shared::MprisMessage::Close,
+                        )
+                        .send_message(),
+                        Message::ErrorResponse,
+                    ),
+                    Command::perform(
+                        sink_sender(
+                            app.rest.player_info.rest.sink_message_sender.clone(),
+                            shared::SinkMessage::Close,
+                        )
+                        .send_message(),
+                        Message::ErrorResponse,
+                    ),
+                ])
             },
         },
         Message::Nav(nav_message) => {
