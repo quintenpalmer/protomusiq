@@ -75,10 +75,11 @@ pub fn render_entire_page<'a>(
         .push({
             let row = match play_queue_expanded {
                 true => Row::new()
-                    .padding(15)
+                    .padding(10)
                     .push(rendered_page.width(Length::FillPortion(3)))
                     .push(play_queue_view.width(Length::FillPortion(2))),
                 false => Row::new()
+                    .padding(10)
                     .push(rendered_page.width(Length::Fill))
                     .push(play_queue_view),
             };
