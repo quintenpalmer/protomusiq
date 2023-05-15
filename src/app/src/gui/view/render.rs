@@ -381,8 +381,7 @@ pub fn render_play_queue<'a>(
                         .height(Length::Fill)
                         .style(style::ContainerPopMidForward {}),
                 )
-                .height(Length::Fill)
-                .padding(10),
+                .height(Length::Fill),
                 true,
             )
         }
