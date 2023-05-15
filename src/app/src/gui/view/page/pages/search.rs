@@ -6,6 +6,7 @@ use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state;
 
 use super::super::super::elements::*;
+use super::super::super::components;
 
 pub fn search_page<'a>(
     library: &'a model::LibraryState,
@@ -181,23 +182,9 @@ pub fn search_page<'a>(
                                                                     .width(Length::Fill),
                                                                 ),
                                                         )
-                                                        .on_press(user_nav_message(
-                                                            NavMessage::ArtistAlbumView(
-                                                                result
-                                                                    .first
-                                                                    .metadata
-                                                                    .album_artist_id
-                                                                    .clone(),
-                                                                result.first.metadata.album_id.clone(),
-                                                                model::AlbumSize::Regular,
-                                                                Some(
-                                                                    musiqlibrary::TrackUniqueIdentifier::from_track(&result
-                                                                        .first
-                                                                        .metadata
-                                                                     )
-                                                                )
-                                                            ),
-                                                        )),
+                                                        .on_press(
+                                                            components::track_link(&result.first.metadata)
+                                                        ),
                                                     )
                                                 },
                                             ),
@@ -249,23 +236,9 @@ pub fn search_page<'a>(
                                                                     .width(Length::Fill),
                                                                 ),
                                                         )
-                                                        .on_press(user_nav_message(
-                                                            NavMessage::ArtistAlbumView(
-                                                                result
-                                                                    .first
-                                                                    .metadata
-                                                                    .album_artist_id
-                                                                    .clone(),
-                                                                result.first.metadata.album_id.clone(),
-                                                                model::AlbumSize::Regular,
-                                                                Some(
-                                                                    musiqlibrary::TrackUniqueIdentifier::from_track(&result
-                                                                        .first
-                                                                        .metadata
-                                                                     )
-                                                                )
-                                                            ),
-                                                        )),
+                                                        .on_press(
+                                                            components::track_link(&result.first.metadata)
+                                                        ),
                                                     )
                                                 },
                                             ),

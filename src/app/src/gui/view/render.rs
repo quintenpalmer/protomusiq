@@ -337,23 +337,7 @@ pub fn render_play_queue<'a>(
                                             bright_paragraph(play_queue_track.track.metadata.title.clone())
                                         )
                                         .on_press(
-                                            user_nav_message(
-                                                NavMessage::ArtistAlbumView(
-                                                    play_queue_track
-                                                        .track
-                                                        .metadata
-                                                        .album_artist_id
-                                                        .clone(),
-                                                    play_queue_track.track.metadata.album_id.clone(),
-                                                    model::AlbumSize::Regular,
-                                                    Some(
-                                                        musiqlibrary::TrackUniqueIdentifier::from_track(&play_queue_track
-                                                            .track
-                                                            .metadata
-                                                         )
-                                                    )
-                                                )
-                                            )
+                                            components::track_link(&play_queue_track.track.metadata)
                                         )
                                         .width(Length::Fill)
                                     )
