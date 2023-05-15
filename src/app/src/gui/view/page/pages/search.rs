@@ -19,6 +19,7 @@ pub fn search_page<'a>(
         state::SearchPageState {
             query,
             search_breadcrumb,
+            search_result_breadcrumb,
             artist_scroll,
             album_scroll,
             track_scroll,
@@ -26,12 +27,23 @@ pub fn search_page<'a>(
             input_state,
             results,
         } => {
-            let breadcrumbs = vec![(
+            let mut breadcrumbs = vec![(
                     search_breadcrumb,
                     "Search".to_string(),
                     user_nav_message(NavMessage::SearchPage("".to_string(), false)),
                 )];
+            match results {
+                Some(_) => {
+                    breadcrumbs.push(
+                        (
+                            search_result_breadcrumb,
+                            query.clone(),
+                            user_nav_message(NavMessage::SearchPage(query.clone(), true))
                         )
+                    );
+                },
+                _ => (),
+            };
 
             let (album_results, artist_results, track_results, featured_artist_results) = match results {
                 Some(results) => {

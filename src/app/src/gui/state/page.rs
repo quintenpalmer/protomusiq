@@ -73,6 +73,7 @@ pub struct SearchPageState {
     pub track_scroll: scrollable::State,
     pub track_artist_scroll: scrollable::State,
     pub search_breadcrumb: button::State,
+    pub search_result_breadcrumb: button::State,
 
     pub results: Option<model::SearchResults<button::State>>,
 
