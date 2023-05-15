@@ -18,6 +18,7 @@ pub fn search_page<'a>(
     match state {
         state::SearchPageState {
             query,
+            search_breadcrumb,
             artist_scroll,
             album_scroll,
             track_scroll,
@@ -25,7 +26,11 @@ pub fn search_page<'a>(
             input_state,
             results,
         } => {
-            let breadcrumbs = Vec::new();
+            let breadcrumbs = vec![(
+                    search_breadcrumb,
+                    "Search".to_string(),
+                    user_nav_message(NavMessage::SearchPage("".to_string(), false)),
+                )];
             let body = {
                 Container::new(
                     Column::new()

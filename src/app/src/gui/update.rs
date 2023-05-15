@@ -663,6 +663,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 album_scroll: scrollable::State::default(),
                 track_scroll: scrollable::State::default(),
                 track_artist_scroll: scrollable::State::default(),
+                search_breadcrumb: button::State::default(),
                 input_state: text_input::State::focused(),
                 results: computed_results,
             });
