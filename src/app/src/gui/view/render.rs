@@ -486,11 +486,11 @@ fn controls_with_maybe_track_info<'a>(
                 .push(
                     Column::new()
                         .push(bright(h2(current_playback.track.metadata.title.clone())))
-                        .push(h3(format!(
-                            "{} - {}",
-                            current_playback.track.metadata.album_artist.clone(),
-                            current_playback.track.metadata.album.clone(),
-                        ))),
+                        .push(Row::new()
+                              .push(h3(current_playback.track.metadata.album_artist.clone()))
+                              .push(h3("-"))
+                              .push(h3(current_playback.track.metadata.album.clone()))
+                        )
                 );
             (duration_info, album_info)
         },
