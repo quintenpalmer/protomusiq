@@ -37,7 +37,7 @@ pub fn search_page<'a>(
                     breadcrumbs.push(
                         (
                             search_result_breadcrumb,
-                            query.clone(),
+                            format!("\"{}\"", query.clone()),
                             user_nav_message(NavMessage::SearchPage(query.clone(), true))
                         )
                     );
