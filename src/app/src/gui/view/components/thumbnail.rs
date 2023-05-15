@@ -6,8 +6,8 @@ use crate::model;
 
 use crate::gui::message::{Message};
 
-use super::elements::*;
-use super::style;
+use super::super::elements::*;
+use super::super::style;
 
 pub enum PlaylistIconSize {
     Small,
