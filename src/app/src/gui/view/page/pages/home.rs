@@ -24,6 +24,7 @@ pub fn home_page<'a>(
             album_list_button,
             track_list_button,
             playlist_list_button,
+            search_button,
             scroll,
         } => (
             Vec::new(),
@@ -78,6 +79,28 @@ pub fn home_page<'a>(
                                             model::ArtistSortKey::ByName,
                                             model::SortOrder::Regular,
                                         ),
+                                    )),
+                                )
+                                .push(
+                                    dark_button(
+                                        search_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_search_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Search".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
+                                        )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::SearchPage(
+                                            "".to_string(),
+                                            false,
+                                        )
                                     )),
                                 ),
                         )
