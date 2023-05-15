@@ -25,6 +25,7 @@ pub fn home_page<'a>(
             track_list_button,
             playlist_list_button,
             search_button,
+            settings_button,
             scroll,
         } => (
             Vec::new(),
@@ -146,6 +147,25 @@ pub fn home_page<'a>(
                                     )
                                     .on_press(user_nav_message(
                                         NavMessage::PlaylistList("".to_string()),
+                                    )),
+                                )
+                                .push(
+                                    dark_button(
+                                        settings_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_settings_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Settings".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
+                                        )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::Config,
                                     )),
                                 ),
                         ),

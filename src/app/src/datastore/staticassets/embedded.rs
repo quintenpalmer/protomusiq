@@ -7,6 +7,7 @@ pub struct AppImages {
     tracks_image: Vec<u8>,
     playlists_image: Vec<u8>,
     search_image: Vec<u8>,
+    settings_image: Vec<u8>,
 }
 
 impl AppImages {
@@ -25,6 +26,10 @@ impl AppImages {
             env!("CARGO_MANIFEST_DIR"),
             "/embedded/search_mag.png"
         ));
+        let settings_image = include_bytes!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/embedded/settings_gear.png",
+        ));
 
         AppImages {
             artists_image: artists_image.to_vec(),
@@ -32,6 +37,7 @@ impl AppImages {
             tracks_image: tracks_image.to_vec(),
             playlists_image: playlists_image.to_vec(),
             search_image: search_image.to_vec(),
+            settings_image: settings_image.to_vec(),
         }
     }
 
@@ -53,5 +59,9 @@ impl AppImages {
 
     pub fn get_search_image(&self) -> &Vec<u8> {
         &self.search_image
+    }
+
+    pub fn get_settings_image(&self) -> &Vec<u8> {
+        &self.settings_image
     }
 }

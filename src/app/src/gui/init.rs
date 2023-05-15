@@ -155,6 +155,7 @@ pub fn initialize_everything() -> state::App {
                 track_list_button: button::State::default(),
                 playlist_list_button: button::State::default(),
                 search_button: button::State::default(),
+                settings_button: button::State::default(),
                 scroll: scrollable::State::default(),
             }),
             should_close: false,

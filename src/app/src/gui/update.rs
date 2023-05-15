@@ -546,6 +546,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 track_list_button: button::State::default(),
                 playlist_list_button: button::State::default(),
                 search_button: button::State::default(),
+                settings_button: button::State::default(),
                 scroll: scrollable::State::default(),
             })
         }
