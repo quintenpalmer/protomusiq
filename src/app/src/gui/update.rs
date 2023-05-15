@@ -266,6 +266,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                         app.rest.play_queue_info.gui.track_info.play_queue.push(
                             state::PlayQueueGuiEntry {
                                 remove_me_button: button::State::default(),
+                                track_link_button: button::State::default(),
                             },
                         );
                     }
@@ -294,6 +295,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     for _new_song in app.rest.play_queue_info.rest.play_queue.iter() {
                         new_song_buttons.push(state::PlayQueueGuiEntry {
                             remove_me_button: button::State::default(),
+                            track_link_button: button::State::default(),
                         });
                     }
                     app.rest.play_queue_info.gui.track_info.play_queue = new_song_buttons;
@@ -318,6 +320,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                 app.rest.play_queue_info.gui.track_info.play_queue.push(
                                     state::PlayQueueGuiEntry {
                                         remove_me_button: button::State::default(),
+                                        track_link_button: button::State::default(),
                                     },
                                 );
                             }
@@ -355,6 +358,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                 app.rest.play_queue_info.gui.track_info.play_history.push(
                                     state::PlayQueueGuiEntry {
                                         remove_me_button: button::State::default(),
+                                        track_link_button: button::State::default(),
                                     },
                                 );
                                 app.rest.play_queue_info.rest.play_history.push(
@@ -379,6 +383,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                 app.rest.play_queue_info.gui.track_info.play_history.push(
                                     state::PlayQueueGuiEntry {
                                         remove_me_button: button::State::default(),
+                                        track_link_button: button::State::default(),
                                     },
                                 );
                                 app.rest.play_queue_info.rest.play_history.push(
@@ -447,7 +452,10 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     app.rest.play_queue_info.rest.play_queue = new_songs_to_queue;
 
                     app.rest.play_queue_info.gui.track_info.play_queue.push(
-                        state::PlayQueueGuiEntry{ remove_me_button: button::State::default() },
+                        state::PlayQueueGuiEntry{
+                            remove_me_button: button::State::default(),
+                            track_link_button: button::State::default(),
+                        },
                     );
 
                     Command::none()

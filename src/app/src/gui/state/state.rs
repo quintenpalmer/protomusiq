@@ -76,6 +76,7 @@ pub struct PlayQueueTrackGuiState {
 
 pub struct PlayQueueGuiEntry {
     pub remove_me_button: button::State,
+    pub track_link_button: button::State,
 }
 
 pub struct PlayQueueInfoState {
