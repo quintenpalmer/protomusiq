@@ -28,15 +28,7 @@ pub fn home_page<'a>(
             settings_button,
             scroll,
         } => {
-            let page = Container::new(
-                Scrollable::new(
-                    scroll,
-                ).push(
-                    Column::new()
-                        .push(
-                            Row::new()
-                                .push(
-                                    dark_button(
+            let album_list = dark_button(
                                         album_list_button,
                                         Container::new(bottom_label(
                                             album_image(
@@ -56,10 +48,8 @@ pub fn home_page<'a>(
                                             model::AlbumSortKey::ByParent,
                                             model::SortOrder::Regular,
                                         ),
-                                    )),
-                                )
-                                .push(
-                                    dark_button(
+                                    ));
+            let artist_list = dark_button(
                                         artist_list_button,
                                         Container::new(bottom_label(
                                             album_image(
@@ -79,35 +69,8 @@ pub fn home_page<'a>(
                                             model::ArtistSortKey::ByName,
                                             model::SortOrder::Regular,
                                         ),
-                                    )),
-                                )
-                                .push(
-                                    dark_button(
-                                        search_button,
-                                        Container::new(bottom_label(
-                                            album_image(
-                                                app_images.get_search_image().clone(),
-                                                model::AlbumSize::Small,
-                                            )
-                                            .into(),
-                                            bright_paragraph(common::abr_str(
-                                                "Search".to_string(),
-                                                consts::ICON_STR_LENGTH,
-                                            )),
-                                        )),
-                                    )
-                                    .on_press(user_nav_message(
-                                        NavMessage::SearchPage(
-                                            "".to_string(),
-                                            false,
-                                        )
-                                    )),
-                                ),
-                        )
-                        .push(
-                            Row::new()
-                                .push(
-                                    dark_button(
+                                    ));
+            let track_list = dark_button(
                                         track_list_button,
                                         Container::new(bottom_label(
                                             album_image(
@@ -127,10 +90,8 @@ pub fn home_page<'a>(
                                             model::TrackSortKey::ByName,
                                             model::SortOrder::Regular,
                                         ),
-                                    )),
-                                )
-                                .push(
-                                    dark_button(
+                                    ));
+            let playlist = dark_button(
                                         playlist_list_button,
                                         Container::new(bottom_label(
                                             album_image(
@@ -146,10 +107,28 @@ pub fn home_page<'a>(
                                     )
                                     .on_press(user_nav_message(
                                         NavMessage::PlaylistList("".to_string()),
-                                    )),
-                                )
-                                .push(
-                                    dark_button(
+                                    ));
+            let search = dark_button(
+                                        search_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_search_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Search".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
+                                        )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::SearchPage(
+                                            "".to_string(),
+                                            false,
+                                        )
+                                    ));
+            let settings = dark_button(
                                         settings_button,
                                         Container::new(bottom_label(
                                             album_image(
@@ -165,8 +144,24 @@ pub fn home_page<'a>(
                                     )
                                     .on_press(user_nav_message(
                                         NavMessage::Config,
-                                    )),
-                                ),
+                                    ));
+
+            let page = Container::new(
+                Scrollable::new(
+                    scroll,
+                ).push(
+                    Column::new()
+                        .push(
+                            Row::new()
+                                .push(album_list)
+                                .push(artist_list)
+                                .push(search),
+                        )
+                        .push(
+                            Row::new()
+                                .push(track_list)
+                                .push(playlist)
+                                .push(settings),
                         ),
                     ),
                 );
