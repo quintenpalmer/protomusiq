@@ -187,6 +187,10 @@ pub fn initialize_everything() -> state::App {
                     next_button: button::State::default(),
                     pause_next_button: button::State::default(),
 
+                    track_link_button: button::State::default(),
+                    artist_link_button: button::State::default(),
+                    album_link_button: button::State::default(),
+
                     volume_zero_button: button::State::default(),
                     volume_up_button: button::State::default(),
                     volume_down_button: button::State::default(),

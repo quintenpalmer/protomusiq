@@ -136,6 +136,10 @@ pub struct PlayerInfoGuiState {
     pub next_button: button::State,
     pub pause_next_button: button::State,
 
+    pub track_link_button: button::State,
+    pub artist_link_button: button::State,
+    pub album_link_button: button::State,
+
     pub volume_zero_button: button::State,
     pub volume_up_button: button::State,
     pub volume_down_button: button::State,

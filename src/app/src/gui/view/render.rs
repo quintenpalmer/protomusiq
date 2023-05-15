@@ -485,11 +485,46 @@ fn controls_with_maybe_track_info<'a>(
                 ))
                 .push(
                     Column::new()
-                        .push(bright(h2(current_playback.track.metadata.title.clone())))
+                        .push(
+                            dark_text_like_button(
+                                &mut player_gui.track_link_button,
+                                bright(h2(current_playback.track.metadata.title.clone()))
+                            )
+                            .on_press(
+                                components::track_link(&current_playback.track.metadata)
+                            )
+                        )
                         .push(Row::new()
-                              .push(h3(current_playback.track.metadata.album_artist.clone()))
+                              .push(
+                                  dark_text_like_button(
+                                      &mut player_gui.artist_link_button,
+                                      h3(current_playback.track.metadata.album_artist.clone())
+                                  )
+                                  .on_press(
+                                      user_nav_message(
+                                          NavMessage::ArtistView(
+                                              current_playback.track.metadata.album_artist_id.clone()
+                                          )
+                                      )
+                                  )
+                              )
                               .push(h3("-"))
-                              .push(h3(current_playback.track.metadata.album.clone()))
+                              .push(
+                                  dark_text_like_button(
+                                      &mut player_gui.album_link_button,
+                                      h3(current_playback.track.metadata.album.clone())
+                                  )
+                                  .on_press(
+                                      user_nav_message(
+                                          NavMessage::ArtistAlbumView(
+                                              current_playback.track.metadata.album_artist_id.clone(),
+                                              current_playback.track.metadata.album_id.clone(),
+                                              model::AlbumSize::Regular,
+                                              None,
+                                          )
+                                      )
+                                  )
+                              )
                         )
                 );
             (duration_info, album_info)
