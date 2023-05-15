@@ -60,6 +60,17 @@ where
     iced::Button::new(state, content).style(style::DarkButton {})
 }
 
+pub fn dark_text_like_button<'a, E>(
+    state: &'a mut iced::button::State,
+    content: E,
+) -> iced::Button<'a, Message>
+where
+    E: Into<iced::Element<'a, Message>>,
+{
+    iced::Button::new(state, content).style(style::DarkTextLikeButton {})
+        .padding(0)
+}
+
 pub fn bottom_label<'a, E: Into<iced::Element<'a, Message>>>(
     top: Element<'a, Message>,
     label: E,
