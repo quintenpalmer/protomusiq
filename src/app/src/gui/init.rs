@@ -154,6 +154,7 @@ pub fn initialize_everything() -> state::App {
                 album_list_button: button::State::default(),
                 track_list_button: button::State::default(),
                 playlist_list_button: button::State::default(),
+                scroll: scrollable::State::default(),
             }),
             should_close: false,
             error_messages: Vec::new(),

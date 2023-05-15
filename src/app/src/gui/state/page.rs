@@ -55,6 +55,7 @@ pub struct HomeState {
     pub album_list_button: button::State,
     pub track_list_button: button::State,
     pub playlist_list_button: button::State,
+    pub scroll: scrollable::State,
 }
 
 #[derive(Debug)]

@@ -545,6 +545,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 album_list_button: button::State::default(),
                 track_list_button: button::State::default(),
                 playlist_list_button: button::State::default(),
+                scroll: scrollable::State::default(),
             })
         }
         NavMessage::Config => {

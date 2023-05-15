@@ -1,4 +1,4 @@
-use iced::{self, button, Column, Container, Row};
+use iced::{self, button, Column, Container, Row, Scrollable};
 
 use crate::model;
 
@@ -24,105 +24,110 @@ pub fn home_page<'a>(
             album_list_button,
             track_list_button,
             playlist_list_button,
+            scroll,
         } => (
             Vec::new(),
             Container::new(
-                Column::new()
-                    .push(
-                        Row::new()
-                            .push(
-                                dark_button(
-                                    album_list_button,
-                                    Container::new(bottom_label(
-                                        album_image(
-                                            app_images.get_albums_image().clone(),
-                                            model::AlbumSize::Small,
-                                        )
-                                        .into(),
-                                        bright_paragraph(common::abr_str(
-                                            "Albums".to_string(),
-                                            consts::ICON_STR_LENGTH,
+                Scrollable::new(
+                    scroll,
+                ).push(
+                    Column::new()
+                        .push(
+                            Row::new()
+                                .push(
+                                    dark_button(
+                                        album_list_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_albums_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Albums".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
                                         )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::AlbumList(
+                                            0,
+                                            model::AlbumSortKey::ByParent,
+                                            model::SortOrder::Regular,
+                                        ),
                                     )),
                                 )
-                                .on_press(user_nav_message(
-                                    NavMessage::AlbumList(
-                                        0,
-                                        model::AlbumSortKey::ByParent,
-                                        model::SortOrder::Regular,
-                                    ),
-                                )),
-                            )
-                            .push(
-                                dark_button(
-                                    artist_list_button,
-                                    Container::new(bottom_label(
-                                        album_image(
-                                            app_images.get_artists_image().clone(),
-                                            model::AlbumSize::Small,
-                                        )
-                                        .into(),
-                                        bright_paragraph(common::abr_str(
-                                            "Artists".to_string(),
-                                            consts::ICON_STR_LENGTH,
+                                .push(
+                                    dark_button(
+                                        artist_list_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_artists_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Artists".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
                                         )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::ArtistList(
+                                            0,
+                                            model::ArtistSortKey::ByName,
+                                            model::SortOrder::Regular,
+                                        ),
+                                    )),
+                                ),
+                        )
+                        .push(
+                            Row::new()
+                                .push(
+                                    dark_button(
+                                        track_list_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_tracks_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Tracks".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
+                                        )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::TrackList(
+                                            0,
+                                            model::TrackSortKey::ByName,
+                                            model::SortOrder::Regular,
+                                        ),
                                     )),
                                 )
-                                .on_press(user_nav_message(
-                                    NavMessage::ArtistList(
-                                        0,
-                                        model::ArtistSortKey::ByName,
-                                        model::SortOrder::Regular,
-                                    ),
-                                )),
-                            ),
-                    )
-                    .push(
-                        Row::new()
-                            .push(
-                                dark_button(
-                                    track_list_button,
-                                    Container::new(bottom_label(
-                                        album_image(
-                                            app_images.get_tracks_image().clone(),
-                                            model::AlbumSize::Small,
-                                        )
-                                        .into(),
-                                        bright_paragraph(common::abr_str(
-                                            "Tracks".to_string(),
-                                            consts::ICON_STR_LENGTH,
+                                .push(
+                                    dark_button(
+                                        playlist_list_button,
+                                        Container::new(bottom_label(
+                                            album_image(
+                                                app_images.get_playlists_image().clone(),
+                                                model::AlbumSize::Small,
+                                            )
+                                            .into(),
+                                            bright_paragraph(common::abr_str(
+                                                "Playlists".to_string(),
+                                                consts::ICON_STR_LENGTH,
+                                            )),
                                         )),
+                                    )
+                                    .on_press(user_nav_message(
+                                        NavMessage::PlaylistList("".to_string()),
                                     )),
-                                )
-                                .on_press(user_nav_message(
-                                    NavMessage::TrackList(
-                                        0,
-                                        model::TrackSortKey::ByName,
-                                        model::SortOrder::Regular,
-                                    ),
-                                )),
-                            )
-                            .push(
-                                dark_button(
-                                    playlist_list_button,
-                                    Container::new(bottom_label(
-                                        album_image(
-                                            app_images.get_playlists_image().clone(),
-                                            model::AlbumSize::Small,
-                                        )
-                                        .into(),
-                                        bright_paragraph(common::abr_str(
-                                            "Playlists".to_string(),
-                                            consts::ICON_STR_LENGTH,
-                                        )),
-                                    )),
-                                )
-                                .on_press(user_nav_message(
-                                    NavMessage::PlaylistList("".to_string()),
-                                )),
-                            ),
+                                ),
+                        ),
                     ),
-            ),
+                ),
         ),
     }
 }
