@@ -27,9 +27,8 @@ pub fn home_page<'a>(
             search_button,
             settings_button,
             scroll,
-        } => (
-            Vec::new(),
-            Container::new(
+        } => {
+            let page = Container::new(
                 Scrollable::new(
                     scroll,
                 ).push(
@@ -170,7 +169,9 @@ pub fn home_page<'a>(
                                 ),
                         ),
                     ),
-                ),
-        ),
+                );
+
+            (Vec::new(), page)
+        },
     }
 }
