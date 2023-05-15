@@ -176,7 +176,8 @@ pub fn render_play_queue<'a>(
     match play_queue_info.play_queue_visible {
         true => {
             let mut play_queue_view = Column::new().spacing(5).padding(10).push(
-                line_row()
+                iced::Row::new()
+                    .align_items(iced::Align::Start)
                     .push(h1("Current Playback").width(Length::Fill))
                     .push(
                         dark_button(
