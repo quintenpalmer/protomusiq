@@ -1,4 +1,4 @@
-use iced::{self, button, Column, Container, Length, Row, Scrollable, TextInput};
+use iced::{self, button, Column, Container, Length, Row, Scrollable, Space, TextInput};
 
 use crate::model;
 
@@ -31,74 +31,11 @@ pub fn search_page<'a>(
                     "Search".to_string(),
                     user_nav_message(NavMessage::SearchPage("".to_string(), false)),
                 )];
-            let body = {
-                Container::new(
-                    Column::new()
-                        .spacing(10)
-                        .push(h1("Search your Library"))
-                        .push(
-                            Row::new()
-                                .push(
-                                    TextInput::new(input_state, "Search...", query, |s| {
-                                        Message::Action(message::Action::UpdateText(s))
-                                    })
-                                    .on_submit(Message::Action(
-                                        message::Action::PerformSearch(query.clone()),
-                                    )),
-                                )
-                                .width(Length::Fill),
                         )
-                        .push(
-                            Row::new()
-                                .spacing(5)
-                                .push(
-                                    Column::new()
-                                        .push(h2("Artists"))
-                                        .push(Scrollable::new(artist_scroll).push(
-                                            results.artists.iter_mut().fold(
-                                                Column::new(),
-                                                |column, result| {
-                                                    column.push(
-                                                        dark_button(
-                                                            &mut result.second,
-                                                            line_row()
-                                                                .spacing(5)
-                                                                .push(album_image(
-                                                                    library
-                                                                        .get_artists_first_album_cover(
-                                                                            model::AlbumSize::Micro,
-                                                                            result
-                                                                                .first
-                                                                                .artist_id
-                                                                                .clone(),
-                                                                        ),
-                                                                    model::AlbumSize::Micro,
-                                                                ))
-                                                                .push(
-                                                                    bright_paragraph(
-                                                                        result
-                                                                            .first
-                                                                            .artist_name
-                                                                            .clone(),
-                                                                    )
-                                                                    .width(Length::Fill),
-                                                                ),
-                                                        )
-                                                        .on_press(user_nav_message(
-                                                            NavMessage::ArtistView(
-                                                                result.first.artist_id.clone(),
-                                                            ),
-                                                        )),
-                                                    )
-                                                },
-                                            ),
-                                        ))
-                                        .width(Length::FillPortion(1)),
-                                )
-                                .push(
-                                    Column::new()
-                                        .push(h2("Albums"))
-                                        .push(Scrollable::new(album_scroll).push(
+
+            let (album_results, artist_results, track_results, featured_artist_results) = match results {
+                Some(results) => {
+                    let album_results = Scrollable::new(album_scroll).push(
                                             results.albums.iter_mut().fold(
                                                 Column::new(),
                                                 |column, result| {
@@ -145,13 +82,47 @@ pub fn search_page<'a>(
                                                     )
                                                 },
                                             ),
-                                        ))
-                                        .width(Length::FillPortion(1)),
-                                )
-                                .push(
-                                    Column::new()
-                                        .push(h2("Tracks"))
-                                        .push(Scrollable::new(track_scroll).push(
+                                        );
+                    let artist_results = Scrollable::new(artist_scroll).push(
+                                            results.artists.iter_mut().fold(
+                                                Column::new(),
+                                                |column, result| {
+                                                    column.push(
+                                                        dark_button(
+                                                            &mut result.second,
+                                                            line_row()
+                                                                .spacing(5)
+                                                                .push(album_image(
+                                                                    library
+                                                                        .get_artists_first_album_cover(
+                                                                            model::AlbumSize::Micro,
+                                                                            result
+                                                                                .first
+                                                                                .artist_id
+                                                                                .clone(),
+                                                                        ),
+                                                                    model::AlbumSize::Micro,
+                                                                ))
+                                                                .push(
+                                                                    bright_paragraph(
+                                                                        result
+                                                                            .first
+                                                                            .artist_name
+                                                                            .clone(),
+                                                                    )
+                                                                    .width(Length::Fill),
+                                                                ),
+                                                        )
+                                                        .on_press(user_nav_message(
+                                                            NavMessage::ArtistView(
+                                                                result.first.artist_id.clone(),
+                                                            ),
+                                                        )),
+                                                    )
+                                                },
+                                            ),
+                                        );
+                    let track_results = Scrollable::new(track_scroll).push(
                                             results.tracks.iter_mut().fold(
                                                 Column::new(),
                                                 |column, result| {
@@ -193,13 +164,8 @@ pub fn search_page<'a>(
                                                     )
                                                 },
                                             ),
-                                        ))
-                                        .width(Length::FillPortion(1)),
-                                )
-                                .push(
-                                    Column::new()
-                                        .push(h2("Artist for Track"))
-                                        .push(Scrollable::new(track_artist_scroll).push(
+                                        );
+                    let featured_artist_results = Scrollable::new(track_artist_scroll).push(
                                             results.track_artists.iter_mut().fold(
                                                 Column::new(),
                                                 |column, result| {
@@ -247,7 +213,59 @@ pub fn search_page<'a>(
                                                     )
                                                 },
                                             ),
-                                        ))
+                                        );
+                    (album_results, artist_results, track_results, featured_artist_results)
+                },
+                None => (
+                    Scrollable::new(album_scroll).push(Space::with_width(Length::Fill)),
+                    Scrollable::new(artist_scroll).push(Space::with_width(Length::Fill)),
+                    Scrollable::new(track_scroll).push(Space::with_width(Length::Fill)),
+                    Scrollable::new(track_artist_scroll).push(Space::with_width(Length::Fill)),
+                ),
+            };
+
+            let body = {
+                Container::new(
+                    Column::new()
+                        .spacing(10)
+                        .push(h1("Search your Library"))
+                        .push(
+                            Row::new()
+                                .push(
+                                    TextInput::new(input_state, "Search...", query, |s| {
+                                        Message::Action(message::Action::UpdateText(s))
+                                    })
+                                    .on_submit(Message::Action(
+                                        message::Action::PerformSearch(query.clone()),
+                                    )),
+                                )
+                                .width(Length::Fill),
+                        )
+                        .push(
+                            Row::new()
+                                .spacing(5)
+                                .push(
+                                    Column::new()
+                                        .push(h2("Artists"))
+                                        .push(artist_results)
+                                        .width(Length::FillPortion(1)),
+                                )
+                                .push(
+                                    Column::new()
+                                        .push(h2("Albums"))
+                                        .push(album_results)
+                                        .width(Length::FillPortion(1)),
+                                )
+                                .push(
+                                    Column::new()
+                                        .push(h2("Tracks"))
+                                        .push(track_results)
+                                        .width(Length::FillPortion(1)),
+                                )
+                                .push(
+                                    Column::new()
+                                        .push(h2("Artist for Track"))
+                                        .push(featured_artist_results)
                                         .width(Length::FillPortion(1)),
                                 )
                                 .width(Length::Fill)

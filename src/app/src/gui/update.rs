@@ -647,14 +647,9 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                             })
                             .collect(),
                     };
-                    mapped_search_results
+                    Some(mapped_search_results)
                 }
-                false => model::SearchResults {
-                    artists: Vec::new(),
-                    albums: Vec::new(),
-                    tracks: Vec::new(),
-                    track_artists: Vec::new(),
-                },
+                false => None,
             };
 
             app.rest.current_page = Page::Search(state::SearchPageState {
