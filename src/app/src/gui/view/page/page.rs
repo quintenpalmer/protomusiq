@@ -3,7 +3,7 @@ use iced::{self, button, Container};
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};
-use crate::state::{self, Page, PlayQueueInfoState, PlayerInfoState};
+use crate::state::{self, ActionState, Page, PlayQueueInfoState, PlayerInfoState};
 
 use crate::datastore::staticassets::embedded;
 
@@ -15,6 +15,7 @@ pub fn render_page<'a>(
     current_page: &'a mut Page,
     library: &'a model::LibraryState,
     app_images: &embedded::AppImages,
+    action_state: &'a ActionState,
     play_queue_info: &PlayQueueInfoState,
     player_info: &'a PlayerInfoState,
 ) -> (
@@ -52,7 +53,7 @@ pub fn render_page<'a>(
             pages::artistalbums::artist_album_list(&library, &play_queue_info, state)
         }
         Page::ArtistAlbumView(ref mut state) => {
-            pages::artistalbum::artist_album_view_state(&library, &player_info, state)
+            pages::artistalbum::artist_album_view_state(&library, &action_state, &player_info, state)
         }
         Page::ArtistTrackView(ref mut state) => {
             pages::artisttracks::artist_track_view_state(&library, &player_info, state)

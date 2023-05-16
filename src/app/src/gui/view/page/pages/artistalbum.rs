@@ -1,11 +1,11 @@
-use iced::{self, button, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
+use iced::{self, button, Checkbox, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
 
 use musiqlibrary;
 
 use crate::model;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
-use crate::state::{self, PlayerInfoState};
+use crate::state::{self, ActionState, PlayerInfoState};
 
 use super::super::super::common;
 use super::super::super::elements::*;
@@ -15,6 +15,7 @@ use super::super::consts;
 
 pub fn artist_album_view_state<'a>(
     library: &'a model::LibraryState,
+    action_state: &'a ActionState,
     player_info: &'a PlayerInfoState,
     state: &'a mut state::ArtistAlbumViewState,
 ) -> (
@@ -205,6 +206,19 @@ pub fn artist_album_view_state<'a>(
                                                     },
                                                     None => Container::new(bright_paragraph("(Create Default Playlist)")),
                                                 }
+                                            )
+                                            .push(
+                                                Row::new()
+                                                    .push(
+                                                        Checkbox::new(
+                                                            action_state.group_buttons_shuffle,
+                                                            "",
+                                                            |_| Message::Action(message::Action::ToggleShuffleOnAdd),
+                                                        )
+                                                    )
+                                                    .push(
+                                                        bright_paragraph("Shuffle (on add)")
+                                                    )
                                             )
                                     ),
                             ),

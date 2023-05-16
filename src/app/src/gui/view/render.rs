@@ -28,6 +28,7 @@ pub fn view_app(app: &mut state::Loaded) -> Element<Message> {
     let app_images = &app.rest.app_images;
     let app_gui = &mut app.gui;
     let current_page = &mut app.rest.current_page;
+    let action_state = &app.rest.action_state;
     let player_info = &app.rest.player_info.rest;
     let play_queue_info = &app.rest.play_queue_info.rest;
     let player_gui = &mut app.rest.player_info.gui;
@@ -37,6 +38,7 @@ pub fn view_app(app: &mut state::Loaded) -> Element<Message> {
         current_page,
         &library,
         &app_images,
+        &action_state,
         &play_queue_info,
         &player_info,
     );
