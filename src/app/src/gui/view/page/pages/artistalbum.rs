@@ -146,10 +146,7 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::PlaySongs(
-                                                        tracks
-                                                            .iter()
-                                                            .map(|track| track.clone())
-                                                            .collect(),
+                                                        tracks.clone()
                                                     ),
                                                 )),
                                             )
@@ -160,10 +157,7 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::InsertSongs(
-                                                        tracks
-                                                            .iter()
-                                                            .map(|track| track.clone())
-                                                            .collect(),
+                                                        tracks.clone(),
                                                         false,
                                                     ),
                                                 )),
@@ -175,10 +169,7 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::AppendSongs(
-                                                        tracks
-                                                            .iter()
-                                                            .map(|track| track.clone())
-                                                            .collect(),
+                                                        tracks.clone(),
                                                         false,
                                                     ),
                                                 )),
