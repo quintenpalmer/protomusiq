@@ -9,8 +9,7 @@ use crate::datastore::{
 };
 use crate::services::{mpris, sink, tracker};
 
-use crate::util::config;
-use crate::logging;
+use crate::util::{config, logging};
 use crate::model;
 
 use crate::datastore::loader;

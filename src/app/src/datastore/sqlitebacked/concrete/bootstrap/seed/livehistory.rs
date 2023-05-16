@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use chrono::{DateTime, Local};
 
-use crate::logging;
+use crate::util::logging;
 
 use super::super::super::constants;
 use super::super::super::dbmodel::{self, bridge};

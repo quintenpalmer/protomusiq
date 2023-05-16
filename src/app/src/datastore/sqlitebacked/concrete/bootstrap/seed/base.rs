@@ -1,6 +1,6 @@
 use std::path;
 
-use crate::logging;
+use crate::util::logging;
 
 use super::super::super::constants;
 use super::super::super::query::{albums, artists, discs, rawtracks, tracks};

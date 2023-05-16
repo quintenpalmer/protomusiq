@@ -8,7 +8,7 @@ use musiqlibrary;
 
 use crate::datastore::loader;
 use crate::datastore::sqlitebacked;
-use crate::logging;
+use crate::util::logging;
 use crate::model;
 
 use super::common;

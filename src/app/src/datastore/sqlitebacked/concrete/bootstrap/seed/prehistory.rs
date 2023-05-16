@@ -1,4 +1,4 @@
-use crate::logging;
+use crate::util::logging;
 use crate::model;
 
 use super::super::super::constants;
