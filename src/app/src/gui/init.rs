@@ -160,6 +160,9 @@ pub fn initialize_everything() -> state::App {
             should_close: false,
             error_messages: Vec::new(),
             app_images: embedded::AppImages::new(&config_state.app_data_path),
+            action_state: state::ActionState{
+                group_buttons_shuffle: false,
+            },
             play_queue_info: state::PlayQueueInfo {
                 gui: state::PlayQueueGuiState {
                     hide_play_queue: button::State::default(),
