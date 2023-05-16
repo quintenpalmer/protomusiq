@@ -6,6 +6,7 @@ use crate::model;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state::{self, ActionState, PlayerInfoState};
+use crate::util::shuffle;
 
 use super::super::super::common;
 use super::super::super::elements::*;
@@ -146,7 +147,11 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::PlaySongs(
-                                                        tracks.clone()
+                                                        if should_shuffle {
+                                                            shuffle::shuffle(tracks.clone())
+                                                        } else {
+                                                            tracks.clone()
+                                                        }
                                                     ),
                                                 )),
                                             )
@@ -157,7 +162,11 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::InsertSongs(
-                                                        tracks.clone(),
+                                                        if should_shuffle {
+                                                            shuffle::shuffle(tracks.clone())
+                                                        } else {
+                                                            tracks.clone()
+                                                        },
                                                         false,
                                                     ),
                                                 )),
@@ -169,7 +178,11 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .on_press(Message::PlaybackRequest(
                                                     message::PlaybackRequest::AppendSongs(
-                                                        tracks.clone(),
+                                                        if should_shuffle {
+                                                            shuffle::shuffle(tracks.clone())
+                                                        } else {
+                                                            tracks.clone()
+                                                        },
                                                         false,
                                                     ),
                                                 )),
