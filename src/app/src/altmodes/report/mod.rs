@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use chrono::TimeZone;
 
-use crate::config;
+use crate::util::config;
 use crate::datastore::{jsonbacked, loader};
 use crate::model;
 

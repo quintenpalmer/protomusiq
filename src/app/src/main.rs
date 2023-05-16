@@ -1,5 +1,5 @@
 mod altmodes;
-mod config;
+mod util;
 mod datastore;
 mod gui;
 mod logging;

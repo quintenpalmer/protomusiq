@@ -10,7 +10,7 @@ use crate::datastore::jsonbacked::{self, tracker, playlists as userplaylists};
 use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;
 
-use crate::config;
+use crate::util::config;
 use crate::model;
 
 #[derive(Debug)]

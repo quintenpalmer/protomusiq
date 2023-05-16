@@ -2,7 +2,7 @@ use std::io;
 
 use musiqlibrary;
 
-use crate::config;
+use crate::util::config;
 use crate::logging;
 use crate::model;
 
