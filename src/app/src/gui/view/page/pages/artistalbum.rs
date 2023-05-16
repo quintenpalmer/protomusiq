@@ -46,6 +46,8 @@ pub fn artist_album_view_state<'a>(
                 }
                 total
             });
+            let should_shuffle = action_state.group_buttons_shuffle;
+
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
                     state::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
@@ -211,7 +213,7 @@ pub fn artist_album_view_state<'a>(
                                                 Row::new()
                                                     .push(
                                                         Checkbox::new(
-                                                            action_state.group_buttons_shuffle,
+                                                            should_shuffle,
                                                             "",
                                                             |_| Message::Action(message::Action::ToggleShuffleOnAdd),
                                                         )
