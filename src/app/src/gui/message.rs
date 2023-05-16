@@ -43,6 +43,8 @@ pub enum Action {
 
     RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
 
+    ToggleShuffleOnAdd,
+
     SetVolume(VolumeRequest),
 
     UpdateText(String),

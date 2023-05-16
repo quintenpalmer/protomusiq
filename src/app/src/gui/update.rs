@@ -130,6 +130,10 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 };
                 Command::none()
             }
+            message::Action::ToggleShuffleOnAdd => {
+                app.rest.action_state.group_buttons_shuffle = !app.rest.action_state.group_buttons_shuffle;
+                Command::none()
+            }
             message::Action::TogglePlayQueueVisible => {
                 app.rest.play_queue_info.rest.play_queue_visible =
                     !app.rest.play_queue_info.rest.play_queue_visible;
