@@ -1,9 +1,9 @@
-use iced::{self, button, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
+use iced::{self, button, Checkbox, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
 
 use crate::model;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
-use crate::state::{self, PlayerInfoState};
+use crate::state::{self, ActionState, PlayerInfoState};
 
 use crate::gui::view::components;
 
@@ -13,6 +13,7 @@ use super::super::super::style;
 
 pub fn playlist_view<'a>(
     library: &'a model::LibraryState,
+    action_state: &'a ActionState,
     player_info: &'a PlayerInfoState,
     state: &'a mut state::PlaylistViewState,
 ) -> (
@@ -29,6 +30,8 @@ pub fn playlist_view<'a>(
             playlist_id,
         } => {
             let playlist = library.user_playlists.get(*playlist_id).unwrap();
+
+            let should_shuffle = action_state.group_buttons_shuffle;
 
             let full_tracks = playlist
                 .tracks
@@ -115,6 +118,19 @@ pub fn playlist_view<'a>(
                                         ),
                                     )
                           )
+                      )
+                      .push(
+                           Row::new()
+                               .push(
+                                   Checkbox::new(
+                                       should_shuffle,
+                                       "",
+                                       |_| Message::Action(message::Action::ToggleShuffleOnAdd),
+                                   )
+                               )
+                               .push(
+                                   bright_paragraph("Shuffle (on add)")
+                               )
                       )
                       )
                       .padding(10)

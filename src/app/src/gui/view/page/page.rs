@@ -38,7 +38,7 @@ pub fn render_page<'a>(
             Container::new(bright_paragraph("The Play Queue")),
         ),
         Page::PlaylistView(ref mut state) => {
-            pages::playlist::playlist_view(&library, &player_info, state)
+            pages::playlist::playlist_view(&library, &action_state, &player_info, state)
         }
         Page::PlaylistList(ref mut state) => pages::playlists::playlist_list_view(&library, state),
         Page::Search(ref mut state) => pages::search::search_page(&library, state),
