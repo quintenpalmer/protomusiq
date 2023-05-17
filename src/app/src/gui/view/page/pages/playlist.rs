@@ -74,11 +74,7 @@ pub fn playlist_view<'a>(
                                         )
                                         .on_press(
                                             Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
-                                                playlist
-                                                    .tracks
-                                                    .iter()
-                                                    .map(|track_id| library.get_track(&track_id).clone())
-                                                    .collect(),
+                                                augmented_tracks.clone(),
                                             )),
                                         ),
                                     )
@@ -90,13 +86,7 @@ pub fn playlist_view<'a>(
                                         .on_press(
                                             Message::PlaybackRequest(
                                                 message::PlaybackRequest::InsertSongs(
-                                                    playlist
-                                                        .tracks
-                                                        .iter()
-                                                        .map(|track_id| {
-                                                            library.get_track(&track_id).clone()
-                                                        })
-                                                        .collect(),
+                                                    augmented_tracks.clone(),
                                                     false,
                                                 ),
                                             ),
@@ -110,13 +100,7 @@ pub fn playlist_view<'a>(
                                         .on_press(
                                             Message::PlaybackRequest(
                                                 message::PlaybackRequest::AppendSongs(
-                                                    playlist
-                                                        .tracks
-                                                        .iter()
-                                                        .map(|track_id| {
-                                                            library.get_track(&track_id).clone()
-                                                        })
-                                                        .collect(),
+                                                    augmented_tracks.clone(),
                                                     false,
                                                 ),
                                             ),
