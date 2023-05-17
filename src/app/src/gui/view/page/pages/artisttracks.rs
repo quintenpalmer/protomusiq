@@ -105,7 +105,7 @@ pub fn artist_track_view_state<'a>(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByParent,
-                            sort_order.clone(),
+                            model::SortOrder::Regular,
                         )),
                     ),
                 )
@@ -114,7 +114,7 @@ pub fn artist_track_view_state<'a>(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByName,
-                            sort_order.clone(),
+                            model::SortOrder::Regular,
                         )),
                     ),
                 )
@@ -123,7 +123,7 @@ pub fn artist_track_view_state<'a>(
                         .on_press(user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByTotalPlayCount,
-                            sort_order.clone(),
+                            model::SortOrder::Reversed,
                         ))),
                 )
                 .push(
@@ -131,7 +131,7 @@ pub fn artist_track_view_state<'a>(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByDuration,
-                            sort_order.clone(),
+                            model::SortOrder::Reversed,
                         )),
                     ),
                 )
@@ -143,7 +143,7 @@ pub fn artist_track_view_state<'a>(
                     .on_press(user_nav_message(NavMessage::ArtistTrackView(
                         artist.artist_info.artist_id.clone(),
                         model::ArtistTrackSortKey::ByTotalPlayedDuration,
-                        sort_order.clone(),
+                        model::SortOrder::Reversed,
                     ))),
                 )
                 .push(
@@ -151,7 +151,7 @@ pub fn artist_track_view_state<'a>(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::Random,
-                            sort_order.clone(),
+                            model::SortOrder::Regular,
                         )),
                     ),
                 );
