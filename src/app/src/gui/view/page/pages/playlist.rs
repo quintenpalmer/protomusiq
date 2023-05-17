@@ -2,6 +2,7 @@ use iced::{self, button, Checkbox, Column, Container, Length, ProgressBar, Row, 
 
 use crate::model;
 
+use crate::util::shuffle;
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state::{self, ActionState, PlayerInfoState};
 
@@ -74,7 +75,11 @@ pub fn playlist_view<'a>(
                                         )
                                         .on_press(
                                             Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
-                                                augmented_tracks.clone(),
+                                                if should_shuffle {
+                                                    shuffle::shuffle(augmented_tracks.clone())
+                                                } else {
+                                                    augmented_tracks.clone()
+                                                }
                                             )),
                                         ),
                                     )
@@ -86,7 +91,11 @@ pub fn playlist_view<'a>(
                                         .on_press(
                                             Message::PlaybackRequest(
                                                 message::PlaybackRequest::InsertSongs(
-                                                    augmented_tracks.clone(),
+                                                    if should_shuffle {
+                                                        shuffle::shuffle(augmented_tracks.clone())
+                                                    } else {
+                                                        augmented_tracks.clone()
+                                                    },
                                                     false,
                                                 ),
                                             ),
@@ -100,7 +109,11 @@ pub fn playlist_view<'a>(
                                         .on_press(
                                             Message::PlaybackRequest(
                                                 message::PlaybackRequest::AppendSongs(
-                                                    augmented_tracks.clone(),
+                                                    if should_shuffle {
+                                                        shuffle::shuffle(augmented_tracks.clone())
+                                                    } else {
+                                                        augmented_tracks.clone()
+                                                    },
                                                     false,
                                                 ),
                                             ),
