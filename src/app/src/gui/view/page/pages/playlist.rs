@@ -120,19 +120,19 @@ pub fn playlist_view<'a>(
                                         ),
                                     )
                           )
-                      )
-                      .push(
-                           Row::new()
-                               .push(
-                                   Checkbox::new(
-                                       should_shuffle,
-                                       "",
-                                       |_| Message::Action(message::Action::ToggleShuffleOnAdd),
+                          .push(
+                               Row::new()
+                                   .push(
+                                       Checkbox::new(
+                                           should_shuffle,
+                                           "",
+                                           |_| Message::Action(message::Action::ToggleShuffleOnAdd),
+                                       )
                                    )
-                               )
-                               .push(
-                                   bright_paragraph("Shuffle (on add)")
-                               )
+                                   .push(
+                                       bright_paragraph("Shuffle (on add)")
+                                   )
+                          )
                       )
                       )
                       .padding(10)
