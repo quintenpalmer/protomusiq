@@ -33,10 +33,15 @@ pub fn playlist_view<'a>(
 
             let should_shuffle = action_state.group_buttons_shuffle;
 
-            let full_tracks = playlist
+            let augmented_tracks: Vec<_> = playlist
                 .tracks
                 .iter()
-                .map(|track| library.get_track(track).metadata.clone())
+                .map(|track| library.get_track(track).clone())
+                .collect();
+
+            let full_tracks = augmented_tracks
+                .iter()
+                .map(|track| track.metadata.clone())
                 .collect();
 
             let greatest_play_count = playlist.tracks
