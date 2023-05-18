@@ -104,6 +104,14 @@ impl<T> Library<T> {
             .get(&key.track_no)
             .unwrap()
     }
+
+    pub fn get_all_tracks(&self) -> Vec<&T> {
+        let mut ret = Vec::new();
+        for artist in self.artists.values() {
+            ret.append(&mut artist.get_all_tracks());
+        }
+        ret
+    }
 }
 
 /// Standalone Artist Info
