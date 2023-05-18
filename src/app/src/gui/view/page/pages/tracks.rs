@@ -1,4 +1,4 @@
-use iced::{self, button, Button, Column, Container, Element, Length, Scrollable, Space};
+use iced::{self, button, Button, Column, Container, Element, Length, ProgressBar, Scrollable, Space};
 
 use crate::model;
 
@@ -47,6 +47,8 @@ pub fn track_list<'a>(
             let body = {
                 let page: usize = page.clone();
 
+                let greatest_play_count = library.get_track_max_play_count();
+
                 let indices = common::get_page(
                     library.track_sorts.from_sort_key(&sort_key, &sort_order),
                     page,
@@ -77,6 +79,9 @@ pub fn track_list<'a>(
                                 .push(
                                     bright_paragraph(info.augmented.play_count.to_string())
                                         .width(Length::Units(40)),
+                                )
+                                .push(
+                                    ProgressBar::new(0.0..=(greatest_play_count as f32), info.augmented.play_count as f32).width(Length::Units(50)),
                                 )
                                 .push(
                                     bright_paragraph(info.metadata.title.clone())
