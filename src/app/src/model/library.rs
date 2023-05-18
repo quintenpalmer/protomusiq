@@ -254,6 +254,15 @@ impl LibraryState {
             .unwrap()
     }
 
+    pub fn get_track_max_play_count(&self) -> usize {
+        self.raw_library
+            .get_all_tracks()
+            .iter()
+            .map(|track| track.augmented.play_count)
+            .max()
+            .unwrap_or(0)
+    }
+
     fn get_artist_first_album(&self, artist_id: &musiqlibrary::ID) -> musiqlibrary::AlbumInfo {
         let artist = self.raw_library.artists.get(&artist_id).unwrap();
         let mut albums = artist.albums.values().collect::<Vec<_>>().clone();
