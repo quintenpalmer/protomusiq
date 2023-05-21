@@ -378,13 +378,13 @@ impl LibraryState {
 }
 
 pub struct ArtistSorts {
-    pub by_name: ListAndReversed<musiqlibrary::ID>,
-    pub by_play_count: ListAndReversed<musiqlibrary::ID>,
-    pub by_album_count: ListAndReversed<musiqlibrary::ID>,
-    pub by_track_count: ListAndReversed<musiqlibrary::ID>,
-    pub by_track_duration: ListAndReversed<musiqlibrary::ID>,
-    pub by_duration_played: ListAndReversed<musiqlibrary::ID>,
-    pub random: ListAndReversed<musiqlibrary::ID>,
+    pub by_name: common::ListAndReversed<musiqlibrary::ID>,
+    pub by_play_count: common::ListAndReversed<musiqlibrary::ID>,
+    pub by_album_count: common::ListAndReversed<musiqlibrary::ID>,
+    pub by_track_count: common::ListAndReversed<musiqlibrary::ID>,
+    pub by_track_duration: common::ListAndReversed<musiqlibrary::ID>,
+    pub by_duration_played: common::ListAndReversed<musiqlibrary::ID>,
+    pub random: common::ListAndReversed<musiqlibrary::ID>,
 }
 
 impl ArtistSorts {
@@ -400,7 +400,7 @@ impl ArtistSorts {
                         .cmp(&b.artist_info.artist_name.to_lowercase())
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -414,7 +414,7 @@ impl ArtistSorts {
                     artist_total_play_count(a).cmp(&artist_total_play_count(b))
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -426,7 +426,7 @@ impl ArtistSorts {
 
                 unpaged_artists.sort_unstable_by(|a, b| a.album_count().cmp(&b.album_count()));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -438,7 +438,7 @@ impl ArtistSorts {
 
                 unpaged_artists.sort_unstable_by(|a, b| a.track_count().cmp(&b.track_count()));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -452,7 +452,7 @@ impl ArtistSorts {
                     artist_track_duration_total(a).cmp(&artist_track_duration_total(b))
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -466,7 +466,7 @@ impl ArtistSorts {
                     artist_total_played_duration(a).cmp(&artist_total_played_duration(b))
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_artists
                         .iter()
                         .map(|a| a.artist_info.artist_id.clone())
@@ -481,7 +481,7 @@ impl ArtistSorts {
                     .map(|x| x.artist_info.artist_id.clone())
                     .collect();
                 artist_ids.shuffle(&mut rng);
-                ListAndReversed::new(artist_ids)
+                common::ListAndReversed::new(artist_ids)
             },
         }
     }
@@ -505,14 +505,14 @@ impl ArtistSorts {
 }
 
 pub struct AlbumSorts {
-    pub by_name: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_artist: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_date: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_last_modified: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_duration: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_total_play_count: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub by_total_played_duration: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
-    pub random: ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_name: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_artist: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_date: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_last_modified: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_duration: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_total_play_count: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub by_total_played_duration: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
+    pub random: common::ListAndReversed<(musiqlibrary::ID, musiqlibrary::ID)>,
 }
 
 impl AlbumSorts {
@@ -540,7 +540,7 @@ impl AlbumSorts {
                         .cmp(&b.1.album_name.to_lowercase())
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_id.clone()))
@@ -565,7 +565,7 @@ impl AlbumSorts {
 
                 unpaged_albums.sort_unstable_by(|a, b| a.1.start_date.cmp(&b.1.start_date));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_id.clone()))
@@ -590,7 +590,7 @@ impl AlbumSorts {
 
                 unpaged_albums.sort_unstable_by(|a, b| a.1.last_modified.cmp(&b.1.last_modified));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_id.clone()))
@@ -619,7 +619,7 @@ impl AlbumSorts {
                         .cmp(&b.0.artist_name.to_lowercase())
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_id.clone()))
@@ -645,7 +645,7 @@ impl AlbumSorts {
                 unpaged_albums
                     .sort_unstable_by(|a, b| a.1.duration_seconds().cmp(&b.1.duration_seconds()));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_info.album_id.clone()))
@@ -672,7 +672,7 @@ impl AlbumSorts {
                     album_total_play_count(&a.1).cmp(&album_total_play_count(b.1))
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_info.album_id.clone()))
@@ -699,7 +699,7 @@ impl AlbumSorts {
                     album_total_played_duration(&a.1).cmp(&album_total_played_duration(b.1))
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_albums
                         .iter()
                         .map(|a| (a.0.artist_id.clone(), a.1.album_info.album_id.clone()))
@@ -727,7 +727,7 @@ impl AlbumSorts {
                         total
                     });
                 album_ids.shuffle(&mut rng);
-                ListAndReversed::new(album_ids)
+                common::ListAndReversed::new(album_ids)
             },
         }
     }
@@ -752,12 +752,12 @@ impl AlbumSorts {
 }
 
 pub struct AlbumTrackSorts {
-    pub by_name: ListAndReversed<AugmentedTrack>,
-    pub by_album: ListAndReversed<AugmentedTrack>,
-    pub by_duration: ListAndReversed<AugmentedTrack>,
-    pub by_total_play_count: ListAndReversed<AugmentedTrack>,
-    pub by_total_played_duration: ListAndReversed<AugmentedTrack>,
-    pub random: ListAndReversed<AugmentedTrack>,
+    pub by_name: common::ListAndReversed<AugmentedTrack>,
+    pub by_album: common::ListAndReversed<AugmentedTrack>,
+    pub by_duration: common::ListAndReversed<AugmentedTrack>,
+    pub by_total_play_count: common::ListAndReversed<AugmentedTrack>,
+    pub by_total_played_duration: common::ListAndReversed<AugmentedTrack>,
+    pub random: common::ListAndReversed<AugmentedTrack>,
 }
 
 impl AlbumTrackSorts {
@@ -773,7 +773,9 @@ impl AlbumTrackSorts {
                         .cmp(&b.metadata.title.to_lowercase())
                 });
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
             by_album: {
                 let mut unpaged_tracks = artist.get_all_tracks();
@@ -781,7 +783,9 @@ impl AlbumTrackSorts {
                 unpaged_tracks
                     .sort_unstable_by(|a, b| a.metadata.date_number.cmp(&b.metadata.date_number));
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
             by_duration: {
                 let mut unpaged_tracks = artist.get_all_tracks();
@@ -789,7 +793,9 @@ impl AlbumTrackSorts {
                 unpaged_tracks
                     .sort_unstable_by(|a, b| a.metadata.duration.cmp(&b.metadata.duration));
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
             by_total_play_count: {
                 let mut unpaged_tracks = artist.get_all_tracks();
@@ -797,14 +803,18 @@ impl AlbumTrackSorts {
                 unpaged_tracks
                     .sort_unstable_by(|a, b| a.augmented.play_count.cmp(&b.augmented.play_count));
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
             by_total_played_duration: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.played_seconds().cmp(&b.played_seconds()));
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
             random: {
                 let mut rng = rand::thread_rng();
@@ -813,7 +823,9 @@ impl AlbumTrackSorts {
 
                 unpaged_tracks.shuffle(&mut rng);
 
-                ListAndReversed::new(unpaged_tracks.into_iter().map(|a| a.clone()).collect())
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
             },
         }
     }
@@ -836,11 +848,11 @@ impl AlbumTrackSorts {
 }
 
 pub struct TrackSorts {
-    pub by_name: ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
-    pub by_play_count: ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
-    pub by_duration: ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
-    pub by_played_amount: ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
-    pub random: ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
+    pub by_name: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
+    pub by_play_count: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
+    pub by_duration: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
+    pub by_played_amount: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
+    pub random: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
 }
 
 impl TrackSorts {
@@ -865,7 +877,7 @@ impl TrackSorts {
                         .cmp(&b.metadata.title.to_lowercase())
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_tracks
                         .iter()
                         .map(|a| musiqlibrary::TrackUniqueIdentifier::from_track(&a.metadata))
@@ -887,7 +899,7 @@ impl TrackSorts {
                 unpaged_tracks
                     .sort_unstable_by(|a, b| a.augmented.play_count.cmp(&b.augmented.play_count));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_tracks
                         .iter()
                         .map(|a| musiqlibrary::TrackUniqueIdentifier::from_track(&a.metadata))
@@ -913,7 +925,7 @@ impl TrackSorts {
                         .cmp(&b.metadata.duration.as_secs())
                 });
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_tracks
                         .iter()
                         .map(|a| musiqlibrary::TrackUniqueIdentifier::from_track(&a.metadata))
@@ -934,7 +946,7 @@ impl TrackSorts {
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.played_seconds().cmp(&b.played_seconds()));
 
-                ListAndReversed::new(
+                common::ListAndReversed::new(
                     unpaged_tracks
                         .iter()
                         .map(|a| musiqlibrary::TrackUniqueIdentifier::from_track(&a.metadata))
@@ -960,7 +972,7 @@ impl TrackSorts {
                 }
 
                 unpaged_track_ids.shuffle(&mut rng);
-                ListAndReversed::new(unpaged_track_ids)
+                common::ListAndReversed::new(unpaged_track_ids)
             },
         }
     }
@@ -978,30 +990,6 @@ impl TrackSorts {
             common::TrackSortKey::ByRandom => &self.random,
         }
         .sort_ordered(&sort_order)
-    }
-}
-
-pub struct ListAndReversed<T> {
-    pub regular: Vec<T>,
-    pub reversed: Vec<T>,
-}
-
-impl<T: Clone> ListAndReversed<T> {
-    pub fn new(regular: Vec<T>) -> Self {
-        let mut reversed = regular.clone();
-        reversed.reverse();
-
-        ListAndReversed {
-            regular: regular,
-            reversed: reversed,
-        }
-    }
-
-    pub fn sort_ordered(&self, sort_order: &common::SortOrder) -> &Vec<T> {
-        match sort_order {
-            common::SortOrder::Regular => &self.regular,
-            common::SortOrder::Reversed => &self.reversed,
-        }
     }
 }
 

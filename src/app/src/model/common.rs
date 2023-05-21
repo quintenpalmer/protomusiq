@@ -121,6 +121,30 @@ impl<F> Pair<F, ()> {
     }
 }
 
+pub struct ListAndReversed<T> {
+    pub regular: Vec<T>,
+    pub reversed: Vec<T>,
+}
+
+impl<T: Clone> ListAndReversed<T> {
+    pub fn new(regular: Vec<T>) -> Self {
+        let mut reversed = regular.clone();
+        reversed.reverse();
+
+        ListAndReversed {
+            regular: regular,
+            reversed: reversed,
+        }
+    }
+
+    pub fn sort_ordered(&self, sort_order: &SortOrder) -> &Vec<T> {
+        match sort_order {
+            SortOrder::Regular => &self.regular,
+            SortOrder::Reversed => &self.reversed,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct SimpleSearchResults {
     pub artists: Vec<musiqlibrary::ArtistInfo>,
