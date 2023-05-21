@@ -21,7 +21,7 @@ pub fn playlist_view<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::PlaylistViewState { playlist_id } => {
-            let playlist = library.user_playlists.get(*playlist_id).unwrap();
+            let playlist = library.user_playlists.get_playlist(*playlist_id).unwrap();
 
             let should_shuffle = action_state.group_buttons_shuffle;
 

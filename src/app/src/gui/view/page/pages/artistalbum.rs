@@ -178,7 +178,7 @@ pub fn artist_album_view_state<'a>(
                                             .push(
                                                 match library.user_playlists.get_default_playlist_id() {
                                                     Some(default_playlist_id) => {
-                                                        let default_playlist = library.user_playlists.get(default_playlist_id).unwrap();
+                                                        let default_playlist = library.user_playlists.get_playlist(default_playlist_id).unwrap();
                                                         Container::new(dark_button(
                                                                 bright_paragraph(format!("+ Add All to:\n\"{}\"", default_playlist.name)),
                                                             )

@@ -66,7 +66,7 @@ impl PlaylistData {
         };
     }
 
-    pub fn get(&self, playlist_id: u64) -> Option<&PlaylistEntry> {
+    pub fn get_playlist(&self, playlist_id: u64) -> Option<&PlaylistEntry> {
         match self.inner {
             Some(ref v) => v.playlists.get(&playlist_id),
             None => None,
