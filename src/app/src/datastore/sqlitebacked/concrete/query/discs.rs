@@ -22,7 +22,9 @@ pub fn insert_disc(main_db: &rusqlite::Connection, album_id: u32, disc_no: u32) 
 }
 
 pub fn select_discs(main_db: &rusqlite::Connection) -> Vec<dbmodel::Disc> {
-    let mut statement = main_db.prepare("SELECT * FROM discs").unwrap();
+    let mut statement = main_db
+        .prepare("SELECT * FROM discs WHERE deleted_at IS NULL")
+        .unwrap();
     let discs = statement
         .query_map([], map_disc)
         .unwrap()

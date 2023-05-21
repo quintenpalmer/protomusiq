@@ -17,7 +17,9 @@ pub fn insert_artist(main_db: &rusqlite::Connection, artist: &musiqlibrary::Arti
 }
 
 pub fn select_artists(main_db: &rusqlite::Connection) -> Vec<dbmodel::Artist> {
-    let mut statement = main_db.prepare("SELECT * FROM artists").unwrap();
+    let mut statement = main_db
+        .prepare("SELECT * FROM artists WHERE deleted_at IS NULL")
+        .unwrap();
     let artists = statement
         .query_map([], map_artist)
         .unwrap()

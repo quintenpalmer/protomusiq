@@ -52,7 +52,9 @@ pub fn insert_track(
 }
 
 pub fn select_tracks(main_db: &rusqlite::Connection) -> Vec<dbmodel::Track> {
-    let mut statement = main_db.prepare("SELECT * FROM tracks").unwrap();
+    let mut statement = main_db
+        .prepare("SELECT * FROM tracks WHERE deleted_at IS NULL")
+        .unwrap();
     let tracks = statement
         .query_map([], map_track)
         .unwrap()

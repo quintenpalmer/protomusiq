@@ -42,7 +42,9 @@ pub fn insert_album(
 }
 
 pub fn select_albums(main_db: &rusqlite::Connection) -> Vec<dbmodel::Album> {
-    let mut statement = main_db.prepare("SELECT * FROM albums").unwrap();
+    let mut statement = main_db
+        .prepare("SELECT * FROM albums WHERE deleted_at IS NULL")
+        .unwrap();
     let albums = statement
         .query_map([], map_album)
         .unwrap()
