@@ -1,13 +1,13 @@
-use iced::{Element, Length};
 use iced::widget::{Column, Container, Row, Scrollable, Space};
+use iced::{Element, Length};
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::model;
 use crate::state;
 
 use super::common;
-use super::elements::*;
 use super::components;
+use super::elements::*;
 use super::page;
 use super::style;
 
@@ -43,8 +43,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 
     let header = render_header(additional_breadcrumbs);
 
-    let (play_queue_view, play_queue_expanded) =
-        render_play_queue(&library, &play_queue_info);
+    let (play_queue_view, play_queue_expanded) = render_play_queue(&library, &play_queue_info);
 
     let playthrough = render_playthrough(&player_info.current_playback);
 
@@ -70,8 +69,9 @@ pub fn render_entire_page<'a>(
 ) -> Element<'a, Message> {
     let mut ret = Column::new()
         .push(
-            Container::new(header.padding(5).height(Length::Fixed(50.0)))
-                .style(iced::theme::Container::Custom(Box::new(style::ContainerPopForward))),
+            Container::new(header.padding(5).height(Length::Fixed(50.0))).style(
+                iced::theme::Container::Custom(Box::new(style::ContainerPopForward)),
+            ),
         )
         .push({
             let row = match play_queue_expanded {
@@ -95,10 +95,9 @@ pub fn render_entire_page<'a>(
     };
     match player_controls {
         Some(controls) => {
-            ret = ret.push(
-                Container::new(controls.height(Length::Fixed(70.0)))
-                    .style(iced::theme::Container::Custom(Box::new(style::ContainerPopForward))),
-            );
+            ret = ret.push(Container::new(controls.height(Length::Fixed(70.0))).style(
+                iced::theme::Container::Custom(Box::new(style::ContainerPopForward)),
+            ));
         }
         None => (),
     };
@@ -106,15 +105,10 @@ pub fn render_entire_page<'a>(
     ret.width(Length::Fill).into()
 }
 
-pub fn render_header<'a>(
-    additional_breadcrumbs: Vec<(String, Message)>,
-) -> Container<'a, Message> {
-    let mut breadcrumbs: Vec<Element<Message>> =
-        vec![
-            dark_button(bright_paragraph("Home"))
-                .on_press(user_nav_message(NavMessage::Home))
-                .into(),
-        ];
+pub fn render_header<'a>(additional_breadcrumbs: Vec<(String, Message)>) -> Container<'a, Message> {
+    let mut breadcrumbs: Vec<Element<Message>> = vec![dark_button(bright_paragraph("Home"))
+        .on_press(user_nav_message(NavMessage::Home))
+        .into()];
 
     breadcrumbs.extend(
         additional_breadcrumbs
@@ -127,9 +121,8 @@ pub fn render_header<'a>(
             .collect::<Vec<Element<Message>>>(),
     );
 
-    let back_forward_buttons = Row::new().push(
-        dark_button(bright_paragraph("<")).on_press(Message::HistoryNav),
-    );
+    let back_forward_buttons =
+        Row::new().push(dark_button(bright_paragraph("<")).on_press(Message::HistoryNav));
 
     let header = Row::new().push(
         line_row()
@@ -149,11 +142,9 @@ pub fn render_header<'a>(
             .push(
                 line_row()
                     .push(
-                        dark_button(bright_paragraph("Search"))
-                            .on_press(user_nav_message(message::NavMessage::SearchPage(
-                                "".to_string(),
-                                false,
-                            ))),
+                        dark_button(bright_paragraph("Search")).on_press(user_nav_message(
+                            message::NavMessage::SearchPage("".to_string(), false),
+                        )),
                     )
                     .push(
                         dark_button(bright_paragraph("Settings"))
@@ -179,10 +170,8 @@ pub fn render_play_queue<'a>(
                     .align_items(iced::Alignment::Start)
                     .push(h1("Current Playback").width(Length::Fill))
                     .push(
-                        dark_button(
-                            bright_paragraph("Focus"),
-                        )
-                        .on_press(user_nav_message(NavMessage::PlayQueueFocus)),
+                        dark_button(bright_paragraph("Focus"))
+                            .on_press(user_nav_message(NavMessage::PlayQueueFocus)),
                     )
                     .push(
                         dark_button(bright_paragraph(">"))
@@ -192,73 +181,54 @@ pub fn render_play_queue<'a>(
             let mut play_queue_column = Column::new();
             let mut stripe_marker = false;
 
-            for (index, play_queue_entry) in play_queue_info
-                .play_history
-                .iter()
-                .enumerate()
-            {
+            for (index, play_queue_entry) in play_queue_info.play_history.iter().enumerate() {
                 stripe_marker = !stripe_marker;
                 play_queue_column = play_queue_column.push(
-                    Container::new(
-                        match play_queue_entry {
-                            state::PlayQueueEntry::Track(play_queue_track) => line_row()
-                                .spacing(5)
-                                .push(album_image(
-                                    library.get_album_cover(
-                                        model::AlbumSize::Micro,
-                                        play_queue_track.track.metadata.album_artist_id.clone(),
-                                        play_queue_track.track.metadata.album_id.clone(),
-                                    ),
-                                    model::AlbumSize::Micro,
-                                ))
-                                .push(
-                                    dark_button(
-                                        bright_paragraph(play_queue_track.track.metadata.title.clone())
-                                    )
-                                    .on_press(
-                                        components::track_link(&play_queue_track.track.metadata)
-                                    )
-                                    .width(Length::Fill)
-                                )
-                                .push(
-                                    dark_button(
-                                        bright_paragraph("-"),
-                                    )
-                                    .on_press(
-                                        message::Message::Action(
-                                            message::Action::RemoveTrackFromPlayQueue(
-                                                message::HistoryOrQueue::History,
-                                                index,
-                                            ),
-                                        ),
-                                    ),
-                                )
-                                .push(dark_paragraph(common::format_duration(
-                                    play_queue_track.track.metadata.duration.as_secs(),
-                                ))),
-                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
+                    Container::new(match play_queue_entry {
+                        state::PlayQueueEntry::Track(play_queue_track) => line_row()
                             .spacing(5)
+                            .push(album_image(
+                                library.get_album_cover(
+                                    model::AlbumSize::Micro,
+                                    play_queue_track.track.metadata.album_artist_id.clone(),
+                                    play_queue_track.track.metadata.album_id.clone(),
+                                ),
+                                model::AlbumSize::Micro,
+                            ))
                             .push(
-                                bright_paragraph("Paused")
-                                    .width(Length::Fill),
+                                dark_button(bright_paragraph(
+                                    play_queue_track.track.metadata.title.clone(),
+                                ))
+                                .on_press(components::track_link(&play_queue_track.track.metadata))
+                                .width(Length::Fill),
                             )
-                            .push(
-                                dark_button(
-                                    bright_paragraph("-"),
-                                )
-                                .on_press(
-                                    message::Message::Action(
-                                        message::Action::RemoveTrackFromPlayQueue(
-                                            message::HistoryOrQueue::History,
-                                            index,
-                                        ),
+                            .push(dark_button(bright_paragraph("-")).on_press(
+                                message::Message::Action(
+                                    message::Action::RemoveTrackFromPlayQueue(
+                                        message::HistoryOrQueue::History,
+                                        index,
                                     ),
                                 ),
-                            )
-                    }
-                    )
+                            ))
+                            .push(dark_paragraph(common::format_duration(
+                                play_queue_track.track.metadata.duration.as_secs(),
+                            ))),
+                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
+                            .spacing(5)
+                            .push(bright_paragraph("Paused").width(Length::Fill))
+                            .push(dark_button(bright_paragraph("-")).on_press(
+                                message::Message::Action(
+                                    message::Action::RemoveTrackFromPlayQueue(
+                                        message::HistoryOrQueue::History,
+                                        index,
+                                    ),
+                                ),
+                            )),
+                    })
                     .padding(2)
-                    .style(iced::theme::Container::Custom(style::get_stripe_style(stripe_marker))),
+                    .style(iced::theme::Container::Custom(
+                        style::get_stripe_style(stripe_marker),
+                    )),
                 );
             }
             match play_queue_info.current_playback {
@@ -278,15 +248,19 @@ pub fn render_play_queue<'a>(
                                         model::AlbumSize::Micro,
                                     ))
                                     .push(
-                                        bright_paragraph(current_playback.track.metadata.title.clone())
-                                            .width(Length::Fill),
+                                        bright_paragraph(
+                                            current_playback.track.metadata.title.clone(),
+                                        )
+                                        .width(Length::Fill),
                                     )
                                     .push(bright_paragraph(common::format_duration(
                                         current_playback.track.metadata.duration.as_secs(),
                                     ))),
                             )
                             .padding(2)
-                            .style(iced::theme::Container::Custom(Box::new(style::ContainerStripeHighlight {}))),
+                            .style(iced::theme::Container::Custom(Box::new(
+                                style::ContainerStripeHighlight {},
+                            ))),
                         );
                     }
                     state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => {
@@ -295,95 +269,72 @@ pub fn render_play_queue<'a>(
                             Container::new(
                                 line_row()
                                     .spacing(5)
-                                    .push(
-                                        bright_paragraph("Paused").width(Length::Fill),
-                                    )
+                                    .push(bright_paragraph("Paused").width(Length::Fill)),
                             )
                             .padding(2)
-                            .style(iced::theme::Container::Custom(Box::new(style::ContainerStripeHighlight {}))),
+                            .style(iced::theme::Container::Custom(Box::new(
+                                style::ContainerStripeHighlight {},
+                            ))),
                         );
-                    },
-                }
+                    }
+                },
                 None => (),
             };
-            for (index, play_queue_entry) in play_queue_info
-                .play_queue
-                .iter()
-                .enumerate()
-            {
+            for (index, play_queue_entry) in play_queue_info.play_queue.iter().enumerate() {
                 stripe_marker = !stripe_marker;
                 play_queue_column = play_queue_column.push(
-                    Container::new(
-                        match play_queue_entry {
-                            state::PlayQueueEntry::Track(play_queue_track) => line_row()
-                                    .spacing(5)
-                                    .push(album_image(
-                                        library.get_album_cover(
-                                            model::AlbumSize::Micro,
-                                            play_queue_track.track.metadata.album_artist_id.clone(),
-                                            play_queue_track.track.metadata.album_id.clone(),
-                                        ),
-                                        model::AlbumSize::Micro,
-                                    ))
-                                    .push(
-                                        dark_button(
-                                            bright_paragraph(play_queue_track.track.metadata.title.clone())
-                                        )
-                                        .on_press(
-                                            components::track_link(&play_queue_track.track.metadata)
-                                        )
-                                        .width(Length::Fill)
-                                    )
-                                    .push(
-                                        dark_button(
-                                            bright_paragraph("-"),
-                                        )
-                                        .on_press(
-                                            message::Message::Action(
-                                                message::Action::RemoveTrackFromPlayQueue(
-                                                    message::HistoryOrQueue::Queue,
-                                                    index,
-                                                ),
-                                            ),
-                                        ),
-                                    )
-                                    .push(dark_paragraph(common::format_duration(
-                                        play_queue_track.track.metadata.duration.as_secs(),
-                                    ))),
-                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
+                    Container::new(match play_queue_entry {
+                        state::PlayQueueEntry::Track(play_queue_track) => line_row()
                             .spacing(5)
+                            .push(album_image(
+                                library.get_album_cover(
+                                    model::AlbumSize::Micro,
+                                    play_queue_track.track.metadata.album_artist_id.clone(),
+                                    play_queue_track.track.metadata.album_id.clone(),
+                                ),
+                                model::AlbumSize::Micro,
+                            ))
                             .push(
-                                bright_paragraph("Paused")
-                                    .width(Length::Fill),
+                                dark_button(bright_paragraph(
+                                    play_queue_track.track.metadata.title.clone(),
+                                ))
+                                .on_press(components::track_link(&play_queue_track.track.metadata))
+                                .width(Length::Fill),
                             )
-                            .push(
-                                dark_button(
-                                    bright_paragraph("-"),
-                                )
-                                .on_press(
-                                    message::Message::Action(
-                                        message::Action::RemoveTrackFromPlayQueue(
-                                            message::HistoryOrQueue::History,
-                                            index,
-                                        ),
+                            .push(dark_button(bright_paragraph("-")).on_press(
+                                message::Message::Action(
+                                    message::Action::RemoveTrackFromPlayQueue(
+                                        message::HistoryOrQueue::Queue,
+                                        index,
                                     ),
                                 ),
-                            )
-                    }
-                    )
+                            ))
+                            .push(dark_paragraph(common::format_duration(
+                                play_queue_track.track.metadata.duration.as_secs(),
+                            ))),
+                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
+                            .spacing(5)
+                            .push(bright_paragraph("Paused").width(Length::Fill))
+                            .push(dark_button(bright_paragraph("-")).on_press(
+                                message::Message::Action(
+                                    message::Action::RemoveTrackFromPlayQueue(
+                                        message::HistoryOrQueue::History,
+                                        index,
+                                    ),
+                                ),
+                            )),
+                    })
                     .padding(2)
-                    .style(iced::theme::Container::Custom(style::get_stripe_style(stripe_marker))),
+                    .style(iced::theme::Container::Custom(
+                        style::get_stripe_style(stripe_marker),
+                    )),
                 );
             }
-            play_queue_view = play_queue_view.push(
-                Scrollable::new(play_queue_column),
-            );
+            play_queue_view = play_queue_view.push(Scrollable::new(play_queue_column));
             (
-                Container::new(
-                    Container::new(play_queue_view)
-                        .height(Length::Fill)
-                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPopMidForward {}))),
-                )
+                Container::new(Container::new(play_queue_view).height(Length::Fill).style(
+                    iced::theme::Container::Custom(Box::new(style::ContainerPopMidForward {})),
+                ))
                 .height(Length::Fill),
                 true,
             )
@@ -406,33 +357,35 @@ pub fn render_playthrough(
     match maybe_current_playback {
         Some(ref outer_current_playback) => match outer_current_playback {
             state::CurrentPlayback::Track(ref current_playback) => {
-                {
-                    let playback_marker_pre_fill_portion = (1 + current_playback.current_second) as u16;
-                    let playback_marker_post_fill_portion =
-                        (1 + current_playback.track.metadata.duration.as_secs()
-                            - current_playback.current_second) as u16;
-                    Some(
-                        Container::new(
-                            Row::new()
-                                .push(
-                                    Container::new(Space::new(Length::Fill, Length::Shrink))
-                                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPlaybackPlayedThrough)))
-                                        .height(Length::Fill)
-                                        .width(Length::FillPortion(playback_marker_pre_fill_portion)),
-                                )
-                                .push(
-                                    Container::new(Space::new(Length::Fill, Length::Fill))
-                                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPlaybackToPlayThrough)))
-                                        .height(Length::Fill)
-                                        .width(Length::FillPortion(playback_marker_post_fill_portion)),
-                                ),
-                        )
-                        .width(Length::Fill),
+                let playback_marker_pre_fill_portion = (1 + current_playback.current_second) as u16;
+                let playback_marker_post_fill_portion =
+                    (1 + current_playback.track.metadata.duration.as_secs()
+                        - current_playback.current_second) as u16;
+                Some(
+                    Container::new(
+                        Row::new()
+                            .push(
+                                Container::new(Space::new(Length::Fill, Length::Shrink))
+                                    .style(iced::theme::Container::Custom(Box::new(
+                                        style::ContainerPlaybackPlayedThrough,
+                                    )))
+                                    .height(Length::Fill)
+                                    .width(Length::FillPortion(playback_marker_pre_fill_portion)),
+                            )
+                            .push(
+                                Container::new(Space::new(Length::Fill, Length::Fill))
+                                    .style(iced::theme::Container::Custom(Box::new(
+                                        style::ContainerPlaybackToPlayThrough,
+                                    )))
+                                    .height(Length::Fill)
+                                    .width(Length::FillPortion(playback_marker_post_fill_portion)),
+                            ),
                     )
-                }
+                    .width(Length::Fill),
+                )
             }
             state::CurrentPlayback::PauseBreak => None,
-        }
+        },
         None => None,
     }
 }
@@ -442,7 +395,11 @@ pub fn render_player_controls<'a>(
     library: &'a model::LibraryState,
 ) -> Option<Container<'a, Message>> {
     match player_info.current_playback {
-        Some(ref outer_current_playback) => Some(controls_with_maybe_track_info(player_info, library, outer_current_playback)),
+        Some(ref outer_current_playback) => Some(controls_with_maybe_track_info(
+            player_info,
+            library,
+            outer_current_playback,
+        )),
         None => None,
     }
 }
@@ -457,9 +414,7 @@ fn controls_with_maybe_track_info<'a>(
             let duration_info = bright_paragraph(format!(
                 "{} / {}",
                 common::format_duration(current_playback.current_second),
-                common::format_duration(
-                    current_playback.track.metadata.duration.as_secs(),
-                )
+                common::format_duration(current_playback.track.metadata.duration.as_secs(),)
             ));
 
             let album_info = Row::new()
@@ -475,52 +430,49 @@ fn controls_with_maybe_track_info<'a>(
                 .push(
                     Column::new()
                         .push(
-                            dark_text_like_button(
-                                bright(h2(current_playback.track.metadata.title.clone()))
-                            )
-                            .on_press(
-                                components::track_link(&current_playback.track.metadata)
-                            )
+                            dark_text_like_button(bright(h2(current_playback
+                                .track
+                                .metadata
+                                .title
+                                .clone())))
+                            .on_press(components::track_link(&current_playback.track.metadata)),
                         )
-                        .push(Row::new()
-                              .push(
-                                  dark_text_like_button(
-                                      h3(current_playback.track.metadata.album_artist.clone())
-                                  )
-                                  .on_press(
-                                      user_nav_message(
-                                          NavMessage::ArtistView(
-                                              current_playback.track.metadata.album_artist_id.clone()
-                                          )
-                                      )
-                                  )
-                              )
-                              .push(h3("-"))
-                              .push(
-                                  dark_text_like_button(
-                                      h3(current_playback.track.metadata.album.clone())
-                                  )
-                                  .on_press(
-                                      user_nav_message(
-                                          NavMessage::ArtistAlbumView(
-                                              current_playback.track.metadata.album_artist_id.clone(),
-                                              current_playback.track.metadata.album_id.clone(),
-                                              model::AlbumSize::Regular,
-                                              None,
-                                          )
-                                      )
-                                  )
-                              )
-                        )
+                        .push(
+                            Row::new()
+                                .push(
+                                    dark_text_like_button(h3(current_playback
+                                        .track
+                                        .metadata
+                                        .album_artist
+                                        .clone()))
+                                    .on_press(user_nav_message(NavMessage::ArtistView(
+                                        current_playback.track.metadata.album_artist_id.clone(),
+                                    ))),
+                                )
+                                .push(h3("-"))
+                                .push(
+                                    dark_text_like_button(h3(current_playback
+                                        .track
+                                        .metadata
+                                        .album
+                                        .clone()))
+                                    .on_press(user_nav_message(NavMessage::ArtistAlbumView(
+                                        current_playback.track.metadata.album_artist_id.clone(),
+                                        current_playback.track.metadata.album_id.clone(),
+                                        model::AlbumSize::Regular,
+                                        None,
+                                    ))),
+                                ),
+                        ),
                 );
             (duration_info, album_info)
-        },
+        }
         state::CurrentPlayback::PauseBreak => {
             let duration_info = bright_paragraph("");
             let album_info = Row::new().spacing(10).push(bright_paragraph("Paused"));
 
             (duration_info, album_info)
-        },
+        }
     };
 
     Container::new(
@@ -531,54 +483,27 @@ fn controls_with_maybe_track_info<'a>(
                     .push(
                         Row::new()
                             .push(
-                                dark_button(
-                                    bright_paragraph("<<"),
-                                )
-                                .on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::Prev,
-                                    ),
+                                dark_button(bright_paragraph("<<")).on_press(
+                                    Message::PlaybackRequest(message::PlaybackRequest::Prev),
                                 ),
                             )
                             .push(if player_info.playing {
-                                dark_button(
-                                    bright_paragraph("="),
-                                )
-                                .on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::Pause,
-                                    ),
+                                dark_button(bright_paragraph("=")).on_press(
+                                    Message::PlaybackRequest(message::PlaybackRequest::Pause),
                                 )
                             } else {
-                                dark_button(
-                                    bright_paragraph(">"),
-                                )
-                                .on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::Play,
-                                    ),
+                                dark_button(bright_paragraph(">")).on_press(
+                                    Message::PlaybackRequest(message::PlaybackRequest::Play),
                                 )
                             })
                             .push(
-                                dark_button(
-                                    bright_paragraph(">>"),
-                                )
-                                .on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::Next,
-                                    ),
+                                dark_button(bright_paragraph(">>")).on_press(
+                                    Message::PlaybackRequest(message::PlaybackRequest::Next),
                                 ),
                             )
-                            .push(
-                                dark_button(
-                                    bright_paragraph("|="),
-                                )
-                                .on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::InsertPause,
-                                    ),
-                                ),
-                            ),
+                            .push(dark_button(bright_paragraph("|=")).on_press(
+                                Message::PlaybackRequest(message::PlaybackRequest::InsertPause),
+                            )),
                     )
                     .push(duration_info)
                     .width(Length::FillPortion(1)),
@@ -588,38 +513,22 @@ fn controls_with_maybe_track_info<'a>(
             .push(
                 Row::new()
                     .push(
-                        dark_button(
-                            bright_paragraph("--"),
-                        )
-                        .on_press(Message::Action(
+                        dark_button(bright_paragraph("--")).on_press(Message::Action(
                             message::Action::SetVolume(message::VolumeRequest::Set(0.0)),
                         )),
                     )
-                    .push(
-                        dark_button(
-                            bright_paragraph("-"),
-                        )
-                        .on_press(Message::Action(
-                            message::Action::SetVolume(message::VolumeRequest::Down(0.1)),
-                        )),
-                    )
+                    .push(dark_button(bright_paragraph("-")).on_press(Message::Action(
+                        message::Action::SetVolume(message::VolumeRequest::Down(0.1)),
+                    )))
                     .push(bright_paragraph(format!(
                         "{}",
                         (player_info.current_volume * 100.0).round()
                     )))
+                    .push(dark_button(bright_paragraph("+")).on_press(Message::Action(
+                        message::Action::SetVolume(message::VolumeRequest::Up(0.1)),
+                    )))
                     .push(
-                        dark_button(
-                            bright_paragraph("+"),
-                        )
-                        .on_press(Message::Action(
-                            message::Action::SetVolume(message::VolumeRequest::Up(0.1)),
-                        )),
-                    )
-                    .push(
-                        dark_button(
-                            bright_paragraph("++"),
-                        )
-                        .on_press(Message::Action(
+                        dark_button(bright_paragraph("++")).on_press(Message::Action(
                             message::Action::SetVolume(message::VolumeRequest::Set(1.0)),
                         )),
                     ),
