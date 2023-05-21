@@ -132,7 +132,7 @@ pub struct LibraryState {
 
     pub grid_info: GridInfo,
 
-    pub album_art: AlbumArt,
+    pub album_art: common::AlbumArt,
 }
 
 pub struct GridInfo {
@@ -990,37 +990,5 @@ impl TrackSorts {
             common::TrackSortKey::ByRandom => &self.random,
         }
         .sort_ordered(&sort_order)
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct AlbumArt {
-    pub large_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-    pub album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-    pub small_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-    pub mini_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-    pub micro_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-    pub orig_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
-}
-
-impl AlbumArt {
-    pub fn get_album_cover(
-        &self,
-        album_size: common::AlbumSize,
-        artist_id: musiqlibrary::ID,
-        album_id: musiqlibrary::ID,
-    ) -> Vec<u8> {
-        match album_size {
-            common::AlbumSize::Large => &self.large_album_covers,
-            common::AlbumSize::Regular => &self.album_covers,
-            common::AlbumSize::Small => &self.small_album_covers,
-            common::AlbumSize::Mini => &self.mini_album_covers,
-            common::AlbumSize::Micro => &self.micro_album_covers,
-        }
-        .get(&musiqlibrary::AlbumUniqueIdentifier::new(
-            artist_id, album_id,
-        ))
-        .unwrap()
-        .clone()
     }
 }

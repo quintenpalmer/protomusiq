@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::env;
 use std::path;
 use std::time;
@@ -142,6 +143,38 @@ impl<T: Clone> ListAndReversed<T> {
             SortOrder::Regular => &self.regular,
             SortOrder::Reversed => &self.reversed,
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct AlbumArt {
+    pub large_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub small_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub mini_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub micro_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub orig_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+}
+
+impl AlbumArt {
+    pub fn get_album_cover(
+        &self,
+        album_size: AlbumSize,
+        artist_id: musiqlibrary::ID,
+        album_id: musiqlibrary::ID,
+    ) -> Vec<u8> {
+        match album_size {
+            AlbumSize::Large => &self.large_album_covers,
+            AlbumSize::Regular => &self.album_covers,
+            AlbumSize::Small => &self.small_album_covers,
+            AlbumSize::Mini => &self.mini_album_covers,
+            AlbumSize::Micro => &self.micro_album_covers,
+        }
+        .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+            artist_id, album_id,
+        ))
+        .unwrap()
+        .clone()
     }
 }
 
