@@ -160,6 +160,9 @@ pub fn load_library_from_cache_and_scan(
                                 &tracks,
                             );
 
+                            // TODO is `Callback::NoCache` correct here?
+                            // there shouldn't be any reason to anything fresh after seeding
+                            // everything
                             (payload, Callback::NoCache)
                         }
                     }
