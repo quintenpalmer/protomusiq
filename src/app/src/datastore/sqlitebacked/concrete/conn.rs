@@ -4,8 +4,8 @@ use std::ops::Add;
 use chrono::{DateTime, Local};
 
 use crate::datastore::localfs;
-use crate::util::logging;
 use crate::model;
+use crate::util::logging;
 
 use super::bootstrap::{migrate, seed};
 use super::constants;
