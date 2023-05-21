@@ -5,7 +5,7 @@ use musiqlibrary;
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};
-use crate::state::{self, PlayQueueInfoState};
+use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
 use super::super::super::elements::*;
@@ -14,7 +14,7 @@ use super::super::consts;
 
 pub fn artist_album_list<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &PlayQueueInfoState,
+    play_queue_info: &PlayQueueInfo,
     state: &'a state::ArtistViewState,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {

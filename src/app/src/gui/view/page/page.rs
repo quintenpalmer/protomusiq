@@ -3,7 +3,7 @@ use iced::widget::Container;
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};
-use crate::state::{self, ActionState, Page, PlayQueueInfoState, PlayerInfoState};
+use crate::state::{self, ActionState, Page, PlayQueueInfo, PlayerInfoState};
 
 use crate::datastore::staticassets::embedded;
 
@@ -16,7 +16,7 @@ pub fn render_page<'a>(
     library: &'a model::LibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
-    play_queue_info: &PlayQueueInfoState,
+    play_queue_info: &PlayQueueInfo,
     player_info: &'a PlayerInfoState,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match current_page {

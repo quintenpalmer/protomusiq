@@ -4,7 +4,7 @@ use iced::{self, Element, Length};
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};
-use crate::state::{self, PlayQueueInfoState};
+use crate::state::{self, PlayQueueInfo};
 
 use super::super::consts;
 
@@ -13,7 +13,7 @@ use super::super::super::elements::*;
 
 pub fn album_list<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &PlayQueueInfoState,
+    play_queue_info: &PlayQueueInfo,
     state: &'a state::AlbumListState,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {

@@ -30,7 +30,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let current_page = &app.current_page;
     let action_state = &app.action_state;
     let player_info = &app.player_info.rest;
-    let play_queue_info = &app.play_queue_info.rest;
+    let play_queue_info = &app.play_queue_info;
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
@@ -161,7 +161,7 @@ pub fn render_header<'a>(additional_breadcrumbs: Vec<(String, Message)>) -> Cont
 
 pub fn render_play_queue<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &'a state::PlayQueueInfoState,
+    play_queue_info: &'a state::PlayQueueInfo,
 ) -> (Container<'a, Message>, bool) {
     match play_queue_info.play_queue_visible {
         true => {

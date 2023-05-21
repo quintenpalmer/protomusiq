@@ -41,10 +41,6 @@ pub struct Config {
 
 /// State for the Play Queue (and Current Track and Play History)
 pub struct PlayQueueInfo {
-    pub rest: PlayQueueInfoState,
-}
-
-pub struct PlayQueueInfoState {
     pub play_queue_visible: bool,
     pub play_history: Vec<PlayQueueEntry>,
     pub current_playback: Option<PlayQueueEntry>,

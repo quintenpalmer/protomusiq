@@ -148,12 +148,10 @@ pub fn initialize_everything() -> state::App {
             group_buttons_shuffle: false,
         },
         play_queue_info: state::PlayQueueInfo {
-            rest: state::PlayQueueInfoState {
-                play_queue_visible: true,
-                play_history: Vec::new(),
-                play_queue: Vec::new(),
-                current_playback: None,
-            },
+            play_queue_visible: true,
+            play_history: Vec::new(),
+            play_queue: Vec::new(),
+            current_playback: None,
         },
         config: state::Config { rest: config_state },
         player_info: state::PlayerInfo {
