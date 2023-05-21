@@ -95,7 +95,7 @@ enum Callback {
 }
 
 impl Callback {
-    fn done(&self, organized: &musiqlibrary::RawLibrary) {
+    fn done(&mut self, organized: &musiqlibrary::RawLibrary) {
         match self {
             Callback::JSON(metadata_json_file) => {
                 let new_metadata_payload: CacheMetadataPayload =
@@ -107,7 +107,7 @@ impl Callback {
                 )
                 .unwrap();
             }
-            Callback::Sqlite(_conn) => (),
+            Callback::Sqlite(conn) => conn.repopulate_tracks(&organized),
             Callback::NoCache => (),
         };
     }
@@ -133,7 +133,7 @@ pub fn load_library_from_cache_and_scan(
 
             logger.print_elapsed("starting loading (should be 0)");
 
-            let (metadata_payload, callback): (CacheMetadataPayload, Callback) = match mode {
+            let (metadata_payload, mut callback): (CacheMetadataPayload, Callback) = match mode {
                 CacheMode::Latest(conn) => {
                     println!("loading with auto (trying sqlite)");
                     let needs_migration = conn.needs_tracks_seeded();
