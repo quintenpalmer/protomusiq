@@ -21,6 +21,7 @@ pub fn insert_album(
             ?,
             ?,
             ?,
+            ?,
             ?) RETURNING id",
             rusqlite::params![
                 rusqlite::types::Null,
@@ -34,7 +35,8 @@ pub fn insert_album(
                     .into_os_string()
                     .into_string()
                     .unwrap(),
-                artist_id
+                artist_id,
+                rusqlite::types::Null,
             ],
             |row| row.get(0),
         )

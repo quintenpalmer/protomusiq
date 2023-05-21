@@ -9,12 +9,14 @@ pub fn insert_disc(main_db: &rusqlite::Connection, album_id: u32, disc_no: u32) 
             ?,
             ?,
             ?,
+            ?,
             ?) RETURNING id",
             rusqlite::params![
                 rusqlite::types::Null,
                 disc_no,
                 rusqlite::types::Null,
-                album_id
+                album_id,
+                rusqlite::types::Null,
             ],
             |row| row.get(0),
         )

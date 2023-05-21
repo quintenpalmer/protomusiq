@@ -24,6 +24,7 @@ pub fn insert_track(
                 ?,
                 ?,
                 ?,
+                ?,
                 ?) RETURNING id",
             rusqlite::params![
                 rusqlite::types::Null,
@@ -45,6 +46,7 @@ pub fn insert_track(
                     .unwrap()
                     .as_secs(),
                 track.ext.clone(),
+                rusqlite::types::Null,
             ],
             |row| row.get(0),
         )

@@ -9,8 +9,13 @@ pub fn insert_artist(main_db: &rusqlite::Connection, artist: &musiqlibrary::Arti
         .query_row(
             "INSERT INTO artists VALUES (
             ?,
+            ?,
             ?) RETURNING id",
-            rusqlite::params![rusqlite::types::Null, artist.artist_name],
+            rusqlite::params![
+                rusqlite::types::Null,
+                artist.artist_name,
+                rusqlite::types::Null
+            ],
             |row| row.get(0),
         )
         .unwrap()
