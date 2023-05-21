@@ -66,6 +66,13 @@ pub enum AlbumSortKey {
     Random,
 }
 
+#[derive(Debug)]
+pub struct PrehistoryRecord {
+    pub source: String,
+    pub key: musiqlibrary::TrackUniqueIdentifier,
+    pub count: u32,
+}
+
 #[derive(Debug, Clone)]
 pub enum AlbumSize {
     Micro,

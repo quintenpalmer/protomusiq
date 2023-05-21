@@ -6,13 +6,6 @@ use crate::datastore::jsonbacked::playlists;
 
 use super::{augmented, common, sorts};
 
-#[derive(Debug)]
-pub struct PrehistoryRecord {
-    pub source: String,
-    pub key: musiqlibrary::TrackUniqueIdentifier,
-    pub count: u32,
-}
-
 pub struct LibraryState {
     pub raw_library: augmented::AugmentedLibrary,
 
