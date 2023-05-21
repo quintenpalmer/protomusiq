@@ -18,14 +18,10 @@ pub fn render_page<'a>(
     action_state: &'a ActionState,
     play_queue_info: &PlayQueueInfoState,
     player_info: &'a PlayerInfoState,
-) -> (
-    Vec<(String, Message)>,
-    Container<'a, Message>,
-) {
+) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match current_page {
         Page::Home(ref state) => pages::home::home_page(&app_images, state),
-        Page::Config(state::ConfigState {
-        }) => (
+        Page::Config(state::ConfigState {}) => (
             Vec::new(),
             Container::new(
                 dark_button(bright_paragraph("Reload Library"))
@@ -42,18 +38,19 @@ pub fn render_page<'a>(
         Page::PlaylistList(ref state) => pages::playlists::playlist_list_view(&library, state),
         Page::Search(ref state) => pages::search::search_page(&library, state),
         Page::TrackList(ref state) => pages::tracks::track_list(&library, state),
-        Page::AlbumList(ref state) => {
-            pages::albums::album_list(&library, &play_queue_info, state)
-        }
+        Page::AlbumList(ref state) => pages::albums::album_list(&library, &play_queue_info, state),
         Page::ArtistList(ref state) => {
             pages::artist::artist_list(&library, &play_queue_info, state)
         }
         Page::ArtistView(ref state) => {
             pages::artistalbums::artist_album_list(&library, &play_queue_info, state)
         }
-        Page::ArtistAlbumView(ref state) => {
-            pages::artistalbum::artist_album_view_state(&library, &action_state, &player_info, state)
-        }
+        Page::ArtistAlbumView(ref state) => pages::artistalbum::artist_album_view_state(
+            &library,
+            &action_state,
+            &player_info,
+            state,
+        ),
         Page::ArtistTrackView(ref state) => {
             pages::artisttracks::artist_track_view_state(&library, &player_info, state)
         }
