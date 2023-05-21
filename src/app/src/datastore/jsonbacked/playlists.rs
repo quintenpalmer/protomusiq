@@ -289,21 +289,21 @@ impl InnerPlaylistData {
                             }
                             constructed.append(&mut found_after);
                             constructed
-                        },
+                        }
                         message::Direction::Up => {
                             let mut constructed = found_before;
                             match constructed.pop() {
                                 Some(old_before_end) => {
                                     constructed.push(track_id);
                                     constructed.push(old_before_end);
-                                },
+                                }
                                 None => {
                                     constructed.push(track_id);
-                                },
+                                }
                             }
                             constructed.append(&mut found_after);
                             constructed
-                        },
+                        }
                     };
 
                     playlist.tracks = new_playlist;
@@ -314,7 +314,6 @@ impl InnerPlaylistData {
             }
             None => Err(format!("playlist with id: {} does not exist", playlist_id)),
         }
-
     }
 
     fn write_json(&self, json_db_path: &PathBuf) {

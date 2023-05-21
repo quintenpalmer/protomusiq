@@ -1,5 +1,5 @@
-use iced::{self, Element, Length, Alignment};
-use iced::widget::{Column, Row, Image, Button, Text};
+use iced::widget::{Button, Column, Image, Row, Text};
+use iced::{self, Alignment, Element, Length};
 
 use crate::model;
 
@@ -51,22 +51,21 @@ pub fn bright(t: Text) -> Text {
     t.style(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
 }
 
-pub fn dark_button<'a, E>(
-    content: E,
-) -> Button<'a, Message>
+pub fn dark_button<'a, E>(content: E) -> Button<'a, Message>
 where
     E: Into<Element<'a, Message>>,
 {
-    Button::new(content).style(iced::theme::Button::Custom(Box::new(style::DarkButton{})))
+    Button::new(content).style(iced::theme::Button::Custom(Box::new(style::DarkButton {})))
 }
 
-pub fn dark_text_like_button<'a, E>(
-    content: E,
-) -> Button<'a, Message>
+pub fn dark_text_like_button<'a, E>(content: E) -> Button<'a, Message>
 where
     E: Into<Element<'a, Message>>,
 {
-    Button::new(content).style(iced::theme::Button::Custom(Box::new(style::DarkTextLikeButton {})))
+    Button::new(content)
+        .style(iced::theme::Button::Custom(Box::new(
+            style::DarkTextLikeButton {},
+        )))
         .padding(0)
 }
 

@@ -94,7 +94,12 @@ pub enum NavMessage {
         model::ArtistTrackSortKey,
         model::SortOrder,
     ),
-    ArtistAlbumView(musiqlibrary::ID, musiqlibrary::ID, model::AlbumSize, Option<musiqlibrary::TrackUniqueIdentifier>),
+    ArtistAlbumView(
+        musiqlibrary::ID,
+        musiqlibrary::ID,
+        model::AlbumSize,
+        Option<musiqlibrary::TrackUniqueIdentifier>,
+    ),
 }
 
 #[derive(Debug, Clone)]
@@ -115,7 +120,7 @@ impl Future for MessageFuture {
 }
 
 pub fn message_command(m: Message) -> iced::Command<Message> {
-    iced::Command::single(iced_native::command::Action::Future(Box::pin(MessageFuture {
-        inner: m,
-    })))
+    iced::Command::single(iced_native::command::Action::Future(Box::pin(
+        MessageFuture { inner: m },
+    )))
 }

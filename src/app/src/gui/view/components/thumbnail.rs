@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use iced;
-use iced::widget::{Column, Container, Space, Row};
+use iced::widget::{Column, Container, Row, Space};
 
 use crate::model;
 
@@ -25,12 +25,14 @@ pub fn compute_playlist_thumbnail<'a>(
         PlaylistIconSize::Large => (model::AlbumSize::Mini, model::AlbumSize::Small),
     };
 
-
     if tracks.len() > 0 {
         let mut album_counts = BTreeMap::new();
         for track in tracks.iter() {
             *album_counts
-                .entry(musiqlibrary::AlbumUniqueIdentifier::new(track.artist_id.clone(), track.album_id.clone()))
+                .entry(musiqlibrary::AlbumUniqueIdentifier::new(
+                    track.artist_id.clone(),
+                    track.album_id.clone(),
+                ))
                 .or_insert(0) += 1;
         }
 
@@ -38,7 +40,8 @@ pub fn compute_playlist_thumbnail<'a>(
         for (key, count) in album_counts.into_iter() {
             counts_for_album
                 .entry(count)
-                .or_insert(Vec::new()).push(key)
+                .or_insert(Vec::new())
+                .push(key)
         }
 
         let mut keys_sorted_by_count = Vec::new();
@@ -68,8 +71,7 @@ pub fn compute_playlist_thumbnail<'a>(
 
         let row = match (&second_key, &third_key, &fourth_key) {
             (None, None, None) => {
-                let mut row = Row::new()
-                    .spacing(3);
+                let mut row = Row::new().spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
                         large_album_size.clone(),
@@ -79,12 +81,10 @@ pub fn compute_playlist_thumbnail<'a>(
                     large_album_size.clone(),
                 ));
                 Column::new().spacing(3).push(row)
-            },
+            }
             (Some(second_key), None, None) => {
-                let mut column = Column::new()
-                    .spacing(3);
-                let mut row = Row::new()
-                    .spacing(3);
+                let mut column = Column::new().spacing(3);
+                let mut row = Row::new().spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
                         small_album_size.clone(),
@@ -96,8 +96,7 @@ pub fn compute_playlist_thumbnail<'a>(
                 row = row.push(empty_album_space(small_album_size.clone()));
                 column = column.push(row);
 
-                let mut second_row = Row::new()
-                    .spacing(3);
+                let mut second_row = Row::new().spacing(3);
                 second_row = second_row.push(empty_album_space(small_album_size.clone()));
                 second_row = second_row.push(album_image(
                     library.get_album_cover(
@@ -112,10 +111,8 @@ pub fn compute_playlist_thumbnail<'a>(
                 column
             }
             _ => {
-                let mut column = Column::new()
-                    .spacing(3);
-                let mut row = Row::new()
-                    .spacing(3);
+                let mut column = Column::new().spacing(3);
+                let mut row = Row::new().spacing(3);
                 row = row.push(album_image(
                     library.get_album_cover(
                         small_album_size.clone(),
@@ -139,8 +136,7 @@ pub fn compute_playlist_thumbnail<'a>(
 
                         match third_key {
                             Some(third_key) => {
-                            let mut second_row = Row::new()
-                                .spacing(3);
+                                let mut second_row = Row::new().spacing(3);
                                 second_row = second_row.push(album_image(
                                     library.get_album_cover(
                                         small_album_size.clone(),
@@ -165,7 +161,7 @@ pub fn compute_playlist_thumbnail<'a>(
                                     }
                                     None => {
                                         column = column.push(second_row);
-                                    },
+                                    }
                                 }
                             }
                             None => (),
@@ -185,7 +181,9 @@ pub fn compute_playlist_thumbnail<'a>(
     .align_y(iced::alignment::Vertical::Center)
     .width(iced::Length::Fixed((large_album_size.width() + 10) as f32))
     .height(iced::Length::Fixed((large_album_size.height() + 10) as f32))
-    .style(iced::theme::Container::Custom(Box::new(style::ContainerDarkInset)))
+    .style(iced::theme::Container::Custom(Box::new(
+        style::ContainerDarkInset,
+    )))
 }
 
 fn empty_album_space(album_size: model::AlbumSize) -> Space {

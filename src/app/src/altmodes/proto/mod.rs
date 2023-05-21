@@ -2,8 +2,8 @@ use std::io;
 
 use musiqlibrary;
 
-use crate::util::{config, logging};
 use crate::model;
+use crate::util::{config, logging};
 
 use crate::datastore::jsonbacked::{self, tracker};
 use crate::datastore::loader;

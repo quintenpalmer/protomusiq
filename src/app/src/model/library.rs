@@ -138,7 +138,7 @@ pub struct LibraryState {
 pub struct GridInfo {
     layout_width: u32,
     layout_height: u32,
-    track_multiplier: u32
+    track_multiplier: u32,
 }
 
 impl GridInfo {

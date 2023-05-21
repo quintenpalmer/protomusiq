@@ -2,9 +2,9 @@ use std::collections::BTreeMap;
 
 use chrono::TimeZone;
 
-use crate::util::config;
 use crate::datastore::{jsonbacked, loader};
 use crate::model;
+use crate::util::config;
 
 #[derive(Debug)]
 pub enum Error {}

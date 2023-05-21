@@ -1,5 +1,5 @@
-use crate::util::logging;
 use crate::model;
+use crate::util::logging;
 
 use super::super::super::constants;
 use super::super::super::dbmodel::bridge;

@@ -6,12 +6,12 @@ use serde_json;
 
 use musiqlibrary;
 
-use crate::datastore::jsonbacked::{self, tracker, playlists as userplaylists};
+use crate::datastore::jsonbacked::{self, playlists as userplaylists, tracker};
 use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;
 
-use crate::util::config;
 use crate::model;
+use crate::util::config;
 
 #[derive(Debug)]
 pub enum TrackerError {
@@ -42,8 +42,7 @@ fn report_tracks_with_io() -> io::Result<()> {
 
     let config_state = config::get_default_config();
 
-    let mut tracker =
-        tracker::JSONTracker::new(&config_state.app_data_path, hostname.clone());
+    let mut tracker = tracker::JSONTracker::new(&config_state.app_data_path, hostname.clone());
 
     let raw_library = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
         &config_state,
@@ -172,10 +171,11 @@ fn prompt_for_tracks(
         "track" => prompt_for_track(&raw_library).map(|x| vec![x]),
         "disc" => prompt_for_disc(&raw_library),
         "playlist" => {
-            let playlist_data = userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
+            let playlist_data =
+                userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
 
             prompt_for_playlist(&raw_library, &playlist_data)
-        },
+        }
         _ => prompt_for_tracks(&config_state, &raw_library),
     }?;
 
@@ -196,10 +196,13 @@ fn prompt_for_album(
 
 fn prompt_for_only_albums(
     raw_library: &musiqlibrary::RawLibrary,
-) -> Result<Vec<(
+) -> Result<
+    Vec<(
         musiqlibrary::ArtistInfo,
         musiqlibrary::KeyedAlbumTracks<musiqlibrary::FullTrackMetadata>,
-    )>, ()> {
+    )>,
+    (),
+> {
     println!("type search query for an album");
     let mut input = String::new();
 
@@ -243,7 +246,10 @@ fn select_album(
     )>,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     for (i, (artist, album)) in albums.iter().enumerate() {
-        println!("{}:\t{}\t({})", i, album.album_info.album_name, artist.artist_name);
+        println!(
+            "{}:\t{}\t({})",
+            i, album.album_info.album_name, artist.artist_name
+        );
     }
 
     println!("select an album from above (0-9)");
@@ -294,7 +300,10 @@ fn select_disc(
     )>,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     for (i, (artist, album)) in albums.iter().enumerate() {
-        println!("{}:\t{}\t({})", i, album.album_info.album_name, artist.artist_name);
+        println!(
+            "{}:\t{}\t({})",
+            i, album.album_info.album_name, artist.artist_name
+        );
     }
 
     println!("select an album from above (0-9)");
@@ -325,7 +334,7 @@ fn select_disc(
 }
 
 fn select_disc_in_album(
-    discs: &BTreeMap<u64, musiqlibrary::DiscTracks<musiqlibrary::FullTrackMetadata>>
+    discs: &BTreeMap<u64, musiqlibrary::DiscTracks<musiqlibrary::FullTrackMetadata>>,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     for (i, disc) in discs.values().enumerate() {
         println!("{}:\t{}", i, disc.disc_no);
@@ -479,10 +488,7 @@ fn select_playlist(
     playlists: Vec<jsonbacked::playlists::PlaylistEntry>,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     for (i, playlist) in playlists.iter().enumerate() {
-        println!(
-            "{}:	{}",
-            i, playlist.name
-        );
+        println!("{}:	{}", i, playlist.name);
     }
 
     println!("select a playlist from above (0-9)");

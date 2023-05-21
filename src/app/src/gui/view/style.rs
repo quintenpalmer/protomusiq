@@ -1,5 +1,5 @@
-use iced::{Background, Color};
 use iced::widget::{button, container};
+use iced::{Background, Color};
 
 use musiqlibrary;
 
@@ -22,8 +22,7 @@ impl button::StyleSheet for DarkTextLikeButton {
     }
 }
 
-pub struct DarkButton {
-}
+pub struct DarkButton {}
 
 impl button::StyleSheet for DarkButton {
     type Style = iced::Theme;
@@ -40,7 +39,9 @@ impl button::StyleSheet for DarkButton {
     }
 }
 
-pub fn get_stripe_style(stripe_marker: bool) -> Box<dyn container::StyleSheet<Style = iced::Theme>> {
+pub fn get_stripe_style(
+    stripe_marker: bool,
+) -> Box<dyn container::StyleSheet<Style = iced::Theme>> {
     if stripe_marker {
         Box::new(ContainerStripeOne)
     } else {
@@ -59,7 +60,9 @@ pub fn get_potential_current_stripe_style(
         None => false,
     };
     let is_selected = match maybe_selected {
-        Some(selected) => &musiqlibrary::TrackUniqueIdentifier::from_track(&display_track.metadata) == selected,
+        Some(selected) => {
+            &musiqlibrary::TrackUniqueIdentifier::from_track(&display_track.metadata) == selected
+        }
         None => false,
     };
 
@@ -180,7 +183,7 @@ impl container::StyleSheet for ContainerPopForward {
     type Style = iced::Theme;
 
     fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
-        container::Appearance{
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x20, 0x20, 0x20))),
             ..container::Appearance::default()
         }
@@ -193,7 +196,7 @@ impl container::StyleSheet for ContainerPopMidForward {
     type Style = iced::Theme;
 
     fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
-        container::Appearance{
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x18, 0x18, 0x18))),
             ..container::Appearance::default()
         }

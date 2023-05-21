@@ -1,5 +1,5 @@
-use iced::{Element, Length};
 use iced::widget::{Button, Column, Container, ProgressBar, Scrollable, Space};
+use iced::{Element, Length};
 
 use crate::model;
 
@@ -12,10 +12,7 @@ use super::super::super::elements::*;
 pub fn track_list<'a>(
     library: &'a model::LibraryState,
     state: &'a state::TrackListState,
-) -> (
-    Vec<(String, Message)>,
-    Container<'a, Message>,
-) {
+) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::TrackListState {
             page,
@@ -66,7 +63,11 @@ pub fn track_list<'a>(
                                         .width(Length::Fixed(40.0)),
                                 )
                                 .push(
-                                    ProgressBar::new(0.0..=(greatest_play_count as f32), info.augmented.play_count as f32).width(Length::Fixed(50.0)),
+                                    ProgressBar::new(
+                                        0.0..=(greatest_play_count as f32),
+                                        info.augmented.play_count as f32,
+                                    )
+                                    .width(Length::Fixed(50.0)),
                                 )
                                 .push(
                                     bright_paragraph(info.metadata.title.clone())
@@ -86,12 +87,9 @@ pub fn track_list<'a>(
                                 info.metadata.album_artist_id.clone(),
                                 info.metadata.album_id.clone(),
                                 model::AlbumSize::Regular,
-                                Some(
-                                    musiqlibrary::TrackUniqueIdentifier::from_track(
-                                        &info
-                                        .metadata
-                                     )
-                                )
+                                Some(musiqlibrary::TrackUniqueIdentifier::from_track(
+                                    &info.metadata,
+                                )),
                             ),
                         )),
                     );
@@ -127,15 +125,19 @@ pub fn track_list<'a>(
                     }
                 };
                 let forward_page = {
-                    if ((page + 1) * library.grid_info.get_track_page_size_usize()) >= total_tracks {
+                    if ((page + 1) * library.grid_info.get_track_page_size_usize()) >= total_tracks
+                    {
                         page
                     } else {
                         page + 1
                     }
                 };
                 let last_page = {
-                    let maybe_last_page = total_tracks / library.grid_info.get_track_page_size_usize();
-                    if maybe_last_page * library.grid_info.get_track_page_size_usize() >= total_tracks {
+                    let maybe_last_page =
+                        total_tracks / library.grid_info.get_track_page_size_usize();
+                    if maybe_last_page * library.grid_info.get_track_page_size_usize()
+                        >= total_tracks
+                    {
                         maybe_last_page - 1
                     } else {
                         maybe_last_page
@@ -149,43 +151,29 @@ pub fn track_list<'a>(
                             line_row().push(
                                 line_row()
                                     .push(paragraph("Sort By: "))
+                                    .push(dark_button(bright_paragraph("Name")).on_press(
+                                        user_nav_message(NavMessage::TrackList(
+                                            0,
+                                            model::TrackSortKey::ByName,
+                                            model::SortOrder::Regular,
+                                        )),
+                                    ))
+                                    .push(dark_button(bright_paragraph("Play Count")).on_press(
+                                        user_nav_message(NavMessage::TrackList(
+                                            0,
+                                            model::TrackSortKey::ByPlayCount,
+                                            model::SortOrder::Reversed,
+                                        )),
+                                    ))
+                                    .push(dark_button(bright_paragraph("Duration")).on_press(
+                                        user_nav_message(NavMessage::TrackList(
+                                            0,
+                                            model::TrackSortKey::ByDuration,
+                                            model::SortOrder::Reversed,
+                                        )),
+                                    ))
                                     .push(
-                                        dark_button(bright_paragraph("Name"))
-                                            .on_press(user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                model::TrackSortKey::ByName,
-                                                model::SortOrder::Regular,
-                                            ))),
-                                    )
-                                    .push(
-                                        dark_button(
-                                            bright_paragraph("Play Count"),
-                                        )
-                                        .on_press(
-                                            user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                model::TrackSortKey::ByPlayCount,
-                                                model::SortOrder::Reversed,
-                                            )),
-                                        ),
-                                    )
-                                    .push(
-                                        dark_button(
-                                            bright_paragraph("Duration"),
-                                        )
-                                        .on_press(
-                                            user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                model::TrackSortKey::ByDuration,
-                                                model::SortOrder::Reversed,
-                                            )),
-                                        ),
-                                    )
-                                    .push(
-                                        dark_button(
-                                            bright_paragraph("Played Duration"),
-                                        )
-                                        .on_press(
+                                        dark_button(bright_paragraph("Played Duration")).on_press(
                                             user_nav_message(NavMessage::TrackList(
                                                 0,
                                                 model::TrackSortKey::ByPlayedAmount,
@@ -193,14 +181,13 @@ pub fn track_list<'a>(
                                             )),
                                         ),
                                     )
-                                    .push(
-                                        dark_button(bright_paragraph("Random"))
-                                            .on_press(user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                model::TrackSortKey::ByRandom,
-                                                model::SortOrder::Regular,
-                                            ))),
-                                    ),
+                                    .push(dark_button(bright_paragraph("Random")).on_press(
+                                        user_nav_message(NavMessage::TrackList(
+                                            0,
+                                            model::TrackSortKey::ByRandom,
+                                            model::SortOrder::Regular,
+                                        )),
+                                    )),
                             ),
                         )
                         .push(
@@ -208,68 +195,54 @@ pub fn track_list<'a>(
                                 .push(
                                     line_row()
                                         .push(paragraph("Page: "))
-                                        .push(
-                                            dark_button(bright_paragraph("<<"))
-                                                .on_press(user_nav_message(NavMessage::TrackList(
-                                                    first_page,
-                                                    sort_key.clone(),
-                                                    sort_order.clone(),
-                                                ))),
-                                        )
-                                        .push(
-                                            dark_button(bright_paragraph("<"))
-                                                .on_press(user_nav_message(NavMessage::TrackList(
-                                                    back_page,
-                                                    sort_key.clone(),
-                                                    sort_order.clone(),
-                                                ))),
-                                        )
+                                        .push(dark_button(bright_paragraph("<<")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                first_page,
+                                                sort_key.clone(),
+                                                sort_order.clone(),
+                                            )),
+                                        ))
+                                        .push(dark_button(bright_paragraph("<")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                back_page,
+                                                sort_key.clone(),
+                                                sort_order.clone(),
+                                            )),
+                                        ))
                                         .push(bright_paragraph(page.to_string()))
-                                        .push(
-                                            dark_button(bright_paragraph(">"))
-                                                .on_press(user_nav_message(NavMessage::TrackList(
-                                                    forward_page,
-                                                    sort_key.clone(),
-                                                    sort_order.clone(),
-                                                ))),
-                                        )
-                                        .push(
-                                            dark_button(bright_paragraph(">>"))
-                                                .on_press(user_nav_message(NavMessage::TrackList(
-                                                    last_page,
-                                                    sort_key.clone(),
-                                                    sort_order.clone(),
-                                                ))),
-                                        ),
+                                        .push(dark_button(bright_paragraph(">")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                forward_page,
+                                                sort_key.clone(),
+                                                sort_order.clone(),
+                                            )),
+                                        ))
+                                        .push(dark_button(bright_paragraph(">>")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                last_page,
+                                                sort_key.clone(),
+                                                sort_order.clone(),
+                                            )),
+                                        )),
                                 )
                                 .push(Space::with_width(Length::Fill))
                                 .push(
                                     line_row()
                                         .push(paragraph("Order: "))
-                                        .push(
-                                            dark_button(
-                                                bright_paragraph("^"),
-                                            )
-                                            .on_press(
-                                                user_nav_message(NavMessage::TrackList(
-                                                    0,
-                                                    sort_key.clone(),
-                                                    model::SortOrder::Reversed,
-                                                )),
-                                            ),
-                                        )
-                                        .push(
-                                            dark_button(
-                                                bright_paragraph("v"),
-                                            )
-                                            .on_press(
-                                                user_nav_message(NavMessage::TrackList(
-                                                    0,
-                                                    sort_key.clone(),
-                                                    model::SortOrder::Regular,
-                                                )),
-                                            ),
-                                        ),
+                                        .push(dark_button(bright_paragraph("^")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                0,
+                                                sort_key.clone(),
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ))
+                                        .push(dark_button(bright_paragraph("v")).on_press(
+                                            user_nav_message(NavMessage::TrackList(
+                                                0,
+                                                sort_key.clone(),
+                                                model::SortOrder::Regular,
+                                            )),
+                                        )),
                                 ),
                         )
                         .push(scrollable),
