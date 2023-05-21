@@ -17,11 +17,7 @@ pub enum App {
 /// State for the App, once it has finished processing all data it needs
 /// to provide its user experience
 pub struct Loaded {
-    pub gui: AppGuiState,
     pub rest: AppState,
-}
-
-pub struct AppGuiState {
 }
 
 pub struct AppState {
@@ -44,19 +40,13 @@ pub struct AppState {
 
 /// State for the Configuratino of the App
 pub struct Config {
-    pub gui: AppConfigGuiState,
     pub rest: model::AppConfigState,
 }
 
-pub struct AppConfigGuiState {}
-
 /// State for the Play Queue (and Current Track and Play History)
 pub struct PlayQueueInfo {
-    pub gui: PlayQueueGuiState,
     pub rest: PlayQueueInfoState,
 }
-
-pub struct PlayQueueGuiState {}
 
 pub struct PlayQueueInfoState {
     pub play_queue_visible: bool,
@@ -108,11 +98,7 @@ pub struct ActionState {
 
 /// State for the Playback, its services, and its controls
 pub struct PlayerInfo {
-    pub gui: PlayerInfoGuiState,
     pub rest: PlayerInfoState,
-}
-
-pub struct PlayerInfoGuiState {
 }
 
 pub struct PlayerInfoState {

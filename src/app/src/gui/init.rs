@@ -137,7 +137,6 @@ pub fn initialize_everything() -> state::App {
     logger.print_elapsed("starting tracker");
 
     state::App::Loaded(state::Loaded {
-        gui: state::AppGuiState {},
         rest: state::AppState {
             page_back_history: Vec::new(),
             page_current_history: message::NavMessage::Home,
@@ -150,7 +149,6 @@ pub fn initialize_everything() -> state::App {
                 group_buttons_shuffle: false,
             },
             play_queue_info: state::PlayQueueInfo {
-                gui: state::PlayQueueGuiState {},
                 rest: state::PlayQueueInfoState {
                     play_queue_visible: true,
                     play_history: Vec::new(),
@@ -158,13 +156,8 @@ pub fn initialize_everything() -> state::App {
                     current_playback: None,
                 },
             },
-            config: state::Config {
-                gui: state::AppConfigGuiState {},
-                rest: config_state,
-            },
+            config: state::Config { rest: config_state },
             player_info: state::PlayerInfo {
-                gui: state::PlayerInfoGuiState {
-                },
                 rest: state::PlayerInfoState {
                     playing: false,
                     current_volume: 1.0,
