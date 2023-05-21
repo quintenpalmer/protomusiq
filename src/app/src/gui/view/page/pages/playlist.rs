@@ -132,7 +132,7 @@ pub fn playlist_view<'a>(
             let tracks: Vec<_> = playlist
                 .tracks
                 .iter()
-                .map(|track_id| library.get_track(&track_id))
+                .map(|track_id| library.get_track(&track_id).clone())
                 .collect();
 
             for track in tracks.clone().into_iter() {
@@ -194,7 +194,7 @@ pub fn playlist_view<'a>(
                                 common::format_duration(track.metadata.duration.as_secs());
 
                             match player_info.get_maybe_current_playback_track() {
-                                Some(c) if (*track == c.clone()) => bright_paragraph(text_to_show),
+                                Some(c) if (track == c.clone()) => bright_paragraph(text_to_show),
                                 _ => dark_paragraph(text_to_show),
                             }
                             .width(Length::Fixed(60.0))
