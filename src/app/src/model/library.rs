@@ -4,10 +4,9 @@ use rand::seq::SliceRandom;
 
 use musiqlibrary;
 
-use crate::datastore;
 use crate::datastore::jsonbacked::playlists;
 
-use super::common;
+use super::{augmented, common};
 
 #[derive(Debug)]
 pub struct PrehistoryRecord {
@@ -16,113 +15,8 @@ pub struct PrehistoryRecord {
     pub count: u32,
 }
 
-pub type AugmentedLibrary = musiqlibrary::Library<AugmentedTrack>;
-
-pub fn augmented_from_raw(
-    raw_library: musiqlibrary::RawLibrary,
-    tracked_data: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter>,
-    historical_data: Box<dyn datastore::traits::HistoricalTrackCountReporter>,
-) -> AugmentedLibrary {
-    raw_library.map_into(&|track| {
-        let uniq_track_id = musiqlibrary::TrackUniqueIdentifier::from_track(&track);
-        let live_play_count = tracked_data.get_live_track_count(&uniq_track_id);
-        let historical_play_count = historical_data.get_historical_track_count(&uniq_track_id);
-        let total_play_count = live_play_count + historical_play_count;
-
-        AugmentedTrack {
-            augmented: AugmentedData {
-                play_count: total_play_count,
-                tagged_genres: Vec::new(),
-            },
-            metadata: track,
-        }
-    })
-}
-
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct AugmentedTrack {
-    pub metadata: musiqlibrary::FullTrackMetadata,
-    pub augmented: AugmentedData,
-}
-
-impl AugmentedTrack {
-    pub fn played_seconds(&self) -> u64 {
-        self.metadata.duration.as_secs() * (self.augmented.play_count as u64)
-    }
-}
-
-impl Into<musiqlibrary::FullTrackMetadata> for AugmentedTrack {
-    fn into(self) -> musiqlibrary::FullTrackMetadata {
-        self.metadata
-    }
-}
-
-pub fn album_total_play_count(album: &musiqlibrary::KeyedAlbumTracks<AugmentedTrack>) -> usize {
-    let mut total = 0;
-    for (_, disc) in album.discs.iter() {
-        for (_, track) in disc.tracks.iter() {
-            total += track.augmented.play_count;
-        }
-    }
-    total
-}
-
-pub fn artist_total_play_count(artist: &musiqlibrary::KeyedArtistAlbums<AugmentedTrack>) -> usize {
-    let mut total = 0;
-    for (_, album) in artist.albums.iter() {
-        total += album_total_play_count(album);
-    }
-    total
-}
-
-pub fn album_total_played_duration(album: &musiqlibrary::KeyedAlbumTracks<AugmentedTrack>) -> u64 {
-    let mut total = 0;
-    for (_, disc) in album.discs.iter() {
-        for (_, track) in disc.tracks.iter() {
-            total += track.played_seconds();
-        }
-    }
-    total
-}
-
-pub fn artist_total_played_duration(
-    artist: &musiqlibrary::KeyedArtistAlbums<AugmentedTrack>,
-) -> u64 {
-    let mut total = 0;
-    for (_, album) in artist.albums.iter() {
-        total += album_total_played_duration(album);
-    }
-    total
-}
-
-pub fn album_track_duration_total(album: &musiqlibrary::KeyedAlbumTracks<AugmentedTrack>) -> u64 {
-    let mut total = 0;
-    for (_, disc) in album.discs.iter() {
-        for (_, track) in disc.tracks.iter() {
-            total += track.metadata.duration.as_secs();
-        }
-    }
-    total
-}
-
-pub fn artist_track_duration_total(
-    artist: &musiqlibrary::KeyedArtistAlbums<AugmentedTrack>,
-) -> u64 {
-    let mut total = 0;
-    for (_, album) in artist.albums.iter() {
-        total += album_track_duration_total(album);
-    }
-    total
-}
-
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct AugmentedData {
-    pub play_count: usize,
-    pub tagged_genres: Vec<String>,
-}
-
 pub struct LibraryState {
-    pub raw_library: AugmentedLibrary,
+    pub raw_library: augmented::AugmentedLibrary,
 
     pub user_playlists: playlists::PlaylistData,
 
@@ -170,7 +64,8 @@ impl GridInfo {
 impl LibraryState {
     pub fn get_artist_map(
         &self,
-    ) -> &BTreeMap<musiqlibrary::ID, musiqlibrary::KeyedArtistAlbums<AugmentedTrack>> {
+    ) -> &BTreeMap<musiqlibrary::ID, musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack>>
+    {
         &self.raw_library.artists
     }
 
@@ -178,7 +73,7 @@ impl LibraryState {
         &self,
     ) -> BTreeMap<
         musiqlibrary::AlbumUniqueIdentifier,
-        &musiqlibrary::KeyedAlbumTracks<AugmentedTrack>,
+        &musiqlibrary::KeyedAlbumTracks<augmented::AugmentedTrack>,
     > {
         let mut ret = BTreeMap::new();
         for (artist_id, artist) in self.raw_library.artists.iter() {
@@ -224,7 +119,7 @@ impl LibraryState {
         &self,
         artist_id: musiqlibrary::ID,
         album_id: musiqlibrary::ID,
-    ) -> &musiqlibrary::KeyedAlbumTracks<AugmentedTrack> {
+    ) -> &musiqlibrary::KeyedAlbumTracks<augmented::AugmentedTrack> {
         &self
             .raw_library
             .artists
@@ -238,7 +133,7 @@ impl LibraryState {
     pub fn get_track(
         &self,
         track_identifier: &musiqlibrary::TrackUniqueIdentifier,
-    ) -> &AugmentedTrack {
+    ) -> &augmented::AugmentedTrack {
         &self
             .raw_library
             .artists
@@ -388,7 +283,7 @@ pub struct ArtistSorts {
 }
 
 impl ArtistSorts {
-    pub fn new(organized: &AugmentedLibrary) -> Self {
+    pub fn new(organized: &augmented::AugmentedLibrary) -> Self {
         ArtistSorts {
             by_name: {
                 let mut unpaged_artists = organized.artists.values().collect::<Vec<_>>();
@@ -411,7 +306,8 @@ impl ArtistSorts {
                 let mut unpaged_artists = organized.artists.values().collect::<Vec<_>>();
 
                 unpaged_artists.sort_unstable_by(|a, b| {
-                    artist_total_play_count(a).cmp(&artist_total_play_count(b))
+                    augmented::artist_total_play_count(a)
+                        .cmp(&augmented::artist_total_play_count(b))
                 });
 
                 common::ListAndReversed::new(
@@ -449,7 +345,8 @@ impl ArtistSorts {
                 let mut unpaged_artists = organized.artists.values().collect::<Vec<_>>();
 
                 unpaged_artists.sort_unstable_by(|a, b| {
-                    artist_track_duration_total(a).cmp(&artist_track_duration_total(b))
+                    augmented::artist_track_duration_total(a)
+                        .cmp(&augmented::artist_track_duration_total(b))
                 });
 
                 common::ListAndReversed::new(
@@ -463,7 +360,8 @@ impl ArtistSorts {
                 let mut unpaged_artists = organized.artists.values().collect::<Vec<_>>();
 
                 unpaged_artists.sort_unstable_by(|a, b| {
-                    artist_total_played_duration(a).cmp(&artist_total_played_duration(b))
+                    augmented::artist_total_played_duration(a)
+                        .cmp(&augmented::artist_total_played_duration(b))
                 });
 
                 common::ListAndReversed::new(
@@ -516,7 +414,7 @@ pub struct AlbumSorts {
 }
 
 impl AlbumSorts {
-    pub fn new(organized: &AugmentedLibrary) -> Self {
+    pub fn new(organized: &augmented::AugmentedLibrary) -> Self {
         AlbumSorts {
             by_name: {
                 let mut unpaged_albums =
@@ -669,7 +567,8 @@ impl AlbumSorts {
                         });
 
                 unpaged_albums.sort_unstable_by(|a, b| {
-                    album_total_play_count(&a.1).cmp(&album_total_play_count(b.1))
+                    augmented::album_total_play_count(&a.1)
+                        .cmp(&augmented::album_total_play_count(b.1))
                 });
 
                 common::ListAndReversed::new(
@@ -696,7 +595,8 @@ impl AlbumSorts {
                         });
 
                 unpaged_albums.sort_unstable_by(|a, b| {
-                    album_total_played_duration(&a.1).cmp(&album_total_played_duration(b.1))
+                    augmented::album_total_played_duration(&a.1)
+                        .cmp(&augmented::album_total_played_duration(b.1))
                 });
 
                 common::ListAndReversed::new(
@@ -752,16 +652,16 @@ impl AlbumSorts {
 }
 
 pub struct AlbumTrackSorts {
-    pub by_name: common::ListAndReversed<AugmentedTrack>,
-    pub by_album: common::ListAndReversed<AugmentedTrack>,
-    pub by_duration: common::ListAndReversed<AugmentedTrack>,
-    pub by_total_play_count: common::ListAndReversed<AugmentedTrack>,
-    pub by_total_played_duration: common::ListAndReversed<AugmentedTrack>,
-    pub random: common::ListAndReversed<AugmentedTrack>,
+    pub by_name: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_album: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_duration: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_total_play_count: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_total_played_duration: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub random: common::ListAndReversed<augmented::AugmentedTrack>,
 }
 
 impl AlbumTrackSorts {
-    pub fn new(artist: &musiqlibrary::KeyedArtistAlbums<AugmentedTrack>) -> Self {
+    pub fn new(artist: &musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack>) -> Self {
         AlbumTrackSorts {
             by_name: {
                 let mut unpaged_tracks = artist.get_all_tracks();
@@ -834,7 +734,7 @@ impl AlbumTrackSorts {
         &self,
         sort_key: &common::ArtistTrackSortKey,
         sort_order: &common::SortOrder,
-    ) -> &Vec<AugmentedTrack> {
+    ) -> &Vec<augmented::AugmentedTrack> {
         match sort_key {
             common::ArtistTrackSortKey::ByName => &self.by_name,
             common::ArtistTrackSortKey::ByParent => &self.by_album,
@@ -856,7 +756,7 @@ pub struct TrackSorts {
 }
 
 impl TrackSorts {
-    pub fn new(organized: &AugmentedLibrary) -> Self {
+    pub fn new(organized: &augmented::AugmentedLibrary) -> Self {
         TrackSorts {
             by_name: {
                 let mut unpaged_tracks = Vec::new();

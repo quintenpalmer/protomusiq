@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 
 use musiqlibrary;
 
+use super::augmented;
 use super::constants;
-use super::library;
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum LoadMode {
@@ -182,16 +182,16 @@ impl AlbumArt {
 pub struct SimpleSearchResults {
     pub artists: Vec<musiqlibrary::ArtistInfo>,
     pub albums: Vec<musiqlibrary::ArtistAlbumInfo>,
-    pub tracks: Vec<library::AugmentedTrack>,
-    pub track_artists: Vec<library::AugmentedTrack>,
+    pub tracks: Vec<augmented::AugmentedTrack>,
+    pub track_artists: Vec<augmented::AugmentedTrack>,
 }
 
 #[derive(Debug)]
 pub struct SearchResults<T> {
     pub artists: Vec<Pair<musiqlibrary::ArtistInfo, T>>,
     pub albums: Vec<Pair<musiqlibrary::ArtistAlbumInfo, T>>,
-    pub tracks: Vec<Pair<library::AugmentedTrack, T>>,
-    pub track_artists: Vec<Pair<library::AugmentedTrack, T>>,
+    pub tracks: Vec<Pair<augmented::AugmentedTrack, T>>,
+    pub track_artists: Vec<Pair<augmented::AugmentedTrack, T>>,
 }
 
 pub fn get_default_config_path() -> path::PathBuf {
@@ -216,9 +216,9 @@ pub fn get_default_data_path() -> path::PathBuf {
 }
 
 pub fn tracks_after_including(
-    tracks: &Vec<library::AugmentedTrack>,
-    current_track: &library::AugmentedTrack,
-) -> Vec<library::AugmentedTrack> {
+    tracks: &Vec<augmented::AugmentedTrack>,
+    current_track: &augmented::AugmentedTrack,
+) -> Vec<augmented::AugmentedTrack> {
     let mut ret = Vec::new();
     let mut found = false;
     for iter_track in tracks.iter() {
