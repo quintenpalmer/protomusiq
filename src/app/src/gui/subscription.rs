@@ -5,7 +5,7 @@ pub fn mpris_callback(app: &state::App) -> iced::Subscription<message::Message> 
     match app {
         state::App::Loaded(loaded) => iced::subscription::unfold(
             "mpris message callback",
-            loaded.player_info.rest.mpris_callback_recv.take(),
+            loaded.player_info.mpris_callback_recv.take(),
             move |mut callback| async move {
                 let msg = callback.as_mut().unwrap().recv().unwrap();
                 (message::Message::MprisCallback(msg), callback)
@@ -22,7 +22,7 @@ pub fn sink_callback(app: &state::App) -> iced::Subscription<message::Message> {
     match app {
         state::App::Loaded(loaded) => iced::subscription::unfold(
             "sink message callback",
-            loaded.player_info.rest.sink_callback_recv.take(),
+            loaded.player_info.sink_callback_recv.take(),
             move |mut callback| async move {
                 let msg = callback.as_mut().unwrap().recv().unwrap();
                 (message::Message::SinkCallback(msg), callback)

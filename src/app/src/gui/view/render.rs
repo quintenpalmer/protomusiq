@@ -29,7 +29,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let app_images = &app.app_images;
     let current_page = &app.current_page;
     let action_state = &app.action_state;
-    let player_info = &app.player_info.rest;
+    let player_info = &app.player_info;
     let play_queue_info = &app.play_queue_info;
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
@@ -391,7 +391,7 @@ pub fn render_playthrough(
 }
 
 pub fn render_player_controls<'a>(
-    player_info: &'a state::PlayerInfoState,
+    player_info: &'a state::PlayerInfo,
     library: &'a model::LibraryState,
 ) -> Option<Container<'a, Message>> {
     match player_info.current_playback {
@@ -405,7 +405,7 @@ pub fn render_player_controls<'a>(
 }
 
 fn controls_with_maybe_track_info<'a>(
-    player_info: &'a state::PlayerInfoState,
+    player_info: &'a state::PlayerInfo,
     library: &'a model::LibraryState,
     outer_current_playback: &'a state::CurrentPlayback,
 ) -> Container<'a, Message> {

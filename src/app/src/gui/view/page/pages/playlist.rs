@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
-use crate::state::{self, ActionState, PlayerInfoState};
+use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
 use crate::gui::view::components;
@@ -16,7 +16,7 @@ use super::super::super::style;
 pub fn playlist_view<'a>(
     library: &'a model::LibraryState,
     action_state: &'a ActionState,
-    player_info: &'a PlayerInfoState,
+    player_info: &'a PlayerInfo,
     state: &'a state::PlaylistViewState,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {

@@ -1,12 +1,12 @@
-use iced::Length;
 use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Space};
+use iced::Length;
 
 use musiqlibrary;
 
 use crate::model;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
-use crate::state::{self, ActionState, PlayerInfoState};
+use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
 use super::super::super::common;
@@ -18,12 +18,9 @@ use super::super::consts;
 pub fn artist_album_view_state<'a>(
     library: &'a model::LibraryState,
     action_state: &'a ActionState,
-    player_info: &'a PlayerInfoState,
+    player_info: &'a PlayerInfo,
     state: &'a state::ArtistAlbumViewState,
-) -> (
-    Vec<(String, Message)>,
-    Container<'a, Message>,
-) {
+) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::ArtistAlbumViewState {
             artist_id,

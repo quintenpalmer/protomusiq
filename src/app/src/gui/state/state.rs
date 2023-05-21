@@ -90,10 +90,6 @@ pub struct ActionState {
 
 /// State for the Playback, its services, and its controls
 pub struct PlayerInfo {
-    pub rest: PlayerInfoState,
-}
-
-pub struct PlayerInfoState {
     pub playing: bool,
     pub current_volume: f32,
     pub current_playback: Option<CurrentPlayback>,
@@ -105,7 +101,7 @@ pub struct PlayerInfoState {
     pub tracker_message_sender: shared::Client<shared::TrackerMessage>,
 }
 
-impl PlayerInfoState {
+impl PlayerInfo {
     pub fn get_maybe_current_playback_track(&self) -> Option<&model::AugmentedTrack> {
         match self.current_playback {
             Some(ref o) => match o {

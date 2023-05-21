@@ -141,7 +141,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             message::Action::Close => Command::batch(vec![
                 Command::perform(
                     mpris_sender(
-                        app.player_info.rest.mpris_message_sender.clone(),
+                        app.player_info.mpris_message_sender.clone(),
                         shared::MprisMessage::Close,
                     )
                     .send_message(),
@@ -149,7 +149,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 ),
                 Command::perform(
                     sink_sender(
-                        app.player_info.rest.sink_message_sender.clone(),
+                        app.player_info.sink_message_sender.clone(),
                         shared::SinkMessage::Close,
                     )
                     .send_message(),
@@ -176,14 +176,14 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             println!("GUI:\thandling internal: {:?}", internal);
             match internal {
                 message::PlaybackRequest::LoadCurrentSong => {
-                    match app.player_info.rest.current_playback {
+                    match app.player_info.current_playback {
                         Some(ref outer_current_playback) => match outer_current_playback {
                             state::CurrentPlayback::Track(ref current_playback) => {
-                                app.player_info.rest.playing = true;
+                                app.player_info.playing = true;
                                 Command::batch(vec![
                                     Command::perform(
                                         mpris_sender(
-                                            app.player_info.rest.mpris_message_sender.clone(),
+                                            app.player_info.mpris_message_sender.clone(),
                                             shared::MprisMessage::SetMetadata(
                                                 current_playback
                                                     .track
@@ -199,10 +199,10 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                                     Command::perform(
                                         {
                                             sink_sender(
-                                                app.player_info.rest.sink_message_sender.clone(),
+                                                app.player_info.sink_message_sender.clone(),
                                                 shared::SinkMessage::LoadSong(
                                                     current_playback.track.metadata.path.clone(),
-                                                    app.player_info.rest.current_volume,
+                                                    app.player_info.current_volume,
                                                 ),
                                             )
                                             .send_message()
@@ -211,7 +211,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                                     ),
                                     Command::perform(
                                         tracker_sender(
-                                            app.player_info.rest.tracker_message_sender.clone(),
+                                            app.player_info.tracker_message_sender.clone(),
                                             shared::TrackerMessage::SongStarted(
                                                 current_playback.track.clone(),
                                             ),
@@ -272,7 +272,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 }
                 message::PlaybackRequest::Prev => {
                     if app.play_queue_info.play_history.len() > 0 {
-                        match app.player_info.rest.current_playback {
+                        match app.player_info.current_playback {
                             Some(ref current_playback) => {
                                 let mut new_play_queue =
                                     vec![state::PlayQueueEntry::from_playback(current_playback)];
@@ -282,7 +282,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                             None => (),
                         };
                         let track = app.play_queue_info.play_history.pop().unwrap();
-                        app.player_info.rest.current_playback = Some(match track {
+                        app.player_info.current_playback = Some(match track {
                             state::PlayQueueEntry::Track(ref t) => {
                                 state::CurrentPlayback::Track(state::CurrentTrackPlayback {
                                     track: t.track.clone(),
@@ -303,7 +303,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 }
                 message::PlaybackRequest::Next => {
                     if app.play_queue_info.play_queue.len() > 0 {
-                        match app.player_info.rest.current_playback {
+                        match app.player_info.current_playback {
                             Some(ref current_playback) => app
                                 .play_queue_info
                                 .play_history
@@ -312,25 +312,25 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                         };
 
                         let track = app.play_queue_info.play_queue.remove(0);
-                        app.player_info.rest.current_playback =
+                        app.player_info.current_playback =
                             Some(state::CurrentPlayback::from_entry_zeroed(&track));
                         app.play_queue_info.current_playback = Some(track.clone());
                         message::message_command(Message::PlaybackRequest(
                             message::PlaybackRequest::LoadCurrentSong,
                         ))
                     } else {
-                        match app.player_info.rest.current_playback {
+                        match app.player_info.current_playback {
                             Some(ref current_playback) => app
                                 .play_queue_info
                                 .play_history
                                 .push(state::PlayQueueEntry::from_playback(current_playback)),
                             None => (),
                         };
-                        app.player_info.rest.current_playback = None;
+                        app.player_info.current_playback = None;
                         app.play_queue_info.current_playback = None;
                         Command::perform(
                             mpris_sender(
-                                app.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetStopped,
                             )
                             .send_message(),
@@ -339,11 +339,11 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                     }
                 }
                 message::PlaybackRequest::Play => {
-                    app.player_info.rest.playing = true;
+                    app.player_info.playing = true;
                     Command::batch(vec![
                         Command::perform(
                             mpris_sender(
-                                app.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPlaying,
                             )
                             .send_message(),
@@ -351,7 +351,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                         ),
                         Command::perform(
                             sink_sender(
-                                app.player_info.rest.sink_message_sender.clone(),
+                                app.player_info.sink_message_sender.clone(),
                                 shared::SinkMessage::PlayButton,
                             )
                             .send_message(),
@@ -360,11 +360,11 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                     ])
                 }
                 message::PlaybackRequest::Pause => {
-                    app.player_info.rest.playing = false;
+                    app.player_info.playing = false;
                     Command::batch(vec![
                         Command::perform(
                             mpris_sender(
-                                app.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPaused,
                             )
                             .send_message(),
@@ -372,7 +372,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                         ),
                         Command::perform(
                             sink_sender(
-                                app.player_info.rest.sink_message_sender.clone(),
+                                app.player_info.sink_message_sender.clone(),
                                 shared::SinkMessage::PauseButton,
                             )
                             .send_message(),
@@ -395,7 +395,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
             }
             shared::SinkCallbackMessage::SecondElapsed => {
-                match app.player_info.rest.current_playback {
+                match app.player_info.current_playback {
                     Some(ref mut outer_current_playback) => match outer_current_playback {
                         state::CurrentPlayback::Track(ref mut current_playback) => {
                             current_playback.current_second += 1
@@ -418,7 +418,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
         }
         Message::MprisCallback(callback) => message::message_command(match callback {
             shared::MprisCallbackMessage::PlayPause => {
-                if app.player_info.rest.playing {
+                if app.player_info.playing {
                     Message::PlaybackRequest(message::PlaybackRequest::Pause)
                 } else {
                     Message::PlaybackRequest(message::PlaybackRequest::Play)
@@ -445,15 +445,15 @@ fn handle_volume_request(
     volume_request: message::VolumeRequest,
 ) -> Command<Message> {
     match volume_request {
-        message::VolumeRequest::Up(delta) => app.player_info.rest.current_volume += delta,
-        message::VolumeRequest::Down(delta) => app.player_info.rest.current_volume -= delta,
-        message::VolumeRequest::Set(new_volume) => app.player_info.rest.current_volume = new_volume,
+        message::VolumeRequest::Up(delta) => app.player_info.current_volume += delta,
+        message::VolumeRequest::Down(delta) => app.player_info.current_volume -= delta,
+        message::VolumeRequest::Set(new_volume) => app.player_info.current_volume = new_volume,
     };
     Command::perform(
         {
             sink_sender(
-                app.player_info.rest.sink_message_sender.clone(),
-                shared::SinkMessage::SetVolume(app.player_info.rest.current_volume),
+                app.player_info.sink_message_sender.clone(),
+                shared::SinkMessage::SetVolume(app.player_info.current_volume),
             )
             .send_message()
         },

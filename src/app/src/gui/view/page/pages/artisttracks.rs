@@ -1,10 +1,10 @@
-use iced::Length;
 use iced::widget::{Column, Container, ProgressBar, Scrollable, Space};
+use iced::Length;
 
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};
-use crate::state::{self, PlayerInfoState};
+use crate::state::{self, PlayerInfo};
 
 use super::super::super::common;
 use super::super::super::elements::*;
@@ -12,12 +12,9 @@ use super::super::super::style;
 
 pub fn artist_track_view_state<'a>(
     library: &'a model::LibraryState,
-    player_info: &'a PlayerInfoState,
+    player_info: &'a PlayerInfo,
     state: &'a state::ArtistTrackViewState,
-) -> (
-    Vec<(String, Message)>,
-    Container<'a, Message>,
-) {
+) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::ArtistTrackViewState {
             artist_id,
@@ -47,15 +44,13 @@ pub fn artist_track_view_state<'a>(
                     dark_button(h2("Albums"))
                         .on_press(user_nav_message(NavMessage::ArtistView(artist_id.clone()))),
                 )
-                .push(
-                    dark_button(h2("Tracks")).on_press(user_nav_message(
-                        NavMessage::ArtistTrackView(
-                            artist_id.clone(),
-                            model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::SortOrder::Reversed,
-                        ),
-                    )),
-                );
+                .push(dark_button(h2("Tracks")).on_press(user_nav_message(
+                    NavMessage::ArtistTrackView(
+                        artist_id.clone(),
+                        model::ArtistTrackSortKey::ByTotalPlayCount,
+                        model::SortOrder::Reversed,
+                    ),
+                )));
 
             let track_sorts = model::AlbumTrackSorts::new(&artist);
 
@@ -78,82 +73,81 @@ pub fn artist_track_view_state<'a>(
 
             let mut stripe_marker = false;
 
-            let sort_bar = line_row()
-                .push(paragraph("Sort By: "))
-                .push(
-                    dark_button(bright_paragraph("Album")).on_press(
-                        user_nav_message(NavMessage::ArtistTrackView(
-                            artist.artist_info.artist_id.clone(),
-                            model::ArtistTrackSortKey::ByParent,
-                            model::SortOrder::Regular,
+            let sort_bar =
+                line_row()
+                    .push(paragraph("Sort By: "))
+                    .push(
+                        dark_button(bright_paragraph("Album")).on_press(user_nav_message(
+                            NavMessage::ArtistTrackView(
+                                artist.artist_info.artist_id.clone(),
+                                model::ArtistTrackSortKey::ByParent,
+                                model::SortOrder::Regular,
+                            ),
                         )),
-                    ),
-                )
-                .push(
-                    dark_button(bright_paragraph("Name")).on_press(
-                        user_nav_message(NavMessage::ArtistTrackView(
-                            artist.artist_info.artist_id.clone(),
-                            model::ArtistTrackSortKey::ByName,
-                            model::SortOrder::Regular,
-                        )),
-                    ),
-                )
-                .push(
-                    dark_button(bright_paragraph("Play Count"))
-                        .on_press(user_nav_message(NavMessage::ArtistTrackView(
-                            artist.artist_info.artist_id.clone(),
-                            model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::SortOrder::Reversed,
-                        ))),
-                )
-                .push(
-                    dark_button(bright_paragraph("Duration")).on_press(
-                        user_nav_message(NavMessage::ArtistTrackView(
-                            artist.artist_info.artist_id.clone(),
-                            model::ArtistTrackSortKey::ByDuration,
-                            model::SortOrder::Reversed,
-                        )),
-                    ),
-                )
-                .push(
-                    dark_button(
-                        bright_paragraph("Played Duration"),
                     )
-                    .on_press(user_nav_message(NavMessage::ArtistTrackView(
-                        artist.artist_info.artist_id.clone(),
-                        model::ArtistTrackSortKey::ByTotalPlayedDuration,
-                        model::SortOrder::Reversed,
-                    ))),
-                )
-                .push(
-                    dark_button(bright_paragraph("Random")).on_press(
+                    .push(
+                        dark_button(bright_paragraph("Name")).on_press(user_nav_message(
+                            NavMessage::ArtistTrackView(
+                                artist.artist_info.artist_id.clone(),
+                                model::ArtistTrackSortKey::ByName,
+                                model::SortOrder::Regular,
+                            ),
+                        )),
+                    )
+                    .push(
+                        dark_button(bright_paragraph("Play Count")).on_press(user_nav_message(
+                            NavMessage::ArtistTrackView(
+                                artist.artist_info.artist_id.clone(),
+                                model::ArtistTrackSortKey::ByTotalPlayCount,
+                                model::SortOrder::Reversed,
+                            ),
+                        )),
+                    )
+                    .push(
+                        dark_button(bright_paragraph("Duration")).on_press(user_nav_message(
+                            NavMessage::ArtistTrackView(
+                                artist.artist_info.artist_id.clone(),
+                                model::ArtistTrackSortKey::ByDuration,
+                                model::SortOrder::Reversed,
+                            ),
+                        )),
+                    )
+                    .push(dark_button(bright_paragraph("Played Duration")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
-                            model::ArtistTrackSortKey::Random,
-                            model::SortOrder::Regular,
+                            model::ArtistTrackSortKey::ByTotalPlayedDuration,
+                            model::SortOrder::Reversed,
                         )),
-                    ),
-                );
+                    ))
+                    .push(
+                        dark_button(bright_paragraph("Random")).on_press(user_nav_message(
+                            NavMessage::ArtistTrackView(
+                                artist.artist_info.artist_id.clone(),
+                                model::ArtistTrackSortKey::Random,
+                                model::SortOrder::Regular,
+                            ),
+                        )),
+                    );
 
             let sort_order_bar = line_row()
                 .push(paragraph("Order: "))
                 .push(
-                    dark_button(bright_paragraph("^")).on_press(
-                        user_nav_message(NavMessage::ArtistTrackView(
+                    dark_button(bright_paragraph("^")).on_press(user_nav_message(
+                        NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             sort_key.clone(),
                             model::SortOrder::Reversed,
-                        )),
-                    ),
+                        ),
+                    )),
                 )
                 .push(
-                    dark_button(bright_paragraph("v")).on_press(
-                        user_nav_message(NavMessage::ArtistTrackView(
+                    dark_button(bright_paragraph("v")).on_press(user_nav_message(
+                        NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             sort_key.clone(),
                             model::SortOrder::Regular,
-                        )),
-                    ),
+                        ),
+                    )),
                 );
 
             for track in tracks.into_iter() {
@@ -182,7 +176,9 @@ pub fn artist_track_view_state<'a>(
                                 bright_paragraph(track.metadata.track.to_string())
                                     .width(Length::Fixed(40.0)),
                             )
-                            .push(bright_paragraph(track_maybe_with_track_artist).width(Length::Fill))
+                            .push(
+                                bright_paragraph(track_maybe_with_track_artist).width(Length::Fill),
+                            )
                             .push(
                                 bright_paragraph(track.augmented.play_count.to_string())
                                     .width(Length::Fixed(40.0)),
@@ -206,26 +202,23 @@ pub fn artist_track_view_state<'a>(
                             })
                             .push(Space::with_width(Length::Fixed(5.0))),
                     )
-                    .on_press(user_nav_message(
-                        NavMessage::ArtistAlbumView(
-                            track.metadata.album_artist_id.clone(),
-                            track.metadata.album_id.clone(),
-                            model::AlbumSize::Regular,
-                            Some(
-                                musiqlibrary::TrackUniqueIdentifier::from_track(
-                                    &track
-                                    .metadata
-                                 )
-                            )
-                        ),
-                    )),
+                    .on_press(user_nav_message(NavMessage::ArtistAlbumView(
+                        track.metadata.album_artist_id.clone(),
+                        track.metadata.album_id.clone(),
+                        model::AlbumSize::Regular,
+                        Some(musiqlibrary::TrackUniqueIdentifier::from_track(
+                            &track.metadata,
+                        )),
+                    ))),
                 )
-                .style(iced::theme::Container::Custom(style::get_potential_current_stripe_style(
-                    stripe_marker,
-                    &track,
-                    &current_track,
-                    &None,
-                )));
+                .style(iced::theme::Container::Custom(
+                    style::get_potential_current_stripe_style(
+                        stripe_marker,
+                        &track,
+                        &current_track,
+                        &None,
+                    ),
+                ));
 
                 tracks_table = tracks_table.push(row);
             }
