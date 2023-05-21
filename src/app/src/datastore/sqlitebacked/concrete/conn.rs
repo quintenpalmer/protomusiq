@@ -115,6 +115,11 @@ impl Connections {
         };
     }
 
+    pub fn repopulate_tracks(&mut self, library: &musiqlibrary::RawLibrary) {
+        let _timestamp =
+            query::undeleted::repopulate_and_soft_delete(&mut self.shared_db, &library);
+    }
+
     pub fn _bootstrap_album_art(&mut self, _all_album_art: ()) {}
 
     pub fn check_has_migration(&self, migration: constants::Migration) -> bool {
