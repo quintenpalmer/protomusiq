@@ -90,7 +90,7 @@ enum SpecifiedCacheMode {
 
 enum Callback {
     JSON(PathBuf),
-    Sqlite,
+    Sqlite(sqlitebacked::Connections),
     NoCache,
 }
 
@@ -102,7 +102,7 @@ impl Callback {
                 &new_metadata_payload,
             )
             .unwrap(),
-            Callback::Sqlite => (),
+            Callback::Sqlite(_conn) => (),
             Callback::NoCache => (),
         };
     }
@@ -253,7 +253,7 @@ fn resolve_specified_cache_mode(
             println!("loading with sqlite");
             let raw_library = conn.get_library();
             let payload = CacheMetadataPayload::from_raw_library(&raw_library);
-            (payload, Callback::Sqlite)
+            (payload, Callback::Sqlite(conn))
         }
     }
 }
