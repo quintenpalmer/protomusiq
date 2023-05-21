@@ -9,8 +9,8 @@ use crate::datastore::{
 };
 use crate::services::{mpris, sink, tracker};
 
-use crate::util::{config, logging};
 use crate::model;
+use crate::util::{config, logging};
 
 use crate::datastore::loader;
 use crate::datastore::staticassets::embedded;
@@ -145,7 +145,7 @@ pub fn initialize_everything() -> state::App {
             should_close: false,
             error_messages: Vec::new(),
             app_images: embedded::AppImages::new(&config_state.app_data_path),
-            action_state: state::ActionState{
+            action_state: state::ActionState {
                 group_buttons_shuffle: false,
             },
             play_queue_info: state::PlayQueueInfo {

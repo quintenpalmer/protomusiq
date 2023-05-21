@@ -74,19 +74,19 @@ pub enum PlayQueueAction {
 impl PlayQueueEntry {
     pub fn from_playback(playback: &CurrentPlayback) -> Self {
         match playback {
-            CurrentPlayback::Track(ref current_playback) => PlayQueueEntry::Track(PlayQueueTrack{track: current_playback.track.clone()}),
+            CurrentPlayback::Track(ref current_playback) => PlayQueueEntry::Track(PlayQueueTrack {
+                track: current_playback.track.clone(),
+            }),
             CurrentPlayback::PauseBreak => PlayQueueEntry::Action(PlayQueueAction::Pause),
         }
     }
 
     pub fn to_playback_zeroed(&self) -> CurrentPlayback {
         match self {
-            PlayQueueEntry::Track(ref track) => CurrentPlayback::Track(
-                CurrentTrackPlayback {
-                    track: track.track.clone(),
-                    current_second: 0,
-                }
-            ),
+            PlayQueueEntry::Track(ref track) => CurrentPlayback::Track(CurrentTrackPlayback {
+                track: track.track.clone(),
+                current_second: 0,
+            }),
             PlayQueueEntry::Action(PlayQueueAction::Pause) => CurrentPlayback::PauseBreak,
         }
     }
@@ -119,7 +119,7 @@ impl PlayerInfoState {
             Some(ref o) => match o {
                 CurrentPlayback::Track(ref v) => Some(&v.track),
                 _ => None,
-            }
+            },
             None => None,
         }
     }
@@ -141,7 +141,7 @@ impl CurrentPlayback {
     }
 
     #[allow(unused)]
-    pub fn to_entry(&self) -> PlayQueueEntry{
+    pub fn to_entry(&self) -> PlayQueueEntry {
         PlayQueueEntry::from_playback(self)
     }
 }
