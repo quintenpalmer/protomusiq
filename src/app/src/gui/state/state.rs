@@ -11,15 +11,11 @@ use super::page;
 /// Top Level Application
 pub enum App {
     Loading,
-    Loaded(Loaded),
+    Loaded(AppState),
 }
 
 /// State for the App, once it has finished processing all data it needs
 /// to provide its user experience
-pub struct Loaded {
-    pub rest: AppState,
-}
-
 pub struct AppState {
     pub current_page: page::Page,
     pub library: model::LibraryState,

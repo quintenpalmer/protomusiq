@@ -20,17 +20,17 @@ pub fn view_loading<'a>() -> Element<'a, Message> {
         .into()
 }
 
-pub fn view_app(app: &state::Loaded) -> Element<Message> {
+pub fn view_app(app: &state::AppState) -> Element<Message> {
     println!(
         "GUI:\tviewing: {}",
-        app.rest.current_page.super_simple_debug_string()
+        app.current_page.super_simple_debug_string()
     );
-    let library = &app.rest.library;
-    let app_images = &app.rest.app_images;
-    let current_page = &app.rest.current_page;
-    let action_state = &app.rest.action_state;
-    let player_info = &app.rest.player_info.rest;
-    let play_queue_info = &app.rest.play_queue_info.rest;
+    let library = &app.library;
+    let app_images = &app.app_images;
+    let current_page = &app.current_page;
+    let action_state = &app.action_state;
+    let player_info = &app.player_info.rest;
+    let play_queue_info = &app.play_queue_info.rest;
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,

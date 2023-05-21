@@ -136,52 +136,50 @@ pub fn initialize_everything() -> state::App {
 
     logger.print_elapsed("starting tracker");
 
-    state::App::Loaded(state::Loaded {
-        rest: state::AppState {
-            page_back_history: Vec::new(),
-            page_current_history: message::NavMessage::Home,
-            page_forward_history: Vec::new(),
-            current_page: state::Page::Home(state::HomeState {}),
-            should_close: false,
-            error_messages: Vec::new(),
-            app_images: embedded::AppImages::new(&config_state.app_data_path),
-            action_state: state::ActionState {
-                group_buttons_shuffle: false,
+    state::App::Loaded(state::AppState {
+        page_back_history: Vec::new(),
+        page_current_history: message::NavMessage::Home,
+        page_forward_history: Vec::new(),
+        current_page: state::Page::Home(state::HomeState {}),
+        should_close: false,
+        error_messages: Vec::new(),
+        app_images: embedded::AppImages::new(&config_state.app_data_path),
+        action_state: state::ActionState {
+            group_buttons_shuffle: false,
+        },
+        play_queue_info: state::PlayQueueInfo {
+            rest: state::PlayQueueInfoState {
+                play_queue_visible: true,
+                play_history: Vec::new(),
+                play_queue: Vec::new(),
+                current_playback: None,
             },
-            play_queue_info: state::PlayQueueInfo {
-                rest: state::PlayQueueInfoState {
-                    play_queue_visible: true,
-                    play_history: Vec::new(),
-                    play_queue: Vec::new(),
-                    current_playback: None,
-                },
+        },
+        config: state::Config { rest: config_state },
+        player_info: state::PlayerInfo {
+            rest: state::PlayerInfoState {
+                playing: false,
+                current_volume: 1.0,
+                current_playback: None,
+                sink_message_sender: sink_client,
+                sink_callback_recv: RefCell::new(Some(sink_callback)),
+                mpris_message_sender: mpris_client,
+                mpris_callback_recv: RefCell::new(Some(mpris_callback)),
+                tracker_message_sender: tracker_client,
             },
-            config: state::Config { rest: config_state },
-            player_info: state::PlayerInfo {
-                rest: state::PlayerInfoState {
-                    playing: false,
-                    current_volume: 1.0,
-                    current_playback: None,
-                    sink_message_sender: sink_client,
-                    sink_callback_recv: RefCell::new(Some(sink_callback)),
-                    mpris_message_sender: mpris_client,
-                    mpris_callback_recv: RefCell::new(Some(mpris_callback)),
-                    tracker_message_sender: tracker_client,
-                },
-            },
-            library: model::LibraryState {
-                raw_library: augmented_library,
+        },
+        library: model::LibraryState {
+            raw_library: augmented_library,
 
-                user_playlists: playlists,
+            user_playlists: playlists,
 
-                artist_sorts: artist_sorts,
-                album_sorts: album_sorts,
-                track_sorts: track_sorts,
+            artist_sorts: artist_sorts,
+            album_sorts: album_sorts,
+            track_sorts: track_sorts,
 
-                grid_info: grid_info,
+            grid_info: grid_info,
 
-                album_art: loaded_images,
-            },
+            album_art: loaded_images,
         },
     })
 }

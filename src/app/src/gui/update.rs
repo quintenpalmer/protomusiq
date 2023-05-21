@@ -6,7 +6,7 @@ use crate::shared;
 
 use super::init;
 use super::message::{self, Message, NavMessage};
-use super::state::{self, App, Loaded, Page};
+use super::state::{self, App, AppState, Page};
 
 pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Message> {
     match message {
@@ -21,12 +21,11 @@ pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Mes
     }
 }
 
-pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
+pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     println!(
         "GUI:\tupdating with {:?} ({})",
         message,
-        app.rest
-            .page_back_history
+        app.page_back_history
             .iter()
             .fold("".to_string(), |total, current| {
                 format!("{:?}, {}", current, total)
@@ -43,14 +42,13 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 handle_volume_request(app, volume_request)
             }
             message::Action::CreateNewPlaylist(playlist_name) => {
-                app.rest.library.user_playlists.add_playlist(playlist_name);
+                app.library.user_playlists.add_playlist(playlist_name);
                 message::message_command(message::user_nav_message(
                     message::NavMessage::PlaylistList("".to_string()),
                 ))
             }
             message::Action::MakePlaylistDefault(playlist_id) => {
-                app.rest
-                    .library
+                app.library
                     .user_playlists
                     .make_playlist_default(playlist_id);
                 Command::none()
@@ -58,7 +56,6 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             message::Action::AddTracksToPlaylist(playlist_id, track_ids) => {
                 for track_id in track_ids.into_iter() {
                     match app
-                        .rest
                         .library
                         .user_playlists
                         .add_track_to_playlist(playlist_id, track_id)
@@ -72,7 +69,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 Command::none()
             }
             message::Action::DeletePlaylist(playlist_id) => {
-                match app.rest.library.user_playlists.delete_playlist(playlist_id) {
+                match app.library.user_playlists.delete_playlist(playlist_id) {
                     Ok(_) => (),
                     Err(err_string) => println!("error deleting playlist: {}", err_string),
                 };
@@ -80,7 +77,6 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             }
             message::Action::RemoveTrackFromPlaylist(playlist_id, track_id) => {
                 match app
-                    .rest
                     .library
                     .user_playlists
                     .remove_track_from_playlist(playlist_id, track_id)
@@ -93,7 +89,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 Command::none()
             }
             message::Action::MoveTrackInPlaylist(playlist_id, direction, track_id) => {
-                match app.rest.library.user_playlists.move_track_in_playlist(
+                match app.library.user_playlists.move_track_in_playlist(
                     playlist_id,
                     direction,
                     track_id,
@@ -108,26 +104,25 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             message::Action::RemoveTrackFromPlayQueue(history_or_queue, index) => {
                 match history_or_queue {
                     message::HistoryOrQueue::History => {
-                        app.rest.play_queue_info.rest.play_history.remove(index);
+                        app.play_queue_info.rest.play_history.remove(index);
                     }
                     message::HistoryOrQueue::Queue => {
-                        app.rest.play_queue_info.rest.play_queue.remove(index);
+                        app.play_queue_info.rest.play_queue.remove(index);
                     }
                 };
                 Command::none()
             }
             message::Action::ToggleShuffleOnAdd => {
-                app.rest.action_state.group_buttons_shuffle =
-                    !app.rest.action_state.group_buttons_shuffle;
+                app.action_state.group_buttons_shuffle = !app.action_state.group_buttons_shuffle;
                 Command::none()
             }
             message::Action::TogglePlayQueueVisible => {
-                app.rest.play_queue_info.rest.play_queue_visible =
-                    !app.rest.play_queue_info.rest.play_queue_visible;
+                app.play_queue_info.rest.play_queue_visible =
+                    !app.play_queue_info.rest.play_queue_visible;
                 Command::none()
             }
             message::Action::UpdateText(new_text) => {
-                match &mut app.rest.current_page {
+                match &mut app.current_page {
                     state::Page::Search(search_page_state) => search_page_state.query = new_text,
                     state::Page::PlaylistList(playlist_page_state) => {
                         playlist_page_state.new_playlist_name = new_text
@@ -138,7 +133,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 };
                 Command::none()
             }
-            message::Action::PerformSearch(query) => match app.rest.current_page {
+            message::Action::PerformSearch(query) => match app.current_page {
                 state::Page::Search(ref _search_state) => message::message_command(
                     message::user_nav_message(message::NavMessage::SearchPage(query, true)),
                 ),
@@ -147,7 +142,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             message::Action::Close => Command::batch(vec![
                 Command::perform(
                     mpris_sender(
-                        app.rest.player_info.rest.mpris_message_sender.clone(),
+                        app.player_info.rest.mpris_message_sender.clone(),
                         shared::MprisMessage::Close,
                     )
                     .send_message(),
@@ -155,7 +150,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 ),
                 Command::perform(
                     sink_sender(
-                        app.rest.player_info.rest.sink_message_sender.clone(),
+                        app.player_info.rest.sink_message_sender.clone(),
                         shared::SinkMessage::Close,
                     )
                     .send_message(),
@@ -165,17 +160,15 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             ]),
         },
         Message::Nav(nav_message) => {
-            app.rest
-                .page_back_history
-                .push(app.rest.page_current_history.clone());
-            app.rest.page_current_history = nav_message.clone();
+            app.page_back_history.push(app.page_current_history.clone());
+            app.page_current_history = nav_message.clone();
             handle_nav(app, nav_message)
         }
-        Message::HistoryNav => match app.rest.page_back_history.pop() {
+        Message::HistoryNav => match app.page_back_history.pop() {
             Some(history_message) => {
-                let old_current = app.rest.page_current_history.clone();
-                app.rest.page_current_history = history_message.clone();
-                app.rest.page_forward_history.insert(0, old_current);
+                let old_current = app.page_current_history.clone();
+                app.page_current_history = history_message.clone();
+                app.page_forward_history.insert(0, old_current);
                 handle_nav(app, history_message)
             }
             None => Command::none(),
@@ -184,14 +177,14 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             println!("GUI:\thandling internal: {:?}", internal);
             match internal {
                 message::PlaybackRequest::LoadCurrentSong => {
-                    match app.rest.player_info.rest.current_playback {
+                    match app.player_info.rest.current_playback {
                         Some(ref outer_current_playback) => match outer_current_playback {
                             state::CurrentPlayback::Track(ref current_playback) => {
-                                app.rest.player_info.rest.playing = true;
+                                app.player_info.rest.playing = true;
                                 Command::batch(vec![
                                     Command::perform(
                                         mpris_sender(
-                                            app.rest.player_info.rest.mpris_message_sender.clone(),
+                                            app.player_info.rest.mpris_message_sender.clone(),
                                             shared::MprisMessage::SetMetadata(
                                                 current_playback
                                                     .track
@@ -207,14 +200,10 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                     Command::perform(
                                         {
                                             sink_sender(
-                                                app.rest
-                                                    .player_info
-                                                    .rest
-                                                    .sink_message_sender
-                                                    .clone(),
+                                                app.player_info.rest.sink_message_sender.clone(),
                                                 shared::SinkMessage::LoadSong(
                                                     current_playback.track.metadata.path.clone(),
-                                                    app.rest.player_info.rest.current_volume,
+                                                    app.player_info.rest.current_volume,
                                                 ),
                                             )
                                             .send_message()
@@ -223,11 +212,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                     ),
                                     Command::perform(
                                         tracker_sender(
-                                            app.rest
-                                                .player_info
-                                                .rest
-                                                .tracker_message_sender
-                                                .clone(),
+                                            app.player_info.rest.tracker_message_sender.clone(),
                                             shared::TrackerMessage::SongStarted(
                                                 current_playback.track.clone(),
                                             ),
@@ -238,7 +223,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                 ])
                             }
                             state::CurrentPlayback::PauseBreak => {
-                                //app.rest.player_info.rest.playing = false;
+                                //app.player_info.rest.playing = false;
                                 message::message_command(Message::PlaybackRequest(
                                     message::PlaybackRequest::Pause,
                                 ))
@@ -257,8 +242,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                             state::PlayQueueTrack { track: iter_track },
                         ));
                     }
-                    app.rest
-                        .play_queue_info
+                    app.play_queue_info
                         .rest
                         .play_queue
                         .append(&mut new_songs_to_queue);
@@ -277,8 +261,8 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                             state::PlayQueueTrack { track: iter_track },
                         ));
                     }
-                    new_songs_to_queue.append(&mut app.rest.play_queue_info.rest.play_queue);
-                    app.rest.play_queue_info.rest.play_queue = new_songs_to_queue;
+                    new_songs_to_queue.append(&mut app.play_queue_info.rest.play_queue);
+                    app.play_queue_info.rest.play_queue = new_songs_to_queue;
 
                     if load_next {
                         message::message_command(Message::PlaybackRequest(
@@ -289,19 +273,18 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     }
                 }
                 message::PlaybackRequest::Prev => {
-                    if app.rest.play_queue_info.rest.play_history.len() > 0 {
-                        match app.rest.player_info.rest.current_playback {
+                    if app.play_queue_info.rest.play_history.len() > 0 {
+                        match app.player_info.rest.current_playback {
                             Some(ref current_playback) => {
                                 let mut new_play_queue =
                                     vec![state::PlayQueueEntry::from_playback(current_playback)];
-                                new_play_queue
-                                    .append(&mut app.rest.play_queue_info.rest.play_queue);
-                                app.rest.play_queue_info.rest.play_queue = new_play_queue;
+                                new_play_queue.append(&mut app.play_queue_info.rest.play_queue);
+                                app.play_queue_info.rest.play_queue = new_play_queue;
                             }
                             None => (),
                         };
-                        let track = app.rest.play_queue_info.rest.play_history.pop().unwrap();
-                        app.rest.player_info.rest.current_playback = Some(match track {
+                        let track = app.play_queue_info.rest.play_history.pop().unwrap();
+                        app.player_info.rest.current_playback = Some(match track {
                             state::PlayQueueEntry::Track(ref t) => {
                                 state::CurrentPlayback::Track(state::CurrentTrackPlayback {
                                     track: t.track.clone(),
@@ -312,7 +295,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                                 state::CurrentPlayback::PauseBreak
                             }
                         });
-                        app.rest.play_queue_info.rest.current_playback = Some(track.clone());
+                        app.play_queue_info.rest.current_playback = Some(track.clone());
                         message::message_command(Message::PlaybackRequest(
                             message::PlaybackRequest::LoadCurrentSong,
                         ))
@@ -321,10 +304,9 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     }
                 }
                 message::PlaybackRequest::Next => {
-                    if app.rest.play_queue_info.rest.play_queue.len() > 0 {
-                        match app.rest.player_info.rest.current_playback {
+                    if app.play_queue_info.rest.play_queue.len() > 0 {
+                        match app.player_info.rest.current_playback {
                             Some(ref current_playback) => app
-                                .rest
                                 .play_queue_info
                                 .rest
                                 .play_history
@@ -332,28 +314,27 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                             None => (),
                         };
 
-                        let track = app.rest.play_queue_info.rest.play_queue.remove(0);
-                        app.rest.player_info.rest.current_playback =
+                        let track = app.play_queue_info.rest.play_queue.remove(0);
+                        app.player_info.rest.current_playback =
                             Some(state::CurrentPlayback::from_entry_zeroed(&track));
-                        app.rest.play_queue_info.rest.current_playback = Some(track.clone());
+                        app.play_queue_info.rest.current_playback = Some(track.clone());
                         message::message_command(Message::PlaybackRequest(
                             message::PlaybackRequest::LoadCurrentSong,
                         ))
                     } else {
-                        match app.rest.player_info.rest.current_playback {
+                        match app.player_info.rest.current_playback {
                             Some(ref current_playback) => app
-                                .rest
                                 .play_queue_info
                                 .rest
                                 .play_history
                                 .push(state::PlayQueueEntry::from_playback(current_playback)),
                             None => (),
                         };
-                        app.rest.player_info.rest.current_playback = None;
-                        app.rest.play_queue_info.rest.current_playback = None;
+                        app.player_info.rest.current_playback = None;
+                        app.play_queue_info.rest.current_playback = None;
                         Command::perform(
                             mpris_sender(
-                                app.rest.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.rest.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetStopped,
                             )
                             .send_message(),
@@ -362,11 +343,11 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     }
                 }
                 message::PlaybackRequest::Play => {
-                    app.rest.player_info.rest.playing = true;
+                    app.player_info.rest.playing = true;
                     Command::batch(vec![
                         Command::perform(
                             mpris_sender(
-                                app.rest.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.rest.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPlaying,
                             )
                             .send_message(),
@@ -374,7 +355,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                         ),
                         Command::perform(
                             sink_sender(
-                                app.rest.player_info.rest.sink_message_sender.clone(),
+                                app.player_info.rest.sink_message_sender.clone(),
                                 shared::SinkMessage::PlayButton,
                             )
                             .send_message(),
@@ -383,11 +364,11 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     ])
                 }
                 message::PlaybackRequest::Pause => {
-                    app.rest.player_info.rest.playing = false;
+                    app.player_info.rest.playing = false;
                     Command::batch(vec![
                         Command::perform(
                             mpris_sender(
-                                app.rest.player_info.rest.mpris_message_sender.clone(),
+                                app.player_info.rest.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPaused,
                             )
                             .send_message(),
@@ -395,7 +376,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                         ),
                         Command::perform(
                             sink_sender(
-                                app.rest.player_info.rest.sink_message_sender.clone(),
+                                app.player_info.rest.sink_message_sender.clone(),
                                 shared::SinkMessage::PauseButton,
                             )
                             .send_message(),
@@ -406,8 +387,8 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 message::PlaybackRequest::InsertPause => {
                     let mut new_songs_to_queue =
                         vec![state::PlayQueueEntry::Action(state::PlayQueueAction::Pause)];
-                    new_songs_to_queue.append(&mut app.rest.play_queue_info.rest.play_queue);
-                    app.rest.play_queue_info.rest.play_queue = new_songs_to_queue;
+                    new_songs_to_queue.append(&mut app.play_queue_info.rest.play_queue);
+                    app.play_queue_info.rest.play_queue = new_songs_to_queue;
 
                     Command::none()
                 }
@@ -418,7 +399,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
             }
             shared::SinkCallbackMessage::SecondElapsed => {
-                match app.rest.player_info.rest.current_playback {
+                match app.player_info.rest.current_playback {
                     Some(ref mut outer_current_playback) => match outer_current_playback {
                         state::CurrentPlayback::Track(ref mut current_playback) => {
                             current_playback.current_second += 1
@@ -441,7 +422,7 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
         }
         Message::MprisCallback(callback) => message::message_command(match callback {
             shared::MprisCallbackMessage::PlayPause => {
-                if app.rest.player_info.rest.playing {
+                if app.player_info.rest.playing {
                     Message::PlaybackRequest(message::PlaybackRequest::Pause)
                 } else {
                     Message::PlaybackRequest(message::PlaybackRequest::Play)
@@ -464,21 +445,19 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
 }
 
 fn handle_volume_request(
-    app: &mut Loaded,
+    app: &mut AppState,
     volume_request: message::VolumeRequest,
 ) -> Command<Message> {
     match volume_request {
-        message::VolumeRequest::Up(delta) => app.rest.player_info.rest.current_volume += delta,
-        message::VolumeRequest::Down(delta) => app.rest.player_info.rest.current_volume -= delta,
-        message::VolumeRequest::Set(new_volume) => {
-            app.rest.player_info.rest.current_volume = new_volume
-        }
+        message::VolumeRequest::Up(delta) => app.player_info.rest.current_volume += delta,
+        message::VolumeRequest::Down(delta) => app.player_info.rest.current_volume -= delta,
+        message::VolumeRequest::Set(new_volume) => app.player_info.rest.current_volume = new_volume,
     };
     Command::perform(
         {
             sink_sender(
-                app.rest.player_info.rest.sink_message_sender.clone(),
-                shared::SinkMessage::SetVolume(app.rest.player_info.rest.current_volume),
+                app.player_info.rest.sink_message_sender.clone(),
+                shared::SinkMessage::SetVolume(app.player_info.rest.current_volume),
             )
             .send_message()
         },
@@ -486,28 +465,28 @@ fn handle_volume_request(
     )
 }
 
-fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<message::Message> {
+fn handle_nav(app: &mut AppState, nav_message: message::NavMessage) -> Command<message::Message> {
     match nav_message {
         NavMessage::Home => {
-            app.rest.current_page = Page::Home(state::HomeState {});
+            app.current_page = Page::Home(state::HomeState {});
             Command::none()
         }
         NavMessage::Config => {
-            app.rest.current_page = Page::Config(state::ConfigState {});
+            app.current_page = Page::Config(state::ConfigState {});
             Command::none()
         }
         NavMessage::PlayQueueFocus => {
-            app.rest.current_page = Page::PlayQueue(state::PlayQueueState {});
+            app.current_page = Page::PlayQueue(state::PlayQueueState {});
             Command::none()
         }
         NavMessage::PlaylistView(playlist_id) => {
-            app.rest.current_page = Page::PlaylistView(state::PlaylistViewState {
+            app.current_page = Page::PlaylistView(state::PlaylistViewState {
                 playlist_id: playlist_id,
             });
             Command::none()
         }
         NavMessage::PlaylistList(new_playlist_name) => {
-            app.rest.current_page = Page::PlaylistList(state::PlaylistListState {
+            app.current_page = Page::PlaylistList(state::PlaylistListState {
                 new_playlist_name: new_playlist_name,
             });
             Command::none()
@@ -515,7 +494,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
         NavMessage::SearchPage(query, perform_search) => {
             let computed_results = match perform_search {
                 true => {
-                    let search_results = app.rest.library.search(query.clone());
+                    let search_results = app.library.search(query.clone());
                     let mapped_search_results = model::SearchResults {
                         artists: search_results
                             .artists
@@ -555,14 +534,14 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
                 false => None,
             };
 
-            app.rest.current_page = Page::Search(state::SearchPageState {
+            app.current_page = Page::Search(state::SearchPageState {
                 query: query,
                 results: computed_results,
             });
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }
         NavMessage::TrackList(page, sort, sort_order) => {
-            app.rest.current_page = Page::TrackList(state::TrackListState {
+            app.current_page = Page::TrackList(state::TrackListState {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
@@ -570,7 +549,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
             Command::none()
         }
         NavMessage::AlbumList(page, sort, sort_order) => {
-            app.rest.current_page = Page::AlbumList(state::AlbumListState {
+            app.current_page = Page::AlbumList(state::AlbumListState {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
@@ -578,7 +557,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
             Command::none()
         }
         NavMessage::ArtistList(page, sort, sort_order) => {
-            app.rest.current_page = Page::ArtistList(state::ArtistListState {
+            app.current_page = Page::ArtistList(state::ArtistListState {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
@@ -586,10 +565,9 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
             Command::none()
         }
         NavMessage::ArtistView(artist_id) => {
-            app.rest.current_page = Page::ArtistView(state::ArtistViewState {
+            app.current_page = Page::ArtistView(state::ArtistViewState {
                 artist_id: artist_id.clone(),
                 albums: app
-                    .rest
                     .library
                     .get_artist_map()
                     .get(&artist_id)
@@ -602,7 +580,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
             Command::none()
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-            app.rest.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
+            app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
                 artist_id: artist_id.clone(),
 
                 sort_key: sort_key,
@@ -611,7 +589,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
             Command::none()
         }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
-            app.rest.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
+            app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                 artist_id: artist_id.clone(),
                 album_id: album_id.clone(),
                 album_size: album_size,
