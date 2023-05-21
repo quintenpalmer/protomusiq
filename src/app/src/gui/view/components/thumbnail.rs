@@ -1,10 +1,11 @@
 use std::collections::BTreeMap;
 
-use iced::{self, Column, Container, Length, Row};
+use iced;
+use iced::widget::{Column, Container, Space, Row};
 
 use crate::model;
 
-use crate::gui::message::{Message};
+use crate::gui::message;
 
 use super::super::elements::*;
 use super::super::style;
@@ -18,7 +19,7 @@ pub fn compute_playlist_thumbnail<'a>(
     library: &'a model::LibraryState,
     tracks: &Vec<musiqlibrary::TrackUniqueIdentifier>,
     icon_size: PlaylistIconSize,
-) -> iced::Container<'a, Message> {
+) -> Container<'a, message::Message> {
     let (small_album_size, large_album_size) = match icon_size {
         PlaylistIconSize::Small => (model::AlbumSize::Micro, model::AlbumSize::Mini),
         PlaylistIconSize::Large => (model::AlbumSize::Mini, model::AlbumSize::Small),
@@ -180,16 +181,16 @@ pub fn compute_playlist_thumbnail<'a>(
     } else {
         Container::new(bright_paragraph("<?>"))
     }
-    .align_x(iced::Align::Center)
-    .align_y(iced::Align::Center)
-    .width(Length::Units(large_album_size.width() + 10))
-    .height(Length::Units(large_album_size.height() + 10))
-    .style(style::ContainerDarkInset)
+    .align_x(iced::alignment::Horizontal::Center)
+    .align_y(iced::alignment::Vertical::Center)
+    .width(iced::Length::Fixed((large_album_size.width() + 10) as f32))
+    .height(iced::Length::Fixed((large_album_size.height() + 10) as f32))
+    .style(iced::theme::Container::Custom(Box::new(style::ContainerDarkInset)))
 }
 
-fn empty_album_space(album_size: model::AlbumSize) -> iced::Space {
-    iced::Space::new(
-        iced::Length::Units(album_size.width()),
-        iced::Length::Units(album_size.height()),
+fn empty_album_space(album_size: model::AlbumSize) -> Space {
+    Space::new(
+        iced::Length::Fixed(album_size.width() as f32),
+        iced::Length::Fixed(album_size.height() as f32),
     )
 }

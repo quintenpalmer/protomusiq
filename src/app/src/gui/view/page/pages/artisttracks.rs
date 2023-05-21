@@ -1,4 +1,5 @@
-use iced::{self, button, Column, Container, Length, ProgressBar, Scrollable, Space};
+use iced::Length;
+use iced::widget::{Column, Container, ProgressBar, Scrollable, Space};
 
 use crate::model;
 
@@ -12,32 +13,13 @@ use super::super::super::style;
 pub fn artist_track_view_state<'a>(
     library: &'a model::LibraryState,
     player_info: &'a PlayerInfoState,
-    state: &'a mut state::ArtistTrackViewState,
+    state: &'a state::ArtistTrackViewState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
         state::ArtistTrackViewState {
-            artist_list_breadcrumb,
-            artist_view_breadcrumb,
-
-            sort_by_name_button,
-            sort_by_album_button,
-            sort_by_play_count_button,
-            sort_by_duration_button,
-            sort_by_played_duration_button,
-            sort_random_button,
-
-            album_view_button,
-            track_view_button,
-
-            sort_order_regular_button,
-            sort_order_reverse_button,
-
-            track_buttons,
-            track_scroll,
-
             artist_id,
 
             sort_key,
@@ -47,7 +29,6 @@ pub fn artist_track_view_state<'a>(
 
             let breadcrumbs = vec![
                 (
-                    artist_list_breadcrumb,
                     "Artists".to_string(),
                     user_nav_message(NavMessage::ArtistList(
                         0,
@@ -56,7 +37,6 @@ pub fn artist_track_view_state<'a>(
                     )),
                 ),
                 (
-                    artist_view_breadcrumb,
                     artist.artist_info.artist_name.clone(),
                     user_nav_message(NavMessage::ArtistView(artist_id.clone())),
                 ),
@@ -64,11 +44,11 @@ pub fn artist_track_view_state<'a>(
 
             let artist_view_button_row = line_row()
                 .push(
-                    dark_button(album_view_button, h2("Albums"))
+                    dark_button(h2("Albums"))
                         .on_press(user_nav_message(NavMessage::ArtistView(artist_id.clone()))),
                 )
                 .push(
-                    dark_button(track_view_button, h2("Tracks")).on_press(user_nav_message(
+                    dark_button(h2("Tracks")).on_press(user_nav_message(
                         NavMessage::ArtistTrackView(
                             artist_id.clone(),
                             model::ArtistTrackSortKey::ByTotalPlayCount,
@@ -101,7 +81,7 @@ pub fn artist_track_view_state<'a>(
             let sort_bar = line_row()
                 .push(paragraph("Sort By: "))
                 .push(
-                    dark_button(sort_by_album_button, bright_paragraph("Album")).on_press(
+                    dark_button(bright_paragraph("Album")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByParent,
@@ -110,7 +90,7 @@ pub fn artist_track_view_state<'a>(
                     ),
                 )
                 .push(
-                    dark_button(sort_by_name_button, bright_paragraph("Name")).on_press(
+                    dark_button(bright_paragraph("Name")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByName,
@@ -119,7 +99,7 @@ pub fn artist_track_view_state<'a>(
                     ),
                 )
                 .push(
-                    dark_button(sort_by_play_count_button, bright_paragraph("Play Count"))
+                    dark_button(bright_paragraph("Play Count"))
                         .on_press(user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByTotalPlayCount,
@@ -127,7 +107,7 @@ pub fn artist_track_view_state<'a>(
                         ))),
                 )
                 .push(
-                    dark_button(sort_by_duration_button, bright_paragraph("Duration")).on_press(
+                    dark_button(bright_paragraph("Duration")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::ByDuration,
@@ -137,7 +117,6 @@ pub fn artist_track_view_state<'a>(
                 )
                 .push(
                     dark_button(
-                        sort_by_played_duration_button,
                         bright_paragraph("Played Duration"),
                     )
                     .on_press(user_nav_message(NavMessage::ArtistTrackView(
@@ -147,7 +126,7 @@ pub fn artist_track_view_state<'a>(
                     ))),
                 )
                 .push(
-                    dark_button(sort_random_button, bright_paragraph("Random")).on_press(
+                    dark_button(bright_paragraph("Random")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             model::ArtistTrackSortKey::Random,
@@ -159,7 +138,7 @@ pub fn artist_track_view_state<'a>(
             let sort_order_bar = line_row()
                 .push(paragraph("Order: "))
                 .push(
-                    dark_button(sort_order_reverse_button, bright_paragraph("^")).on_press(
+                    dark_button(bright_paragraph("^")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             sort_key.clone(),
@@ -168,7 +147,7 @@ pub fn artist_track_view_state<'a>(
                     ),
                 )
                 .push(
-                    dark_button(sort_order_regular_button, bright_paragraph("v")).on_press(
+                    dark_button(bright_paragraph("v")).on_press(
                         user_nav_message(NavMessage::ArtistTrackView(
                             artist.artist_info.artist_id.clone(),
                             sort_key.clone(),
@@ -177,7 +156,7 @@ pub fn artist_track_view_state<'a>(
                     ),
                 );
 
-            for (track_button, track) in track_buttons.iter_mut().zip(tracks.into_iter()) {
+            for track in tracks.into_iter() {
                 stripe_marker = !stripe_marker;
 
                 let track_maybe_with_track_artist =
@@ -189,7 +168,6 @@ pub fn artist_track_view_state<'a>(
 
                 let row = Container::new(
                     dark_button(
-                        track_button,
                         line_row()
                             .spacing(5)
                             .push(album_image(
@@ -202,19 +180,19 @@ pub fn artist_track_view_state<'a>(
                             ))
                             .push(
                                 bright_paragraph(track.metadata.track.to_string())
-                                    .width(Length::Units(40)),
+                                    .width(Length::Fixed(40.0)),
                             )
                             .push(bright_paragraph(track_maybe_with_track_artist).width(Length::Fill))
                             .push(
                                 bright_paragraph(track.augmented.play_count.to_string())
-                                    .width(Length::Units(40)),
+                                    .width(Length::Fixed(40.0)),
                             )
                             .push(
                                 ProgressBar::new(
                                     0.0..=(greatest_play_count as f32),
                                     track.augmented.play_count as f32,
                                 )
-                                .width(Length::Units(50)),
+                                .width(Length::Fixed(50.0)),
                             )
                             .push({
                                 let text_to_show =
@@ -223,10 +201,10 @@ pub fn artist_track_view_state<'a>(
                                     Some(ref c) if (track == c) => bright_paragraph(text_to_show),
                                     _ => dark_paragraph(text_to_show),
                                 }
-                                .width(Length::Units(60))
-                                .horizontal_alignment(iced::HorizontalAlignment::Right)
+                                .width(Length::Fixed(60.0))
+                                .horizontal_alignment(iced::alignment::Horizontal::Right)
                             })
-                            .push(Space::with_width(Length::Units(5))),
+                            .push(Space::with_width(Length::Fixed(5.0))),
                     )
                     .on_press(user_nav_message(
                         NavMessage::ArtistAlbumView(
@@ -242,17 +220,17 @@ pub fn artist_track_view_state<'a>(
                         ),
                     )),
                 )
-                .style(style::get_potential_current_stripe_style(
+                .style(iced::theme::Container::Custom(style::get_potential_current_stripe_style(
                     stripe_marker,
                     &track,
                     &current_track,
                     &None,
-                ));
+                )));
 
                 tracks_table = tracks_table.push(row);
             }
 
-            let scrollable = Scrollable::new(track_scroll).push(tracks_table);
+            let scrollable = Scrollable::new(tracks_table);
 
             let body = Container::new(
                 Column::new()

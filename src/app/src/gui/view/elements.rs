@@ -1,4 +1,5 @@
-use iced::{self, Align, Column, Element, Length};
+use iced::{self, Element, Length, Alignment};
+use iced::widget::{Column, Row, Image, Button, Text};
 
 use crate::model;
 
@@ -6,85 +7,83 @@ use crate::gui::message::Message;
 
 use super::style;
 
-pub fn line_row<'a>() -> iced::Row<'a, Message> {
-    iced::Row::new().align_items(Align::Center)
+pub fn line_row<'a>() -> Row<'a, Message> {
+    Row::new().align_items(Alignment::Center)
 }
 
-pub fn h1<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn h1<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(35)
-        .color(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
+        .style(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
 }
 
-pub fn h2<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn h2<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(25)
-        .color(iced::Color::from_rgb8(0xb8, 0xb8, 0xb8))
+        .style(iced::Color::from_rgb8(0xb8, 0xb8, 0xb8))
 }
 
-pub fn h3<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn h3<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(20)
-        .color(iced::Color::from_rgb8(0xad, 0xad, 0xad))
+        .style(iced::Color::from_rgb8(0xad, 0xad, 0xad))
 }
 
-pub fn bright_paragraph<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn bright_paragraph<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(16)
-        .color(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
+        .style(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
 }
 
-pub fn paragraph<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn paragraph<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(16)
-        .color(iced::Color::from_rgb8(0xad, 0xad, 0xad))
+        .style(iced::Color::from_rgb8(0xad, 0xad, 0xad))
 }
 
-pub fn dark_paragraph<S: Into<String>>(s: S) -> iced::Text {
-    iced::Text::new(s)
+pub fn dark_paragraph<S: Into<String>>(s: S) -> Text<'static> {
+    Text::new(s.into())
         .size(16)
-        .color(iced::Color::from_rgb8(0x70, 0x70, 0x70))
+        .style(iced::Color::from_rgb8(0x70, 0x70, 0x70))
 }
 
-pub fn bright(t: iced::Text) -> iced::Text {
-    t.color(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
+pub fn bright(t: Text) -> Text {
+    t.style(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
 }
 
 pub fn dark_button<'a, E>(
-    state: &'a mut iced::button::State,
     content: E,
-) -> iced::Button<'a, Message>
+) -> Button<'a, Message>
 where
-    E: Into<iced::Element<'a, Message>>,
+    E: Into<Element<'a, Message>>,
 {
-    iced::Button::new(state, content).style(style::DarkButton {})
+    Button::new(content).style(iced::theme::Button::Custom(Box::new(style::DarkButton{})))
 }
 
 pub fn dark_text_like_button<'a, E>(
-    state: &'a mut iced::button::State,
     content: E,
-) -> iced::Button<'a, Message>
+) -> Button<'a, Message>
 where
-    E: Into<iced::Element<'a, Message>>,
+    E: Into<Element<'a, Message>>,
 {
-    iced::Button::new(state, content).style(style::DarkTextLikeButton {})
+    Button::new(content).style(iced::theme::Button::Custom(Box::new(style::DarkTextLikeButton {})))
         .padding(0)
 }
 
-pub fn bottom_label<'a, E: Into<iced::Element<'a, Message>>>(
+pub fn bottom_label<'a, E: Into<Element<'a, Message>>>(
     top: Element<'a, Message>,
     label: E,
 ) -> Column<'a, Message> {
     Column::new()
         .padding(8)
         .spacing(8)
-        .align_items(Align::Center)
+        .align_items(Alignment::Center)
         .push(top)
         .push(label)
 }
 
-pub fn album_image(album_cover_bytes: Vec<u8>, size: model::AlbumSize) -> iced::Image {
-    iced::Image::new(iced::widget::image::Handle::from_memory(album_cover_bytes))
-        .width(Length::Units(size.width()))
-        .height(Length::Units(size.height()))
+pub fn album_image(album_cover_bytes: Vec<u8>, size: model::AlbumSize) -> Image {
+    Image::new(iced::widget::image::Handle::from_memory(album_cover_bytes))
+        .width(Length::Fixed(size.width() as f32))
+        .height(Length::Fixed(size.height() as f32))
 }

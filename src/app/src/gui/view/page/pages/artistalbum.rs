@@ -1,4 +1,5 @@
-use iced::{self, button, Checkbox, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
+use iced::Length;
+use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Space};
 
 use musiqlibrary;
 
@@ -18,25 +19,17 @@ pub fn artist_album_view_state<'a>(
     library: &'a model::LibraryState,
     action_state: &'a ActionState,
     player_info: &'a PlayerInfoState,
-    state: &'a mut state::ArtistAlbumViewState,
+    state: &'a state::ArtistAlbumViewState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
         state::ArtistAlbumViewState {
-            artist_list_breadcrumb,
-            artist_view_breadcrumb,
-            artist_album_view_breadcrumb,
             artist_id,
             album_id,
             album_size,
             maybe_selected_track,
-            toggle_image_size_button,
-            entire_track_list_buttons,
-            all_disc_buttons,
-            track_play_buttons,
-            scroll,
         } => {
             let artist = library.get_artist_map().get(&artist_id).unwrap();
             let album = artist.albums.get(&album_id).unwrap();
@@ -64,7 +57,6 @@ pub fn artist_album_view_state<'a>(
 
             let breadcrumbs = vec![
                 (
-                    artist_list_breadcrumb,
                     "Artists".to_string(),
                     user_nav_message(NavMessage::ArtistList(
                         0,
@@ -73,12 +65,10 @@ pub fn artist_album_view_state<'a>(
                     )),
                 ),
                 (
-                    artist_view_breadcrumb,
                     artist.artist_info.artist_name.clone(),
                     user_nav_message(NavMessage::ArtistView(artist_id.clone())),
                 ),
                 (
-                    artist_album_view_breadcrumb,
                     common::abr_str(album.album_info.album_name.clone(), consts::NAV_STR_LENGTH),
                     user_nav_message(NavMessage::ArtistAlbumView(
                         artist_id.clone(),
@@ -101,7 +91,7 @@ pub fn artist_album_view_state<'a>(
                                     model::AlbumSize::Regular => (model::AlbumSize::Regular, model::AlbumSize::Large),
                                     model::AlbumSize::Large => (model::AlbumSize::Large, model::AlbumSize::Micro),
                                 };
-                                dark_button(toggle_image_size_button, album_image(
+                                dark_button(album_image(
                                     library.get_album_cover(
                                         current.clone(),
                                         artist.artist_info.artist_id.clone(),
@@ -142,7 +132,6 @@ pub fn artist_album_view_state<'a>(
                                             .spacing(5)
                                             .push(
                                                 dark_button(
-                                                    &mut entire_track_list_buttons.play_button,
                                                     bright_paragraph("> Play All"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
@@ -157,7 +146,6 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 dark_button(
-                                                    &mut entire_track_list_buttons.insert_button,
                                                     bright_paragraph(">| Insert All Next"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
@@ -173,7 +161,6 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 dark_button(
-                                                    &mut entire_track_list_buttons.append_button,
                                                     bright_paragraph("|> Append All"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
@@ -196,7 +183,6 @@ pub fn artist_album_view_state<'a>(
                                                     Some(default_playlist_id) => {
                                                         let default_playlist = library.user_playlists.get(default_playlist_id).unwrap();
                                                         Container::new(dark_button(
-                                                                &mut entire_track_list_buttons.add_to_default_playlist_button,
                                                                 bright_paragraph(format!("+ Add All to:\n\"{}\"", default_playlist.name)),
                                                             )
                                                             .on_press(Message::Action(message::Action::AddTracksToPlaylist(
@@ -217,8 +203,8 @@ pub fn artist_album_view_state<'a>(
                                                 Row::new()
                                                     .push(
                                                         Checkbox::new(
-                                                            should_shuffle,
                                                             "",
+                                                            should_shuffle,
                                                             |_| Message::Action(message::Action::ToggleShuffleOnAdd),
                                                         )
                                                     )
@@ -229,15 +215,13 @@ pub fn artist_album_view_state<'a>(
                                     ),
                             ),
                     )
-                    .push(Space::new(Length::Fill, Length::Units(20)))
+                    .push(Space::new(Length::Fill, Length::Fixed(20.0)))
                     .push({
                         let mut column = Column::new().padding(15);
                         let mut stripe_marker = false;
                         let disc_count = discs.len();
 
-                        for (disc, (disc_buttons, tracks_buttons)) in
-                            discs.into_iter().zip(all_disc_buttons.iter_mut().zip(track_play_buttons.iter_mut()))
-                        {
+                        for disc in discs.into_iter() {
                             if disc_count > 1 {
                                 column = column.push(
                                         Row::new()
@@ -246,7 +230,6 @@ pub fn artist_album_view_state<'a>(
                                                 Row::new()
                                                     .push(
                                                         dark_button(
-                                                            &mut disc_buttons.play_button,
                                                             bright_paragraph(">"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
@@ -259,7 +242,6 @@ pub fn artist_album_view_state<'a>(
                                                     )
                                                     .push(
                                                         dark_button(
-                                                            &mut disc_buttons.insert_button,
                                                             bright_paragraph(">|"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
@@ -273,7 +255,6 @@ pub fn artist_album_view_state<'a>(
                                                     )
                                                     .push(
                                                         dark_button(
-                                                            &mut disc_buttons.append_button,
                                                             bright_paragraph("|>"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
@@ -288,7 +269,6 @@ pub fn artist_album_view_state<'a>(
                                                     .push(
                                                         match library.user_playlists.get_default_playlist_id() {
                                                             Some(default_playlist_id) => Container::new(dark_button(
-                                                                    &mut disc_buttons.add_to_default_playlist_button,
                                                                     bright_paragraph("+"),
                                                                 )
                                                                 .on_press(Message::Action(message::Action::AddTracksToPlaylist(
@@ -302,19 +282,11 @@ pub fn artist_album_view_state<'a>(
                                                         }
                                                     ),
                                                 ).push(
-                                                    Space::with_width(Length::Units(60))
+                                                    Space::with_width(Length::Fixed(60.0))
                                                 ),
                                 );
                             }
-                            for (track, state::TrackLineItemButtons{
-                                    play_button,
-                                    play_all_from_here_button,
-                                    add_to_default_playlist_button,
-                                    insert_button,
-                                    append_button,
-                                }) in
-                                disc.tracks.values().zip(tracks_buttons)
-                            {
+                            for track in disc.tracks.values() {
                                 stripe_marker = !stripe_marker;
 
                                 let track_maybe_with_track_artist = if
@@ -330,7 +302,7 @@ pub fn artist_album_view_state<'a>(
                                         line_row()
                                             .spacing(5)
                                             .push(
-                                                dark_button(play_button, bright_paragraph(">"))
+                                                dark_button(bright_paragraph(">"))
                                                     .on_press(Message::PlaybackRequest(
                                                         message::PlaybackRequest::PlaySongs(
                                                             vec![track.clone()],
@@ -338,7 +310,7 @@ pub fn artist_album_view_state<'a>(
                                                     )),
                                             )
                                             .push(
-                                                dark_button(play_all_from_here_button, bright_paragraph(">..."))
+                                                dark_button(bright_paragraph(">..."))
                                                     .on_press(Message::PlaybackRequest(
                                                         message::PlaybackRequest::PlaySongs(
                                                             model::tracks_after_including(&tracks, &track),
@@ -347,7 +319,7 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 bright_paragraph(track.metadata.track.to_string())
-                                                    .width(Length::Units(40)),
+                                                    .width(Length::Fixed(40.0)),
                                             )
                                             .push(
                                                 bright_paragraph(track_maybe_with_track_artist)
@@ -355,17 +327,16 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 bright_paragraph(track.augmented.play_count.to_string())
-                                                    .width(Length::Units(40)),
+                                                    .width(Length::Fixed(40.0)),
                                             )
                                             .push(
-                                                ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Units(50)),
+                                                ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Fixed(50.0)),
                                             )
                                             .push(Row::new()
                                                 .spacing(0)
                                                 .padding(0)
                                                 .push(
                                                     dark_button(
-                                                        insert_button,
                                                         bright_paragraph(">|"),
                                                     )
                                                     .on_press(Message::PlaybackRequest(
@@ -377,7 +348,6 @@ pub fn artist_album_view_state<'a>(
                                                 )
                                                 .push(
                                                     dark_button(
-                                                        append_button,
                                                         bright_paragraph("|>"),
                                                     )
                                                     .on_press(Message::PlaybackRequest(
@@ -390,7 +360,6 @@ pub fn artist_album_view_state<'a>(
                                                 .push(
                                                     match library.user_playlists.get_default_playlist_id() {
                                                         Some(default_playlist_id) => Container::new(dark_button(
-                                                                add_to_default_playlist_button,
                                                                 bright_paragraph("+"),
                                                             )
                                                             .on_press(Message::Action(message::Action::AddTracksToPlaylist(
@@ -413,24 +382,26 @@ pub fn artist_album_view_state<'a>(
                                                         },
                                                         _ => dark_paragraph(text_to_show),
                                                     },
-                                                }.width(Length::Units(60))
-                                                .horizontal_alignment(iced::HorizontalAlignment::Right)
+                                                }.width(Length::Fixed(60.0))
+                                                .horizontal_alignment(iced::alignment::Horizontal::Right)
                                             })
-                                            .push(Space::with_width(Length::Units(5)))
+                                            .push(Space::with_width(Length::Fixed(5.0)))
                                     )
                                     .style(
-                                        style::get_potential_current_stripe_style(
-                                            stripe_marker,
-                                            &track,
-                                            &current_track,
-                                            &maybe_selected_track,
+                                        iced::theme::Container::Custom(
+                                            style::get_potential_current_stripe_style(
+                                                stripe_marker,
+                                                &track,
+                                                &current_track,
+                                                &maybe_selected_track,
+                                            ),
                                         ),
-                                    ),
+                                   )
                                 )
                             }
                         }
 
-                        Container::new(Scrollable::new(scroll).push(column))
+                        Container::new(Scrollable::new(column))
                     }),
             );
 

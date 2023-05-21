@@ -219,6 +219,7 @@ impl LibraryState {
         }
     }
 
+    #[allow(unused)]
     pub fn get_artist_album_tracks(
         &self,
         artist_id: musiqlibrary::ID,

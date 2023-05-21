@@ -1,4 +1,5 @@
-use iced::{self, button, Column, Container, Element, Length, Row, Scrollable, Space};
+use iced::{Element, Length};
+use iced::widget::{Column, Container, Row, Scrollable, Space};
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::model;
@@ -19,20 +20,17 @@ pub fn view_loading<'a>() -> Element<'a, Message> {
         .into()
 }
 
-pub fn view_app(app: &mut state::Loaded) -> Element<Message> {
+pub fn view_app(app: &state::Loaded) -> Element<Message> {
     println!(
         "GUI:\tviewing: {}",
         app.rest.current_page.super_simple_debug_string()
     );
     let library = &app.rest.library;
     let app_images = &app.rest.app_images;
-    let app_gui = &mut app.gui;
-    let current_page = &mut app.rest.current_page;
+    let current_page = &app.rest.current_page;
     let action_state = &app.rest.action_state;
     let player_info = &app.rest.player_info.rest;
     let play_queue_info = &app.rest.play_queue_info.rest;
-    let player_gui = &mut app.rest.player_info.gui;
-    let play_queue_gui = &mut app.rest.play_queue_info.gui;
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
@@ -43,14 +41,14 @@ pub fn view_app(app: &mut state::Loaded) -> Element<Message> {
         &player_info,
     );
 
-    let header = render_header(app_gui, additional_breadcrumbs);
+    let header = render_header(additional_breadcrumbs);
 
     let (play_queue_view, play_queue_expanded) =
-        render_play_queue(&library, &play_queue_info, play_queue_gui);
+        render_play_queue(&library, &play_queue_info);
 
     let playthrough = render_playthrough(&player_info.current_playback);
 
-    let player_controls = render_player_controls(player_info, player_gui, &library);
+    let player_controls = render_player_controls(player_info, &library);
 
     render_entire_page(
         header,
@@ -72,8 +70,8 @@ pub fn render_entire_page<'a>(
 ) -> Element<'a, Message> {
     let mut ret = Column::new()
         .push(
-            Container::new(header.padding(5).height(Length::Units(50)))
-                .style(style::ContainerPopForward),
+            Container::new(header.padding(5).height(Length::Fixed(50.0)))
+                .style(iced::theme::Container::Custom(Box::new(style::ContainerPopForward))),
         )
         .push({
             let row = match play_queue_expanded {
@@ -91,15 +89,15 @@ pub fn render_entire_page<'a>(
         });
     match playthrough {
         Some(through) => {
-            ret = ret.push(through.height(Length::Units(15)));
+            ret = ret.push(through.height(Length::Fixed(15.0)));
         }
         None => (),
     };
     match player_controls {
         Some(controls) => {
             ret = ret.push(
-                Container::new(controls.height(Length::Units(70)))
-                    .style(style::ContainerPopForward),
+                Container::new(controls.height(Length::Fixed(70.0)))
+                    .style(iced::theme::Container::Custom(Box::new(style::ContainerPopForward))),
             );
         }
         None => (),
@@ -109,12 +107,11 @@ pub fn render_entire_page<'a>(
 }
 
 pub fn render_header<'a>(
-    app_gui: &'a mut state::AppGuiState,
-    additional_breadcrumbs: Vec<(&'a mut button::State, String, Message)>,
+    additional_breadcrumbs: Vec<(String, Message)>,
 ) -> Container<'a, Message> {
     let mut breadcrumbs: Vec<Element<Message>> =
         vec![
-            dark_button(&mut app_gui.home_breadcrumb, bright_paragraph("Home"))
+            dark_button(bright_paragraph("Home"))
                 .on_press(user_nav_message(NavMessage::Home))
                 .into(),
         ];
@@ -122,8 +119,8 @@ pub fn render_header<'a>(
     breadcrumbs.extend(
         additional_breadcrumbs
             .into_iter()
-            .map(|(button_state, crumb_text, on_press)| {
-                dark_button(button_state, bright_paragraph(crumb_text))
+            .map(|(crumb_text, on_press)| {
+                dark_button(bright_paragraph(crumb_text))
                     .on_press(on_press)
                     .into()
             })
@@ -131,7 +128,7 @@ pub fn render_header<'a>(
     );
 
     let back_forward_buttons = Row::new().push(
-        dark_button(&mut app_gui.back_button, bright_paragraph("<")).on_press(Message::HistoryNav),
+        dark_button(bright_paragraph("<")).on_press(Message::HistoryNav),
     );
 
     let header = Row::new().push(
@@ -152,18 +149,18 @@ pub fn render_header<'a>(
             .push(
                 line_row()
                     .push(
-                        dark_button(&mut app_gui.search_button, bright_paragraph("Search"))
+                        dark_button(bright_paragraph("Search"))
                             .on_press(user_nav_message(message::NavMessage::SearchPage(
                                 "".to_string(),
                                 false,
                             ))),
                     )
                     .push(
-                        dark_button(&mut app_gui.config_button, bright_paragraph("Settings"))
+                        dark_button(bright_paragraph("Settings"))
                             .on_press(user_nav_message(message::NavMessage::Config)),
                     )
                     .push(
-                        dark_button(&mut app_gui.close_button, bright_paragraph("X"))
+                        dark_button(bright_paragraph("X"))
                             .on_press(Message::Action(message::Action::Close)),
                     ),
             ),
@@ -174,33 +171,30 @@ pub fn render_header<'a>(
 pub fn render_play_queue<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &'a state::PlayQueueInfoState,
-    play_queue_gui: &'a mut state::PlayQueueGuiState,
 ) -> (Container<'a, Message>, bool) {
     match play_queue_info.play_queue_visible {
         true => {
             let mut play_queue_view = Column::new().spacing(5).padding(10).push(
-                iced::Row::new()
-                    .align_items(iced::Align::Start)
+                iced::widget::Row::new()
+                    .align_items(iced::Alignment::Start)
                     .push(h1("Current Playback").width(Length::Fill))
                     .push(
                         dark_button(
-                            &mut play_queue_gui.play_queue_page_button,
                             bright_paragraph("Focus"),
                         )
                         .on_press(user_nav_message(NavMessage::PlayQueueFocus)),
                     )
                     .push(
-                        dark_button(&mut play_queue_gui.hide_play_queue, bright_paragraph(">"))
+                        dark_button(bright_paragraph(">"))
                             .on_press(Message::Action(message::Action::TogglePlayQueueVisible)),
                     ),
             );
             let mut play_queue_column = Column::new();
             let mut stripe_marker = false;
 
-            for (index, (play_queue_entry, play_queue_track_gui)) in play_queue_info
+            for (index, play_queue_entry) in play_queue_info
                 .play_history
                 .iter()
-                .zip(play_queue_gui.track_info.play_history.iter_mut())
                 .enumerate()
             {
                 stripe_marker = !stripe_marker;
@@ -218,7 +212,7 @@ pub fn render_play_queue<'a>(
                                     model::AlbumSize::Micro,
                                 ))
                                 .push(
-                                    dark_button(&mut play_queue_track_gui.track_link_button,
+                                    dark_button(
                                         bright_paragraph(play_queue_track.track.metadata.title.clone())
                                     )
                                     .on_press(
@@ -228,7 +222,6 @@ pub fn render_play_queue<'a>(
                                 )
                                 .push(
                                     dark_button(
-                                        &mut play_queue_track_gui.remove_me_button,
                                         bright_paragraph("-"),
                                     )
                                     .on_press(
@@ -251,7 +244,6 @@ pub fn render_play_queue<'a>(
                             )
                             .push(
                                 dark_button(
-                                    &mut play_queue_track_gui.remove_me_button,
                                     bright_paragraph("-"),
                                 )
                                 .on_press(
@@ -266,7 +258,7 @@ pub fn render_play_queue<'a>(
                     }
                     )
                     .padding(2)
-                    .style(style::get_stripe_style(stripe_marker)),
+                    .style(iced::theme::Container::Custom(style::get_stripe_style(stripe_marker))),
                 );
             }
             match play_queue_info.current_playback {
@@ -294,7 +286,7 @@ pub fn render_play_queue<'a>(
                                     ))),
                             )
                             .padding(2)
-                            .style(style::ContainerStripeHighlight {}),
+                            .style(iced::theme::Container::Custom(Box::new(style::ContainerStripeHighlight {}))),
                         );
                     }
                     state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => {
@@ -308,16 +300,15 @@ pub fn render_play_queue<'a>(
                                     )
                             )
                             .padding(2)
-                            .style(style::ContainerStripeHighlight {}),
+                            .style(iced::theme::Container::Custom(Box::new(style::ContainerStripeHighlight {}))),
                         );
                     },
                 }
                 None => (),
             };
-            for (index, (play_queue_entry, play_queue_track_gui)) in play_queue_info
+            for (index, play_queue_entry) in play_queue_info
                 .play_queue
                 .iter()
-                .zip(play_queue_gui.track_info.play_queue.iter_mut())
                 .enumerate()
             {
                 stripe_marker = !stripe_marker;
@@ -335,7 +326,7 @@ pub fn render_play_queue<'a>(
                                         model::AlbumSize::Micro,
                                     ))
                                     .push(
-                                        dark_button(&mut play_queue_track_gui.track_link_button,
+                                        dark_button(
                                             bright_paragraph(play_queue_track.track.metadata.title.clone())
                                         )
                                         .on_press(
@@ -345,7 +336,6 @@ pub fn render_play_queue<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            &mut play_queue_track_gui.remove_me_button,
                                             bright_paragraph("-"),
                                         )
                                         .on_press(
@@ -368,7 +358,6 @@ pub fn render_play_queue<'a>(
                             )
                             .push(
                                 dark_button(
-                                    &mut play_queue_track_gui.remove_me_button,
                                     bright_paragraph("-"),
                                 )
                                 .on_press(
@@ -383,17 +372,17 @@ pub fn render_play_queue<'a>(
                     }
                     )
                     .padding(2)
-                    .style(style::get_stripe_style(stripe_marker)),
+                    .style(iced::theme::Container::Custom(style::get_stripe_style(stripe_marker))),
                 );
             }
             play_queue_view = play_queue_view.push(
-                Scrollable::new(&mut play_queue_gui.play_queue_scroll).push(play_queue_column),
+                Scrollable::new(play_queue_column),
             );
             (
                 Container::new(
                     Container::new(play_queue_view)
                         .height(Length::Fill)
-                        .style(style::ContainerPopMidForward {}),
+                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPopMidForward {}))),
                 )
                 .height(Length::Fill),
                 true,
@@ -402,7 +391,7 @@ pub fn render_play_queue<'a>(
         false => (
             Container::new(
                 Column::new().spacing(5).padding(5).push(
-                    dark_button(&mut play_queue_gui.hide_play_queue, bright_paragraph("<"))
+                    dark_button(bright_paragraph("<"))
                         .on_press(Message::Action(message::Action::TogglePlayQueueVisible)),
                 ),
             ),
@@ -427,13 +416,13 @@ pub fn render_playthrough(
                             Row::new()
                                 .push(
                                     Container::new(Space::new(Length::Fill, Length::Shrink))
-                                        .style(style::ContainerPlaybackPlayedThrough)
+                                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPlaybackPlayedThrough)))
                                         .height(Length::Fill)
                                         .width(Length::FillPortion(playback_marker_pre_fill_portion)),
                                 )
                                 .push(
                                     Container::new(Space::new(Length::Fill, Length::Fill))
-                                        .style(style::ContainerPlaybackToPlayThrough)
+                                        .style(iced::theme::Container::Custom(Box::new(style::ContainerPlaybackToPlayThrough)))
                                         .height(Length::Fill)
                                         .width(Length::FillPortion(playback_marker_post_fill_portion)),
                                 ),
@@ -450,18 +439,16 @@ pub fn render_playthrough(
 
 pub fn render_player_controls<'a>(
     player_info: &'a state::PlayerInfoState,
-    player_gui: &'a mut state::PlayerInfoGuiState,
     library: &'a model::LibraryState,
 ) -> Option<Container<'a, Message>> {
     match player_info.current_playback {
-        Some(ref outer_current_playback) => Some(controls_with_maybe_track_info(player_info, player_gui, library, outer_current_playback)),
+        Some(ref outer_current_playback) => Some(controls_with_maybe_track_info(player_info, library, outer_current_playback)),
         None => None,
     }
 }
 
 fn controls_with_maybe_track_info<'a>(
     player_info: &'a state::PlayerInfoState,
-    player_gui: &'a mut state::PlayerInfoGuiState,
     library: &'a model::LibraryState,
     outer_current_playback: &'a state::CurrentPlayback,
 ) -> Container<'a, Message> {
@@ -489,7 +476,6 @@ fn controls_with_maybe_track_info<'a>(
                     Column::new()
                         .push(
                             dark_text_like_button(
-                                &mut player_gui.track_link_button,
                                 bright(h2(current_playback.track.metadata.title.clone()))
                             )
                             .on_press(
@@ -499,7 +485,6 @@ fn controls_with_maybe_track_info<'a>(
                         .push(Row::new()
                               .push(
                                   dark_text_like_button(
-                                      &mut player_gui.artist_link_button,
                                       h3(current_playback.track.metadata.album_artist.clone())
                                   )
                                   .on_press(
@@ -513,7 +498,6 @@ fn controls_with_maybe_track_info<'a>(
                               .push(h3("-"))
                               .push(
                                   dark_text_like_button(
-                                      &mut player_gui.album_link_button,
                                       h3(current_playback.track.metadata.album.clone())
                                   )
                                   .on_press(
@@ -548,7 +532,6 @@ fn controls_with_maybe_track_info<'a>(
                         Row::new()
                             .push(
                                 dark_button(
-                                    &mut player_gui.prev_button,
                                     bright_paragraph("<<"),
                                 )
                                 .on_press(
@@ -559,7 +542,6 @@ fn controls_with_maybe_track_info<'a>(
                             )
                             .push(if player_info.playing {
                                 dark_button(
-                                    &mut player_gui.pause_button,
                                     bright_paragraph("="),
                                 )
                                 .on_press(
@@ -569,7 +551,6 @@ fn controls_with_maybe_track_info<'a>(
                                 )
                             } else {
                                 dark_button(
-                                    &mut player_gui.pause_button,
                                     bright_paragraph(">"),
                                 )
                                 .on_press(
@@ -580,7 +561,6 @@ fn controls_with_maybe_track_info<'a>(
                             })
                             .push(
                                 dark_button(
-                                    &mut player_gui.next_button,
                                     bright_paragraph(">>"),
                                 )
                                 .on_press(
@@ -591,7 +571,6 @@ fn controls_with_maybe_track_info<'a>(
                             )
                             .push(
                                 dark_button(
-                                    &mut player_gui.pause_next_button,
                                     bright_paragraph("|="),
                                 )
                                 .on_press(
@@ -610,7 +589,6 @@ fn controls_with_maybe_track_info<'a>(
                 Row::new()
                     .push(
                         dark_button(
-                            &mut player_gui.volume_zero_button,
                             bright_paragraph("--"),
                         )
                         .on_press(Message::Action(
@@ -619,7 +597,6 @@ fn controls_with_maybe_track_info<'a>(
                     )
                     .push(
                         dark_button(
-                            &mut player_gui.volume_down_button,
                             bright_paragraph("-"),
                         )
                         .on_press(Message::Action(
@@ -632,7 +609,6 @@ fn controls_with_maybe_track_info<'a>(
                     )))
                     .push(
                         dark_button(
-                            &mut player_gui.volume_up_button,
                             bright_paragraph("+"),
                         )
                         .on_press(Message::Action(
@@ -641,7 +617,6 @@ fn controls_with_maybe_track_info<'a>(
                     )
                     .push(
                         dark_button(
-                            &mut player_gui.volume_max_button,
                             bright_paragraph("++"),
                         )
                         .on_press(Message::Action(

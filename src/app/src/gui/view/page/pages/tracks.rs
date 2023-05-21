@@ -1,4 +1,5 @@
-use iced::{self, button, Button, Column, Container, Element, Length, ProgressBar, Scrollable, Space};
+use iced::{Element, Length};
+use iced::widget::{Button, Column, Container, ProgressBar, Scrollable, Space};
 
 use crate::model;
 
@@ -10,9 +11,9 @@ use super::super::super::elements::*;
 
 pub fn track_list<'a>(
     library: &'a model::LibraryState,
-    state: &'a mut state::TrackListState,
+    state: &'a state::TrackListState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
@@ -20,23 +21,8 @@ pub fn track_list<'a>(
             page,
             sort_key,
             sort_order,
-            album_list_breadcrumb,
-            sort_order_regular_button,
-            sort_order_reverse_button,
-            sort_by_name_button,
-            sort_by_duration_button,
-            sort_by_play_count_button,
-            sort_by_played_duration_button,
-            sort_random_button,
-            nav_first_button,
-            nav_back_button,
-            nav_forward_button,
-            nav_last_button,
-            album_buttons,
-            track_scroll,
         } => {
             let breadcrumbs = vec![(
-                album_list_breadcrumb,
                 "Tracks".to_string(),
                 user_nav_message(NavMessage::TrackList(
                     0,
@@ -62,10 +48,9 @@ pub fn track_list<'a>(
 
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
-                for (track_button, info) in album_buttons.iter_mut().zip(paged_tracks.into_iter()) {
+                for info in paged_tracks.into_iter() {
                     buttons.push(
                         dark_button(
-                            track_button,
                             line_row()
                                 .spacing(5)
                                 .push(album_image(
@@ -78,10 +63,10 @@ pub fn track_list<'a>(
                                 ))
                                 .push(
                                     bright_paragraph(info.augmented.play_count.to_string())
-                                        .width(Length::Units(40)),
+                                        .width(Length::Fixed(40.0)),
                                 )
                                 .push(
-                                    ProgressBar::new(0.0..=(greatest_play_count as f32), info.augmented.play_count as f32).width(Length::Units(50)),
+                                    ProgressBar::new(0.0..=(greatest_play_count as f32), info.augmented.play_count as f32).width(Length::Fixed(50.0)),
                                 )
                                 .push(
                                     bright_paragraph(info.metadata.title.clone())
@@ -91,10 +76,10 @@ pub fn track_list<'a>(
                                     bright_paragraph(common::format_duration(
                                         info.metadata.duration.as_secs(),
                                     ))
-                                    .width(Length::Units(60))
-                                    .horizontal_alignment(iced::HorizontalAlignment::Right),
+                                    .width(Length::Fixed(60.0))
+                                    .horizontal_alignment(iced::alignment::Horizontal::Right),
                                 )
-                                .push(Space::with_width(Length::Units(5))),
+                                .push(Space::with_width(Length::Fixed(5.0))),
                         )
                         .on_press(user_nav_message(
                             NavMessage::ArtistAlbumView(
@@ -122,7 +107,7 @@ pub fn track_list<'a>(
 
                 let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(track_scroll).push(grid);
+                let scrollable = Scrollable::new(grid);
 
                 let mut total_tracks = 0;
                 for (_, artist) in library.get_artist_map().iter() {
@@ -165,7 +150,7 @@ pub fn track_list<'a>(
                                 line_row()
                                     .push(paragraph("Sort By: "))
                                     .push(
-                                        dark_button(sort_by_name_button, bright_paragraph("Name"))
+                                        dark_button(bright_paragraph("Name"))
                                             .on_press(user_nav_message(NavMessage::TrackList(
                                                 0,
                                                 model::TrackSortKey::ByName,
@@ -174,7 +159,6 @@ pub fn track_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_play_count_button,
                                             bright_paragraph("Play Count"),
                                         )
                                         .on_press(
@@ -187,7 +171,6 @@ pub fn track_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_duration_button,
                                             bright_paragraph("Duration"),
                                         )
                                         .on_press(
@@ -200,7 +183,6 @@ pub fn track_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_played_duration_button,
                                             bright_paragraph("Played Duration"),
                                         )
                                         .on_press(
@@ -212,7 +194,7 @@ pub fn track_list<'a>(
                                         ),
                                     )
                                     .push(
-                                        dark_button(sort_random_button, bright_paragraph("Random"))
+                                        dark_button(bright_paragraph("Random"))
                                             .on_press(user_nav_message(NavMessage::TrackList(
                                                 0,
                                                 model::TrackSortKey::ByRandom,
@@ -227,7 +209,7 @@ pub fn track_list<'a>(
                                     line_row()
                                         .push(paragraph("Page: "))
                                         .push(
-                                            dark_button(nav_first_button, bright_paragraph("<<"))
+                                            dark_button(bright_paragraph("<<"))
                                                 .on_press(user_nav_message(NavMessage::TrackList(
                                                     first_page,
                                                     sort_key.clone(),
@@ -235,7 +217,7 @@ pub fn track_list<'a>(
                                                 ))),
                                         )
                                         .push(
-                                            dark_button(nav_back_button, bright_paragraph("<"))
+                                            dark_button(bright_paragraph("<"))
                                                 .on_press(user_nav_message(NavMessage::TrackList(
                                                     back_page,
                                                     sort_key.clone(),
@@ -244,7 +226,7 @@ pub fn track_list<'a>(
                                         )
                                         .push(bright_paragraph(page.to_string()))
                                         .push(
-                                            dark_button(nav_forward_button, bright_paragraph(">"))
+                                            dark_button(bright_paragraph(">"))
                                                 .on_press(user_nav_message(NavMessage::TrackList(
                                                     forward_page,
                                                     sort_key.clone(),
@@ -252,7 +234,7 @@ pub fn track_list<'a>(
                                                 ))),
                                         )
                                         .push(
-                                            dark_button(nav_last_button, bright_paragraph(">>"))
+                                            dark_button(bright_paragraph(">>"))
                                                 .on_press(user_nav_message(NavMessage::TrackList(
                                                     last_page,
                                                     sort_key.clone(),
@@ -266,7 +248,6 @@ pub fn track_list<'a>(
                                         .push(paragraph("Order: "))
                                         .push(
                                             dark_button(
-                                                sort_order_reverse_button,
                                                 bright_paragraph("^"),
                                             )
                                             .on_press(
@@ -279,7 +260,6 @@ pub fn track_list<'a>(
                                         )
                                         .push(
                                             dark_button(
-                                                sort_order_regular_button,
                                                 bright_paragraph("v"),
                                             )
                                             .on_press(

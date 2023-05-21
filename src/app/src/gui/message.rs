@@ -1,5 +1,7 @@
 use std::pin;
 
+use iced;
+
 use iced::futures::task::{Context, Poll};
 use iced::futures::Future;
 
@@ -110,4 +112,10 @@ impl Future for MessageFuture {
     fn poll(self: pin::Pin<&mut Self>, _ctx: &mut Context<'_>) -> Poll<Self::Output> {
         Poll::Ready(self.inner.clone())
     }
+}
+
+pub fn message_command(m: Message) -> iced::Command<Message> {
+    iced::Command::single(iced_native::command::Action::Future(Box::pin(MessageFuture {
+        inner: m,
+    })))
 }

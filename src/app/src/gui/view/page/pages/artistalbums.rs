@@ -1,4 +1,4 @@
-use iced::{self, button, Button, Column, Container, Row, Scrollable};
+use iced::widget::{Button, Column, Container, Row, Scrollable};
 
 use musiqlibrary;
 
@@ -15,26 +15,20 @@ use super::super::consts;
 pub fn artist_album_list<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &PlayQueueInfoState,
-    state: &'a mut state::ArtistViewState,
+    state: &'a state::ArtistViewState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
         state::ArtistViewState {
-            artist_list_breadcrumb,
-            artist_view_breadcrumb,
             artist_id,
-            album_view_button,
-            track_view_button,
-            album_buttons,
-            album_scroll,
+            albums,
         } => {
             let artist = library.get_artist_map().get(&artist_id).unwrap();
 
             let breadcrumbs = vec![
                 (
-                    artist_list_breadcrumb,
                     "Artists".to_string(),
                     user_nav_message(NavMessage::ArtistList(
                         0,
@@ -43,7 +37,6 @@ pub fn artist_album_list<'a>(
                     )),
                 ),
                 (
-                    artist_view_breadcrumb,
                     artist.artist_info.artist_name.clone(),
                     user_nav_message(NavMessage::ArtistView(artist_id.clone())),
                 ),
@@ -51,7 +44,7 @@ pub fn artist_album_list<'a>(
             let body =
                 {
                     let mut buttons: Vec<(musiqlibrary::AlbumInfo, Button<Message>)> = Vec::new();
-                    for (album_id, album_button) in album_buttons.iter_mut() {
+                    for album_id in albums.iter() {
                         let album = library
                             .get_artist_map()
                             .get(&artist_id)
@@ -62,7 +55,6 @@ pub fn artist_album_list<'a>(
                         buttons.push((
                             album.album_info.clone(),
                             dark_button(
-                                album_button,
                                 bottom_label(
                                     album_image(
                                         library.get_album_cover(
@@ -74,7 +66,7 @@ pub fn artist_album_list<'a>(
                                     )
                                     .into(),
                                     Column::new()
-                                        .align_items(iced::Align::Center)
+                                        .align_items(iced::Alignment::Center)
                                         .push(bright_paragraph(common::abr_str(
                                             album.album_info.album_name.clone(),
                                             consts::ICON_STR_LENGTH,
@@ -105,8 +97,6 @@ pub fn artist_album_list<'a>(
                     });
                     */
 
-                    let mut scrollable = Scrollable::new(album_scroll);
-
                     let mut album_grid_columns: Column<Message> = Column::new();
                     let mut album_grid_rows = Row::new();
                     let mut row_length = 0;
@@ -132,14 +122,14 @@ pub fn artist_album_list<'a>(
                         }
                     }
 
-                    scrollable = scrollable.push(album_grid_columns);
+                    let scrollable = Scrollable::new(album_grid_columns);
 
                     let artist_view_button_row =
                         line_row()
-                            .push(dark_button(album_view_button, h2("Albums")).on_press(
+                            .push(dark_button(h2("Albums")).on_press(
                                 user_nav_message(NavMessage::ArtistView(artist_id.clone())),
                             ))
-                            .push(dark_button(track_view_button, h2("Tracks")).on_press(
+                            .push(dark_button(h2("Tracks")).on_press(
                                 user_nav_message(NavMessage::ArtistTrackView(
                                     artist_id.clone(),
                                     model::ArtistTrackSortKey::ByTotalPlayCount,

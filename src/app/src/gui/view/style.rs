@@ -1,4 +1,5 @@
-use iced::{button, container, Background, Color};
+use iced::{Background, Color};
+use iced::widget::{button, container};
 
 use musiqlibrary;
 
@@ -7,34 +8,39 @@ use crate::model;
 pub struct DarkTextLikeButton {}
 
 impl button::StyleSheet for DarkTextLikeButton {
-    fn active(&self) -> button::Style {
-        button::Style {
+    type Style = iced::Theme;
+
+    fn active(&self, _theme: &iced::Theme) -> button::Appearance {
+        button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
             border_radius: 0.0,
             border_width: 0.0,
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
-            ..button::Style::default()
+            ..button::Appearance::default()
         }
     }
 }
 
-pub struct DarkButton {}
+pub struct DarkButton {
+}
 
 impl button::StyleSheet for DarkButton {
-    fn active(&self) -> button::Style {
-        button::Style {
+    type Style = iced::Theme;
+
+    fn active(&self, _theme: &iced::Theme) -> button::Appearance {
+        button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
             border_radius: 1.0,
             border_width: 1.0,
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
-            ..button::Style::default()
+            ..button::Appearance::default()
         }
     }
 }
 
-pub fn get_stripe_style(stripe_marker: bool) -> Box<dyn container::StyleSheet> {
+pub fn get_stripe_style(stripe_marker: bool) -> Box<dyn container::StyleSheet<Style = iced::Theme>> {
     if stripe_marker {
         Box::new(ContainerStripeOne)
     } else {
@@ -47,7 +53,7 @@ pub fn get_potential_current_stripe_style(
     display_track: &model::AugmentedTrack,
     maybe_currently_playing: &Option<model::AugmentedTrack>,
     maybe_selected: &Option<musiqlibrary::TrackUniqueIdentifier>,
-) -> Box<dyn container::StyleSheet> {
+) -> Box<dyn container::StyleSheet<Style = iced::Theme>> {
     let is_playing = match maybe_currently_playing {
         Some(currently_playing) => currently_playing == display_track,
         None => false,
@@ -75,11 +81,13 @@ pub fn get_potential_current_stripe_style(
 pub struct ContainerStripeOne;
 
 impl container::StyleSheet for ContainerStripeOne {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x20, 0x20, 0x20))),
             //text_color: Some(Color::WHITE),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -87,11 +95,13 @@ impl container::StyleSheet for ContainerStripeOne {
 pub struct ContainerStripeTwo;
 
 impl container::StyleSheet for ContainerStripeTwo {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x28, 0x28, 0x28))),
             //text_color: Some(Color::WHITE),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -99,11 +109,13 @@ impl container::StyleSheet for ContainerStripeTwo {
 pub struct ContainerStripeHighlight;
 
 impl container::StyleSheet for ContainerStripeHighlight {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0x82))),
             text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -111,11 +123,13 @@ impl container::StyleSheet for ContainerStripeHighlight {
 pub struct ContainerStripeSelected;
 
 impl container::StyleSheet for ContainerStripeSelected {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0xc2))),
             text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -123,11 +137,13 @@ impl container::StyleSheet for ContainerStripeSelected {
 pub struct ContainerStripeHighlightAndSelected;
 
 impl container::StyleSheet for ContainerStripeHighlightAndSelected {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x01, 0x7f, 0xa2))),
             text_color: Some(Color::from_rgb8(0x06, 0xda, 0xdd)),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -135,10 +151,12 @@ impl container::StyleSheet for ContainerStripeHighlightAndSelected {
 pub struct ContainerPlaybackPlayedThrough;
 
 impl container::StyleSheet for ContainerPlaybackPlayedThrough {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x00, 0xd8, 0xd8))),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -146,10 +164,12 @@ impl container::StyleSheet for ContainerPlaybackPlayedThrough {
 pub struct ContainerPlaybackToPlayThrough;
 
 impl container::StyleSheet for ContainerPlaybackToPlayThrough {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x10, 0x10, 0x10))),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -157,10 +177,12 @@ impl container::StyleSheet for ContainerPlaybackToPlayThrough {
 pub struct ContainerPopForward;
 
 impl container::StyleSheet for ContainerPopForward {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance{
             background: Some(Background::Color(Color::from_rgb8(0x20, 0x20, 0x20))),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -168,10 +190,12 @@ impl container::StyleSheet for ContainerPopForward {
 pub struct ContainerPopMidForward;
 
 impl container::StyleSheet for ContainerPopMidForward {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance{
             background: Some(Background::Color(Color::from_rgb8(0x18, 0x18, 0x18))),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }
@@ -179,10 +203,12 @@ impl container::StyleSheet for ContainerPopMidForward {
 pub struct ContainerDarkInset;
 
 impl container::StyleSheet for ContainerDarkInset {
-    fn style(&self) -> container::Style {
-        container::Style {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x13, 0x13, 0x13))),
-            ..container::Style::default()
+            ..container::Appearance::default()
         }
     }
 }

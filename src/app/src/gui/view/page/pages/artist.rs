@@ -1,4 +1,5 @@
-use iced::{self, button, Button, Column, Container, Element, Length, Row, Scrollable, Space};
+use iced::{Element, Length};
+use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
 
 use crate::model;
 
@@ -13,9 +14,9 @@ use super::super::super::elements::*;
 pub fn artist_list<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &PlayQueueInfoState,
-    state: &'a mut state::ArtistListState,
+    state: &'a state::ArtistListState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
@@ -23,25 +24,8 @@ pub fn artist_list<'a>(
             page,
             sort_key,
             sort_order,
-            artist_list_breadcrumb,
-            sort_order_regular_button,
-            sort_order_reverse_button,
-            sort_by_name_button,
-            sort_by_play_count_button,
-            sort_by_album_count_button,
-            sort_by_track_count_button,
-            sort_by_track_duration_button,
-            sort_by_duration_played_button,
-            sort_random_button,
-            nav_first_button,
-            nav_back_button,
-            nav_forward_button,
-            nav_last_button,
-            artist_buttons,
-            artist_scroll,
         } => (
             vec![(
-                artist_list_breadcrumb,
                 "Artists".to_string(),
                 user_nav_message(NavMessage::ArtistList(
                     0,
@@ -65,12 +49,10 @@ pub fn artist_list<'a>(
 
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
-                for (artist_button, artist) in
-                    artist_buttons.iter_mut().zip(paged_artists.into_iter())
+                for artist in paged_artists.into_iter()
                 {
                     buttons.push(
                         dark_button(
-                            artist_button,
                             bottom_label(
                                 album_image(
                                     library.get_artists_first_album_cover(
@@ -118,7 +100,7 @@ pub fn artist_list<'a>(
                 }
                 let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(artist_scroll).push(grid);
+                let scrollable = Scrollable::new(grid);
                 let first_page = 0;
                 let back_page = {
                     if page == 0 {
@@ -152,7 +134,7 @@ pub fn artist_list<'a>(
                                 line_row()
                                     .push(paragraph("Sort By: "))
                                     .push(
-                                        dark_button(sort_by_name_button, bright_paragraph("Name"))
+                                        dark_button(bright_paragraph("Name"))
                                             .on_press(user_nav_message(NavMessage::ArtistList(
                                                 0,
                                                 model::ArtistSortKey::ByName,
@@ -160,7 +142,7 @@ pub fn artist_list<'a>(
                                             ))),
                                     )
                                     .push(
-                                        dark_button(sort_random_button, bright_paragraph("Random"))
+                                        dark_button(bright_paragraph("Random"))
                                             .on_press(user_nav_message(NavMessage::ArtistList(
                                                 0,
                                                 model::ArtistSortKey::Random,
@@ -169,7 +151,6 @@ pub fn artist_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_play_count_button,
                                             bright_paragraph("Play Count"),
                                         )
                                         .on_press(
@@ -182,7 +163,6 @@ pub fn artist_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_album_count_button,
                                             bright_paragraph("Album Count"),
                                         )
                                         .on_press(
@@ -195,7 +175,6 @@ pub fn artist_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_track_count_button,
                                             bright_paragraph("Track Count"),
                                         )
                                         .on_press(
@@ -208,7 +187,6 @@ pub fn artist_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_track_duration_button,
                                             bright_paragraph("Track Duration"),
                                         )
                                         .on_press(
@@ -221,7 +199,6 @@ pub fn artist_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_duration_played_button,
                                             bright_paragraph("Duration Played"),
                                         )
                                         .on_press(
@@ -239,7 +216,7 @@ pub fn artist_list<'a>(
                                 .push(
                                     line_row()
                                         .push(
-                                            dark_button(nav_first_button, bright_paragraph("<<"))
+                                            dark_button(bright_paragraph("<<"))
                                                 .on_press(user_nav_message(
                                                     NavMessage::ArtistList(
                                                         first_page,
@@ -249,7 +226,7 @@ pub fn artist_list<'a>(
                                                 )),
                                         )
                                         .push(
-                                            dark_button(nav_back_button, bright_paragraph("<"))
+                                            dark_button(bright_paragraph("<"))
                                                 .on_press(user_nav_message(
                                                     NavMessage::ArtistList(
                                                         back_page,
@@ -260,7 +237,7 @@ pub fn artist_list<'a>(
                                         )
                                         .push(bright_paragraph(page.to_string()))
                                         .push(
-                                            dark_button(nav_forward_button, bright_paragraph(">"))
+                                            dark_button(bright_paragraph(">"))
                                                 .on_press(user_nav_message(
                                                     NavMessage::ArtistList(
                                                         forward_page,
@@ -270,7 +247,7 @@ pub fn artist_list<'a>(
                                                 )),
                                         )
                                         .push(
-                                            dark_button(nav_last_button, bright_paragraph(">>"))
+                                            dark_button(bright_paragraph(">>"))
                                                 .on_press(user_nav_message(
                                                     NavMessage::ArtistList(
                                                         last_page,
@@ -286,7 +263,6 @@ pub fn artist_list<'a>(
                                         .push(paragraph("Order: "))
                                         .push(
                                             dark_button(
-                                                sort_order_reverse_button,
                                                 bright_paragraph("^"),
                                             )
                                             .on_press(
@@ -299,7 +275,6 @@ pub fn artist_list<'a>(
                                         )
                                         .push(
                                             dark_button(
-                                                sort_order_regular_button,
                                                 bright_paragraph("v"),
                                             )
                                             .on_press(

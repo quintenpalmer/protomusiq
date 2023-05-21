@@ -1,4 +1,5 @@
-use iced::{self, button, Column, Container, Length, Row, Scrollable, Space, TextInput};
+use iced::Length;
+use iced::widget::{Column, Container, Row, Scrollable, Space, TextInput};
 
 use crate::model;
 
@@ -10,25 +11,17 @@ use super::super::super::components;
 
 pub fn search_page<'a>(
     library: &'a model::LibraryState,
-    state: &'a mut state::SearchPageState,
+    state: &'a state::SearchPageState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
         state::SearchPageState {
             query,
-            search_breadcrumb,
-            search_result_breadcrumb,
-            artist_scroll,
-            album_scroll,
-            track_scroll,
-            track_artist_scroll,
-            input_state,
             results,
         } => {
             let mut breadcrumbs = vec![(
-                    search_breadcrumb,
                     "Search".to_string(),
                     user_nav_message(NavMessage::SearchPage("".to_string(), false)),
                 )];
@@ -36,7 +29,6 @@ pub fn search_page<'a>(
                 Some(_) => {
                     breadcrumbs.push(
                         (
-                            search_result_breadcrumb,
                             format!("\"{}\"", query.clone()),
                             user_nav_message(NavMessage::SearchPage(query.clone(), true))
                         )
@@ -47,13 +39,12 @@ pub fn search_page<'a>(
 
             let (album_results, artist_results, track_results, featured_artist_results) = match results {
                 Some(results) => {
-                    let album_results = Scrollable::new(album_scroll).push(
-                                            results.albums.iter_mut().fold(
+                    let album_results = Scrollable::new(
+                                            results.albums.iter().fold(
                                                 Column::new(),
                                                 |column, result| {
                                                     column.push(
                                                         dark_button(
-                                                            &mut result.second,
                                                             line_row()
                                                                 .spacing(5)
                                                                 .push(album_image(
@@ -95,13 +86,12 @@ pub fn search_page<'a>(
                                                 },
                                             ),
                                         );
-                    let artist_results = Scrollable::new(artist_scroll).push(
-                                            results.artists.iter_mut().fold(
+                    let artist_results = Scrollable::new(
+                                            results.artists.iter().fold(
                                                 Column::new(),
                                                 |column, result| {
                                                     column.push(
                                                         dark_button(
-                                                            &mut result.second,
                                                             line_row()
                                                                 .spacing(5)
                                                                 .push(album_image(
@@ -134,13 +124,12 @@ pub fn search_page<'a>(
                                                 },
                                             ),
                                         );
-                    let track_results = Scrollable::new(track_scroll).push(
-                                            results.tracks.iter_mut().fold(
+                    let track_results = Scrollable::new(
+                                            results.tracks.iter().fold(
                                                 Column::new(),
                                                 |column, result| {
                                                     column.push(
                                                         dark_button(
-                                                            &mut result.second,
                                                             line_row()
                                                                 .spacing(5)
                                                                 .push(album_image(
@@ -177,13 +166,12 @@ pub fn search_page<'a>(
                                                 },
                                             ),
                                         );
-                    let featured_artist_results = Scrollable::new(track_artist_scroll).push(
-                                            results.track_artists.iter_mut().fold(
+                    let featured_artist_results = Scrollable::new(
+                                            results.track_artists.iter().fold(
                                                 Column::new(),
                                                 |column, result| {
                                                     column.push(
                                                         dark_button(
-                                                            &mut result.second,
                                                             line_row()
                                                                 .spacing(5)
                                                                 .push(album_image(
@@ -229,10 +217,10 @@ pub fn search_page<'a>(
                     (album_results, artist_results, track_results, featured_artist_results)
                 },
                 None => (
-                    Scrollable::new(album_scroll).push(Space::with_width(Length::Fill)),
-                    Scrollable::new(artist_scroll).push(Space::with_width(Length::Fill)),
-                    Scrollable::new(track_scroll).push(Space::with_width(Length::Fill)),
-                    Scrollable::new(track_artist_scroll).push(Space::with_width(Length::Fill)),
+                    Scrollable::new(Space::with_width(Length::Fill)),
+                    Scrollable::new(Space::with_width(Length::Fill)),
+                    Scrollable::new(Space::with_width(Length::Fill)),
+                    Scrollable::new(Space::with_width(Length::Fill)),
                 ),
             };
 
@@ -244,7 +232,8 @@ pub fn search_page<'a>(
                         .push(
                             Row::new()
                                 .push(
-                                    TextInput::new(input_state, "Search...", query, |s| {
+                                    TextInput::new("Search...", query)
+                                    .on_input(|s| {
                                         Message::Action(message::Action::UpdateText(s))
                                     })
                                     .on_submit(Message::Action(

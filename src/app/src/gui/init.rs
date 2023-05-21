@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 
-use iced::{self, button, scrollable};
+use iced;
 
 use crate::datastore::{
     self,
@@ -137,26 +137,12 @@ pub fn initialize_everything() -> state::App {
     logger.print_elapsed("starting tracker");
 
     state::App::Loaded(state::Loaded {
-        gui: state::AppGuiState {
-            home_breadcrumb: button::State::default(),
-            back_button: button::State::default(),
-            search_button: button::State::default(),
-            config_button: button::State::default(),
-            close_button: button::State::default(),
-        },
+        gui: state::AppGuiState {},
         rest: state::AppState {
             page_back_history: Vec::new(),
             page_current_history: message::NavMessage::Home,
             page_forward_history: Vec::new(),
-            current_page: state::Page::Home(state::HomeState {
-                artist_list_button: button::State::default(),
-                album_list_button: button::State::default(),
-                track_list_button: button::State::default(),
-                playlist_list_button: button::State::default(),
-                search_button: button::State::default(),
-                settings_button: button::State::default(),
-                scroll: scrollable::State::default(),
-            }),
+            current_page: state::Page::Home(state::HomeState {}),
             should_close: false,
             error_messages: Vec::new(),
             app_images: embedded::AppImages::new(&config_state.app_data_path),
@@ -164,15 +150,7 @@ pub fn initialize_everything() -> state::App {
                 group_buttons_shuffle: false,
             },
             play_queue_info: state::PlayQueueInfo {
-                gui: state::PlayQueueGuiState {
-                    hide_play_queue: button::State::default(),
-                    play_queue_page_button: button::State::default(),
-                    play_queue_scroll: scrollable::State::default(),
-                    track_info: state::PlayQueueTrackGuiState {
-                        play_history: Vec::new(),
-                        play_queue: Vec::new(),
-                    },
-                },
+                gui: state::PlayQueueGuiState {},
                 rest: state::PlayQueueInfoState {
                     play_queue_visible: true,
                     play_history: Vec::new(),
@@ -186,20 +164,6 @@ pub fn initialize_everything() -> state::App {
             },
             player_info: state::PlayerInfo {
                 gui: state::PlayerInfoGuiState {
-                    play_button: button::State::default(),
-                    pause_button: button::State::default(),
-                    prev_button: button::State::default(),
-                    next_button: button::State::default(),
-                    pause_next_button: button::State::default(),
-
-                    track_link_button: button::State::default(),
-                    artist_link_button: button::State::default(),
-                    album_link_button: button::State::default(),
-
-                    volume_zero_button: button::State::default(),
-                    volume_up_button: button::State::default(),
-                    volume_down_button: button::State::default(),
-                    volume_max_button: button::State::default(),
                 },
                 rest: state::PlayerInfoState {
                     playing: false,
@@ -232,8 +196,6 @@ pub fn initialize_everything() -> state::App {
 pub fn init_app() -> (state::App, iced::Command<message::Message>) {
     (
         state::App::Loading,
-        iced::Command::from(message::MessageFuture {
-            inner: message::Message::Action(message::Action::LoadEverything),
-        }),
+        message::message_command(message::Message::Action(message::Action::LoadEverything)),
     )
 }

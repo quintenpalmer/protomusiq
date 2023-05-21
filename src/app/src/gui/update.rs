@@ -1,4 +1,4 @@
-use iced::{button, scrollable, text_input, Command};
+use iced::Command;
 
 use crate::model;
 use crate::shared;
@@ -43,11 +43,9 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             }
             message::Action::CreateNewPlaylist(playlist_name) => {
                 app.rest.library.user_playlists.add_playlist(playlist_name);
-                Command::from(message::MessageFuture {
-                    inner: message::user_nav_message(message::NavMessage::PlaylistList(
-                        "".to_string(),
-                    )),
-                })
+                message::message_command(message::user_nav_message(
+                    message::NavMessage::PlaylistList("".to_string()),
+                ))
             }
             message::Action::MakePlaylistDefault(playlist_id) => {
                 app.rest
@@ -94,12 +92,11 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 Command::none()
             }
             message::Action::MoveTrackInPlaylist(playlist_id, direction, track_id) => {
-                match app
-                    .rest
-                    .library
-                    .user_playlists
-                    .move_track_in_playlist(playlist_id, direction, track_id)
-                {
+                match app.rest.library.user_playlists.move_track_in_playlist(
+                    playlist_id,
+                    direction,
+                    track_id,
+                ) {
                     Ok(_) => (),
                     Err(err_string) => {
                         println!("error removing track from playlist: {}", err_string)
@@ -110,28 +107,17 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             message::Action::RemoveTrackFromPlayQueue(history_or_queue, index) => {
                 match history_or_queue {
                     message::HistoryOrQueue::History => {
-                        app.rest
-                            .play_queue_info
-                            .gui
-                            .track_info
-                            .play_history
-                            .remove(index);
                         app.rest.play_queue_info.rest.play_history.remove(index);
                     }
                     message::HistoryOrQueue::Queue => {
-                        app.rest
-                            .play_queue_info
-                            .gui
-                            .track_info
-                            .play_queue
-                            .remove(index);
                         app.rest.play_queue_info.rest.play_queue.remove(index);
                     }
                 };
                 Command::none()
             }
             message::Action::ToggleShuffleOnAdd => {
-                app.rest.action_state.group_buttons_shuffle = !app.rest.action_state.group_buttons_shuffle;
+                app.rest.action_state.group_buttons_shuffle =
+                    !app.rest.action_state.group_buttons_shuffle;
                 Command::none()
             }
             message::Action::TogglePlayQueueVisible => {
@@ -152,32 +138,30 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 Command::none()
             }
             message::Action::PerformSearch(query) => match app.rest.current_page {
-                state::Page::Search(ref _search_state) => Command::from(message::MessageFuture {
-                    inner: message::user_nav_message(message::NavMessage::SearchPage(query, true)),
-                }),
+                state::Page::Search(ref _search_state) => message::message_command(
+                    message::user_nav_message(message::NavMessage::SearchPage(query, true)),
+                ),
                 _ => Command::none(),
-            }
-            message::Action::Close => {
-                app.rest.should_close = true;
-                Command::batch(vec![
-                    Command::perform(
-                        mpris_sender(
-                            app.rest.player_info.rest.mpris_message_sender.clone(),
-                            shared::MprisMessage::Close,
-                        )
-                        .send_message(),
-                        Message::ErrorResponse,
-                    ),
-                    Command::perform(
-                        sink_sender(
-                            app.rest.player_info.rest.sink_message_sender.clone(),
-                            shared::SinkMessage::Close,
-                        )
-                        .send_message(),
-                        Message::ErrorResponse,
-                    ),
-                ])
             },
+            message::Action::Close => Command::batch(vec![
+                Command::perform(
+                    mpris_sender(
+                        app.rest.player_info.rest.mpris_message_sender.clone(),
+                        shared::MprisMessage::Close,
+                    )
+                    .send_message(),
+                    Message::ErrorResponse,
+                ),
+                Command::perform(
+                    sink_sender(
+                        app.rest.player_info.rest.sink_message_sender.clone(),
+                        shared::SinkMessage::Close,
+                    )
+                    .send_message(),
+                    Message::ErrorResponse,
+                ),
+                iced::window::close(),
+            ]),
         },
         Message::Nav(nav_message) => {
             app.rest
@@ -206,73 +190,75 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     match app.rest.player_info.rest.current_playback {
                         Some(ref outer_current_playback) => match outer_current_playback {
                             state::CurrentPlayback::Track(ref current_playback) => {
-                                    app.rest.player_info.rest.playing = true;
-                                    Command::batch(vec![
-                                        Command::perform(
-                                            mpris_sender(
-                                                app.rest.player_info.rest.mpris_message_sender.clone(),
-                                                shared::MprisMessage::SetMetadata(
-                                                    current_playback.track.metadata.album_artist.clone(),
-                                                    current_playback.track.metadata.title.clone(),
+                                app.rest.player_info.rest.playing = true;
+                                Command::batch(vec![
+                                    Command::perform(
+                                        mpris_sender(
+                                            app.rest.player_info.rest.mpris_message_sender.clone(),
+                                            shared::MprisMessage::SetMetadata(
+                                                current_playback
+                                                    .track
+                                                    .metadata
+                                                    .album_artist
+                                                    .clone(),
+                                                current_playback.track.metadata.title.clone(),
+                                            ),
+                                        )
+                                        .send_message(),
+                                        Message::ErrorResponse,
+                                    ),
+                                    Command::perform(
+                                        {
+                                            sink_sender(
+                                                app.rest
+                                                    .player_info
+                                                    .rest
+                                                    .sink_message_sender
+                                                    .clone(),
+                                                shared::SinkMessage::LoadSong(
+                                                    current_playback.track.metadata.path.clone(),
+                                                    app.rest.player_info.rest.current_volume,
                                                 ),
                                             )
-                                            .send_message(),
-                                            Message::ErrorResponse,
-                                        ),
-                                        Command::perform(
-                                            {
-                                                sink_sender(
-                                                    app.rest.player_info.rest.sink_message_sender.clone(),
-                                                    shared::SinkMessage::LoadSong(
-                                                        current_playback.track.metadata.path.clone(),
-                                                        app.rest.player_info.rest.current_volume,
-                                                    ),
-                                                )
-                                                .send_message()
-                                            },
-                                            Message::ErrorResponse,
-                                        ),
-                                        Command::perform(
-                                            tracker_sender(
-                                                app.rest.player_info.rest.tracker_message_sender.clone(),
-                                                shared::TrackerMessage::SongStarted(
-                                                    current_playback.track.clone(),
-                                                ),
-                                            )
-                                            .send_message(),
-                                            Message::ErrorResponse,
-                                        ),
-                                    ])
-                                },
-                                state::CurrentPlayback::PauseBreak => {
-                                    //app.rest.player_info.rest.playing = false;
-                                    Command::from(message::MessageFuture {
-                                        inner: Message::PlaybackRequest(message::PlaybackRequest::Pause),
-                                    })
-                                },
+                                            .send_message()
+                                        },
+                                        Message::ErrorResponse,
+                                    ),
+                                    Command::perform(
+                                        tracker_sender(
+                                            app.rest
+                                                .player_info
+                                                .rest
+                                                .tracker_message_sender
+                                                .clone(),
+                                            shared::TrackerMessage::SongStarted(
+                                                current_playback.track.clone(),
+                                            ),
+                                        )
+                                        .send_message(),
+                                        Message::ErrorResponse,
+                                    ),
+                                ])
                             }
+                            state::CurrentPlayback::PauseBreak => {
+                                //app.rest.player_info.rest.playing = false;
+                                message::message_command(Message::PlaybackRequest(
+                                    message::PlaybackRequest::Pause,
+                                ))
+                            }
+                        },
                         None => Command::none(),
                     }
                 }
-                message::PlaybackRequest::PlaySongs(tracks) => {
-                    Command::from(message::MessageFuture {
-                        inner: Message::PlaybackRequest(message::PlaybackRequest::InsertSongs(
-                            tracks, true,
-                        )),
-                    })
-                }
+                message::PlaybackRequest::PlaySongs(tracks) => message::message_command(
+                    Message::PlaybackRequest(message::PlaybackRequest::InsertSongs(tracks, true)),
+                ),
                 message::PlaybackRequest::AppendSongs(tracks, load_next) => {
                     let mut new_songs_to_queue = Vec::new();
                     for iter_track in tracks.into_iter() {
-                        new_songs_to_queue.push(state::PlayQueueEntry::Track(state::PlayQueueTrack { track: iter_track }));
-                    }
-                    for _track in new_songs_to_queue.iter() {
-                        app.rest.play_queue_info.gui.track_info.play_queue.push(
-                            state::PlayQueueGuiEntry {
-                                remove_me_button: button::State::default(),
-                                track_link_button: button::State::default(),
-                            },
-                        );
+                        new_songs_to_queue.push(state::PlayQueueEntry::Track(
+                            state::PlayQueueTrack { track: iter_track },
+                        ));
                     }
                     app.rest
                         .play_queue_info
@@ -280,9 +266,9 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                         .play_queue
                         .append(&mut new_songs_to_queue);
                     if load_next {
-                        Command::from(message::MessageFuture {
-                            inner: Message::PlaybackRequest(message::PlaybackRequest::Next),
-                        })
+                        message::message_command(Message::PlaybackRequest(
+                            message::PlaybackRequest::Next,
+                        ))
                     } else {
                         Command::none()
                     }
@@ -290,24 +276,17 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 message::PlaybackRequest::InsertSongs(tracks, load_next) => {
                     let mut new_songs_to_queue = Vec::new();
                     for iter_track in tracks.into_iter() {
-                        new_songs_to_queue.push(state::PlayQueueEntry::Track(state::PlayQueueTrack { track: iter_track }));
+                        new_songs_to_queue.push(state::PlayQueueEntry::Track(
+                            state::PlayQueueTrack { track: iter_track },
+                        ));
                     }
                     new_songs_to_queue.append(&mut app.rest.play_queue_info.rest.play_queue);
                     app.rest.play_queue_info.rest.play_queue = new_songs_to_queue;
 
-                    let mut new_song_buttons = Vec::new();
-                    for _new_song in app.rest.play_queue_info.rest.play_queue.iter() {
-                        new_song_buttons.push(state::PlayQueueGuiEntry {
-                            remove_me_button: button::State::default(),
-                            track_link_button: button::State::default(),
-                        });
-                    }
-                    app.rest.play_queue_info.gui.track_info.play_queue = new_song_buttons;
-
                     if load_next {
-                        Command::from(message::MessageFuture {
-                            inner: Message::PlaybackRequest(message::PlaybackRequest::Next),
-                        })
+                        message::message_command(Message::PlaybackRequest(
+                            message::PlaybackRequest::Next,
+                        ))
                     } else {
                         Command::none()
                     }
@@ -316,41 +295,30 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     if app.rest.play_queue_info.rest.play_history.len() > 0 {
                         match app.rest.player_info.rest.current_playback {
                             Some(ref current_playback) => {
-                                let mut new_play_queue = vec![state::PlayQueueEntry::from_playback(current_playback)];
+                                let mut new_play_queue =
+                                    vec![state::PlayQueueEntry::from_playback(current_playback)];
                                 new_play_queue
                                     .append(&mut app.rest.play_queue_info.rest.play_queue);
                                 app.rest.play_queue_info.rest.play_queue = new_play_queue;
-
-                                app.rest.play_queue_info.gui.track_info.play_queue.push(
-                                    state::PlayQueueGuiEntry {
-                                        remove_me_button: button::State::default(),
-                                        track_link_button: button::State::default(),
-                                    },
-                                );
                             }
                             None => (),
                         };
-                        app.rest
-                            .play_queue_info
-                            .gui
-                            .track_info
-                            .play_history
-                            .pop()
-                            .unwrap();
                         let track = app.rest.play_queue_info.rest.play_history.pop().unwrap();
                         app.rest.player_info.rest.current_playback = Some(match track {
-                            state::PlayQueueEntry::Track(ref t) => state::CurrentPlayback::Track(state::CurrentTrackPlayback {
-                                track: t.track.clone(),
-                                current_second: 0,
-                            }),
-                            state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => state::CurrentPlayback::PauseBreak,
+                            state::PlayQueueEntry::Track(ref t) => {
+                                state::CurrentPlayback::Track(state::CurrentTrackPlayback {
+                                    track: t.track.clone(),
+                                    current_second: 0,
+                                })
+                            }
+                            state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => {
+                                state::CurrentPlayback::PauseBreak
+                            }
                         });
                         app.rest.play_queue_info.rest.current_playback = Some(track.clone());
-                        Command::from(message::MessageFuture {
-                            inner: Message::PlaybackRequest(
-                                message::PlaybackRequest::LoadCurrentSong,
-                            ),
-                        })
+                        message::message_command(Message::PlaybackRequest(
+                            message::PlaybackRequest::LoadCurrentSong,
+                        ))
                     } else {
                         Command::none()
                     }
@@ -358,42 +326,30 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 message::PlaybackRequest::Next => {
                     if app.rest.play_queue_info.rest.play_queue.len() > 0 {
                         match app.rest.player_info.rest.current_playback {
-                            Some(ref current_playback) => {
-                                app.rest.play_queue_info.gui.track_info.play_history.push(
-                                    state::PlayQueueGuiEntry {
-                                        remove_me_button: button::State::default(),
-                                        track_link_button: button::State::default(),
-                                    },
-                                );
-                                app.rest.play_queue_info.rest.play_history.push(
-                                    state::PlayQueueEntry::from_playback(current_playback),
-                                )
-                            }
+                            Some(ref current_playback) => app
+                                .rest
+                                .play_queue_info
+                                .rest
+                                .play_history
+                                .push(state::PlayQueueEntry::from_playback(current_playback)),
                             None => (),
                         };
 
-                        app.rest.play_queue_info.gui.track_info.play_queue.remove(0);
                         let track = app.rest.play_queue_info.rest.play_queue.remove(0);
-                        app.rest.player_info.rest.current_playback = Some(state::CurrentPlayback::from_entry_zeroed(&track));
+                        app.rest.player_info.rest.current_playback =
+                            Some(state::CurrentPlayback::from_entry_zeroed(&track));
                         app.rest.play_queue_info.rest.current_playback = Some(track.clone());
-                        Command::from(message::MessageFuture {
-                            inner: Message::PlaybackRequest(
-                                message::PlaybackRequest::LoadCurrentSong,
-                            ),
-                        })
+                        message::message_command(Message::PlaybackRequest(
+                            message::PlaybackRequest::LoadCurrentSong,
+                        ))
                     } else {
                         match app.rest.player_info.rest.current_playback {
-                            Some(ref current_playback) => {
-                                app.rest.play_queue_info.gui.track_info.play_history.push(
-                                    state::PlayQueueGuiEntry {
-                                        remove_me_button: button::State::default(),
-                                        track_link_button: button::State::default(),
-                                    },
-                                );
-                                app.rest.play_queue_info.rest.play_history.push(
-                                    state::PlayQueueEntry::from_playback(current_playback),
-                                )
-                            }
+                            Some(ref current_playback) => app
+                                .rest
+                                .play_queue_info
+                                .rest
+                                .play_history
+                                .push(state::PlayQueueEntry::from_playback(current_playback)),
                             None => (),
                         };
                         app.rest.player_info.rest.current_playback = None;
@@ -451,29 +407,25 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                     ])
                 }
                 message::PlaybackRequest::InsertPause => {
-                    let mut new_songs_to_queue = vec![state::PlayQueueEntry::Action(state::PlayQueueAction::Pause)];
+                    let mut new_songs_to_queue =
+                        vec![state::PlayQueueEntry::Action(state::PlayQueueAction::Pause)];
                     new_songs_to_queue.append(&mut app.rest.play_queue_info.rest.play_queue);
                     app.rest.play_queue_info.rest.play_queue = new_songs_to_queue;
-
-                    app.rest.play_queue_info.gui.track_info.play_queue.push(
-                        state::PlayQueueGuiEntry{
-                            remove_me_button: button::State::default(),
-                            track_link_button: button::State::default(),
-                        },
-                    );
 
                     Command::none()
                 }
             }
         }
         Message::SinkCallback(callback) => match callback {
-            shared::SinkCallbackMessage::SongEnded => Command::from(message::MessageFuture {
-                inner: Message::PlaybackRequest(message::PlaybackRequest::Next),
-            }),
+            shared::SinkCallbackMessage::SongEnded => {
+                message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
+            }
             shared::SinkCallbackMessage::SecondElapsed => {
                 match app.rest.player_info.rest.current_playback {
                     Some(ref mut outer_current_playback) => match outer_current_playback {
-                        state::CurrentPlayback::Track(ref mut current_playback) => current_playback.current_second += 1,
+                        state::CurrentPlayback::Track(ref mut current_playback) => {
+                            current_playback.current_second += 1
+                        }
                         _ => println!("Hmmm, songs are playing back while on a pause break?"),
                     },
                     None => (),
@@ -490,30 +442,26 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
             };
             Command::none()
         }
-        Message::MprisCallback(callback) => Command::from(match callback {
+        Message::MprisCallback(callback) => message::message_command(match callback {
             shared::MprisCallbackMessage::PlayPause => {
                 if app.rest.player_info.rest.playing {
-                    message::MessageFuture {
-                        inner: Message::PlaybackRequest(message::PlaybackRequest::Pause),
-                    }
+                    Message::PlaybackRequest(message::PlaybackRequest::Pause)
                 } else {
-                    message::MessageFuture {
-                        inner: Message::PlaybackRequest(message::PlaybackRequest::Play),
-                    }
+                    Message::PlaybackRequest(message::PlaybackRequest::Play)
                 }
             }
-            shared::MprisCallbackMessage::Play => message::MessageFuture {
-                inner: Message::PlaybackRequest(message::PlaybackRequest::Play),
-            },
-            shared::MprisCallbackMessage::Pause => message::MessageFuture {
-                inner: Message::PlaybackRequest(message::PlaybackRequest::Pause),
-            },
-            shared::MprisCallbackMessage::Prev => message::MessageFuture {
-                inner: Message::PlaybackRequest(message::PlaybackRequest::Prev),
-            },
-            shared::MprisCallbackMessage::Next => message::MessageFuture {
-                inner: Message::PlaybackRequest(message::PlaybackRequest::Next),
-            },
+            shared::MprisCallbackMessage::Play => {
+                Message::PlaybackRequest(message::PlaybackRequest::Play)
+            }
+            shared::MprisCallbackMessage::Pause => {
+                Message::PlaybackRequest(message::PlaybackRequest::Pause)
+            }
+            shared::MprisCallbackMessage::Prev => {
+                Message::PlaybackRequest(message::PlaybackRequest::Prev)
+            }
+            shared::MprisCallbackMessage::Next => {
+                Message::PlaybackRequest(message::PlaybackRequest::Next)
+            }
         }),
     }
 }
@@ -543,74 +491,19 @@ fn handle_volume_request(
 
 fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
     match nav_message {
-        NavMessage::Home => {
-            app.rest.current_page = Page::Home(state::HomeState {
-                artist_list_button: button::State::default(),
-                album_list_button: button::State::default(),
-                track_list_button: button::State::default(),
-                playlist_list_button: button::State::default(),
-                search_button: button::State::default(),
-                settings_button: button::State::default(),
-                scroll: scrollable::State::default(),
-            })
-        }
-        NavMessage::Config => {
-            app.rest.current_page = Page::Config(state::ConfigState {
-                refresh_library_button: button::State::default(),
-            })
-        }
+        NavMessage::Home => app.rest.current_page = Page::Home(state::HomeState {}),
+        NavMessage::Config => app.rest.current_page = Page::Config(state::ConfigState {}),
         NavMessage::PlayQueueFocus => {
             app.rest.current_page = Page::PlayQueue(state::PlayQueueState {});
         }
         NavMessage::PlaylistView(playlist_id) => {
-            let buttons = match app.rest.library.user_playlists.get(playlist_id) {
-                Some(playlist) => playlist
-                    .tracks
-                    .iter()
-                    .map(|_| state::PlaylistTrackLineItemButtons {
-                        play_button: button::State::default(),
-                        link_button: button::State::default(),
-                        remove_from_playlist_button: button::State::default(),
-                        move_down_in_playlist_button: button::State::default(),
-                        move_up_in_playlist_button: button::State::default(),
-                        insert_button: button::State::default(),
-                        append_button: button::State::default(),
-                    })
-                    .collect(),
-                None => Vec::new(),
-            };
             app.rest.current_page = Page::PlaylistView(state::PlaylistViewState {
-                playlist_play_queue_buttons: state::PlayQueueInteractionButtons {
-                    play_button: button::State::default(),
-                    insert_button: button::State::default(),
-                    append_button: button::State::default(),
-                },
-                track_play_buttons: buttons,
-                playlist_list_breadcrumb: button::State::default(),
-                this_playlist_breadcrumb: button::State::default(),
-                track_scroll: scrollable::State::default(),
                 playlist_id: playlist_id,
             });
         }
         NavMessage::PlaylistList(new_playlist_name) => {
             app.rest.current_page = Page::PlaylistList(state::PlaylistListState {
-                playlist_scroll: scrollable::State::default(),
-                playlist_list_breadcrumb: button::State::default(),
-                playlist_make_default_buttons: app
-                    .rest
-                    .library
-                    .user_playlists
-                    .to_vec()
-                    .iter()
-                    .map(|_| state::PlaylistListButtons {
-                        link_to_playlist_button: button::State::default(),
-                        delete_playlist_button: button::State::default(),
-                        make_default_button: button::State::default(),
-                    })
-                    .collect(),
                 new_playlist_name: new_playlist_name,
-                new_playlist_text_input: text_input::State::default(),
-                new_playlist_button: button::State::default(),
             });
         }
         NavMessage::SearchPage(query, perform_search) => {
@@ -623,7 +516,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                             .into_iter()
                             .map(|artist| model::Pair {
                                 first: artist.first,
-                                second: button::State::default(),
+                                second: (),
                             })
                             .collect(),
                         albums: search_results
@@ -631,7 +524,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                             .into_iter()
                             .map(|artist_album| model::Pair {
                                 first: artist_album.first,
-                                second: button::State::default(),
+                                second: (),
                             })
                             .collect(),
                         tracks: search_results
@@ -639,7 +532,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                             .into_iter()
                             .map(|track| model::Pair {
                                 first: track.first,
-                                second: button::State::default(),
+                                second: (),
                             })
                             .collect(),
                         track_artists: search_results
@@ -647,7 +540,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                             .into_iter()
                             .map(|track_artist| model::Pair {
                                 first: track_artist.first,
-                                second: button::State::default(),
+                                second: (),
                             })
                             .collect(),
                     };
@@ -658,13 +551,6 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
 
             app.rest.current_page = Page::Search(state::SearchPageState {
                 query: query,
-                artist_scroll: scrollable::State::default(),
-                album_scroll: scrollable::State::default(),
-                track_scroll: scrollable::State::default(),
-                track_artist_scroll: scrollable::State::default(),
-                search_breadcrumb: button::State::default(),
-                search_result_breadcrumb: button::State::default(),
-                input_state: text_input::State::focused(),
                 results: computed_results,
             });
         }
@@ -673,45 +559,6 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
-                album_list_breadcrumb: button::State::default(),
-                sort_order_regular_button: button::State::default(),
-                sort_order_reverse_button: button::State::default(),
-                sort_by_name_button: button::State::default(),
-                sort_by_play_count_button: button::State::default(),
-                sort_by_duration_button: button::State::default(),
-                sort_by_played_duration_button: button::State::default(),
-                sort_random_button: button::State::default(),
-                nav_first_button: button::State::default(),
-                nav_back_button: button::State::default(),
-                nav_forward_button: button::State::default(),
-                nav_last_button: button::State::default(),
-                album_buttons: vec![
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                ],
-                track_scroll: scrollable::State::default(),
             });
         }
         NavMessage::AlbumList(page, sort, sort_order) => {
@@ -719,48 +566,6 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
-                album_list_breadcrumb: button::State::default(),
-                sort_order_regular_button: button::State::default(),
-                sort_order_reverse_button: button::State::default(),
-                sort_by_name_button: button::State::default(),
-                sort_by_date_button: button::State::default(),
-                sort_by_duration_button: button::State::default(),
-                sort_by_last_mod_button: button::State::default(),
-                sort_by_total_play_count_button: button::State::default(),
-                sort_by_total_played_duration_button: button::State::default(),
-                sort_random_button: button::State::default(),
-                sort_by_artist_button: button::State::default(),
-                nav_first_button: button::State::default(),
-                nav_back_button: button::State::default(),
-                nav_forward_button: button::State::default(),
-                nav_last_button: button::State::default(),
-                album_buttons: vec![
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                ],
-                album_scroll: scrollable::State::default(),
             });
         }
         NavMessage::ArtistList(page, sort, sort_order) => {
@@ -768,61 +573,12 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
-                artist_list_breadcrumb: button::State::default(),
-                sort_order_regular_button: button::State::default(),
-                sort_order_reverse_button: button::State::default(),
-
-                sort_by_name_button: button::State::default(),
-                sort_random_button: button::State::default(),
-                sort_by_play_count_button: button::State::default(),
-                sort_by_album_count_button: button::State::default(),
-                sort_by_track_count_button: button::State::default(),
-                sort_by_track_duration_button: button::State::default(),
-                sort_by_duration_played_button: button::State::default(),
-
-                nav_first_button: button::State::default(),
-                nav_back_button: button::State::default(),
-                nav_forward_button: button::State::default(),
-                nav_last_button: button::State::default(),
-                artist_buttons: vec![
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                    button::State::default(),
-                ],
-                artist_scroll: scrollable::State::default(),
             });
         }
         NavMessage::ArtistView(artist_id) => {
             app.rest.current_page = Page::ArtistView(state::ArtistViewState {
-                artist_list_breadcrumb: button::State::default(),
-                artist_view_breadcrumb: button::State::default(),
                 artist_id: artist_id.clone(),
-
-                album_view_button: button::State::default(),
-                track_view_button: button::State::default(),
-
-                album_buttons: app
+                albums: app
                     .rest
                     .library
                     .get_artist_map()
@@ -830,50 +586,12 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                     .unwrap()
                     .albums
                     .keys()
-                    .map(|k| (k.clone(), button::State::default()))
+                    .map(|k| k.clone())
                     .collect(),
-                album_scroll: scrollable::State::default(),
             });
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-            let mut track_buttons = Vec::new();
-            for album in app
-                .rest
-                .library
-                .get_artist_map()
-                .get(&artist_id)
-                .unwrap()
-                .albums
-                .values()
-            {
-                for disc in album.discs.values() {
-                    for _track in disc.tracks.values() {
-                        track_buttons.push(
-                            button::State::default(),
-                        );
-                    }
-                }
-            }
             app.rest.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
-                artist_list_breadcrumb: button::State::default(),
-                artist_view_breadcrumb: button::State::default(),
-
-                sort_by_name_button: button::State::default(),
-                sort_by_album_button: button::State::default(),
-                sort_by_play_count_button: button::State::default(),
-                sort_by_duration_button: button::State::default(),
-                sort_by_played_duration_button: button::State::default(),
-                sort_random_button: button::State::default(),
-
-                album_view_button: button::State::default(),
-                track_view_button: button::State::default(),
-
-                sort_order_regular_button: button::State::default(),
-                sort_order_reverse_button: button::State::default(),
-
-                track_buttons: track_buttons,
-                track_scroll: scrollable::State::default(),
-
                 artist_id: artist_id.clone(),
 
                 sort_key: sort_key,
@@ -882,56 +600,10 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
         }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.rest.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
-                artist_list_breadcrumb: button::State::default(),
-                artist_view_breadcrumb: button::State::default(),
-                artist_album_view_breadcrumb: button::State::default(),
                 artist_id: artist_id.clone(),
                 album_id: album_id.clone(),
                 album_size: album_size,
                 maybe_selected_track: maybe_selected_track,
-                toggle_image_size_button: button::State::default(),
-                entire_track_list_buttons: state::TrackLineItemButtons {
-                    play_button: button::State::default(),
-                    play_all_from_here_button: button::State::default(),
-                    insert_button: button::State::default(),
-                    append_button: button::State::default(),
-                    add_to_default_playlist_button: button::State::default(),
-                },
-                all_disc_buttons: app
-                    .rest
-                    .library
-                    .get_artist_album_tracks(artist_id.clone(), album_id.clone())
-                    .discs
-                    .keys()
-                    .map(|_disc| state::TrackLineItemButtons {
-                        play_button: button::State::default(),
-                        play_all_from_here_button: button::State::default(),
-                        add_to_default_playlist_button: button::State::default(),
-                        insert_button: button::State::default(),
-                        append_button: button::State::default(),
-                    })
-                    .collect(),
-                track_play_buttons: app
-                    .rest
-                    .library
-                    .get_artist_album_tracks(artist_id.clone(), album_id.clone())
-                    .discs
-                    .values()
-                    .map(|tracks| {
-                        tracks
-                            .tracks
-                            .values()
-                            .map(|_track| state::TrackLineItemButtons {
-                                play_button: button::State::default(),
-                                play_all_from_here_button: button::State::default(),
-                                add_to_default_playlist_button: button::State::default(),
-                                insert_button: button::State::default(),
-                                append_button: button::State::default(),
-                            })
-                            .collect()
-                    })
-                    .collect(),
-                scroll: scrollable::State::default(),
             });
         }
     };

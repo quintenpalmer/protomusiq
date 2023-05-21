@@ -1,4 +1,5 @@
-use iced::{self, button, Checkbox, Column, Container, Length, ProgressBar, Row, Scrollable, Space};
+use iced::Length;
+use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Space};
 
 use crate::model;
 
@@ -16,18 +17,13 @@ pub fn playlist_view<'a>(
     library: &'a model::LibraryState,
     action_state: &'a ActionState,
     player_info: &'a PlayerInfoState,
-    state: &'a mut state::PlaylistViewState,
+    state: &'a state::PlaylistViewState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
         state::PlaylistViewState {
-            playlist_play_queue_buttons,
-            track_play_buttons,
-            playlist_list_breadcrumb,
-            this_playlist_breadcrumb,
-            track_scroll,
             playlist_id,
         } => {
             let playlist = library.user_playlists.get(*playlist_id).unwrap();
@@ -70,7 +66,6 @@ pub fn playlist_view<'a>(
                                 Row::new()
                                     .push(
                                         dark_button(
-                                            &mut playlist_play_queue_buttons.play_button,
                                             bright_paragraph("> Play All"),
                                         )
                                         .on_press(
@@ -85,7 +80,6 @@ pub fn playlist_view<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            &mut playlist_play_queue_buttons.insert_button,
                                             bright_paragraph(">| Insert All Next"),
                                         )
                                         .on_press(
@@ -103,7 +97,6 @@ pub fn playlist_view<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            &mut playlist_play_queue_buttons.append_button,
                                             bright_paragraph("|> Append All"),
                                         )
                                         .on_press(
@@ -124,8 +117,8 @@ pub fn playlist_view<'a>(
                                Row::new()
                                    .push(
                                        Checkbox::new(
-                                           should_shuffle,
                                            "",
+                                           should_shuffle,
                                            |_| Message::Action(message::Action::ToggleShuffleOnAdd),
                                        )
                                    )
@@ -138,7 +131,7 @@ pub fn playlist_view<'a>(
                       .padding(10)
                       .width(Length::Fill)
                       .style(
-                          style::ContainerPopForward,
+                          iced::theme::Container::Custom(Box::new(style::ContainerPopForward)),
                       )
                 );
             let mut stripe_marker = true;
@@ -152,19 +145,7 @@ pub fn playlist_view<'a>(
 
             let mut tracks_column = Column::new();
 
-            for (
-                track_id,
-                state::PlaylistTrackLineItemButtons {
-                    play_button,
-                    link_button,
-                    remove_from_playlist_button,
-                    move_down_in_playlist_button,
-                    move_up_in_playlist_button,
-                    insert_button,
-                    append_button,
-                },
-            ) in playlist.tracks.iter().zip(track_play_buttons.iter_mut())
-            {
+            for track_id in playlist.tracks.iter() {
                 stripe_marker = !stripe_marker;
                 let track = library.get_track(&track_id);
                 let row = Container::new(
@@ -178,14 +159,13 @@ pub fn playlist_view<'a>(
                             ),
                             model::AlbumSize::Micro,
                         ))
-                        .push(dark_button(play_button, bright_paragraph("> ")).on_press(
+                        .push(dark_button(bright_paragraph("> ")).on_press(
                             Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
                                 vec![track.clone()],
                             )),
                         ))
                         .push(
                             dark_button(
-                                link_button,
                                 bright_paragraph(track.metadata.title.clone()),
                             )
                             .on_press(
@@ -198,13 +178,13 @@ pub fn playlist_view<'a>(
                                 .spacing(5)
                                 .push(
                                     bright_paragraph(track.augmented.play_count.to_string())
-                                        .width(Length::Units(40)),
+                                        .width(Length::Fixed(40.0)),
                                 )
                                 .push(
-                                    ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Units(50)),
+                                    ProgressBar::new(0.0..=(greatest_play_count as f32), track.augmented.play_count as f32).width(Length::Fixed(50.0)),
                                 )
                                 .push(
-                                    dark_button(insert_button, bright_paragraph(">|"))
+                                    dark_button(bright_paragraph(">|"))
                                         .on_press(Message::PlaybackRequest(
                                             message::PlaybackRequest::InsertSongs(
                                                 vec![track.clone()],
@@ -213,7 +193,7 @@ pub fn playlist_view<'a>(
                                         )),
                                 )
                                 .push(
-                                    dark_button(append_button, bright_paragraph("|>"))
+                                    dark_button(bright_paragraph("|>"))
                                         .on_press(Message::PlaybackRequest(
                                             message::PlaybackRequest::AppendSongs(
                                                 vec![track.clone()],
@@ -232,14 +212,13 @@ pub fn playlist_view<'a>(
                                 }
                                 _ => dark_paragraph(text_to_show),
                             }
-                            .width(Length::Units(60))
-                            .horizontal_alignment(iced::HorizontalAlignment::Right)
+                            .width(Length::Fixed(60.0))
+                            .horizontal_alignment(iced::alignment::Horizontal::Right)
                         })
                         .push(
                             line_row()
                                 .push(
                                     dark_button(
-                                        move_up_in_playlist_button,
                                         bright_paragraph("^"),
                                     )
                                     .on_press(
@@ -256,7 +235,6 @@ pub fn playlist_view<'a>(
                                 )
                                 .push(
                                     dark_button(
-                                        move_down_in_playlist_button,
                                         bright_paragraph("v"),
                                     )
                                     .on_press(
@@ -274,7 +252,6 @@ pub fn playlist_view<'a>(
 
                                 .push(
                                     dark_button(
-                                        remove_from_playlist_button,
                                         bright_paragraph(" - "),
                                     )
                                     .on_press(
@@ -289,27 +266,25 @@ pub fn playlist_view<'a>(
                                     ),
                                 )
                         )
-                        .push(Space::with_width(Length::Units(5))),
+                        .push(Space::with_width(Length::Fixed(5.0))),
                 )
-                .style(style::get_potential_current_stripe_style(
+                .style(iced::theme::Container::Custom(style::get_potential_current_stripe_style(
                     stripe_marker,
                     &track,
                     &current_track,
                     &None,
-                ));
+                )));
                 tracks_column = tracks_column.push(row);
             }
 
-            column = column.push(Scrollable::new(track_scroll).push(tracks_column));
+            column = column.push(Scrollable::new(tracks_column));
             (
                 vec![
                     (
-                        playlist_list_breadcrumb,
                         "Playlists".to_string(),
                         user_nav_message(NavMessage::PlaylistList("".to_string())),
                     ),
                     (
-                        this_playlist_breadcrumb,
                         playlist.name.clone(),
                         user_nav_message(NavMessage::PlaylistView(playlist_id.clone())),
                     ),

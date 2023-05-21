@@ -1,7 +1,5 @@
 use std::cell::RefCell;
 
-use iced::{button, scrollable};
-
 use crate::shared;
 
 use crate::datastore::staticassets::embedded;
@@ -24,11 +22,6 @@ pub struct Loaded {
 }
 
 pub struct AppGuiState {
-    pub back_button: button::State,
-    pub home_breadcrumb: button::State,
-    pub search_button: button::State,
-    pub config_button: button::State,
-    pub close_button: button::State,
 }
 
 pub struct AppState {
@@ -63,22 +56,7 @@ pub struct PlayQueueInfo {
     pub rest: PlayQueueInfoState,
 }
 
-pub struct PlayQueueGuiState {
-    pub hide_play_queue: button::State,
-    pub play_queue_page_button: button::State,
-    pub play_queue_scroll: scrollable::State,
-    pub track_info: PlayQueueTrackGuiState,
-}
-
-pub struct PlayQueueTrackGuiState {
-    pub play_history: Vec<PlayQueueGuiEntry>,
-    pub play_queue: Vec<PlayQueueGuiEntry>,
-}
-
-pub struct PlayQueueGuiEntry {
-    pub remove_me_button: button::State,
-    pub track_link_button: button::State,
-}
+pub struct PlayQueueGuiState {}
 
 pub struct PlayQueueInfoState {
     pub play_queue_visible: bool,
@@ -135,20 +113,6 @@ pub struct PlayerInfo {
 }
 
 pub struct PlayerInfoGuiState {
-    pub play_button: button::State,
-    pub pause_button: button::State,
-    pub prev_button: button::State,
-    pub next_button: button::State,
-    pub pause_next_button: button::State,
-
-    pub track_link_button: button::State,
-    pub artist_link_button: button::State,
-    pub album_link_button: button::State,
-
-    pub volume_zero_button: button::State,
-    pub volume_up_button: button::State,
-    pub volume_down_button: button::State,
-    pub volume_max_button: button::State,
 }
 
 pub struct PlayerInfoState {

@@ -1,4 +1,5 @@
-use iced::{self, button, Button, Column, Container, Element, Length, Row, Scrollable, Space};
+use iced::{self, Element, Length};
+use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
 
 use crate::model;
 
@@ -13,9 +14,9 @@ use super::super::super::elements::*;
 pub fn album_list<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &PlayQueueInfoState,
-    state: &'a mut state::AlbumListState,
+    state: &'a state::AlbumListState,
 ) -> (
-    Vec<(&'a mut button::State, String, Message)>,
+    Vec<(String, Message)>,
     Container<'a, Message>,
 ) {
     match state {
@@ -23,26 +24,8 @@ pub fn album_list<'a>(
             page,
             sort_key,
             sort_order,
-            album_list_breadcrumb,
-            sort_order_regular_button,
-            sort_order_reverse_button,
-            sort_by_artist_button,
-            sort_by_name_button,
-            sort_by_date_button,
-            sort_by_duration_button,
-            sort_by_total_play_count_button,
-            sort_by_total_played_duration_button,
-            sort_by_last_mod_button,
-            sort_random_button,
-            nav_first_button,
-            nav_back_button,
-            nav_forward_button,
-            nav_last_button,
-            album_buttons,
-            album_scroll,
         } => {
             let breadcrumbs = vec![(
-                album_list_breadcrumb,
                 "Albums".to_string(),
                 user_nav_message(NavMessage::AlbumList(
                     0,
@@ -68,10 +51,9 @@ pub fn album_list<'a>(
 
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
-                for (album_button, info) in album_buttons.iter_mut().zip(paged_albums.into_iter()) {
+                for info in paged_albums.into_iter() {
                     buttons.push(
                         dark_button(
-                            album_button,
                             bottom_label(
                                 album_image(
                                     library.get_album_cover(
@@ -83,7 +65,7 @@ pub fn album_list<'a>(
                                 )
                                 .into(),
                                 Column::new()
-                                    .align_items(iced::Align::Center)
+                                    .align_items(iced::Alignment::Center)
                                     .push(bright_paragraph(common::abr_str(
                                         info.album.album_name.clone(),
                                         consts::ICON_STR_LENGTH,
@@ -131,7 +113,7 @@ pub fn album_list<'a>(
                 }
                 let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(album_scroll).push(grid);
+                let scrollable = Scrollable::new(grid);
                 let first_page = 0;
                 let back_page = {
                     if page == 0 {
@@ -165,7 +147,6 @@ pub fn album_list<'a>(
                                     .push(paragraph("Sort By: "))
                                     .push(
                                         dark_button(
-                                            sort_by_artist_button,
                                             bright_paragraph("Artist Name"),
                                         )
                                         .on_press(
@@ -177,7 +158,7 @@ pub fn album_list<'a>(
                                         ),
                                     )
                                     .push(
-                                        dark_button(sort_by_name_button, bright_paragraph("Name"))
+                                        dark_button(bright_paragraph("Name"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 0,
                                                 model::AlbumSortKey::ByName,
@@ -186,7 +167,6 @@ pub fn album_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_last_mod_button,
                                             bright_paragraph("Added"),
                                         )
                                         .on_press(
@@ -199,7 +179,6 @@ pub fn album_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_duration_button,
                                             bright_paragraph("Duration"),
                                         )
                                         .on_press(
@@ -212,7 +191,6 @@ pub fn album_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_total_play_count_button,
                                             bright_paragraph("Total Play Count"),
                                         )
                                         .on_press(
@@ -225,7 +203,6 @@ pub fn album_list<'a>(
                                     )
                                     .push(
                                         dark_button(
-                                            sort_by_total_played_duration_button,
                                             bright_paragraph("Total Played Duration"),
                                         )
                                         .on_press(
@@ -237,7 +214,7 @@ pub fn album_list<'a>(
                                         ),
                                     )
                                     .push(
-                                        dark_button(sort_by_date_button, bright_paragraph("Date"))
+                                        dark_button(bright_paragraph("Date"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 0,
                                                 model::AlbumSortKey::ByDate,
@@ -245,7 +222,7 @@ pub fn album_list<'a>(
                                             ))),
                                     )
                                     .push(
-                                        dark_button(sort_random_button, bright_paragraph("Random"))
+                                        dark_button(bright_paragraph("Random"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 0,
                                                 model::AlbumSortKey::Random,
@@ -259,7 +236,7 @@ pub fn album_list<'a>(
                                 line_row()
                                     .push(paragraph("Page: "))
                                     .push(
-                                        dark_button(nav_first_button, bright_paragraph("<<"))
+                                        dark_button(bright_paragraph("<<"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 first_page,
                                                 sort_key.clone(),
@@ -267,7 +244,7 @@ pub fn album_list<'a>(
                                             ))),
                                     )
                                     .push(
-                                        dark_button(nav_back_button, bright_paragraph("<"))
+                                        dark_button(bright_paragraph("<"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 back_page,
                                                 sort_key.clone(),
@@ -276,7 +253,7 @@ pub fn album_list<'a>(
                                     )
                                     .push(bright_paragraph(page.to_string()))
                                     .push(
-                                        dark_button(nav_forward_button, bright_paragraph(">"))
+                                        dark_button(bright_paragraph(">"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 forward_page,
                                                 sort_key.clone(),
@@ -284,7 +261,7 @@ pub fn album_list<'a>(
                                             ))),
                                     )
                                     .push(
-                                        dark_button(nav_last_button, bright_paragraph(">>"))
+                                        dark_button(bright_paragraph(">>"))
                                             .on_press(user_nav_message(NavMessage::AlbumList(
                                                 last_page,
                                                 sort_key.clone(),
@@ -297,7 +274,6 @@ pub fn album_list<'a>(
                                             .push(paragraph("Order: "))
                                             .push(
                                                 dark_button(
-                                                    sort_order_reverse_button,
                                                     bright_paragraph("^"),
                                                 )
                                                 .on_press(user_nav_message(NavMessage::AlbumList(
@@ -308,7 +284,6 @@ pub fn album_list<'a>(
                                             )
                                             .push(
                                                 dark_button(
-                                                    sort_order_regular_button,
                                                     bright_paragraph("v"),
                                                 )
                                                 .on_press(user_nav_message(NavMessage::AlbumList(

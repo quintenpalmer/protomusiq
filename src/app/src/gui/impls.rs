@@ -11,6 +11,7 @@ impl Application for state::App {
     type Executor = executor::Default;
     type Message = message::Message;
     type Flags = ();
+    type Theme = iced::Theme;
 
     fn new(_flags: ()) -> (Self, Command<Self::Message>) {
         init::init_app()
@@ -20,21 +21,17 @@ impl Application for state::App {
         String::from("Musiq Library")
     }
 
-    fn update(
-        &mut self,
-        message: Self::Message,
-        _clipboard: &mut iced::Clipboard,
-    ) -> Command<Self::Message> {
+    fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         match self {
             state::App::Loading => update::update_from_loading_state(self, message),
             state::App::Loaded(ref mut loaded) => update::update_state(loaded, message),
         }
     }
 
-    fn view(&mut self) -> Element<Self::Message> {
+    fn view(&self) -> Element<Self::Message> {
         match self {
             state::App::Loading => view::view_loading(),
-            state::App::Loaded(ref mut loaded) => view::view_app(loaded),
+            state::App::Loaded(ref loaded) => view::view_app(loaded),
         }
     }
 
@@ -45,18 +42,30 @@ impl Application for state::App {
         ])
     }
 
-    fn background_color(&self) -> iced::Color {
-        iced::Color::from_rgb8(0x15, 0x15, 0x15)
+    fn theme(&self) -> iced::Theme {
+        iced::Theme::Dark
+    }
+
+    fn style(&self) -> iced::theme::Application {
+        fn dark_background(_theme: &iced::theme::Theme) -> iced::application::Appearance {
+            iced::application::Appearance {
+                background_color: iced::Color::from_rgb8(0x15, 0x15, 0x15),
+                text_color: iced::Color::WHITE,
+            }
+        }
+
+        iced::theme::Application::from(dark_background as fn(&iced::theme::Theme) -> _)
     }
 
     fn scale_factor(&self) -> f64 {
         1.0
     }
 
-    fn should_exit(&self) -> bool {
-        match self {
-            state::App::Loaded(loaded) => loaded.rest.should_close,
-            _ => false,
-        }
-    }
+    // TODO replace with `iced_native::window::Action`
+    //fn should_exit(&self) -> bool {
+    //    match self {
+    //        state::App::Loaded(loaded) => loaded.rest.should_close,
+    //        _ => false,
+    //    }
+    //}
 }
