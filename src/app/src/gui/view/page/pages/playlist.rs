@@ -129,9 +129,14 @@ pub fn playlist_view<'a>(
 
             let mut tracks_column = Column::new();
 
-            for track_id in playlist.tracks.iter() {
+            let tracks: Vec<_> = playlist
+                .tracks
+                .iter()
+                .map(|track_id| library.get_track(&track_id))
+                .collect();
+
+            for track in tracks.clone().into_iter() {
                 stripe_marker = !stripe_marker;
-                let track = library.get_track(&track_id);
                 let row = Container::new(
                     line_row()
                         .spacing(5)
