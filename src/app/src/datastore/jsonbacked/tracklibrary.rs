@@ -95,13 +95,18 @@ enum Callback {
 }
 
 impl Callback {
-    fn done(&self, new_metadata_payload: CacheMetadataPayload) {
+    fn done(&self, organized: &musiqlibrary::RawLibrary) {
         match self {
-            Callback::JSON(metadata_json_file) => serde_json::to_writer(
-                fs::File::create(metadata_json_file).unwrap(),
-                &new_metadata_payload,
-            )
-            .unwrap(),
+            Callback::JSON(metadata_json_file) => {
+                let new_metadata_payload: CacheMetadataPayload =
+                    arbitrary_serialize_sort(&organized);
+
+                serde_json::to_writer(
+                    fs::File::create(metadata_json_file).unwrap(),
+                    &new_metadata_payload,
+                )
+                .unwrap();
+            }
             Callback::Sqlite(_conn) => (),
             Callback::NoCache => (),
         };
@@ -222,11 +227,9 @@ pub fn load_library_from_cache_and_scan(
                 ret
             };
 
-            let new_metadata_payload = arbitrary_serialize_sort(&organized);
+            logger.print_elapsed("no longer serialize sorting");
 
-            logger.print_elapsed("serialize sorting");
-
-            callback.done(new_metadata_payload);
+            callback.done(&organized);
 
             logger.print_elapsed("writing the json back");
 
