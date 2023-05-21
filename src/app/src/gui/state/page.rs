@@ -39,12 +39,10 @@ impl Page {
 }
 
 #[derive(Debug)]
-pub struct HomeState {
-}
+pub struct HomeState {}
 
 #[derive(Debug)]
-pub struct ConfigState {
-}
+pub struct ConfigState {}
 
 #[derive(Debug)]
 pub struct SearchPageState {
