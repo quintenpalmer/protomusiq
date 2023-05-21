@@ -153,6 +153,11 @@ pub fn playlist_view<'a>(
                                 track.clone(),
                             ])),
                         ))
+                        .push(dark_button(bright_paragraph(">...")).on_press(
+                            Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
+                                model::tracks_after_including(&tracks, &track),
+                            )),
+                        ))
                         .push(
                             dark_button(bright_paragraph(track.metadata.title.clone()))
                                 .on_press(components::track_link(&track.metadata))
