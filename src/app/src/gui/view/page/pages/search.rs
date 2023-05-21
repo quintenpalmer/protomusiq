@@ -178,9 +178,10 @@ pub fn search_page<'a>(
                                         .on_input(|s| {
                                             Message::Action(message::Action::UpdateText(s))
                                         })
-                                        .on_submit(Message::Action(
-                                            message::Action::PerformSearch(query.clone()),
-                                        )),
+                                        .on_submit(Message::Action(message::Action::PerformSearch(
+                                            query.clone(),
+                                        )))
+                                        .id(state::TEXT_INPUT_ID.clone()),
                                 )
                                 .width(Length::Fill),
                         )

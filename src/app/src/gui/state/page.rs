@@ -2,6 +2,11 @@ use musiqlibrary;
 
 use crate::model;
 
+use iced::widget::text_input;
+use once_cell::sync;
+
+pub static TEXT_INPUT_ID: sync::Lazy<text_input::Id> = sync::Lazy::new(text_input::Id::unique);
+
 #[derive(Debug)]
 pub enum Page {
     Home(HomeState),

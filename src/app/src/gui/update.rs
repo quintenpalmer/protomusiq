@@ -1,3 +1,4 @@
+use iced::widget::text_input;
 use iced::Command;
 
 use crate::model;
@@ -558,7 +559,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<mes
                 query: query,
                 results: computed_results,
             });
-            Command::none()
+            text_input::focus(state::TEXT_INPUT_ID.clone())
         }
         NavMessage::TrackList(page, sort, sort_order) => {
             app.rest.current_page = Page::TrackList(state::TrackListState {
