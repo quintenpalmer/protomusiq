@@ -168,21 +168,17 @@ pub fn update_state(app: &mut Loaded, message: Message) -> Command<Message> {
                 .page_back_history
                 .push(app.rest.page_current_history.clone());
             app.rest.page_current_history = nav_message.clone();
-            handle_nav(app, nav_message);
-            Command::none()
+            handle_nav(app, nav_message)
         }
-        Message::HistoryNav => {
-            match app.rest.page_back_history.pop() {
-                Some(history_message) => {
-                    let old_current = app.rest.page_current_history.clone();
-                    app.rest.page_current_history = history_message.clone();
-                    app.rest.page_forward_history.insert(0, old_current);
-                    handle_nav(app, history_message);
-                }
-                None => (),
-            };
-            Command::none()
-        }
+        Message::HistoryNav => match app.rest.page_back_history.pop() {
+            Some(history_message) => {
+                let old_current = app.rest.page_current_history.clone();
+                app.rest.page_current_history = history_message.clone();
+                app.rest.page_forward_history.insert(0, old_current);
+                handle_nav(app, history_message)
+            }
+            None => Command::none(),
+        },
         Message::PlaybackRequest(internal) => {
             println!("GUI:\thandling internal: {:?}", internal);
             match internal {
@@ -489,22 +485,31 @@ fn handle_volume_request(
     )
 }
 
-fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
+fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) -> Command<message::Message> {
     match nav_message {
-        NavMessage::Home => app.rest.current_page = Page::Home(state::HomeState {}),
-        NavMessage::Config => app.rest.current_page = Page::Config(state::ConfigState {}),
+        NavMessage::Home => {
+            app.rest.current_page = Page::Home(state::HomeState {});
+            Command::none()
+        }
+        NavMessage::Config => {
+            app.rest.current_page = Page::Config(state::ConfigState {});
+            Command::none()
+        }
         NavMessage::PlayQueueFocus => {
             app.rest.current_page = Page::PlayQueue(state::PlayQueueState {});
+            Command::none()
         }
         NavMessage::PlaylistView(playlist_id) => {
             app.rest.current_page = Page::PlaylistView(state::PlaylistViewState {
                 playlist_id: playlist_id,
             });
+            Command::none()
         }
         NavMessage::PlaylistList(new_playlist_name) => {
             app.rest.current_page = Page::PlaylistList(state::PlaylistListState {
                 new_playlist_name: new_playlist_name,
             });
+            Command::none()
         }
         NavMessage::SearchPage(query, perform_search) => {
             let computed_results = match perform_search {
@@ -553,6 +558,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 query: query,
                 results: computed_results,
             });
+            Command::none()
         }
         NavMessage::TrackList(page, sort, sort_order) => {
             app.rest.current_page = Page::TrackList(state::TrackListState {
@@ -560,6 +566,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_key: sort,
                 sort_order: sort_order,
             });
+            Command::none()
         }
         NavMessage::AlbumList(page, sort, sort_order) => {
             app.rest.current_page = Page::AlbumList(state::AlbumListState {
@@ -567,6 +574,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_key: sort,
                 sort_order: sort_order,
             });
+            Command::none()
         }
         NavMessage::ArtistList(page, sort, sort_order) => {
             app.rest.current_page = Page::ArtistList(state::ArtistListState {
@@ -574,6 +582,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_key: sort,
                 sort_order: sort_order,
             });
+            Command::none()
         }
         NavMessage::ArtistView(artist_id) => {
             app.rest.current_page = Page::ArtistView(state::ArtistViewState {
@@ -589,6 +598,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                     .map(|k| k.clone())
                     .collect(),
             });
+            Command::none()
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
             app.rest.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
@@ -597,6 +607,7 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 sort_key: sort_key,
                 sort_order: sort_order,
             });
+            Command::none()
         }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.rest.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
@@ -605,8 +616,9 @@ fn handle_nav(app: &mut Loaded, nav_message: message::NavMessage) {
                 album_size: album_size,
                 maybe_selected_track: maybe_selected_track,
             });
+            Command::none()
         }
-    };
+    }
 }
 
 fn tracker_sender<T: std::fmt::Debug>(
