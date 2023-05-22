@@ -154,7 +154,7 @@ impl PlaylistData {
         }
     }
 
-    pub fn to_vec(&self) -> Vec<PlaylistEntry> {
+    pub fn entries_as_vec(&self) -> Vec<PlaylistEntry> {
         match self.inner {
             Some(ref v) => v.to_vec(),
             None => EMPTY_PLAYLIST_VEC,

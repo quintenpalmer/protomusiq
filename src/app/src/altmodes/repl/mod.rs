@@ -465,7 +465,7 @@ fn prompt_for_playlist(
     }
 
     let mut playlists = Vec::new();
-    for p in playlist_data.to_vec().into_iter() {
+    for p in playlist_data.entries_as_vec().into_iter() {
         if p.name.to_lowercase().contains(&input.to_lowercase()) {
             playlists.push(p);
         }

@@ -42,7 +42,7 @@ pub fn playlist_list_view<'a>(
 
                 let mut playlists = Column::new();
                 let mut stripe_marker = false;
-                for user_playlist in library.user_playlists.to_vec().iter().rev() {
+                for user_playlist in library.user_playlists.entries_as_vec().iter().rev() {
                     let mut row = line_row();
                     row = row.push(
                         dark_button(
