@@ -66,6 +66,12 @@ pub enum AlbumSortKey {
     Random,
 }
 
+#[derive(Debug, Clone)]
+pub enum Direction {
+    Up,
+    Down,
+}
+
 #[derive(Debug)]
 pub struct PrehistoryRecord {
     pub source: String,

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use musiqlibrary;
 
-use crate::gui::message;
+use crate::model;
 
 use super::super::localfs;
 use super::common;
@@ -127,7 +127,7 @@ impl PlaylistData {
     pub fn move_track_in_playlist(
         &mut self,
         playlist_id: u64,
-        direction: message::Direction,
+        direction: model::Direction,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.inner {
@@ -256,7 +256,7 @@ impl InnerPlaylistData {
     pub fn move_track_in_playlist(
         &mut self,
         playlist_id: u64,
-        direction: message::Direction,
+        direction: model::Direction,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.playlists.get_mut(&playlist_id) {
@@ -278,7 +278,7 @@ impl InnerPlaylistData {
                     }
 
                     let new_playlist = match direction {
-                        message::Direction::Down => {
+                        model::Direction::Down => {
                             let mut constructed = found_before;
                             if found_after.len() > 0 {
                                 let old_first_of_after = found_after.remove(0);
@@ -290,7 +290,7 @@ impl InnerPlaylistData {
                             constructed.append(&mut found_after);
                             constructed
                         }
-                        message::Direction::Up => {
+                        model::Direction::Up => {
                             let mut constructed = found_before;
                             match constructed.pop() {
                                 Some(old_before_end) => {

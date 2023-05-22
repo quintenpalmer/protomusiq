@@ -27,12 +27,6 @@ pub enum Message {
 }
 
 #[derive(Debug, Clone)]
-pub enum Direction {
-    Up,
-    Down,
-}
-
-#[derive(Debug, Clone)]
 pub enum Action {
     LoadEverything,
 
@@ -41,7 +35,7 @@ pub enum Action {
     AddTracksToPlaylist(u64, Vec<musiqlibrary::TrackUniqueIdentifier>),
     DeletePlaylist(u64),
     RemoveTrackFromPlaylist(u64, musiqlibrary::TrackUniqueIdentifier),
-    MoveTrackInPlaylist(u64, Direction, musiqlibrary::TrackUniqueIdentifier),
+    MoveTrackInPlaylist(u64, model::Direction, musiqlibrary::TrackUniqueIdentifier),
 
     RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
 

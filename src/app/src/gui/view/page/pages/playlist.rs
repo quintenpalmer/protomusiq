@@ -210,7 +210,7 @@ pub fn playlist_view<'a>(
                                 .push(dark_button(bright_paragraph("^")).on_press(Message::Action(
                                     message::Action::MoveTrackInPlaylist(
                                         *playlist_id,
-                                        message::Direction::Up,
+                                        model::Direction::Up,
                                         musiqlibrary::TrackUniqueIdentifier::from_track(
                                             &track.metadata,
                                         ),
@@ -219,7 +219,7 @@ pub fn playlist_view<'a>(
                                 .push(dark_button(bright_paragraph("v")).on_press(Message::Action(
                                     message::Action::MoveTrackInPlaylist(
                                         *playlist_id,
-                                        message::Direction::Down,
+                                        model::Direction::Down,
                                         musiqlibrary::TrackUniqueIdentifier::from_track(
                                             &track.metadata,
                                         ),
