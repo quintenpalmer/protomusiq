@@ -11,14 +11,7 @@ use crate::model;
 use super::super::localfs;
 use super::common;
 
-const EMPTY_PLAYLIST_VEC: Vec<PlaylistEntry> = Vec::new();
-
-#[derive(Deserialize, Serialize, Default, Clone)]
-pub struct PlaylistEntry {
-    pub id: u32,
-    pub name: String,
-    pub tracks: Vec<musiqlibrary::TrackUniqueIdentifier>,
-}
+const EMPTY_PLAYLIST_VEC: Vec<model::playlist::PlaylistEntry> = Vec::new();
 
 pub struct PlaylistData {
     pub json_db_path: PathBuf,
@@ -66,7 +59,7 @@ impl PlaylistData {
         };
     }
 
-    pub fn get_playlist(&self, playlist_id: u32) -> Option<&PlaylistEntry> {
+    pub fn get_playlist(&self, playlist_id: u32) -> Option<&model::playlist::PlaylistEntry> {
         match self.inner {
             Some(ref v) => v.playlists.get(&playlist_id),
             None => None,
@@ -154,7 +147,7 @@ impl PlaylistData {
         }
     }
 
-    pub fn entries_as_vec(&self) -> Vec<PlaylistEntry> {
+    pub fn entries_as_vec(&self) -> Vec<model::playlist::PlaylistEntry> {
         match self.inner {
             Some(ref v) => v.to_vec(),
             None => EMPTY_PLAYLIST_VEC,
@@ -165,7 +158,7 @@ impl PlaylistData {
 pub struct InnerPlaylistData {
     pub current_id: u32,
     pub selected_playlist_id: u32,
-    pub playlists: BTreeMap<u32, PlaylistEntry>,
+    pub playlists: BTreeMap<u32, model::playlist::PlaylistEntry>,
 }
 
 impl InnerPlaylistData {
@@ -175,7 +168,7 @@ impl InnerPlaylistData {
             selected_playlist_id: 1,
             playlists: vec![(
                 1,
-                PlaylistEntry {
+                model::playlist::PlaylistEntry {
                     id: 1,
                     name: name,
                     tracks: Vec::new(),
@@ -187,7 +180,7 @@ impl InnerPlaylistData {
     }
 
     fn add(&mut self, name: String) {
-        let new_entry = PlaylistEntry {
+        let new_entry = model::playlist::PlaylistEntry {
             id: self.current_id + 1,
             name: name,
             tracks: Vec::new(),
@@ -320,7 +313,7 @@ impl InnerPlaylistData {
         serde_json::to_writer(fs::File::create(&json_db_path).unwrap(), &self.to_raw()).unwrap()
     }
 
-    fn to_vec(&self) -> Vec<PlaylistEntry> {
+    fn to_vec(&self) -> Vec<model::playlist::PlaylistEntry> {
         self.playlists
             .iter()
             .map(|(_key, value)| value.clone())
@@ -352,5 +345,5 @@ impl InnerPlaylistData {
 pub struct RawPlaylistData {
     pub current_id: u32,
     pub selected_playlist_id: u32,
-    pub playlists: Vec<PlaylistEntry>,
+    pub playlists: Vec<model::playlist::PlaylistEntry>,
 }

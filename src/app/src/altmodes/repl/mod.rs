@@ -485,7 +485,7 @@ fn prompt_for_playlist(
 
 fn select_playlist(
     raw_library: &musiqlibrary::RawLibrary,
-    playlists: Vec<jsonbacked::playlists::PlaylistEntry>,
+    playlists: Vec<model::playlist::PlaylistEntry>,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     for (i, playlist) in playlists.iter().enumerate() {
         println!("{}:	{}", i, playlist.name);
@@ -520,7 +520,7 @@ fn select_playlist(
 
 fn playlist_full_track_metadata(
     raw_library: &musiqlibrary::RawLibrary,
-    playlist: &jsonbacked::playlists::PlaylistEntry,
+    playlist: &model::playlist::PlaylistEntry,
 ) -> Vec<musiqlibrary::FullTrackMetadata> {
     playlist
         .tracks

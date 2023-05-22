@@ -3,6 +3,7 @@ pub mod augmented;
 pub mod common;
 pub mod constants;
 pub mod library;
+pub mod playlist;
 pub mod sorts;
 
 pub use app::*;
