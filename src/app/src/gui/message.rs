@@ -31,11 +31,11 @@ pub enum Action {
     LoadEverything,
 
     CreateNewPlaylist(String),
-    MakePlaylistDefault(u64),
-    AddTracksToPlaylist(u64, Vec<musiqlibrary::TrackUniqueIdentifier>),
-    DeletePlaylist(u64),
-    RemoveTrackFromPlaylist(u64, musiqlibrary::TrackUniqueIdentifier),
-    MoveTrackInPlaylist(u64, model::Direction, musiqlibrary::TrackUniqueIdentifier),
+    MakePlaylistDefault(u32),
+    AddTracksToPlaylist(u32, Vec<musiqlibrary::TrackUniqueIdentifier>),
+    DeletePlaylist(u32),
+    RemoveTrackFromPlaylist(u32, musiqlibrary::TrackUniqueIdentifier),
+    MoveTrackInPlaylist(u32, model::Direction, musiqlibrary::TrackUniqueIdentifier),
 
     RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
 
@@ -78,7 +78,7 @@ pub enum NavMessage {
     PlayQueueFocus,
     SearchPage(String, bool),
     PlaylistList(String),
-    PlaylistView(u64),
+    PlaylistView(u32),
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     ArtistList(usize, model::ArtistSortKey, model::SortOrder),

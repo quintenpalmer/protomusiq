@@ -15,7 +15,7 @@ const EMPTY_PLAYLIST_VEC: Vec<PlaylistEntry> = Vec::new();
 
 #[derive(Deserialize, Serialize, Default, Clone)]
 pub struct PlaylistEntry {
-    pub id: u64,
+    pub id: u32,
     pub name: String,
     pub tracks: Vec<musiqlibrary::TrackUniqueIdentifier>,
 }
@@ -66,14 +66,14 @@ impl PlaylistData {
         };
     }
 
-    pub fn get_playlist(&self, playlist_id: u64) -> Option<&PlaylistEntry> {
+    pub fn get_playlist(&self, playlist_id: u32) -> Option<&PlaylistEntry> {
         match self.inner {
             Some(ref v) => v.playlists.get(&playlist_id),
             None => None,
         }
     }
 
-    pub fn delete_playlist(&mut self, playlist_id: u64) -> Result<(), String> {
+    pub fn delete_playlist(&mut self, playlist_id: u32) -> Result<(), String> {
         match self.inner {
             Some(ref mut v) => {
                 let ret = v.delete_playlist(playlist_id);
@@ -84,7 +84,7 @@ impl PlaylistData {
         }
     }
 
-    pub fn make_playlist_default(&mut self, playlist_id: u64) {
+    pub fn make_playlist_default(&mut self, playlist_id: u32) {
         match self.inner {
             Some(ref mut v) => {
                 v.make_playlist_default(playlist_id);
@@ -96,7 +96,7 @@ impl PlaylistData {
 
     pub fn add_track_to_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.inner {
@@ -111,7 +111,7 @@ impl PlaylistData {
 
     pub fn remove_track_from_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.inner {
@@ -126,7 +126,7 @@ impl PlaylistData {
 
     pub fn move_track_in_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         direction: model::Direction,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
@@ -140,14 +140,14 @@ impl PlaylistData {
         }
     }
 
-    pub fn is_default_playlist(&self, playlist_id: u64) -> bool {
+    pub fn is_default_playlist(&self, playlist_id: u32) -> bool {
         match self.inner {
             Some(ref v) => v.is_default_playlist(playlist_id),
             None => false,
         }
     }
 
-    pub fn get_default_playlist_id(&self) -> Option<u64> {
+    pub fn get_default_playlist_id(&self) -> Option<u32> {
         match self.inner {
             Some(ref v) => Some(v.selected_playlist_id),
             None => None,
@@ -163,9 +163,9 @@ impl PlaylistData {
 }
 
 pub struct InnerPlaylistData {
-    pub current_id: u64,
-    pub selected_playlist_id: u64,
-    pub playlists: BTreeMap<u64, PlaylistEntry>,
+    pub current_id: u32,
+    pub selected_playlist_id: u32,
+    pub playlists: BTreeMap<u32, PlaylistEntry>,
 }
 
 impl InnerPlaylistData {
@@ -198,7 +198,7 @@ impl InnerPlaylistData {
         self.playlists.insert(new_entry.id, new_entry);
     }
 
-    fn delete_playlist(&mut self, playlist_id: u64) -> Result<(), String> {
+    fn delete_playlist(&mut self, playlist_id: u32) -> Result<(), String> {
         if self.is_default_playlist(playlist_id) {
             return Err(format!(
                 "playlist with id {} is the active playlist",
@@ -215,19 +215,19 @@ impl InnerPlaylistData {
         }
     }
 
-    fn make_playlist_default(&mut self, playlist_id: u64) {
+    fn make_playlist_default(&mut self, playlist_id: u32) {
         if self.playlists.contains_key(&playlist_id) {
             self.selected_playlist_id = playlist_id;
         }
     }
 
-    fn is_default_playlist(&self, playlist_id: u64) -> bool {
+    fn is_default_playlist(&self, playlist_id: u32) -> bool {
         self.selected_playlist_id == playlist_id
     }
 
     pub fn add_track_to_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.playlists.get_mut(&playlist_id) {
@@ -241,7 +241,7 @@ impl InnerPlaylistData {
 
     fn remove_track_from_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
         match self.playlists.get_mut(&playlist_id) {
@@ -255,7 +255,7 @@ impl InnerPlaylistData {
 
     pub fn move_track_in_playlist(
         &mut self,
-        playlist_id: u64,
+        playlist_id: u32,
         direction: model::Direction,
         track_id: musiqlibrary::TrackUniqueIdentifier,
     ) -> Result<(), String> {
@@ -350,7 +350,7 @@ impl InnerPlaylistData {
 
 #[derive(Deserialize, Serialize, Default)]
 pub struct RawPlaylistData {
-    pub current_id: u64,
-    pub selected_playlist_id: u64,
+    pub current_id: u32,
+    pub selected_playlist_id: u32,
     pub playlists: Vec<PlaylistEntry>,
 }

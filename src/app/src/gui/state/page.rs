@@ -66,7 +66,7 @@ pub struct PlaylistListState {
 
 #[derive(Debug)]
 pub struct PlaylistViewState {
-    pub playlist_id: u64,
+    pub playlist_id: u32,
 }
 
 #[derive(Debug)]
