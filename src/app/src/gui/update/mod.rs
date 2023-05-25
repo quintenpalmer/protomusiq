@@ -10,6 +10,7 @@ mod action;
 mod common;
 mod nav;
 mod playback;
+mod sink;
 mod volume;
 
 pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Message> {
@@ -53,25 +54,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             None => Command::none(),
         },
         Message::PlaybackRequest(internal) => playback::handle_playback_request(app, internal),
-        Message::SinkCallback(callback) => match callback {
-            shared::SinkCallbackMessage::SongEnded => {
-                message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
-            }
-            shared::SinkCallbackMessage::SecondElapsed => {
-                match app.player_info.current_playback {
-                    Some(ref mut outer_current_playback) => match outer_current_playback {
-                        state::CurrentPlayback::Track(ref mut current_playback) => {
-                            current_playback.current_second += 1
-                        }
-                        _ => println!("Hmmm, songs are playing back while on a pause break?"),
-                    },
-                    None => (),
-                };
-                Command::none()
-            }
-            shared::SinkCallbackMessage::Paused => Command::none(),
-            shared::SinkCallbackMessage::Playing => Command::none(),
-        },
+        Message::SinkCallback(callback) => sink::handle_sink_callback(app, callback),
         Message::ErrorResponse(resp) => {
             match resp {
                 Ok(()) => (),
