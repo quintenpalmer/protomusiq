@@ -6,6 +6,7 @@ use super::super::message::{self, Message};
 use super::super::state::{self, AppState};
 
 use super::common;
+use super::loaded;
 
 pub fn handle_playback_request(
     app: &mut AppState,
@@ -65,7 +66,8 @@ pub fn handle_playback_request(
                 None => Command::none(),
             }
         }
-        message::PlaybackRequest::PlaySongs(tracks) => message::message_command(
+        message::PlaybackRequest::PlaySongs(tracks) => loaded::update_state(
+            app,
             Message::PlaybackRequest(message::PlaybackRequest::InsertSongs(tracks, true)),
         ),
         message::PlaybackRequest::AppendSongs(tracks, load_next) => {
