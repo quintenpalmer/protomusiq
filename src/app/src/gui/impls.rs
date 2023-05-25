@@ -22,10 +22,7 @@ impl Application for state::App {
     }
 
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
-        match self {
-            state::App::Loading => update::update_from_loading_state(self, message),
-            state::App::Loaded(ref mut loaded) => update::update_state(loaded, message),
-        }
+        update::update(self, message)
     }
 
     fn view(&self) -> Element<Self::Message> {
