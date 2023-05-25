@@ -2,6 +2,8 @@ use std::cell::RefCell;
 
 use iced;
 
+use super::update;
+
 use crate::datastore::{
     self,
     jsonbacked::{self, playlists as userplaylists},
@@ -181,8 +183,10 @@ pub fn initialize_everything() -> state::App {
 }
 
 pub fn init_app() -> (state::App, iced::Command<message::Message>) {
-    (
-        state::App::Loading,
-        message::message_command(message::Message::Action(message::Action::LoadEverything)),
-    )
+    let mut app = state::App::Loading;
+    let ret = update::update(
+        &mut app,
+        message::Message::Action(message::Action::LoadEverything),
+    );
+    (app, ret)
 }
