@@ -112,9 +112,3 @@ impl Future for MessageFuture {
         Poll::Ready(self.inner.clone())
     }
 }
-
-pub fn message_command(m: Message) -> iced::Command<Message> {
-    iced::Command::single(iced_native::command::Action::Future(Box::pin(
-        MessageFuture { inner: m },
-    )))
-}
