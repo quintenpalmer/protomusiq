@@ -8,6 +8,8 @@ use super::init;
 use super::message::{self, Message, NavMessage};
 use super::state::{self, App, AppState, Page};
 
+mod common;
+
 pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Message> {
     match message {
         Message::Action(message::Action::LoadEverything) => {
@@ -140,7 +142,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             },
             message::Action::Close => Command::batch(vec![
                 Command::perform(
-                    mpris_sender(
+                    common::mpris_sender(
                         app.player_info.mpris_message_sender.clone(),
                         shared::MprisMessage::Close,
                     )
@@ -148,7 +150,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                     Message::ErrorResponse,
                 ),
                 Command::perform(
-                    sink_sender(
+                    common::sink_sender(
                         app.player_info.sink_message_sender.clone(),
                         shared::SinkMessage::Close,
                     )
@@ -182,7 +184,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                                 app.player_info.playing = true;
                                 Command::batch(vec![
                                     Command::perform(
-                                        mpris_sender(
+                                        common::mpris_sender(
                                             app.player_info.mpris_message_sender.clone(),
                                             shared::MprisMessage::SetMetadata(
                                                 current_playback
@@ -198,7 +200,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                                     ),
                                     Command::perform(
                                         {
-                                            sink_sender(
+                                            common::sink_sender(
                                                 app.player_info.sink_message_sender.clone(),
                                                 shared::SinkMessage::LoadSong(
                                                     current_playback.track.metadata.path.clone(),
@@ -210,7 +212,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                                         Message::ErrorResponse,
                                     ),
                                     Command::perform(
-                                        tracker_sender(
+                                        common::tracker_sender(
                                             app.player_info.tracker_message_sender.clone(),
                                             shared::TrackerMessage::SongStarted(
                                                 current_playback.track.clone(),
@@ -329,7 +331,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                         app.player_info.current_playback = None;
                         app.play_queue_info.current_playback = None;
                         Command::perform(
-                            mpris_sender(
+                            common::mpris_sender(
                                 app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetStopped,
                             )
@@ -342,7 +344,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                     app.player_info.playing = true;
                     Command::batch(vec![
                         Command::perform(
-                            mpris_sender(
+                            common::mpris_sender(
                                 app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPlaying,
                             )
@@ -350,7 +352,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                             Message::ErrorResponse,
                         ),
                         Command::perform(
-                            sink_sender(
+                            common::sink_sender(
                                 app.player_info.sink_message_sender.clone(),
                                 shared::SinkMessage::PlayButton,
                             )
@@ -363,7 +365,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                     app.player_info.playing = false;
                     Command::batch(vec![
                         Command::perform(
-                            mpris_sender(
+                            common::mpris_sender(
                                 app.player_info.mpris_message_sender.clone(),
                                 shared::MprisMessage::SetPaused,
                             )
@@ -371,7 +373,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                             Message::ErrorResponse,
                         ),
                         Command::perform(
-                            sink_sender(
+                            common::sink_sender(
                                 app.player_info.sink_message_sender.clone(),
                                 shared::SinkMessage::PauseButton,
                             )
@@ -451,7 +453,7 @@ fn handle_volume_request(
     };
     Command::perform(
         {
-            sink_sender(
+            common::sink_sender(
                 app.player_info.sink_message_sender.clone(),
                 shared::SinkMessage::SetVolume(app.player_info.current_volume),
             )
@@ -592,51 +594,6 @@ fn handle_nav(app: &mut AppState, nav_message: message::NavMessage) -> Command<m
                 maybe_selected_track: maybe_selected_track,
             });
             Command::none()
-        }
-    }
-}
-
-fn tracker_sender<T: std::fmt::Debug>(
-    tx: shared::Client<T>,
-    message: T,
-) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Tracker".to_string(), tx, message)
-}
-
-fn mpris_sender<T: std::fmt::Debug>(tx: shared::Client<T>, message: T) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Mpris".to_string(), tx, message)
-}
-
-fn sink_sender<T: std::fmt::Debug>(tx: shared::Client<T>, message: T) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Sink".to_string(), tx, message)
-}
-
-struct MessageCommandSender<T> {
-    name: String,
-    tx: shared::Client<T>,
-    message: T,
-}
-
-impl<T: std::fmt::Debug> MessageCommandSender<T> {
-    fn new(name: String, tx: shared::Client<T>, message: T) -> Self {
-        MessageCommandSender {
-            name: name,
-            tx: tx,
-            message: message,
-        }
-    }
-
-    async fn send_message(self) -> Result<(), String> {
-        println!("GUI:\t{}: payload is {:?}", self.name, self.message);
-        match self.tx.send(self.message) {
-            Ok(a) => {
-                println!("GUI:\t{}: resp was {:?}", self.name, a);
-                Ok(())
-            }
-            Err(e) => {
-                println!("GUI:\t{}: err resp was {:?}", self.name, e);
-                Err(format!("{:?}", e))
-            }
         }
     }
 }
