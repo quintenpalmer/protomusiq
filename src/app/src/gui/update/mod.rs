@@ -8,6 +8,7 @@ use super::state::{self, App, AppState};
 
 mod common;
 mod nav;
+mod volume;
 
 pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Message> {
     match message {
@@ -40,7 +41,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 Command::none()
             }
             message::Action::SetVolume(volume_request) => {
-                handle_volume_request(app, volume_request)
+                volume::handle_volume_request(app, volume_request)
             }
             message::Action::CreateNewPlaylist(playlist_name) => {
                 app.library.user_playlists.add_playlist(playlist_name);
@@ -439,25 +440,4 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             }
         }),
     }
-}
-
-fn handle_volume_request(
-    app: &mut AppState,
-    volume_request: message::VolumeRequest,
-) -> Command<Message> {
-    match volume_request {
-        message::VolumeRequest::Up(delta) => app.player_info.current_volume += delta,
-        message::VolumeRequest::Down(delta) => app.player_info.current_volume -= delta,
-        message::VolumeRequest::Set(new_volume) => app.player_info.current_volume = new_volume,
-    };
-    Command::perform(
-        {
-            common::sink_sender(
-                app.player_info.sink_message_sender.clone(),
-                shared::SinkMessage::SetVolume(app.player_info.current_volume),
-            )
-            .send_message()
-        },
-        Message::ErrorResponse,
-    )
 }
