@@ -3,8 +3,8 @@ use iced::Command;
 
 use crate::model;
 
-use super::message::{self, NavMessage};
-use super::state::{self, AppState, Page};
+use super::super::message::{self, NavMessage};
+use super::super::state::{self, AppState, Page};
 
 pub fn handle_nav(
     app: &mut AppState,

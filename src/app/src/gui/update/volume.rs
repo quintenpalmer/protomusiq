@@ -2,8 +2,8 @@ use iced::Command;
 
 use crate::shared;
 
-use super::message::{self, Message};
-use super::state::AppState;
+use super::super::message::{self, Message};
+use super::super::state::AppState;
 
 use super::common;
 
