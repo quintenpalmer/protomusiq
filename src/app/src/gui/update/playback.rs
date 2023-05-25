@@ -58,9 +58,10 @@ pub fn handle_playback_request(
                     }
                     state::CurrentPlayback::PauseBreak => {
                         //app.player_info.rest.playing = false;
-                        message::message_command(Message::PlaybackRequest(
-                            message::PlaybackRequest::Pause,
-                        ))
+                        loaded::update_state(
+                            app,
+                            Message::PlaybackRequest(message::PlaybackRequest::Pause),
+                        )
                     }
                 },
                 None => Command::none(),
@@ -81,7 +82,10 @@ pub fn handle_playback_request(
                 .play_queue
                 .append(&mut new_songs_to_queue);
             if load_next {
-                message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
+                loaded::update_state(
+                    app,
+                    Message::PlaybackRequest(message::PlaybackRequest::Next),
+                )
             } else {
                 Command::none()
             }
@@ -97,7 +101,10 @@ pub fn handle_playback_request(
             app.play_queue_info.play_queue = new_songs_to_queue;
 
             if load_next {
-                message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
+                loaded::update_state(
+                    app,
+                    Message::PlaybackRequest(message::PlaybackRequest::Next),
+                )
             } else {
                 Command::none()
             }
@@ -126,9 +133,10 @@ pub fn handle_playback_request(
                     }
                 });
                 app.play_queue_info.current_playback = Some(track.clone());
-                message::message_command(Message::PlaybackRequest(
-                    message::PlaybackRequest::LoadCurrentSong,
-                ))
+                loaded::update_state(
+                    app,
+                    Message::PlaybackRequest(message::PlaybackRequest::LoadCurrentSong),
+                )
             } else {
                 Command::none()
             }
@@ -147,9 +155,10 @@ pub fn handle_playback_request(
                 app.player_info.current_playback =
                     Some(state::CurrentPlayback::from_entry_zeroed(&track));
                 app.play_queue_info.current_playback = Some(track.clone());
-                message::message_command(Message::PlaybackRequest(
-                    message::PlaybackRequest::LoadCurrentSong,
-                ))
+                loaded::update_state(
+                    app,
+                    Message::PlaybackRequest(message::PlaybackRequest::LoadCurrentSong),
+                )
             } else {
                 match app.player_info.current_playback {
                     Some(ref current_playback) => app

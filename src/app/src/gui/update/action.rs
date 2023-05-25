@@ -6,6 +6,7 @@ use super::super::message::{self, Message};
 use super::super::state::{self, AppState};
 
 use super::common;
+use super::loaded;
 use super::volume;
 
 pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<message::Message> {
@@ -19,9 +20,10 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
         }
         message::Action::CreateNewPlaylist(playlist_name) => {
             app.library.user_playlists.add_playlist(playlist_name);
-            message::message_command(message::user_nav_message(
-                message::NavMessage::PlaylistList("".to_string()),
-            ))
+            loaded::update_state(
+                app,
+                message::user_nav_message(message::NavMessage::PlaylistList("".to_string())),
+            )
         }
         message::Action::MakePlaylistDefault(playlist_id) => {
             app.library
@@ -109,7 +111,8 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             Command::none()
         }
         message::Action::PerformSearch(query) => match app.current_page {
-            state::Page::Search(ref _search_state) => message::message_command(
+            state::Page::Search(ref _search_state) => loaded::update_state(
+                app,
                 message::user_nav_message(message::NavMessage::SearchPage(query, true)),
             ),
             _ => Command::none(),

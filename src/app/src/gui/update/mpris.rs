@@ -5,11 +5,13 @@ use crate::shared;
 use super::super::message::{self, Message};
 use super::super::state::AppState;
 
+use super::loaded;
+
 pub fn handle_mpris_callback(
     app: &mut AppState,
     callback: shared::MprisCallbackMessage,
 ) -> Command<message::Message> {
-    message::message_command(match callback {
+    let followup_message = match callback {
         shared::MprisCallbackMessage::PlayPause => {
             if app.player_info.playing {
                 Message::PlaybackRequest(message::PlaybackRequest::Pause)
@@ -29,5 +31,7 @@ pub fn handle_mpris_callback(
         shared::MprisCallbackMessage::Next => {
             Message::PlaybackRequest(message::PlaybackRequest::Next)
         }
-    })
+    };
+
+    loaded::update_state(app, followup_message)
 }

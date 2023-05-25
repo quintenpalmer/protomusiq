@@ -5,14 +5,17 @@ use crate::shared;
 use super::super::message::{self, Message};
 use super::super::state::{self, AppState};
 
+use super::loaded;
+
 pub fn handle_sink_callback(
     app: &mut AppState,
     callback: shared::SinkCallbackMessage,
 ) -> Command<message::Message> {
     match callback {
-        shared::SinkCallbackMessage::SongEnded => {
-            message::message_command(Message::PlaybackRequest(message::PlaybackRequest::Next))
-        }
+        shared::SinkCallbackMessage::SongEnded => loaded::update_state(
+            app,
+            Message::PlaybackRequest(message::PlaybackRequest::Next),
+        ),
         shared::SinkCallbackMessage::SecondElapsed => {
             match app.player_info.current_playback {
                 Some(ref mut outer_current_playback) => match outer_current_playback {
