@@ -1,13 +1,12 @@
 use iced::Command;
 
-use crate::shared;
-
 use super::init;
 use super::message::{self, Message};
 use super::state::{self, App, AppState};
 
 mod action;
 mod common;
+mod mpris;
 mod nav;
 mod playback;
 mod sink;
@@ -62,26 +61,6 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             };
             Command::none()
         }
-        Message::MprisCallback(callback) => message::message_command(match callback {
-            shared::MprisCallbackMessage::PlayPause => {
-                if app.player_info.playing {
-                    Message::PlaybackRequest(message::PlaybackRequest::Pause)
-                } else {
-                    Message::PlaybackRequest(message::PlaybackRequest::Play)
-                }
-            }
-            shared::MprisCallbackMessage::Play => {
-                Message::PlaybackRequest(message::PlaybackRequest::Play)
-            }
-            shared::MprisCallbackMessage::Pause => {
-                Message::PlaybackRequest(message::PlaybackRequest::Pause)
-            }
-            shared::MprisCallbackMessage::Prev => {
-                Message::PlaybackRequest(message::PlaybackRequest::Prev)
-            }
-            shared::MprisCallbackMessage::Next => {
-                Message::PlaybackRequest(message::PlaybackRequest::Next)
-            }
-        }),
+        Message::MprisCallback(callback) => mpris::handle_mpris_callback(app, callback),
     }
 }
