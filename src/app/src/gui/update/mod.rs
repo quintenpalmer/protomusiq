@@ -2,28 +2,18 @@ use iced::Command;
 
 use super::init;
 use super::message::{self, Message};
-use super::state::{self, App, AppState};
+use super::state::{self, AppState};
 
 mod action;
 mod common;
+mod loading;
 mod mpris;
 mod nav;
 mod playback;
 mod sink;
 mod volume;
 
-pub fn update_from_loading_state(app: &mut App, message: Message) -> Command<Message> {
-    match message {
-        Message::Action(message::Action::LoadEverything) => {
-            *app = init::initialize_everything();
-            Command::none()
-        }
-        _ => {
-            println!("cannot process {:?} before we are loaded", message);
-            Command::none()
-        }
-    }
-}
+pub use loading::update_from_loading_state;
 
 pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     println!(
