@@ -5,6 +5,7 @@ mod loading;
 mod mpris;
 mod nav;
 mod playback;
+mod setup;
 mod sink;
 mod volume;
 

@@ -7,6 +7,7 @@ use super::action;
 use super::mpris;
 use super::nav;
 use super::playback;
+use super::setup;
 use super::sink;
 
 pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
@@ -23,6 +24,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     match message {
         Message::Action(action) => action::handle_action(app, action),
         Message::PlaybackRequest(internal) => playback::handle_playback_request(app, internal),
+        Message::Setup(setup) => setup::handle_setup(app, setup),
         Message::SinkCallback(callback) => sink::handle_sink_callback(app, callback),
         Message::MprisCallback(callback) => mpris::handle_mpris_callback(app, callback),
         Message::Nav(nav_message) => {
