@@ -396,10 +396,14 @@ fn prompt_for_track(
     }
 
     let mut tracks = Vec::new();
+    let mut exact = Vec::new();
     for artist in raw_library.artists.values() {
         for album in artist.albums.values() {
             for disc in album.discs.values() {
                 for track in disc.tracks.values() {
+                    if track.title.to_lowercase() == input.to_lowercase() {
+                        exact.push(track.clone());
+                    }
                     if track.title.to_lowercase().contains(&input.to_lowercase()) {
                         tracks.push(track.clone());
                     }
@@ -409,6 +413,10 @@ fn prompt_for_track(
     }
 
     if tracks.len() > 9 {
+        if exact.len() > 0 {
+            println!("found a lot, here are the exact matches");
+            return select_track(exact);
+        }
         println!("try a more narrow search query");
         return prompt_for_track(&raw_library);
     }
