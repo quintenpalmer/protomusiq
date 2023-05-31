@@ -473,13 +473,21 @@ fn prompt_for_playlist(
     }
 
     let mut playlists = Vec::new();
+    let mut exact = Vec::new();
     for p in playlist_data.entries_as_vec().into_iter() {
+        if p.name.to_lowercase() == input.to_lowercase() {
+            exact.push(p.clone());
+        }
         if p.name.to_lowercase().contains(&input.to_lowercase()) {
             playlists.push(p);
         }
     }
 
     if playlists.len() > 9 {
+        if exact.len() > 0 {
+            println!("found a lot, here are the exact matches");
+            return select_playlist(&raw_library, exact);
+        }
         println!("try a more narrow search query");
         return prompt_for_playlist(&raw_library, &playlist_data);
     }
