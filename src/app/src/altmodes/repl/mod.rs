@@ -214,8 +214,12 @@ fn prompt_for_only_albums(
     }
 
     let mut albums = Vec::new();
+    let mut exact = Vec::new();
     for artist in raw_library.artists.values() {
         for album in artist.albums.values() {
+            if album.album_info.album_name.to_lowercase() == input.to_lowercase() {
+                exact.push((artist.artist_info.clone(), album.clone()));
+            }
             if album
                 .album_info
                 .album_name
@@ -228,6 +232,10 @@ fn prompt_for_only_albums(
     }
 
     if albums.len() > 9 {
+        if exact.len() > 0 {
+            println!("found a lot, here are the exact matches");
+            return Ok(exact);
+        }
         println!("try a more narrow search query");
         return prompt_for_only_albums(&raw_library);
     }
