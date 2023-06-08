@@ -24,11 +24,7 @@ pub enum Message {
     ErrorResponse(Result<(), String>),
     SinkCallback(shared::SinkCallbackMessage),
     MprisCallback(shared::MprisCallbackMessage),
-    Setup(SubscriptionSetup),
 }
-
-#[derive(Debug, Clone)]
-pub enum SubscriptionSetup {}
 
 #[derive(Debug, Clone)]
 pub enum Action {
