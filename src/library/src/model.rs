@@ -61,6 +61,12 @@ pub struct FullTrackMetadata {
     pub ext: String,
 }
 
+impl FullTrackMetadata {
+    pub fn to_unique_id(&self) -> TrackUniqueIdentifier {
+        TrackUniqueIdentifier::from_track(&self)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct TrackPathInfo {
     pub path: path::PathBuf,
