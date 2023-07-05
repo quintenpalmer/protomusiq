@@ -429,14 +429,17 @@ fn controls_with_maybe_track_info<'a>(
                 ))
                 .push(
                     Column::new()
-                        .push(
-                            dark_text_like_button(bright(h2(current_playback
-                                .track
-                                .metadata
-                                .title
-                                .clone())))
-                            .on_press(components::track_link(&current_playback.track.metadata)),
-                        )
+                        .push({
+                            let row = Row::new().push(
+                                dark_text_like_button(bright(h2(current_playback
+                                    .track
+                                    .metadata
+                                    .title
+                                    .clone())))
+                                .on_press(components::track_link(&current_playback.track.metadata)),
+                            );
+                            row
+                        })
                         .push(
                             Row::new()
                                 .push(
