@@ -430,7 +430,7 @@ fn controls_with_maybe_track_info<'a>(
                 .push(
                     Column::new()
                         .push({
-                            let row = Row::new().push(
+                            let mut row = Row::new().push(
                                 dark_text_like_button(bright(h2(current_playback
                                     .track
                                     .metadata
@@ -438,6 +438,12 @@ fn controls_with_maybe_track_info<'a>(
                                     .clone())))
                                 .on_press(components::track_link(&current_playback.track.metadata)),
                             );
+                            match current_playback.track.metadata.get_maybe_track_artist() {
+                                Some(track_artist) => {
+                                    row = row.push(h2(format!(" ({})", track_artist)))
+                                }
+                                None => (),
+                            }
                             row
                         })
                         .push(
