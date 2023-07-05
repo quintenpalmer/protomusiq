@@ -286,13 +286,7 @@ pub fn artist_album_view_state<'a>(
                             for track in disc.tracks.values() {
                                 stripe_marker = !stripe_marker;
 
-                                let track_maybe_with_track_artist = if
-                                        track.metadata.album_artist == track.metadata.track_artist
-                                    {
-                                        track.metadata.title.clone()
-                                    } else {
-                                        format!("{} ({})", track.metadata.title, track.metadata.track_artist)
-                                    };
+                                let track_maybe_with_track_artist = track.metadata.get_track_text_with_maybe_artist();
 
                                 column = column.push(
                                     Container::new(
