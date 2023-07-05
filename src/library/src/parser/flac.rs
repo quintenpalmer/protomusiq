@@ -6,7 +6,7 @@ use std::time::SystemTime;
 
 use claxon;
 
-use super::generic::MetadataParser;
+use super::generic::{trimmer, MetadataParser};
 
 pub struct FlacMetadataParser {
     tag_map: BTreeMap<String, String>,
@@ -54,15 +54,17 @@ impl FlacMetadataParser {
 
 impl MetadataParser for FlacMetadataParser {
     fn album(&self) -> Option<String> {
-        self.tag_map.get("album").map(|x| x.to_string())
+        self.tag_map.get("album").map(|x| trimmer(x.to_string()))
     }
 
     fn album_artist(&self) -> Option<String> {
-        self.tag_map.get("albumartist").map(|x| x.to_string())
+        self.tag_map
+            .get("albumartist")
+            .map(|x| trimmer(x.to_string()))
     }
 
     fn artist(&self) -> String {
-        self.tag_map.get("artist").unwrap().to_string()
+        trimmer(self.tag_map.get("artist").unwrap().to_string())
     }
 
     fn disc(&self) -> Option<u64> {
@@ -87,11 +89,11 @@ impl MetadataParser for FlacMetadataParser {
     }
 
     fn title(&self) -> String {
-        self.tag_map.get("title").unwrap().to_string()
+        trimmer(self.tag_map.get("title").unwrap().to_string())
     }
 
     fn genre(&self) -> Option<String> {
-        self.tag_map.get("genre").map(|x| x.to_string())
+        self.tag_map.get("genre").map(|x| trimmer(x.to_string()))
     }
 
     fn date(&self) -> Option<String> {
@@ -99,7 +101,7 @@ impl MetadataParser for FlacMetadataParser {
             Some(v) => Some(v),
             None => self.tag_map.get("year"),
         }
-        .map(|x| x.to_string())
+        .map(|x| trimmer(x.to_string()))
     }
 
     fn duration(&self) -> time::Duration {

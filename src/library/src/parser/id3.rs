@@ -5,7 +5,7 @@ use std::time;
 use id3::{self, TagLike};
 use mp3_duration;
 
-use super::generic::MetadataParser;
+use super::generic::{trimmer, MetadataParser};
 
 pub struct ID3MetadataParser {
     tag: id3::Tag,
@@ -49,15 +49,15 @@ impl ID3MetadataParser {
 
 impl MetadataParser for ID3MetadataParser {
     fn album(&self) -> Option<String> {
-        self.tag.album().map(|x| x.to_string())
+        self.tag.album().map(|x| trimmer(x.to_string()))
     }
 
     fn album_artist(&self) -> Option<String> {
-        self.tag.album_artist().map(|x| x.to_string())
+        self.tag.album_artist().map(|x| trimmer(x.to_string()))
     }
 
     fn artist(&self) -> String {
-        self.tag.artist().unwrap().to_string()
+        trimmer(self.tag.artist().unwrap().to_string())
     }
 
     fn disc(&self) -> Option<u64> {
@@ -81,11 +81,11 @@ impl MetadataParser for ID3MetadataParser {
     }
 
     fn title(&self) -> String {
-        self.tag.title().unwrap().to_string()
+        trimmer(self.tag.title().unwrap().to_string())
     }
 
     fn genre(&self) -> Option<String> {
-        self.tag.genre().map(|x| x.to_string())
+        self.tag.genre().map(|x| trimmer(x.to_string()))
     }
 
     fn date(&self) -> Option<String> {
@@ -96,9 +96,10 @@ impl MetadataParser for ID3MetadataParser {
                 None => match self.tag.date_recorded() {
                     Some(v) => Some(v.to_string()),
                     None => None,
-                }
+                },
             },
         }
+        .map(|x| trimmer(x))
     }
 
     fn duration(&self) -> time::Duration {
