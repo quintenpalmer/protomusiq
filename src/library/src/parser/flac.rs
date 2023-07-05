@@ -70,22 +70,26 @@ impl MetadataParser for FlacMetadataParser {
     fn disc(&self) -> Option<u64> {
         self.tag_map
             .get("discnumber")
-            .map(|x| x.parse::<u64>())
-            .map(|x| x.unwrap())
+            .map(|x| get_pair(x))
+            .and_then(|x| get_first(x))
     }
 
     fn disc_total(&self) -> Option<u64> {
-        self.tag_map
-            .get("disctotal")
-            .map(|x| x.parse::<u64>())
-            .map(|x| x.unwrap())
+        match self.tag_map.get("disctotal") {
+            Some(x) => Some(x.parse::<u64>()).map(|x| x.unwrap()),
+            None => self
+                .tag_map
+                .get("discnumber")
+                .map(|x| get_pair(x))
+                .and_then(|x| get_second(x)),
+        }
     }
 
     fn track(&self) -> Option<u64> {
         self.tag_map
             .get("tracknumber")
-            .map(|x| x.parse::<u64>())
-            .map(|x| x.unwrap())
+            .map(|x| get_pair(x))
+            .and_then(|x| get_first(x))
     }
 
     fn title(&self) -> String {
