@@ -125,3 +125,24 @@ impl MetadataParser for FlacMetadataParser {
         "flac".to_string()
     }
 }
+
+fn get_pair(full_value: &str) -> Option<(u64, Option<u64>)> {
+    let mut split = full_value.splitn(2, &['\0', '/'][..]);
+    let a = split.next()?.parse().ok()?;
+    let b = split.next().and_then(|s| s.parse().ok());
+    Some((a, b))
+}
+
+fn get_first<T>(maybe_found: Option<(T, Option<T>)>) -> Option<T> {
+    match maybe_found {
+        Some((first, _second)) => Some(first),
+        None => None,
+    }
+}
+
+fn get_second<T>(maybe_found: Option<(T, Option<T>)>) -> Option<T> {
+    match maybe_found {
+        Some((_first, second)) => second,
+        None => None,
+    }
+}
