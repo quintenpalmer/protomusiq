@@ -512,7 +512,7 @@ impl TrackSorts {
                 common::ListAndReversed::new(
                     unpaged_tracks
                         .iter()
-                        .map(|a| musiqlibrary::TrackUniqueIdentifier::from_track(&a.metadata))
+                        .map(|a| a.metadata.to_unique_id())
                         .collect(),
                 )
             },
