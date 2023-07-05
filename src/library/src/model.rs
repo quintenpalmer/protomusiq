@@ -66,13 +66,12 @@ impl FullTrackMetadata {
         TrackUniqueIdentifier::from_track(&self)
     }
 
-    pub fn get_track_text_with_maybe_artist(&self) -> String {
-        let track_maybe_with_track_artist = if self.album_artist == self.track_artist {
-            self.title.clone()
+    pub fn get_maybe_track_artist(&self) -> Option<String> {
+        if self.album_artist == self.track_artist {
+            None
         } else {
-            format!("{} ({})", self.title, self.track_artist)
-        };
-        track_maybe_with_track_artist
+            Some(self.track_artist.clone())
+        }
     }
 }
 

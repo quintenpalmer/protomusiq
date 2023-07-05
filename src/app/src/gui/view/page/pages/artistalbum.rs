@@ -286,7 +286,7 @@ pub fn artist_album_view_state<'a>(
                             for track in disc.tracks.values() {
                                 stripe_marker = !stripe_marker;
 
-                                let track_maybe_with_track_artist = track.metadata.get_track_text_with_maybe_artist();
+                                let maybe_track_artist = track.metadata.get_maybe_track_artist();
 
                                 column = column.push(
                                     Container::new(
@@ -313,8 +313,11 @@ pub fn artist_album_view_state<'a>(
                                                     .width(Length::Fixed(40.0)),
                                             )
                                             .push(
-                                                bright_paragraph(track_maybe_with_track_artist)
+                                                bright_paragraph(track.metadata.title.clone())
                                                     .width(Length::Fill),
+                                            )
+                                            .push(
+                                                paragraph(maybe_track_artist.unwrap_or("".to_string()))
                                             )
                                             .push(
                                                 bright_paragraph(track.augmented.play_count.to_string())
