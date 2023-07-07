@@ -398,7 +398,9 @@ impl AlbumTrackSorts {
             by_name: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
-                unpaged_tracks.sort_unstable_by(|a, b| {
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| {
                     a.metadata
                         .title
                         .to_lowercase()
@@ -412,8 +414,9 @@ impl AlbumTrackSorts {
             by_album: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
-                unpaged_tracks
-                    .sort_unstable_by(|a, b| a.metadata.date_number.cmp(&b.metadata.date_number));
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.metadata.date_number.cmp(&b.metadata.date_number));
 
                 common::ListAndReversed::new(
                     unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
@@ -422,8 +425,9 @@ impl AlbumTrackSorts {
             by_duration: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
-                unpaged_tracks
-                    .sort_unstable_by(|a, b| a.metadata.duration.cmp(&b.metadata.duration));
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.metadata.duration.cmp(&b.metadata.duration));
 
                 common::ListAndReversed::new(
                     unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
@@ -432,8 +436,9 @@ impl AlbumTrackSorts {
             by_total_play_count: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
-                unpaged_tracks
-                    .sort_unstable_by(|a, b| a.augmented.play_count.cmp(&b.augmented.play_count));
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.augmented.play_count.cmp(&b.augmented.play_count));
 
                 common::ListAndReversed::new(
                     unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
@@ -442,7 +447,9 @@ impl AlbumTrackSorts {
             by_total_played_duration: {
                 let mut unpaged_tracks = artist.get_all_tracks();
 
-                unpaged_tracks.sort_unstable_by(|a, b| a.played_seconds().cmp(&b.played_seconds()));
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.played_seconds().cmp(&b.played_seconds()));
 
                 common::ListAndReversed::new(
                     unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
