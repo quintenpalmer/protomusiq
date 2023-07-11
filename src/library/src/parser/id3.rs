@@ -65,7 +65,30 @@ impl MetadataParser for ID3MetadataParser {
     }
 
     fn disc_total(&self) -> Option<u64> {
-        self.tag.total_discs().map(|x| x as u64)
+        self.tag.total_discs().map(|x| x as u64).or_else(|| {
+            let mut found = None;
+            for frame in self.tag.frames() {
+                if frame.id() == "TXXX" {
+                    match frame.content().extended_text() {
+                        Some(extended_text) => {
+                            if extended_text.description == "DISCTOTAL" {
+                                match extended_text
+                                    .value
+                                    .trim()
+                                    .trim_matches(char::from(0))
+                                    .parse::<u64>()
+                                {
+                                    Ok(disctotal) => found = Some(disctotal),
+                                    Err(_e) => (),
+                                }
+                            }
+                        }
+                        None => (),
+                    }
+                }
+            }
+            found
+        })
     }
 
     fn track(&self) -> Option<u64> {
