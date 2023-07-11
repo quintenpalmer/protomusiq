@@ -416,7 +416,7 @@ impl AlbumTrackSorts {
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
-                unpaged_tracks.sort_by(|a, b| a.metadata.date_number.cmp(&b.metadata.date_number));
+                unpaged_tracks.sort_by(|a, b| a.metadata.album.cmp(&b.metadata.album));
 
                 common::ListAndReversed::new(
                     unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
