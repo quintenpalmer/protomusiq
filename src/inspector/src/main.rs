@@ -221,7 +221,17 @@ impl AppCmd for TreeViewer {
                     album.album_info.album_id.hashed()
                 );
                 for disc in album.discs.values() {
-                    println!("\t\t\tDisc: '{}'", disc.disc_no);
+                    println!(
+                        "\t\t\tDisc: '{}' (of '{}')",
+                        disc.disc_no,
+                        disc.tracks
+                            .values()
+                            .next()
+                            .unwrap()
+                            .disc_total
+                            .map(|x| x.to_string())
+                            .unwrap_or("<none seen>".to_string())
+                    );
                     for track in disc.tracks.values() {
                         println!("\t\t\t\t'{}'\t: '{}'", track.track, track.title);
                     }
