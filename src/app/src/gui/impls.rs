@@ -55,7 +55,10 @@ impl Application for state::App {
     }
 
     fn scale_factor(&self) -> f64 {
-        1.0
+        match self {
+            state::App::Loaded(loaded) => loaded.config.rest.scale_factor,
+            state::App::Loading => 1.0,
+        }
     }
 
     // TODO replace with `iced_native::window::Action`
