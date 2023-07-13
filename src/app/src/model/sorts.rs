@@ -486,6 +486,111 @@ impl AlbumTrackSorts {
     }
 }
 
+pub struct AlbumFeaturedTrackSorts {
+    pub by_name: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_album: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_duration: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_total_play_count: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub by_total_played_duration: common::ListAndReversed<augmented::AugmentedTrack>,
+    pub random: common::ListAndReversed<augmented::AugmentedTrack>,
+}
+
+impl AlbumFeaturedTrackSorts {
+    pub fn new(featured_artist_tracks: Vec<augmented::AugmentedTrack>) -> Self {
+        AlbumFeaturedTrackSorts {
+            by_name: {
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| {
+                    a.metadata
+                        .title
+                        .to_lowercase()
+                        .cmp(&b.metadata.title.to_lowercase())
+                });
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+            by_album: {
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.metadata.album.cmp(&b.metadata.album));
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+            by_duration: {
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.metadata.duration.cmp(&b.metadata.duration));
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+            by_total_play_count: {
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.augmented.play_count.cmp(&b.augmented.play_count));
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+            by_total_played_duration: {
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
+
+                unpaged_tracks.sort_by(|a, b| a.played_seconds().cmp(&b.played_seconds()));
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+            random: {
+                let mut rng = rand::thread_rng();
+
+                let mut unpaged_tracks = featured_artist_tracks.clone();
+
+                unpaged_tracks.shuffle(&mut rng);
+
+                common::ListAndReversed::new(
+                    unpaged_tracks.into_iter().map(|a| a.clone()).collect(),
+                )
+            },
+        }
+    }
+
+    pub fn from_sort_key(
+        &self,
+        sort_key: &common::ArtistFeaturedTrackSortKey,
+        sort_order: &common::SortOrder,
+    ) -> &Vec<augmented::AugmentedTrack> {
+        match sort_key {
+            common::ArtistFeaturedTrackSortKey::ByName => &self.by_name,
+            common::ArtistFeaturedTrackSortKey::ByParent => &self.by_album,
+            common::ArtistFeaturedTrackSortKey::ByDuration => &self.by_duration,
+            common::ArtistFeaturedTrackSortKey::ByTotalPlayCount => &self.by_total_play_count,
+            common::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration => {
+                &self.by_total_played_duration
+            }
+            common::ArtistFeaturedTrackSortKey::Random => &self.random,
+        }
+        .sort_ordered(&sort_order)
+    }
+}
+
 pub struct TrackSorts {
     pub by_name: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
     pub by_play_count: common::ListAndReversed<musiqlibrary::TrackUniqueIdentifier>,
