@@ -9,6 +9,8 @@ use super::{augmented, common, sorts};
 pub struct LibraryState {
     pub raw_library: augmented::AugmentedLibrary,
 
+    pub extra_library: ExtraLibraryKeys,
+
     pub user_playlists: playlists::PlaylistData,
 
     pub artist_sorts: sorts::ArtistSorts,
@@ -227,6 +229,31 @@ impl LibraryState {
             albums: artist_albums,
             tracks: tracks,
             track_artists: track_artists,
+        }
+    }
+}
+
+pub struct ExtraLibraryKeys {
+    pub featured_artists: BTreeMap<musiqlibrary::ID, Vec<augmented::AugmentedTrack>>,
+}
+
+impl ExtraLibraryKeys {
+    pub fn from_library(library: &augmented::AugmentedLibrary) -> Self {
+        let mut featured: BTreeMap<musiqlibrary::ID, Vec<augmented::AugmentedTrack>> =
+            BTreeMap::new();
+
+        for track in library.get_all_tracks().iter() {
+            match track.metadata.get_maybe_track_artist() {
+                Some(track_artist) => featured
+                    .entry(musiqlibrary::ID::new(&track_artist))
+                    .or_insert(Vec::new())
+                    .push(track.clone().clone()),
+                None => (),
+            }
+        }
+
+        ExtraLibraryKeys {
+            featured_artists: featured,
         }
     }
 }

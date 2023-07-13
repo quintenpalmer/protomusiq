@@ -115,6 +115,8 @@ pub fn initialize_everything() -> state::App {
         model::augmented_from_raw(loaded_library, read_only_tracker, historical_reporter);
     logger.print_elapsed("augmenting raw library");
 
+    let extra_library = model::ExtraLibraryKeys::from_library(&augmented_library);
+
     let artist_sorts = model::ArtistSorts::new(&augmented_library);
     logger.print_elapsed("sorting artists");
 
@@ -168,6 +170,7 @@ pub fn initialize_everything() -> state::App {
         },
         library: model::LibraryState {
             raw_library: augmented_library,
+            extra_library: extra_library,
 
             user_playlists: playlists,
 
