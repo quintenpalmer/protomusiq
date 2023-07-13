@@ -91,6 +91,13 @@ impl LibraryState {
             .unwrap()
     }
 
+    pub fn get_featured_tracks_for_artist(
+        &self,
+        artist_id: &musiqlibrary::ID,
+    ) -> Vec<augmented::AugmentedTrack> {
+        self.extra_library.get_featured_tracks_for_artist(artist_id)
+    }
+
     pub fn get_track(
         &self,
         track_identifier: &musiqlibrary::TrackUniqueIdentifier,
@@ -254,6 +261,16 @@ impl ExtraLibraryKeys {
 
         ExtraLibraryKeys {
             featured_artists: featured,
+        }
+    }
+
+    pub fn get_featured_tracks_for_artist(
+        &self,
+        artist_id: &musiqlibrary::ID,
+    ) -> Vec<augmented::AugmentedTrack> {
+        match self.featured_artists.get(artist_id) {
+            Some(v) => v.clone(),
+            None => Vec::new(),
         }
     }
 }
