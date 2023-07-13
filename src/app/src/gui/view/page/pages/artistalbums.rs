@@ -126,6 +126,13 @@ pub fn artist_album_list<'a>(
                             model::ArtistTrackSortKey::ByTotalPlayCount,
                             model::SortOrder::Reversed,
                         ),
+                    )))
+                    .push(dark_button(h2("Featured")).on_press(user_nav_message(
+                        NavMessage::ArtistFeaturedTrackView(
+                            artist_id.clone(),
+                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                            model::SortOrder::Reversed,
+                        ),
                     )));
 
                 Container::new(
