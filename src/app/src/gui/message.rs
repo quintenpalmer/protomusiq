@@ -88,6 +88,11 @@ pub enum NavMessage {
         model::ArtistTrackSortKey,
         model::SortOrder,
     ),
+    ArtistFeaturedTrackView(
+        musiqlibrary::ID,
+        model::ArtistFeaturedTrackSortKey,
+        model::SortOrder,
+    ),
     ArtistAlbumView(
         musiqlibrary::ID,
         musiqlibrary::ID,

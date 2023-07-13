@@ -20,6 +20,7 @@ pub enum Page {
     ArtistList(ArtistListState),
     ArtistView(ArtistViewState),
     ArtistTrackView(ArtistTrackViewState),
+    ArtistFeaturedTrackView(ArtistFeaturedTrackViewState),
     ArtistAlbumView(ArtistAlbumViewState),
 }
 
@@ -37,6 +38,7 @@ impl Page {
             Page::ArtistList(_) => "ArtistList",
             Page::ArtistView(_) => "ArtistView",
             Page::ArtistTrackView(_) => "ArtistTrackViewState",
+            Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
         }
         .to_string()
@@ -101,6 +103,14 @@ pub struct ArtistTrackViewState {
     pub artist_id: musiqlibrary::ID,
 
     pub sort_key: model::ArtistTrackSortKey,
+    pub sort_order: model::SortOrder,
+}
+
+#[derive(Debug)]
+pub struct ArtistFeaturedTrackViewState {
+    pub artist_id: musiqlibrary::ID,
+
+    pub sort_key: model::ArtistFeaturedTrackSortKey,
     pub sort_order: model::SortOrder,
 }
 

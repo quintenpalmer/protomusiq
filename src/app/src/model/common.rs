@@ -44,6 +44,16 @@ pub enum ArtistTrackSortKey {
 }
 
 #[derive(Debug, Clone)]
+pub enum ArtistFeaturedTrackSortKey {
+    ByName,
+    ByParent,
+    ByDuration,
+    ByTotalPlayCount,
+    ByTotalPlayedDuration,
+    Random,
+}
+
+#[derive(Debug, Clone)]
 pub enum ArtistSortKey {
     ByName,
     ByPlayCount,

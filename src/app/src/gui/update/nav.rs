@@ -132,6 +132,15 @@ pub fn handle_nav(
             });
             Command::none()
         }
+        NavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
+            app.current_page = Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+                artist_id: artist_id.clone(),
+
+                sort_key: sort_key,
+                sort_order: sort_order,
+            });
+            Command::none()
+        }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                 artist_id: artist_id.clone(),

@@ -2,6 +2,7 @@ pub mod albums;
 pub mod artist;
 pub mod artistalbum;
 pub mod artistalbums;
+pub mod artistfeatured;
 pub mod artisttracks;
 pub mod home;
 pub mod playlist;
