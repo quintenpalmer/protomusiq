@@ -9,3 +9,5 @@ Name=Musiqapp
 Exec=%USERNAME%/.bin/musiqapp
 
 Terminal=false
+
+Icon=%USERNAME%/.local/share/icons/hicolor/48x48/apps/musiqapp.png
