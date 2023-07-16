@@ -7,11 +7,10 @@ cargo check
 cargo doc
 cargo build --release
 
-cp ../../target/release/musiqapp ~/.bin/
-cp ../../target/release/musiqapp ~/storage/projects/buildexecs/musiqapp/
-cp assets/Musiqapp.desktop       ~/storage/projects/buildexecs/musiqapp/
+cp ../../target/release/musiqapp assets/
 
-sed -e "s|%USERNAME%|$HOME|g" assets/Musiqapp.desktop > ~/.local/share/applications/Musiqapp.desktop
-update-desktop-database ~/.local/share/applications/
+sh assets/install.sh
+
+cp -r assets/ ~/storage/projects/buildexecs/musiqapp/
 
 #~/.bin/musiqapp
