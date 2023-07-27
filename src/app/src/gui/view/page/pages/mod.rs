@@ -4,6 +4,7 @@ pub mod artistalbum;
 pub mod artistalbums;
 pub mod artistfeatured;
 pub mod artisttracks;
+pub mod config;
 pub mod home;
 pub mod playlist;
 pub mod playlists;

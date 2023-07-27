@@ -2,7 +2,7 @@ use iced::widget::Container;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::Message;
 use crate::state::{self, ActionState, Page, PlayQueueInfo, PlayerInfo};
 
 use crate::datastore::staticassets::embedded;
@@ -21,13 +21,7 @@ pub fn render_page<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match current_page {
         Page::Home(ref state) => pages::home::home_page(&app_images, state),
-        Page::Config(state::ConfigState {}) => (
-            Vec::new(),
-            Container::new(
-                dark_button(bright_paragraph("Reload Library"))
-                    .on_press(user_nav_message(NavMessage::Config)),
-            ),
-        ),
+        Page::Config(state::ConfigState {}) => pages::config::config_page(),
         Page::PlayQueue(state::PlayQueueState {}) => (
             Vec::new(),
             Container::new(bright_paragraph("The Play Queue")),
