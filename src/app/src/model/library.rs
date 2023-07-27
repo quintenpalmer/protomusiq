@@ -254,7 +254,7 @@ impl ExtraLibraryKeys {
                 Some(track_artist) => featured
                     .entry(musiqlibrary::ID::new(&track_artist))
                     .or_insert(Vec::new())
-                    .push(track.clone().clone()),
+                    .push((*track).clone()),
                 None => (),
             }
         }
