@@ -10,9 +10,11 @@ pub struct AppConfigState {
     pub app_data_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
     pub grid_layout_track_multiplier: u32,
+
     pub scale_factor: f64,
 }
 
@@ -30,9 +32,11 @@ pub struct RawAppConfigState {
     pub library_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
     pub grid_layout_track_multiplier: u32,
+
     pub scale_factor: Option<f64>,
 }
 
