@@ -26,6 +26,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         app.current_page.super_simple_debug_string()
     );
     let library = &app.library;
+    let config = &app.config.rest;
     let app_images = &app.app_images;
     let current_page = &app.current_page;
     let action_state = &app.action_state;
@@ -50,6 +51,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let player_controls = render_player_controls(player_info, &library);
 
     render_entire_page(
+        config,
         header,
         rendered_page,
         play_queue_view,
@@ -60,6 +62,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 }
 
 pub fn render_entire_page<'a>(
+    config: &model::AppConfigState,
     header: Container<'a, Message>,
     rendered_page: Container<'a, Message>,
     play_queue_view: Container<'a, Message>,
@@ -77,8 +80,8 @@ pub fn render_entire_page<'a>(
             let row = match play_queue_expanded {
                 true => Row::new()
                     .padding(10)
-                    .push(rendered_page.width(Length::FillPortion(3)))
-                    .push(play_queue_view.width(Length::FillPortion(2))),
+                    .push(rendered_page.width(Length::FillPortion(config.split_ratio_left)))
+                    .push(play_queue_view.width(Length::FillPortion(config.split_ratio_right))),
                 false => Row::new()
                     .padding(10)
                     .push(rendered_page.width(Length::Fill))
