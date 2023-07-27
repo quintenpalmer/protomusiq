@@ -53,6 +53,7 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
                             "jpg" => None,
                             "gif" => None,
                             "pdf" => None,
+                            "webp" => None,
                             unexpected_ext => {
                                 println!(
                                     "no music metadata parsed for extension {}\t(path: {})",
@@ -124,6 +125,7 @@ pub fn find_files<O: AsRef<Path>, P: AsRef<Path>>(
                             "jpg" => None,
                             "gif" => None,
                             "pdf" => None,
+                            "webp" => None,
                             unexpected_ext => {
                                 println!(
                                     "no music metadata parsed for extension {}\t(path: {})",
