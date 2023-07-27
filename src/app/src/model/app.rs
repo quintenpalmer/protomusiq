@@ -11,6 +11,9 @@ pub struct AppConfigState {
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
 
+    pub split_ratio_left: u16,
+    pub split_ratio_right: u16,
+
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
     pub grid_layout_track_multiplier: u32,
@@ -33,6 +36,9 @@ pub struct RawAppConfigState {
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
 
+    pub split_ratio_left: Option<u16>,
+    pub split_ratio_right: Option<u16>,
+
     pub grid_layout_width: u32,
     pub grid_layout_height: u32,
     pub grid_layout_track_multiplier: u32,
@@ -47,6 +53,8 @@ impl RawAppConfigState {
             app_data_path: app_data_path.as_ref().to_path_buf(),
             hostname: self.hostname,
             load_mode: self.load_mode,
+            split_ratio_left: self.split_ratio_left.unwrap_or(3),
+            split_ratio_right: self.split_ratio_right.unwrap_or(2),
             grid_layout_width: self.grid_layout_width,
             grid_layout_height: self.grid_layout_height,
             grid_layout_track_multiplier: self.grid_layout_track_multiplier,
