@@ -85,7 +85,7 @@ pub fn search_page<'a>(
                                             ),
                                     )
                                     .on_press(
-                                        user_nav_message(NavMessage::ArtistView(
+                                        user_nav_message(NavMessage::ArtistAlbumsView(
                                             result.first.artist_id.clone(),
                                         )),
                                     ),

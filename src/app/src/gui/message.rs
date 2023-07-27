@@ -82,7 +82,7 @@ pub enum NavMessage {
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     ArtistList(usize, model::ArtistSortKey, model::SortOrder),
-    ArtistView(musiqlibrary::ID),
+    ArtistAlbumsView(musiqlibrary::ID),
     ArtistTrackView(
         musiqlibrary::ID,
         model::ArtistTrackSortKey,

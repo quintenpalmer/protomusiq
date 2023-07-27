@@ -32,7 +32,7 @@ pub fn artist_album_list<'a>(
                 ),
                 (
                     artist.artist_info.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistView(artist_id.clone())),
+                    user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
                 ),
             ];
             let body = {
@@ -116,10 +116,9 @@ pub fn artist_album_list<'a>(
                 let scrollable = Scrollable::new(album_grid_columns);
 
                 let artist_view_button_row = line_row()
-                    .push(
-                        dark_button(h2("Albums"))
-                            .on_press(user_nav_message(NavMessage::ArtistView(artist_id.clone()))),
-                    )
+                    .push(dark_button(h2("Albums")).on_press(user_nav_message(
+                        NavMessage::ArtistAlbumsView(artist_id.clone()),
+                    )))
                     .push(dark_button(h2("Tracks")).on_press(user_nav_message(
                         NavMessage::ArtistTrackView(
                             artist_id.clone(),

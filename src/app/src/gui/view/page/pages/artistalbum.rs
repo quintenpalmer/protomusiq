@@ -63,7 +63,7 @@ pub fn artist_album_view_state<'a>(
                 ),
                 (
                     artist.artist_info.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistView(artist_id.clone())),
+                    user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
                 ),
                 (
                     common::abr_str(album.album_info.album_name.clone(), consts::NAV_STR_LENGTH),

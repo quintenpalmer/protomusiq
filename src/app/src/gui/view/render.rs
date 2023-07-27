@@ -457,7 +457,7 @@ fn controls_with_maybe_track_info<'a>(
                                         .metadata
                                         .album_artist
                                         .clone()))
-                                    .on_press(user_nav_message(NavMessage::ArtistView(
+                                    .on_press(user_nav_message(NavMessage::ArtistAlbumsView(
                                         current_playback.track.metadata.album_artist_id.clone(),
                                     ))),
                                 )

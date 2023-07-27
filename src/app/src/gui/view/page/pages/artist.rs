@@ -63,7 +63,7 @@ pub fn artist_list<'a>(
                             )),
                         ))
                         .on_press(user_nav_message(
-                            NavMessage::ArtistView(artist.artist_id.clone()),
+                            NavMessage::ArtistAlbumsView(artist.artist_id.clone()),
                         )),
                     );
                 }
