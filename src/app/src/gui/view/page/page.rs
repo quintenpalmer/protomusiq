@@ -42,7 +42,7 @@ pub fn render_page<'a>(
         Page::ArtistList(ref state) => {
             pages::artist::artist_list(&library, &play_queue_info, state)
         }
-        Page::ArtistView(ref state) => {
+        Page::ArtistAlbumsView(ref state) => {
             pages::artistalbums::artist_album_list(&library, &play_queue_info, state)
         }
         Page::ArtistAlbumView(ref state) => pages::artistalbum::artist_album_view_state(

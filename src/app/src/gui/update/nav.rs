@@ -109,7 +109,7 @@ pub fn handle_nav(
             Command::none()
         }
         NavMessage::ArtistAlbumsView(artist_id) => {
-            app.current_page = Page::ArtistView(state::ArtistViewState {
+            app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
                 artist_id: artist_id.clone(),
                 albums: app
                     .library
