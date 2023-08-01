@@ -513,7 +513,7 @@ fn controls_with_maybe_track_info<'a>(
                                     Message::PlaybackRequest(message::PlaybackRequest::Next),
                                 ),
                             )
-                            .push(dark_button(bright_paragraph("|=")).on_press(
+                            .push(dark_button(bright_paragraph("=|")).on_press(
                                 Message::PlaybackRequest(message::PlaybackRequest::InsertPause),
                             )),
                     )
