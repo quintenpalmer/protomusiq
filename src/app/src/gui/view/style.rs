@@ -13,7 +13,7 @@ impl button::StyleSheet for DarkTextLikeButton {
     fn active(&self, _theme: &iced::Theme) -> button::Appearance {
         button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
-            border_radius: 0.0,
+            border_radius: 0.0.into(),
             border_width: 0.0,
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
@@ -30,7 +30,7 @@ impl button::StyleSheet for DarkButton {
     fn active(&self, _theme: &iced::Theme) -> button::Appearance {
         button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
-            border_radius: 1.0,
+            border_radius: [1.0, 1.0, 1.0, 1.0].into(),
             border_width: 1.0,
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
