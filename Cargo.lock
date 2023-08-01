@@ -2129,7 +2129,6 @@ dependencies = [
  "chrono",
  "glib 0.14.8",
  "iced",
- "iced_native",
  "image",
  "mpris-player",
  "musiqlibrary",
