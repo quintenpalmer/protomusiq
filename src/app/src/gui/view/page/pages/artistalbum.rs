@@ -222,7 +222,8 @@ pub fn artist_album_view_state<'a>(
                             if disc_count > 1 {
                                 column = column.push(
                                         Row::new()
-                                            .push(h2(format!("Disc {}", disc.disc_no)).width(Length::Fill))
+                                            .push(h2(format!("Disc {}", disc.disc_no)))
+                                            .push(Space::with_width(Length::Fill))
                                             .push(
                                                 Row::new()
                                                     .push(
