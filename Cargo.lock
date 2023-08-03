@@ -1176,6 +1176,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ad0a93d233ebf96623465aad4046a8d3aa4da22d4f4beba5388838c8a434bbb4"
 
 [[package]]
+name = "gio-sys"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ccf87c30a12c469b6d958950f6a9c09f2be20b7773f7e70d20b867fdf2628c3"
+dependencies = [
+ "glib-sys 0.17.10",
+ "gobject-sys 0.17.10",
+ "libc",
+ "system-deps 6.0.3",
+ "winapi",
+]
+
+[[package]]
 name = "glam"
 version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1221,6 +1234,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "glib"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3fad45ba8d4d2cea612b432717e834f48031cd8853c8aaf43b2c79fec8d144b"
+dependencies = [
+ "bitflags 1.3.2",
+ "futures-channel",
+ "futures-core",
+ "futures-executor",
+ "futures-task",
+ "futures-util",
+ "gio-sys",
+ "glib-macros 0.17.10",
+ "glib-sys 0.17.10",
+ "gobject-sys 0.17.10",
+ "libc",
+ "memchr",
+ "once_cell",
+ "smallvec",
+ "thiserror",
+]
+
+[[package]]
 name = "glib-macros"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1251,6 +1287,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "glib-macros"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eca5c79337338391f1ab8058d6698125034ce8ef31b72a442437fa6c8580de26"
+dependencies = [
+ "anyhow",
+ "heck 0.4.0",
+ "proc-macro-crate 1.2.1",
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "glib-sys"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1265,6 +1316,16 @@ name = "glib-sys"
 version = "0.15.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef4b192f8e65e9cf76cbf4ea71fa8e3be4a0e18ffe3d68b8da6836974cc5bad4"
+dependencies = [
+ "libc",
+ "system-deps 6.0.3",
+]
+
+[[package]]
+name = "glib-sys"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d80aa6ea7bba0baac79222204aa786a6293078c210abe69ef1336911d4bdc4f0"
 dependencies = [
  "libc",
  "system-deps 6.0.3",
@@ -1318,6 +1379,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d57ce44246becd17153bd035ab4d32cfee096a657fc01f2231c9278378d1e0a"
 dependencies = [
  "glib-sys 0.15.10",
+ "libc",
+ "system-deps 6.0.3",
+]
+
+[[package]]
+name = "gobject-sys"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd34c3317740a6358ec04572c1bcfd3ac0b5b6529275fae255b237b314bb8062"
+dependencies = [
+ "glib-sys 0.17.10",
  "libc",
  "system-deps 6.0.3",
 ]
@@ -2195,7 +2267,7 @@ name = "musiqapp"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "glib 0.14.8",
+ "glib 0.17.10",
  "iced",
  "image",
  "mpris-player",
