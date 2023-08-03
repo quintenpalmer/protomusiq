@@ -284,7 +284,7 @@ pub fn artist_album_view_state<'a>(
                                                         }
                                                     ),
                                                 ).push(
-                                                    Space::with_width(Length::Fixed(60.0))
+                                                    Space::with_width(Length::Fixed(75.0))
                                                 ),
                                 );
                             }
