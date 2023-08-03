@@ -21,7 +21,7 @@ rusqlite = { version = "0.29", features = ["bundled", "chrono", "blob"] }
 
 chrono = { version = "0.4", features = ["serde"] }
 
-rodio = "0.16"
+rodio = "0.17"
 mpris-player = "0.6"
 glib = "0.14"
 
