@@ -222,8 +222,6 @@ pub fn artist_album_view_state<'a>(
                             if disc_count > 1 {
                                 column = column.push(
                                         Row::new()
-                                            .push(h2(format!("Disc {}", disc.disc_no)))
-                                            .push(Space::with_width(Length::Fill))
                                             .push(
                                                 Row::new()
                                                     .push(
@@ -238,6 +236,12 @@ pub fn artist_album_view_state<'a>(
                                                             ),
                                                         )),
                                                     )
+                                            )
+                                            .push(Space::with_width(Length::Fixed(5.0)))
+                                            .push(h2(format!("Disc {}", disc.disc_no)))
+                                            .push(Space::with_width(Length::Fill))
+                                            .push(
+                                                Row::new()
                                                     .push(
                                                         dark_button(
                                                             bright_paragraph(">|"),
