@@ -7,4 +7,5 @@ members = [
   "src/inspector/",
   "src/tui/",
   "src/playhistoryimport",
+  "src/ytimporter",
 ]
