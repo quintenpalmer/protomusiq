@@ -401,7 +401,14 @@ pub fn artist_album_view_state<'a>(
                             }
                         }
 
-                        Container::new(Scrollable::new(column))
+                        Container::new(
+                            Container::new(Scrollable::new(column))
+                                .padding(10)
+                                .style(iced::theme::Container::Custom(
+                                    Box::new(style::ContainerDarkInset{})
+                                ))
+                        )
+                        .padding(10)
                     }),
             );
 
