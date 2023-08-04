@@ -297,7 +297,12 @@ pub fn artist_album_view_state<'a>(
                                     Container::new(
                                         line_row()
                                             .spacing(5)
-                                            .push(Space::with_width(5.0))
+                                            .push(if disc_count > 1 {
+                                                Space::with_width(5.0)
+                                                } else {
+                                                    Space::with_width(0.0)
+                                                }
+                                            )
                                             .push(
                                                 dark_button(bright_paragraph(">"))
                                                     .on_press(Message::PlaybackRequest(
