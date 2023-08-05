@@ -19,7 +19,7 @@ pub fn artist_album_list<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::ArtistViewState { artist_id, albums } => {
-            let artist = library.get_artist_map().get(&artist_id).unwrap();
+            let artist = library.get_artist_info(*artist_id);
 
             let breadcrumbs = vec![
                 (
@@ -31,7 +31,7 @@ pub fn artist_album_list<'a>(
                     )),
                 ),
                 (
-                    artist.artist_info.artist_name.clone(),
+                    artist.artist_name.clone(),
                     user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
                 ),
             ];
@@ -51,7 +51,7 @@ pub fn artist_album_list<'a>(
                             album_image(
                                 library.get_album_cover(
                                     model::AlbumSize::Small,
-                                    artist.artist_info.artist_id.clone(),
+                                    artist.artist_id.clone(),
                                     album.album_info.album_id.clone(),
                                 ),
                                 model::AlbumSize::Small,
@@ -70,7 +70,7 @@ pub fn artist_album_list<'a>(
                         ))
                         .on_press(user_nav_message(
                             NavMessage::ArtistAlbumView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 album.album_info.album_id.clone(),
                                 model::AlbumSize::Regular,
                                 None,
@@ -136,7 +136,7 @@ pub fn artist_album_list<'a>(
 
                 Container::new(
                     Column::new()
-                        .push(h1(artist.artist_info.artist_name.clone()))
+                        .push(h1(artist.artist_name.clone()))
                         .push(artist_view_button_row)
                         .push(scrollable),
                 )
