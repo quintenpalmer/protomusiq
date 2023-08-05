@@ -1,5 +1,5 @@
 use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Space};
-use iced::Length;
+use iced::{Element, Length};
 
 use musiqlibrary;
 
@@ -329,10 +329,22 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 maybe_track_artist
-                                                    .map(|track_artist|
-                                                         paragraph(format!("({})", track_artist))
+                                                    .map(|track_artist| {
+                                                             let ret: Element<Message> = dark_text_like_button(paragraph(format!(
+                                                                " ({})",
+                                                                track_artist
+                                                            )))
+                                                            .on_press(
+                                                                user_nav_message(NavMessage::ArtistFeaturedTrackView(
+                                                                    musiqlibrary::ID::new(&track_artist),
+                                                                    model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                                                                    model::SortOrder::Reversed,
+                                                                )),
+                                                            ).into();
+                                                            ret
+                                                        }
                                                     )
-                                                    .unwrap_or(paragraph("".to_string()))
+                                                    .unwrap_or(paragraph("".to_string()).into())
                                             )
                                             .push(
                                                 bright_paragraph(track.augmented.play_count.to_string())
