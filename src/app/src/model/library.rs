@@ -179,12 +179,12 @@ impl LibraryState {
             .unwrap_or(0)
     }
 
-    fn get_artist_first_album(&self, artist_id: &musiqlibrary::ID) -> musiqlibrary::AlbumInfo {
+    fn get_artist_first_album_id(&self, artist_id: &musiqlibrary::ID) -> musiqlibrary::ID {
         let artist = self.raw_library.artists.get(&artist_id).unwrap();
         let mut albums = artist.albums.values().collect::<Vec<_>>().clone();
         albums.sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));
         let album = albums[0].album_info.clone();
-        album
+        album.album_id
     }
 
     pub fn get_artists_first_album_cover(
@@ -192,10 +192,10 @@ impl LibraryState {
         album_size: common::AlbumSize,
         artist_id: musiqlibrary::ID,
     ) -> Vec<u8> {
-        let album_info = self.get_artist_first_album(&artist_id);
+        let album_id = self.get_artist_first_album_id(&artist_id);
 
         self.album_art
-            .get_album_cover(album_size, artist_id, album_info.album_id.clone())
+            .get_album_cover(album_size, artist_id, album_id)
     }
 
     pub fn get_album_cover(
