@@ -24,7 +24,7 @@ pub struct LibraryState {
 
 impl LibraryState {
     pub fn new(
-        augmented_library: augmented::AugmentedLibrary,
+        mut augmented_library: augmented::AugmentedLibrary,
         extra_library: ExtraLibraryKeys,
         playlists: playlists::PlaylistData,
         artist_sorts: sorts::ArtistSorts,
@@ -33,6 +33,24 @@ impl LibraryState {
         grid_info: GridInfo,
         loaded_images: common::AlbumArt,
     ) -> Self {
+        for (extra_library_artist, featured_tracks) in extra_library.featured_artists.iter() {
+            augmented_library
+                .artists
+                .entry(*extra_library_artist)
+                .or_insert(musiqlibrary::KeyedArtistAlbums {
+                    artist_info: musiqlibrary::ArtistInfo {
+                        artist_id: featured_tracks.get(0).unwrap().metadata.track_artist_id,
+                        artist_name: featured_tracks
+                            .get(0)
+                            .unwrap()
+                            .metadata
+                            .track_artist
+                            .clone(),
+                    },
+                    albums: BTreeMap::new(),
+                });
+        }
+
         LibraryState {
             raw_library: augmented_library,
             extra_library: extra_library,
