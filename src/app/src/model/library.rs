@@ -52,12 +52,10 @@ impl LibraryState {
     }
 
     pub fn get_artist_info(&self, artist_id: musiqlibrary::ID) -> musiqlibrary::ArtistInfo {
-        self.raw_library
-            .artists
-            .get(&artist_id)
-            .unwrap()
-            .artist_info
-            .clone()
+        match self.raw_library.artists.get(&artist_id) {
+            Some(raw_library_artist) => raw_library_artist.artist_info.clone(),
+            None => self.extra_library.get_artist_info(&artist_id),
+        }
     }
 
     pub fn get_artist_album_info(
@@ -272,6 +270,12 @@ impl ExtraLibraryKeys {
             Some(v) => v.clone(),
             None => Vec::new(),
         }
+    }
+
+    pub fn get_artist_info(&self, artist_id: &musiqlibrary::ID) -> musiqlibrary::ArtistInfo {
+        let tracks = self.featured_artists.get(artist_id).unwrap();
+        let track = tracks.get(0).unwrap();
+        track.metadata.get_artist_info()
     }
 }
 
