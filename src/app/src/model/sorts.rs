@@ -394,9 +394,10 @@ pub struct AlbumTrackSorts {
 
 impl AlbumTrackSorts {
     pub fn new(artist: &musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack>) -> Self {
+        let all_tracks = artist.get_all_tracks();
         AlbumTrackSorts {
             by_name: {
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
@@ -412,7 +413,7 @@ impl AlbumTrackSorts {
                 )
             },
             by_album: {
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
@@ -423,7 +424,7 @@ impl AlbumTrackSorts {
                 )
             },
             by_duration: {
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
@@ -434,7 +435,7 @@ impl AlbumTrackSorts {
                 )
             },
             by_total_play_count: {
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
@@ -445,7 +446,7 @@ impl AlbumTrackSorts {
                 )
             },
             by_total_played_duration: {
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.sort_unstable_by(|a, b| a.metadata.track.cmp(&b.metadata.track));
 
@@ -458,7 +459,7 @@ impl AlbumTrackSorts {
             random: {
                 let mut rng = rand::thread_rng();
 
-                let mut unpaged_tracks = artist.get_all_tracks();
+                let mut unpaged_tracks = all_tracks.clone();
 
                 unpaged_tracks.shuffle(&mut rng);
 
