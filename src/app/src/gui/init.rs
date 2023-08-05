@@ -168,20 +168,16 @@ pub fn initialize_everything() -> state::App {
             mpris_callback_recv: RefCell::new(Some(mpris_callback)),
             tracker_message_sender: tracker_client,
         },
-        library: model::LibraryState {
-            raw_library: augmented_library,
-            extra_library: extra_library,
-
-            user_playlists: playlists,
-
-            artist_sorts: artist_sorts,
-            album_sorts: album_sorts,
-            track_sorts: track_sorts,
-
-            grid_info: grid_info,
-
-            album_art: loaded_images,
-        },
+        library: model::LibraryState::new(
+            augmented_library,
+            extra_library,
+            playlists,
+            artist_sorts,
+            album_sorts,
+            track_sorts,
+            grid_info,
+            loaded_images,
+        ),
     })
 }
 

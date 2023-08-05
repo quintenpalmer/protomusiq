@@ -23,6 +23,32 @@ pub struct LibraryState {
 }
 
 impl LibraryState {
+    pub fn new(
+        augmented_library: augmented::AugmentedLibrary,
+        extra_library: ExtraLibraryKeys,
+        playlists: playlists::PlaylistData,
+        artist_sorts: sorts::ArtistSorts,
+        album_sorts: sorts::AlbumSorts,
+        track_sorts: sorts::TrackSorts,
+        grid_info: GridInfo,
+        loaded_images: common::AlbumArt,
+    ) -> Self {
+        LibraryState {
+            raw_library: augmented_library,
+            extra_library: extra_library,
+
+            user_playlists: playlists,
+
+            artist_sorts: artist_sorts,
+            album_sorts: album_sorts,
+            track_sorts: track_sorts,
+
+            grid_info: grid_info,
+
+            album_art: loaded_images,
+        }
+    }
+
     pub fn get_artist_map(
         &self,
     ) -> &BTreeMap<musiqlibrary::ID, musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack>>
