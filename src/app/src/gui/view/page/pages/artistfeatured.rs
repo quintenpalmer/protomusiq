@@ -22,7 +22,7 @@ pub fn artist_featured_track_view_state<'a>(
             sort_key,
             sort_order,
         } => {
-            let artist = library.get_artist_map().get(&artist_id).unwrap();
+            let artist = library.get_artist_info(*artist_id);
 
             let featured_tracks = library.get_featured_tracks_for_artist(&artist_id);
 
@@ -36,7 +36,7 @@ pub fn artist_featured_track_view_state<'a>(
                     )),
                 ),
                 (
-                    artist.artist_info.artist_name.clone(),
+                    artist.artist_name.clone(),
                     user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
                 ),
             ];
@@ -87,7 +87,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(bright_paragraph("Album")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::ByParent,
                                 model::SortOrder::Regular,
                             ),
@@ -96,7 +96,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(bright_paragraph("Name")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::ByName,
                                 model::SortOrder::Regular,
                             ),
@@ -105,7 +105,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(bright_paragraph("Play Count")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                 model::SortOrder::Reversed,
                             ),
@@ -114,7 +114,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(bright_paragraph("Duration")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::ByDuration,
                                 model::SortOrder::Reversed,
                             ),
@@ -122,7 +122,7 @@ pub fn artist_featured_track_view_state<'a>(
                     )
                     .push(dark_button(bright_paragraph("Played Duration")).on_press(
                         user_nav_message(NavMessage::ArtistFeaturedTrackView(
-                            artist.artist_info.artist_id.clone(),
+                            artist.artist_id.clone(),
                             model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration,
                             model::SortOrder::Reversed,
                         )),
@@ -130,7 +130,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(bright_paragraph("Random")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_info.artist_id.clone(),
+                                artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::Random,
                                 model::SortOrder::Regular,
                             ),
@@ -142,7 +142,7 @@ pub fn artist_featured_track_view_state<'a>(
                 .push(
                     dark_button(bright_paragraph("^")).on_press(user_nav_message(
                         NavMessage::ArtistFeaturedTrackView(
-                            artist.artist_info.artist_id.clone(),
+                            artist.artist_id.clone(),
                             sort_key.clone(),
                             model::SortOrder::Reversed,
                         ),
@@ -151,7 +151,7 @@ pub fn artist_featured_track_view_state<'a>(
                 .push(
                     dark_button(bright_paragraph("v")).on_press(user_nav_message(
                         NavMessage::ArtistFeaturedTrackView(
-                            artist.artist_info.artist_id.clone(),
+                            artist.artist_id.clone(),
                             sort_key.clone(),
                             model::SortOrder::Regular,
                         ),
@@ -235,7 +235,7 @@ pub fn artist_featured_track_view_state<'a>(
 
             let body = Container::new(
                 Column::new()
-                    .push(h1(artist.artist_info.artist_name.clone()))
+                    .push(h1(artist.artist_name.clone()))
                     .push(artist_view_button_row)
                     .push(sort_bar)
                     .push(sort_order_bar)
