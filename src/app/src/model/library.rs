@@ -184,10 +184,20 @@ impl LibraryState {
         artist_id: &musiqlibrary::ID,
     ) -> (musiqlibrary::ID, musiqlibrary::ID) {
         let artist = self.raw_library.artists.get(&artist_id).unwrap();
-        let mut albums = artist.albums.values().collect::<Vec<_>>().clone();
-        albums.sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));
-        let album = albums[0].album_info.clone();
-        (artist_id.clone(), album.album_id)
+        match artist.albums.values().collect::<Vec<_>>().as_mut_slice() {
+            [] => self
+                .extra_library
+                .get_album_ids(&artist_id)
+                .get(0)
+                .unwrap()
+                .clone(),
+            albums => {
+                albums
+                    .sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));
+                let album = albums[0].album_info.clone();
+                (artist_id.clone(), album.album_id)
+            }
+        }
     }
 
     pub fn get_artists_first_album_cover(
