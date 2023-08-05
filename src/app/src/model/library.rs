@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use musiqlibrary;
 
@@ -330,6 +330,17 @@ impl ExtraLibraryKeys {
         let tracks = self.featured_artists.get(artist_id).unwrap();
         let track = tracks.get(0).unwrap();
         track.metadata.get_artist_info()
+    }
+
+    pub fn get_album_ids(
+        &self,
+        artist_id: &musiqlibrary::ID,
+    ) -> Vec<(musiqlibrary::ID, musiqlibrary::ID)> {
+        let mut album_ids = BTreeSet::new();
+        for track in self.featured_artists.get(artist_id).unwrap() {
+            album_ids.insert((track.metadata.album_artist_id, track.metadata.album_id));
+        }
+        album_ids.into_iter().collect()
     }
 }
 
