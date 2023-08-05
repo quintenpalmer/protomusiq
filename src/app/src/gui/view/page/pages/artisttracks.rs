@@ -58,7 +58,9 @@ pub fn artist_track_view_state<'a>(
                     ),
                 )));
 
-            let track_sorts = model::AlbumTrackSorts::new(&artist);
+            let artist_tracks = library.get_artist_tracks(&artist_id);
+
+            let track_sorts = model::AlbumTrackSorts::new(artist_tracks);
 
             let tracks = track_sorts.from_sort_key(&sort_key, &sort_order);
 

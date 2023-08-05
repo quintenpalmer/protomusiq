@@ -393,8 +393,7 @@ pub struct AlbumTrackSorts {
 }
 
 impl AlbumTrackSorts {
-    pub fn new(artist: &musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack>) -> Self {
-        let all_tracks = artist.get_all_tracks();
+    pub fn new(all_tracks: Vec<&augmented::AugmentedTrack>) -> Self {
         AlbumTrackSorts {
             by_name: {
                 let mut unpaged_tracks = all_tracks.clone();
