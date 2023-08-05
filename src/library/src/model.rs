@@ -73,6 +73,13 @@ impl FullTrackMetadata {
             Some(self.track_artist.clone())
         }
     }
+
+    pub fn get_artist_info(&self) -> ArtistInfo {
+        ArtistInfo {
+            artist_id: self.album_artist_id,
+            artist_name: self.album_artist.clone(),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
