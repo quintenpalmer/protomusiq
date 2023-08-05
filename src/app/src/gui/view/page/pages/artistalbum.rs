@@ -328,7 +328,7 @@ pub fn artist_album_view_state<'a>(
                                                     .width(Length::Fill),
                                             )
                                             .push(
-                                                paragraph(maybe_track_artist.map(|x| format!("({})", x)).unwrap_or("".to_string()))
+                                                maybe_track_artist.map(|x| paragraph(format!("({})", x))).unwrap_or(paragraph("".to_string()))
                                             )
                                             .push(
                                                 bright_paragraph(track.augmented.play_count.to_string())
