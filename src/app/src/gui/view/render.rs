@@ -443,7 +443,19 @@ fn controls_with_maybe_track_info<'a>(
                             );
                             match current_playback.track.metadata.get_maybe_track_artist() {
                                 Some(track_artist) => {
-                                    row = row.push(h2(format!(" ({})", track_artist)))
+                                    row = row.push(
+                                        dark_text_like_button(bright(h2(format!(
+                                            " ({})",
+                                            track_artist
+                                        ))))
+                                        .on_press(
+                                            user_nav_message(NavMessage::ArtistFeaturedTrackView(
+                                                musiqlibrary::ID::new(&track_artist),
+                                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                                                model::SortOrder::Reversed,
+                                            )),
+                                        ),
+                                    )
                                 }
                                 None => (),
                             }
