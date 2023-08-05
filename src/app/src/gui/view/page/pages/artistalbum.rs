@@ -329,7 +329,9 @@ pub fn artist_album_view_state<'a>(
                                             )
                                             .push(
                                                 maybe_track_artist
-                                                    .map(|track_artist| paragraph(format!("({})", track_artist)))
+                                                    .map(|track_artist|
+                                                         paragraph(format!("({})", track_artist))
+                                                    )
                                                     .unwrap_or(paragraph("".to_string()))
                                             )
                                             .push(
