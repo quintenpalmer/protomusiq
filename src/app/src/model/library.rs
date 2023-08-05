@@ -58,6 +58,16 @@ impl LibraryState {
         }
     }
 
+    pub fn get_artist_tracks(
+        &self,
+        artist_id: &musiqlibrary::ID,
+    ) -> Vec<&augmented::AugmentedTrack> {
+        match self.raw_library.artists.get(&artist_id) {
+            Some(raw_library_artist) => raw_library_artist.get_all_tracks(),
+            None => Vec::new(),
+        }
+    }
+
     pub fn get_artist_album_info(
         &self,
         artist_id: musiqlibrary::ID,
