@@ -15,7 +15,7 @@ fn main() {
     println!("Goodbye.");
 }
 
-fn simple_debug_display(node: &html_parser::Node, indent_level: usize) {
+pub fn simple_debug_display(node: &html_parser::Node, indent_level: usize) {
     match node {
         html_parser::Node::Text(t) => println!("{}\"{}\"", "    ".repeat(indent_level), t.trim()),
         html_parser::Node::Element(e) => {
@@ -29,7 +29,7 @@ fn simple_debug_display(node: &html_parser::Node, indent_level: usize) {
     }
 }
 
-fn explore_node(node: &html_parser::Node, indent_level: usize) {
+pub fn explore_node(node: &html_parser::Node, indent_level: usize) {
     println!("{}", node_debug_repr(node));
     match node {
         html_parser::Node::Text(_t) => (),
