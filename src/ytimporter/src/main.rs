@@ -1,5 +1,7 @@
 use std::fs;
 
+use html_parser;
+
 fn main() {
     println!("Hello, world!");
     let html_str = fs::read_to_string("imports/test.html").unwrap();
