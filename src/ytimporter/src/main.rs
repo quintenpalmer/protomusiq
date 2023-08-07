@@ -34,6 +34,7 @@ pub fn simple_debug_display(node: &html_parser::Node, indent_level: usize) {
 
 pub enum Action<'a> {
     ExploreChild(&'a html_parser::Node),
+    TraverseBackUp,
     Done,
 }
 
@@ -41,6 +42,7 @@ impl<'a> Action<'a> {
     fn simple_debug(&'a self) -> String {
         match self {
             Action::ExploreChild(c) => format!("Exploring: {}", node_debug_repr(c)),
+            Action::TraverseBackUp => "Traversing back up...".to_string(),
             Action::Done => "Done!".to_string(),
         }
     }
@@ -52,6 +54,7 @@ pub fn explore_node<'a>(node: &'a html_parser::Node, indent_level: usize) -> Act
         html_parser::Node::Text(_t) => Action::Done,
         html_parser::Node::Element(e) => match prompt_for_child(e, indent_level + 1) {
             Action::ExploreChild(child) => explore_node(child, indent_level + 1),
+            Action::TraverseBackUp => explore_node(node, indent_level),
             Action::Done => Action::Done,
         },
         html_parser::Node::Comment(_c) => Action::Done,
@@ -70,6 +73,10 @@ fn prompt_for_child<'a>(element: &'a html_parser::Element, indent_level: usize) 
 
     io::stdin().read_line(&mut input).unwrap();
     input = input.trim_end().to_string();
+
+    if input == "up" {
+        return Action::TraverseBackUp;
+    }
 
     match input.parse::<usize>() {
         Ok(i) => {
