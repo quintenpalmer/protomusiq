@@ -10,10 +10,7 @@ fn main() {
     let html_dom = html_parser::Dom::parse(html_str.as_str()).unwrap();
     println!("type: {:?}", html_dom.tree_type);
     for child in html_dom.children.iter() {
-        println!(
-            "final action was:\t{}",
-            explore_node(&child, 0).simple_debug()
-        );
+        println!("final action was:\t{}", explore_node(&child).simple_debug());
     }
     println!("Goodbye.");
 }
@@ -48,20 +45,20 @@ impl<'a> Action<'a> {
     }
 }
 
-pub fn explore_node<'a>(node: &'a html_parser::Node, indent_level: usize) -> Action<'a> {
+pub fn explore_node<'a>(node: &'a html_parser::Node) -> Action<'a> {
     println!("{}", node_debug_repr(node));
     match node {
         html_parser::Node::Text(_t) => Action::Done,
-        html_parser::Node::Element(e) => match prompt_for_child(e, indent_level + 1) {
-            Action::ExploreChild(child) => explore_node(child, indent_level + 1),
-            Action::TraverseBackUp => explore_node(node, indent_level),
+        html_parser::Node::Element(e) => match prompt_for_child(e) {
+            Action::ExploreChild(child) => explore_node(child),
+            Action::TraverseBackUp => explore_node(node),
             Action::Done => Action::Done,
         },
         html_parser::Node::Comment(_c) => Action::Done,
     }
 }
 
-fn prompt_for_child<'a>(element: &'a html_parser::Element, indent_level: usize) -> Action<'a> {
+fn prompt_for_child<'a>(element: &'a html_parser::Element) -> Action<'a> {
     let mut children_by_index = Vec::new();
     for (index, child) in element.children.iter().enumerate() {
         children_by_index.push(child);
@@ -84,12 +81,12 @@ fn prompt_for_child<'a>(element: &'a html_parser::Element, indent_level: usize) 
                 Action::ExploreChild(children_by_index.get(i).unwrap())
             } else {
                 println!("index must be within range of elements seen");
-                prompt_for_child(element, indent_level)
+                prompt_for_child(element)
             }
         }
         Err(_) => {
             println!("must input a number for index");
-            prompt_for_child(element, indent_level)
+            prompt_for_child(element)
         }
     }
 }
