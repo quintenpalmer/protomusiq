@@ -50,8 +50,12 @@ pub fn explore_node<'a>(node: &'a html_parser::Node) -> Action<'a> {
     match node {
         html_parser::Node::Text(_t) => Action::Done,
         html_parser::Node::Element(e) => match prompt_for_child(e) {
-            Action::ExploreChild(child) => explore_node(child),
-            Action::TraverseBackUp => explore_node(node),
+            Action::ExploreChild(child) => match explore_node(child) {
+                Action::ExploreChild(inner_child) => explore_node(inner_child),
+                Action::TraverseBackUp => explore_node(node),
+                Action::Done => Action::Done,
+            },
+            Action::TraverseBackUp => Action::TraverseBackUp,
             Action::Done => Action::Done,
         },
         html_parser::Node::Comment(_c) => Action::Done,
