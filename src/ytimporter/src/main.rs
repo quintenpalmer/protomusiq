@@ -10,7 +10,10 @@ fn main() {
     let html_dom = html_parser::Dom::parse(html_str.as_str()).unwrap();
     println!("type: {:?}", html_dom.tree_type);
     for child in html_dom.children.iter() {
-        explore_node(&child, 0)
+        println!(
+            "final action was:\t{}",
+            explore_node(&child, 0).simple_debug()
+        );
     }
     println!("Goodbye.");
 }
@@ -29,18 +32,33 @@ pub fn simple_debug_display(node: &html_parser::Node, indent_level: usize) {
     }
 }
 
-pub fn explore_node(node: &html_parser::Node, indent_level: usize) {
-    println!("{}", node_debug_repr(node));
-    match node {
-        html_parser::Node::Text(_t) => (),
-        html_parser::Node::Element(e) => {
-            prompt_for_child(e, indent_level + 1);
+pub enum Action<'a> {
+    ExploreChild(&'a html_parser::Node),
+    Done,
+}
+
+impl<'a> Action<'a> {
+    fn simple_debug(&'a self) -> String {
+        match self {
+            Action::ExploreChild(c) => format!("Exploring: {}", node_debug_repr(c)),
+            Action::Done => "Done!".to_string(),
         }
-        html_parser::Node::Comment(_c) => (),
     }
 }
 
-fn prompt_for_child(element: &html_parser::Element, indent_level: usize) {
+pub fn explore_node<'a>(node: &'a html_parser::Node, indent_level: usize) -> Action<'a> {
+    println!("{}", node_debug_repr(node));
+    match node {
+        html_parser::Node::Text(_t) => Action::Done,
+        html_parser::Node::Element(e) => match prompt_for_child(e, indent_level + 1) {
+            Action::ExploreChild(child) => explore_node(child, indent_level + 1),
+            Action::Done => Action::Done,
+        },
+        html_parser::Node::Comment(_c) => Action::Done,
+    }
+}
+
+fn prompt_for_child<'a>(element: &'a html_parser::Element, indent_level: usize) -> Action<'a> {
     let mut children_by_index = Vec::new();
     for (index, child) in element.children.iter().enumerate() {
         children_by_index.push(child);
@@ -56,7 +74,7 @@ fn prompt_for_child(element: &html_parser::Element, indent_level: usize) {
     match input.parse::<usize>() {
         Ok(i) => {
             if i < children_by_index.len() {
-                explore_node(children_by_index[i], indent_level + 1)
+                Action::ExploreChild(children_by_index.get(i).unwrap())
             } else {
                 println!("index must be within range of elements seen");
                 prompt_for_child(element, indent_level)
