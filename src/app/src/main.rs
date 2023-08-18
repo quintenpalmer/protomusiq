@@ -18,6 +18,7 @@ pub enum RunMode {
     ReportToTracker,
     GenerateReport,
     Prototype,
+    ReconcileHistory,
 }
 
 #[derive(Debug)]
@@ -27,6 +28,7 @@ pub enum AppError {
     Tracker(altmodes::repl::TrackerError),
     ReportGeneration(altmodes::report::Error),
     Prototype(altmodes::proto::Error),
+    ReconcileHistory(altmodes::reconcile::Error),
 }
 
 pub fn main() -> Result<(), AppError> {
@@ -47,6 +49,9 @@ pub fn main() -> Result<(), AppError> {
         if arg == "--prototype" {
             run_mode = RunMode::Prototype;
         }
+        if arg == "--reconcile" {
+            run_mode = RunMode::ReconcileHistory;
+        }
     }
 
     match run_mode {
@@ -59,5 +64,8 @@ pub fn main() -> Result<(), AppError> {
             altmodes::report::generate_year_end_report().map_err(AppError::ReportGeneration)
         }
         RunMode::Prototype => altmodes::proto::entry_point().map_err(AppError::Prototype),
+        RunMode::ReconcileHistory => {
+            altmodes::reconcile::entry_point().map_err(AppError::ReconcileHistory)
+        }
     }
 }
