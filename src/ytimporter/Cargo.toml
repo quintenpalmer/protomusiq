@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 html_parser = "0.7"
 html5ever = "0.26"
+markup5ever_rcdom = "0.2"
