@@ -136,11 +136,13 @@ pub struct RawTrackedPayload {
 }
 
 impl RawTrackedPayload {
-    fn to_btree_map(self) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>> {
+    pub fn to_btree_map(
+        self,
+    ) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>> {
         self.tracks.into_iter().collect()
     }
 
-    fn from_btree_map(
+    pub fn from_btree_map(
         tracks: &BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>>,
     ) -> Self {
         RawTrackedPayload {
