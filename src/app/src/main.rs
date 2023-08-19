@@ -1,10 +1,10 @@
 mod altmodes;
-mod util;
 mod datastore;
 mod gui;
 mod model;
 mod services;
 mod shared;
+mod util;
 
 use std::env;
 
