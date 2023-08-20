@@ -2,6 +2,10 @@ mod gplaymusic;
 mod jellyfin;
 mod model;
 mod spotify;
+mod youtube;
+
+#[macro_use]
+extern crate html5ever;
 
 use std::env;
 
@@ -10,6 +14,7 @@ pub enum RunMode {
     Jellyfin,
     GPlayMusic,
     Spotify,
+    YouTube,
 }
 
 fn main() {
@@ -27,6 +32,9 @@ fn main() {
         if arg == "spotify" {
             run_mode = RunMode::Spotify;
         }
+        if arg == "youtube" {
+            run_mode = RunMode::YouTube;
+        }
     }
 
     match run_mode {
@@ -34,5 +42,6 @@ fn main() {
         RunMode::Jellyfin => jellyfin::translate_jellyfin_play_history(),
         RunMode::GPlayMusic => gplaymusic::translate_gplay_music_play_history(),
         RunMode::Spotify => spotify::translate_gplay_music_play_history(),
+        RunMode::YouTube => youtube::translate_youtube_play_history(),
     }
 }
