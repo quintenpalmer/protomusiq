@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use super::ytmodel;
 
-pub fn sort_entries_by_count(
+pub fn sort_entries_by_song_max_play_count(
     entries: Vec<ytmodel::Entry>,
 ) -> Vec<(String, Vec<(String, Vec<String>)>)> {
     let mut by_artist_by_track_map: BTreeMap<String, BTreeMap<String, Vec<String>>> =

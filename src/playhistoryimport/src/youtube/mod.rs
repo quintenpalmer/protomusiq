@@ -13,7 +13,8 @@ use super::model;
 pub fn translate_youtube_play_history() {
     let entries = util::get_entries();
 
-    let sorted_entry_by_key = sort::sort_entries_by_count(entries);
+    let keyed_by_artist_sorted_by_max_song_play_count =
+        sort::sort_entries_by_song_max_play_count(entries);
 
     let raw_library = util::get_library();
 
@@ -23,7 +24,7 @@ pub fn translate_youtube_play_history() {
 
     let mut only_take_freebies = false;
 
-    for (artist, _track_watch_vec) in sorted_entry_by_key.iter() {
+    for (artist, _track_watch_vec) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
         match model::get_lowercase_artist(&raw_library, &artist) {
             Some(_found_artist) => {
                 perfect_artist_map.insert(artist.clone(), artist.clone());
