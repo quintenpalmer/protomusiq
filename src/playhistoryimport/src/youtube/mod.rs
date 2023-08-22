@@ -24,7 +24,16 @@ pub fn translate_youtube_play_history() {
 
     let mut only_take_freebies = false;
 
-    for (artist, _track_watch_vec) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
+    for (artist, track_watch_ats) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
+        println!(
+            "artist: '{}' has {} for max views",
+            artist,
+            track_watch_ats
+                .iter()
+                .fold(0, |seen_max, (_track, watch_info)| {
+                    seen_max.max(watch_info.len())
+                })
+        );
         match model::get_lowercase_artist(&raw_library, &artist) {
             Some(_found_artist) => {
                 perfect_artist_map.insert(artist.clone(), artist.clone());
