@@ -10,10 +10,10 @@ use super::model;
 pub fn translate_youtube_play_history() {
     let entries = util::get_entries();
 
+    let raw_library = util::get_library();
+
     let keyed_by_artist_sorted_by_max_song_play_count =
         prompt::sort::sort_entries_by_song_max_play_count(entries);
-
-    let raw_library = util::get_library();
 
     let mut perfect_artist_map: BTreeMap<String, String> = BTreeMap::new();
 
