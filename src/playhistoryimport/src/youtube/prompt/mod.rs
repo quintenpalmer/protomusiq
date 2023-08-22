@@ -1,3 +1,5 @@
-pub mod intermediate;
-pub mod prompt;
-pub mod sort;
+mod intermediate;
+mod prompt;
+mod sort;
+
+pub mod artists;
