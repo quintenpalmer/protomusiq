@@ -4,7 +4,9 @@ use std::path;
 use html5ever::tendril::TendrilSink;
 use markup5ever_rcdom as rcdom;
 
-use super::{convert, find, ytmodel};
+use crate::youtube::ytmodel;
+
+use super::parse::{convert, find};
 
 pub fn get_library() -> musiqlibrary::RawLibrary {
     let library_path = "/home/quinten/storage/media/music/bestexisting";

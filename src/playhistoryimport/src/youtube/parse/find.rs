@@ -1,4 +1,6 @@
-use super::ytmodel::*;
+use crate::youtube::ytmodel::*;
+
+use super::pmodel::*;
 
 pub fn find_all_entries(body: Vec<SimpleHtml>) -> Vec<Entry> {
     match body.as_slice() {
