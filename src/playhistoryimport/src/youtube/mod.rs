@@ -1,7 +1,5 @@
-mod intermediate;
 mod parse;
 mod prompt;
-mod sort;
 mod util;
 mod ytmodel;
 
@@ -13,13 +11,14 @@ pub fn translate_youtube_play_history() {
     let entries = util::get_entries();
 
     let keyed_by_artist_sorted_by_max_song_play_count =
-        sort::sort_entries_by_song_max_play_count(entries);
+        prompt::sort::sort_entries_by_song_max_play_count(entries);
 
     let raw_library = util::get_library();
 
     let mut perfect_artist_map: BTreeMap<String, String> = BTreeMap::new();
 
-    let mut manual_artist_map: BTreeMap<String, String> = intermediate::load_intermediate_artists();
+    let mut manual_artist_map: BTreeMap<String, String> =
+        prompt::intermediate::load_intermediate_artists();
 
     let mut only_take_freebies = false;
 
@@ -41,7 +40,7 @@ pub fn translate_youtube_play_history() {
                 if !manual_artist_map.contains_key(artist) {
                     if !only_take_freebies {
                         let maybe_confirmed_name =
-                            prompt::prompt_user_for_artist_name(&raw_library, &artist);
+                            prompt::prompt::prompt_user_for_artist_name(&raw_library, &artist);
                         match maybe_confirmed_name {
                             ytmodel::PromptResult::Answer(confirmed_name) => {
                                 manual_artist_map.insert(artist.clone(), confirmed_name);
@@ -71,7 +70,7 @@ pub fn translate_youtube_play_history() {
         );
     }
 
-    intermediate::save_intermediate_artists(&manual_artist_map);
+    prompt::intermediate::save_intermediate_artists(&manual_artist_map);
 
     for (artist, track_watch_ats) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
         for (track_name, watched_ats) in track_watch_ats.iter() {

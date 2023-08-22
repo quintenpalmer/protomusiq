@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::ytmodel;
+use crate::youtube::ytmodel;
 
 pub fn sort_entries_by_song_max_play_count(
     entries: Vec<ytmodel::Entry>,

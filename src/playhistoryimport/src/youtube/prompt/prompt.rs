@@ -1,4 +1,4 @@
-use super::ytmodel::*;
+use crate::youtube::ytmodel::*;
 
 use std::io;
 
