@@ -4,19 +4,12 @@ use crate::model;
 
 use super::super::ytmodel;
 
-use super::{intermediate, prompt, sort};
+use super::{intermediate, prompt};
 
 pub fn get_all_artist_info_resolved(
-    entries: Vec<ytmodel::Entry>,
+    keyed_by_artist_sorted_by_max_song_play_count: &Vec<(String, Vec<(String, Vec<String>)>)>,
     raw_library: &musiqlibrary::RawLibrary,
-) -> (
-    BTreeMap<String, String>,
-    BTreeMap<String, String>,
-    Vec<(String, Vec<(String, Vec<String>)>)>,
-) {
-    let keyed_by_artist_sorted_by_max_song_play_count =
-        sort::sort_entries_by_song_max_play_count(entries);
-
+) -> (BTreeMap<String, String>, BTreeMap<String, String>) {
     let mut perfect_artist_map: BTreeMap<String, String> = BTreeMap::new();
 
     let mut manual_artist_map: BTreeMap<String, String> = intermediate::load_intermediate_artists();
@@ -73,9 +66,5 @@ pub fn get_all_artist_info_resolved(
 
     intermediate::save_intermediate_artists(&manual_artist_map);
 
-    (
-        perfect_artist_map,
-        manual_artist_map,
-        keyed_by_artist_sorted_by_max_song_play_count,
-    )
+    (perfect_artist_map, manual_artist_map)
 }
