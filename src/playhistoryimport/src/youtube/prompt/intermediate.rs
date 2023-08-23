@@ -28,3 +28,9 @@ pub fn load_intermediate_tracks() -> BTreeMap<String, musiqlibrary::TrackUniqueI
 
     existing_manual_mapping
 }
+
+pub fn save_intermediate_tracks(track_map: &BTreeMap<String, musiqlibrary::TrackUniqueIdentifier>) {
+    let manual_mapping_file_file =
+        fs::File::create("youtube/output/debug/2_manual_track_mapping.json").unwrap();
+    serde_json::to_writer_pretty(manual_mapping_file_file, track_map).unwrap();
+}

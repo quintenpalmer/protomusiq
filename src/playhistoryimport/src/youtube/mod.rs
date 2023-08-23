@@ -17,22 +17,10 @@ pub fn translate_youtube_play_history() {
         &raw_library,
     );
 
-    for (artist, track_watch_ats) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
-        for (track_name, watched_ats) in track_watch_ats.iter() {
-            let matched_artist = match perfect_artist_map.get(artist) {
-                Some(matched_a) => Some(matched_a),
-                None => match manual_artist_map.get(artist) {
-                    Some(matched_a) => Some(matched_a),
-                    None => None,
-                },
-            };
-            println!(
-                "artist '{}' (matched as {:?}) has track '{}' with {} views",
-                artist,
-                matched_artist,
-                track_name,
-                watched_ats.len()
-            );
-        }
-    }
+    let manual_track_map = prompt::tracks::get_all_track_info_resolved(
+        &keyed_by_artist_sorted_by_max_song_play_count,
+        &raw_library,
+        &perfect_artist_map,
+        &manual_artist_map,
+    );
 }
