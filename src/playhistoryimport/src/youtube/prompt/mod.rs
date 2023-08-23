@@ -1,5 +1,5 @@
 mod intermediate;
-mod prompt;
+mod userinput;
 
 pub mod artists;
 pub mod tracks;

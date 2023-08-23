@@ -4,7 +4,7 @@ use crate::model;
 
 use super::super::ytmodel;
 
-use super::{intermediate, prompt};
+use super::{intermediate, userinput};
 
 pub fn get_all_artist_info_resolved(
     keyed_by_artist_sorted_by_max_song_play_count: &Vec<(String, Vec<(String, Vec<String>)>)>,
@@ -34,7 +34,7 @@ pub fn get_all_artist_info_resolved(
                 if !manual_artist_map.contains_key(artist) {
                     if !only_take_freebies {
                         let maybe_confirmed_name =
-                            prompt::prompt_user_for_artist_name(&raw_library, &artist);
+                            userinput::prompt_user_for_artist_name(&raw_library, &artist);
                         match maybe_confirmed_name {
                             ytmodel::PromptResult::Answer(confirmed_name) => {
                                 manual_artist_map.insert(artist.clone(), confirmed_name);
