@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
-use super::intermediate;
+use super::super::ytmodel;
+
+use super::{intermediate, userinput};
 
 pub fn get_all_track_info_resolved(
     keyed_by_artist_sorted_by_max_song_play_count: &Vec<(String, Vec<(String, Vec<String>)>)>,
@@ -10,28 +12,59 @@ pub fn get_all_track_info_resolved(
 ) -> BTreeMap<String, musiqlibrary::TrackUniqueIdentifier> {
     let mut manual_track_map = intermediate::load_intermediate_tracks();
 
+    let mut keep_looping = true;
+
     for (artist, track_watch_ats) in keyed_by_artist_sorted_by_max_song_play_count.iter() {
         for (track_name, watched_ats) in track_watch_ats.iter() {
-            let matched_artist = match perfect_artist_map.get(artist) {
-                Some(matched_a) => Some(matched_a),
-                None => match manual_artist_map.get(artist) {
-                    Some(matched_a) => Some(matched_a),
-                    None => None,
-                },
-            };
-            println!(
-                "artist '{}' (matched as {:?}) has track '{}' with {} views",
-                artist,
-                matched_artist,
-                track_name,
-                watched_ats.len()
-            );
-            match matched_artist {
-                Some(artist) => {
-                    println!("found an actual artist, will only search their songs");
-                }
-                None => {
-                    println!("could not find an actual artist, will search all songs");
+            if keep_looping {
+                match manual_track_map.get(track_name) {
+                    Some(found_track) => {
+                        println!("already found track, matched as: {:?}", found_track);
+                    }
+                    None => {
+                        let matched_artist = match perfect_artist_map.get(artist) {
+                            Some(matched_a) => Some(matched_a),
+                            None => match manual_artist_map.get(artist) {
+                                Some(matched_a) => Some(matched_a),
+                                None => None,
+                            },
+                        };
+                        println!(
+                            "artist '{}' (matched as {:?}) has track '{}' with {} views",
+                            artist,
+                            matched_artist,
+                            track_name,
+                            watched_ats.len()
+                        );
+                        match matched_artist {
+                            Some(_artist) => {
+                                println!("found an actual artist, will only search their songs");
+                            }
+                            None => {
+                                println!("could not find an actual artist, will search all songs");
+                            }
+                        };
+                        let track_id_result = userinput::prompt_user_for_track(
+                            raw_library,
+                            matched_artist,
+                            track_name,
+                            watched_ats,
+                        );
+
+                        match track_id_result {
+                            ytmodel::PromptResult::Answer(confirmed_track) => {
+                                println!("found this maybe track_id: {:?}", confirmed_track);
+                                manual_track_map.insert(track_name.clone(), confirmed_track);
+                            }
+                            ytmodel::PromptResult::NothingFound => {
+                                println!("skipping this track: {}", track_name)
+                            }
+                            ytmodel::PromptResult::Stop => {
+                                println!("breaking as instructed");
+                                keep_looping = false;
+                            }
+                        }
+                    }
                 }
             }
         }
