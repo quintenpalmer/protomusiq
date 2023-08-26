@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::PathBuf;
 
@@ -57,4 +58,26 @@ pub fn bootstrap_raw_data<T: Default + DeserializeOwned + Serialize, S: Into<Str
     };
 
     (raw, json_db_path)
+}
+
+pub struct FileAllower {
+    allowed_set: Option<BTreeSet<PathBuf>>,
+}
+
+impl FileAllower {
+    pub fn new(maybe_allow_list: &Option<Vec<PathBuf>>) -> Self {
+        FileAllower {
+            allowed_set: match maybe_allow_list {
+                Some(allow_list) => Some(allow_list.iter().map(|x| x.clone()).collect()),
+                None => None,
+            },
+        }
+    }
+
+    pub fn is_allowed(&self, filename: &PathBuf) -> bool {
+        match self.allowed_set {
+            Some(ref v) => v.contains(filename),
+            None => true,
+        }
+    }
 }

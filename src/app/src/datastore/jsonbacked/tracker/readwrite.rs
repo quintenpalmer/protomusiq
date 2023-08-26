@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -105,33 +105,11 @@ impl datastore::traits::LiveHistoryWriteDS for JSONTracker {
     }
 }
 
-struct FileAllower {
-    allowed_set: Option<BTreeSet<PathBuf>>,
-}
-
-impl FileAllower {
-    pub fn new(maybe_allow_list: &Option<Vec<PathBuf>>) -> Self {
-        FileAllower {
-            allowed_set: match maybe_allow_list {
-                Some(allow_list) => Some(allow_list.iter().map(|x| x.clone()).collect()),
-                None => None,
-            },
-        }
-    }
-
-    pub fn is_allowed(&self, filename: &PathBuf) -> bool {
-        match self.allowed_set {
-            Some(ref v) => v.contains(filename),
-            None => true,
-        }
-    }
-}
-
 pub fn list_all_tracker_records(
     app_data_path: &PathBuf,
     allowed_tracker_files: &Option<Vec<PathBuf>>,
 ) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>> {
-    let allowed_files = FileAllower::new(allowed_tracker_files);
+    let allowed_files = common::FileAllower::new(allowed_tracker_files);
 
     let mut all_tracks = BTreeMap::new();
 
