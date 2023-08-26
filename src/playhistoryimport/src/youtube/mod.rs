@@ -1,3 +1,4 @@
+mod output;
 mod parse;
 mod prompt;
 mod sort;
@@ -23,4 +24,10 @@ pub fn translate_youtube_play_history() {
         &perfect_artist_map,
         &manual_artist_map,
     );
+
+    output::write_release_output(
+        &raw_library,
+        &keyed_by_artist_sorted_by_max_song_play_count,
+        &manual_track_map,
+    )
 }
