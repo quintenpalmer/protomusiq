@@ -64,3 +64,21 @@ pub fn sort_entries_by_song_max_play_count(
 
     entry_by_title_sorted
 }
+
+pub fn sort_by_track_play_count_folded(
+    by_artist_by_track_map: &Vec<(String, Vec<(String, Vec<String>)>)>,
+) -> Vec<((String, String), Vec<String>)> {
+    let mut ret = Vec::new();
+
+    for (artist, track_watched_ats) in by_artist_by_track_map.iter() {
+        for (track, watched_ats) in track_watched_ats.iter() {
+            ret.push(((artist.clone(), track.clone()), watched_ats.clone()));
+        }
+    }
+
+    ret.sort_by_key(|((_artist, _track), watched_ats)| watched_ats.len());
+
+    ret.reverse();
+
+    return ret;
+}
