@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::PathBuf;
 
@@ -105,10 +105,34 @@ impl datastore::traits::LiveHistoryWriteDS for JSONTracker {
     }
 }
 
+struct FileAllower {
+    allowed_set: Option<BTreeSet<PathBuf>>,
+}
+
+impl FileAllower {
+    pub fn new(maybe_allow_list: &Option<Vec<PathBuf>>) -> Self {
+        FileAllower {
+            allowed_set: match maybe_allow_list {
+                Some(allow_list) => Some(allow_list.iter().map(|x| x.clone()).collect()),
+                None => None,
+            },
+        }
+    }
+
+    pub fn is_allowed(&self, filename: &PathBuf) -> bool {
+        match self.allowed_set {
+            Some(ref v) => v.contains(filename),
+            None => true,
+        }
+    }
+}
+
 pub fn list_all_tracker_records(
     app_data_path: &PathBuf,
     allowed_tracker_files: &Option<Vec<PathBuf>>,
 ) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>> {
+    let allowed_files = FileAllower::new(allowed_tracker_files);
+
     let mut all_tracks = BTreeMap::new();
 
     let tracker_files_dir = localfs::build_tree_for_dirs(&app_data_path, vec!["data", "tracker"]);
@@ -116,20 +140,26 @@ pub fn list_all_tracker_records(
     for tracker_file in fs::read_dir(tracker_files_dir).unwrap() {
         let tracker_file = tracker_file.unwrap().path();
         println!("tracker_file: {:?}", tracker_file);
-        match tracker_file.extension().map(|x| x.to_str()) {
-            Some(Some("json")) => {
-                let current_tracks: RawTrackedPayload =
-                    common::maybe_get_existing_raw_data(&tracker_file).unwrap();
-                for (current_track, mut current_track_count) in current_tracks.tracks.into_iter() {
-                    all_tracks
-                        .entry(current_track)
-                        .or_insert(Vec::new())
-                        .append(&mut current_track_count);
+        if allowed_files.is_allowed(&tracker_file) {
+            match tracker_file.extension().map(|x| x.to_str()) {
+                Some(Some("json")) => {
+                    let current_tracks: RawTrackedPayload =
+                        common::maybe_get_existing_raw_data(&tracker_file).unwrap();
+                    for (current_track, mut current_track_count) in
+                        current_tracks.tracks.into_iter()
+                    {
+                        all_tracks
+                            .entry(current_track)
+                            .or_insert(Vec::new())
+                            .append(&mut current_track_count);
+                    }
                 }
+                Some(Some(ext)) => println!("skipping non json file ({}) in data/tracker/", ext),
+                Some(None) => println!("skipping non json file in data/tracker/"),
+                None => println!("skipping non json file in data/tracker/"),
             }
-            Some(Some(ext)) => println!("skipping non json file ({}) in data/tracker/", ext),
-            Some(None) => println!("skipping non json file in data/tracker/"),
-            None => println!("skipping non json file in data/tracker/"),
+        } else {
+            println!("skipping file which was not allowed from config");
         }
     }
     all_tracks
