@@ -97,7 +97,10 @@ fn check_tracked(config_state: &model::AppConfigState) {
         &config_state,
         &loader::Loader::NoCache,
     );
-    let prehistory_records = tracker::list_all_tracker_records(&config_state.app_data_path);
+    let prehistory_records = tracker::list_all_tracker_records(
+        &config_state.app_data_path,
+        &config_state.allowed_tracker_files,
+    );
 
     let mut no_matches = Vec::new();
 

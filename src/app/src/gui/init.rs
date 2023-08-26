@@ -49,6 +49,7 @@ pub fn initialize_everything() -> state::App {
             let json_track_reporter = jsonbacked::tracker::ReadOnlyTracker::new(
                 &config_state.app_data_path.to_path_buf(),
                 config_state.hostname.clone(),
+                &config_state.allowed_tracker_files,
             );
             logger.print_elapsed("read only tracker");
 
@@ -61,6 +62,7 @@ pub fn initialize_everything() -> state::App {
                 true => {
                     let livehistory_records = jsonbacked::tracker::list_all_tracker_records(
                         &config_state.app_data_path.clone(),
+                        &config_state.allowed_tracker_files,
                     );
 
                     conn.bootstrap_livehistory(&livehistory_records);

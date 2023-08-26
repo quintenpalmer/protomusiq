@@ -20,6 +20,7 @@ pub fn generate_year_end_report() -> Result<(), Error> {
     let read_only_tracker = jsonbacked::tracker::ReadOnlyTracker::new(
         &config_state.app_data_path.to_path_buf(),
         config_state.hostname.clone(),
+        &None,
     );
 
     let augmented = organized.map_into(&|track| {

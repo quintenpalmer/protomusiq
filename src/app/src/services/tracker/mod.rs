@@ -63,6 +63,7 @@ pub fn run_forever(
             let json_tracker = tracker::JSONTracker::new(
                 &config_state.app_data_path.to_path_buf(),
                 config_state.hostname.clone(),
+                &config_state.allowed_tracker_files,
             );
             Box::new(json_tracker)
         }
@@ -74,6 +75,7 @@ pub fn run_forever(
             let json_tracker = tracker::JSONTracker::new(
                 &config_state.app_data_path.to_path_buf(),
                 config_state.hostname.clone(),
+                &config_state.allowed_tracker_files,
             );
 
             let sqlite_tracker = sqlitebacked::SqliteLiveHistoryRecorder::new(conn);

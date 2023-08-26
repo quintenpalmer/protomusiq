@@ -13,9 +13,13 @@ pub struct ReadOnlyTracker {
 }
 
 impl ReadOnlyTracker {
-    pub fn new(app_data_path: &PathBuf, hostname: String) -> Self {
+    pub fn new(
+        app_data_path: &PathBuf,
+        hostname: String,
+        allowed_tracker_files: &Option<Vec<PathBuf>>,
+    ) -> Self {
         ReadOnlyTracker {
-            inner: JSONTracker::new(app_data_path, hostname),
+            inner: JSONTracker::new(app_data_path, hostname, allowed_tracker_files),
         }
     }
 

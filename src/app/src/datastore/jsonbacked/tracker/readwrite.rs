@@ -19,13 +19,17 @@ pub struct JSONTracker {
 }
 
 impl JSONTracker {
-    pub fn new(app_data_path: &PathBuf, hostname: String) -> Self {
+    pub fn new(
+        app_data_path: &PathBuf,
+        hostname: String,
+        allowed_tracker_files: &Option<Vec<PathBuf>>,
+    ) -> Self {
         let (raw_tracker, final_path): (RawTrackedPayload, PathBuf) = common::bootstrap_raw_data(
             &app_data_path,
             vec!["data", "tracker", format!("{}.json", hostname).as_str()],
         );
 
-        let all_tracks = list_all_tracker_records(app_data_path);
+        let all_tracks = list_all_tracker_records(app_data_path, allowed_tracker_files);
 
         JSONTracker {
             tracker_db_json_path: final_path,
@@ -103,6 +107,7 @@ impl datastore::traits::LiveHistoryWriteDS for JSONTracker {
 
 pub fn list_all_tracker_records(
     app_data_path: &PathBuf,
+    allowed_tracker_files: &Option<Vec<PathBuf>>,
 ) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, Vec<DateTime<Local>>> {
     let mut all_tracks = BTreeMap::new();
 

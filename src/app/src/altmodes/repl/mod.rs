@@ -42,7 +42,11 @@ fn report_tracks_with_io() -> io::Result<()> {
 
     let config_state = config::get_default_config();
 
-    let mut tracker = tracker::JSONTracker::new(&config_state.app_data_path, hostname.clone());
+    let mut tracker = tracker::JSONTracker::new(
+        &config_state.app_data_path,
+        hostname.clone(),
+        &config_state.allowed_tracker_files,
+    );
 
     let raw_library = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
         &config_state,
