@@ -58,6 +58,8 @@ pub fn initialize_everything() -> state::App {
         loader::Loader::Sqlite(ref orig_conn) | loader::Loader::Latest(ref orig_conn) => {
             let mut conn = orig_conn.spawn_connection();
 
+            // TODO: honor `config_state.allowed_tracker_files` and
+            // `config_state.allowed_prehistory_files` in sqlite implementation
             match conn.needs_livehistory_seeded() {
                 true => {
                     let livehistory_records = jsonbacked::tracker::list_all_tracker_records(
