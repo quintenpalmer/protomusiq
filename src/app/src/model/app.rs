@@ -19,6 +19,9 @@ pub struct AppConfigState {
     pub grid_layout_track_multiplier: u32,
 
     pub scale_factor: f64,
+
+    pub allowed_tracker_files: Option<Vec<path::PathBuf>>,
+    pub allowed_prehistory_files: Option<Vec<path::PathBuf>>,
 }
 
 impl AppConfigState {
@@ -44,6 +47,9 @@ pub struct RawAppConfigState {
     pub grid_layout_track_multiplier: u32,
 
     pub scale_factor: Option<f64>,
+
+    pub allowed_tracker_files: Option<Vec<path::PathBuf>>,
+    pub allowed_prehistory_files: Option<Vec<path::PathBuf>>,
 }
 
 impl RawAppConfigState {
@@ -59,6 +65,8 @@ impl RawAppConfigState {
             grid_layout_height: self.grid_layout_height,
             grid_layout_track_multiplier: self.grid_layout_track_multiplier,
             scale_factor: self.scale_factor.unwrap_or(1.0),
+            allowed_tracker_files: self.allowed_tracker_files,
+            allowed_prehistory_files: self.allowed_prehistory_files,
         }
     }
 }
