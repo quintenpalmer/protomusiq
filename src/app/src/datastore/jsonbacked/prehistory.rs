@@ -21,8 +21,12 @@ pub struct Reporter {
 }
 
 impl Reporter {
-    pub fn new(app_data_path: &path::PathBuf) -> Self {
-        let historical_play_count_vec = compute_historical_map(&app_data_path);
+    pub fn new(
+        app_data_path: &path::PathBuf,
+        allowed_prehistory_files: &Option<Vec<path::PathBuf>>,
+    ) -> Self {
+        let historical_play_count_vec =
+            compute_historical_map(&app_data_path, allowed_prehistory_files);
 
         let mut historical_play_count_records = BTreeMap::new();
 
@@ -57,7 +61,10 @@ struct PreHistoryContainer {
     records: Vec<PrehistoryPlayCountEntry>,
 }
 
-pub fn compute_historical_map(app_data_path: &path::PathBuf) -> Vec<model::PrehistoryRecord> {
+pub fn compute_historical_map(
+    app_data_path: &path::PathBuf,
+    allowed_prehistory_files: &Option<Vec<path::PathBuf>>,
+) -> Vec<model::PrehistoryRecord> {
     let mut records = Vec::new();
 
     for historical_file in fs::read_dir(app_data_path.join("data").join("prehistory")).unwrap() {

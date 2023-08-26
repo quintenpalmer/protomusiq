@@ -82,8 +82,10 @@ pub fn initialize_everything() -> state::App {
     let historical_reporter: Box<dyn datastore::traits::HistoricalTrackCountReporter> = match loader
     {
         loader::Loader::NoCache | loader::Loader::JSON => {
-            let historical_play_count_reporter =
-                jsonbacked::prehistory::Reporter::new(&config_state.app_data_path.to_path_buf());
+            let historical_play_count_reporter = jsonbacked::prehistory::Reporter::new(
+                &config_state.app_data_path.to_path_buf(),
+                &config_state.allowed_prehistory_files,
+            );
             logger.print_elapsed("got JSON historical play count reporter");
 
             Box::new(historical_play_count_reporter)
@@ -95,6 +97,7 @@ pub fn initialize_everything() -> state::App {
                 true => {
                     let prehistory_records = jsonbacked::prehistory::compute_historical_map(
                         &config_state.app_data_path.clone(),
+                        &config_state.allowed_prehistory_files,
                     );
 
                     conn.bootstrap_prehistory(&prehistory_records);
