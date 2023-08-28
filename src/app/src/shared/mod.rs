@@ -4,6 +4,17 @@ use std::sync::mpsc;
 use crate::model;
 
 #[derive(Debug, Clone)]
+pub enum GUIToBackendMessage {
+    ToSink(SinkMessage),
+}
+
+#[derive(Debug, Clone)]
+pub enum BackendToGUIMessage {
+    SinkReports(SinkCallbackMessage),
+    MprisReports(MprisCallbackMessage),
+}
+
+#[derive(Debug, Clone)]
 pub enum SinkMessage {
     PlayButton,
     PauseButton,
