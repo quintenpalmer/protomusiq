@@ -5,7 +5,7 @@ mod constants;
 pub mod functions;
 pub mod library;
 pub mod playlist;
-pub mod sorts;
+mod sorts;
 
 pub use augmented::*;
 pub use common::*;
