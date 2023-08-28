@@ -73,7 +73,12 @@ fn insert_all_sources(main_db: &rusqlite::Connection) {
         .unwrap();
 
     if num_sources == 0 {
-        for name in &["Google Play Music All Access", "Spotify", "Jellyfin", "YouTube"] {
+        for name in &[
+            "Google Play Music All Access",
+            "Spotify",
+            "Jellyfin",
+            "YouTube",
+        ] {
             main_db
                 .execute(
                     "INSERT INTO sources VALUES (
