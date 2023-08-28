@@ -10,7 +10,10 @@ pub enum Loader {
 }
 
 impl Loader {
-    pub fn from_load_mode(config_state: model::AppConfigState, load_mode: model::LoadMode) -> Self {
+    pub fn from_load_mode(
+        config_state: model::app::AppConfigState,
+        load_mode: model::LoadMode,
+    ) -> Self {
         match load_mode {
             model::LoadMode::NoCache => Loader::NoCache,
             model::LoadMode::JSON => Loader::JSON,

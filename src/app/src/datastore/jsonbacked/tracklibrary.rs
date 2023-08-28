@@ -114,7 +114,7 @@ impl Callback {
 }
 
 pub fn load_library_from_cache_and_scan(
-    config_state: &model::AppConfigState,
+    config_state: &model::app::AppConfigState,
     loader: &loader::Loader,
     //public_load_mode: model::LoadMode,
 ) -> musiqlibrary::RawLibrary {
@@ -242,7 +242,7 @@ pub fn load_library_from_cache_and_scan(
 }
 
 fn resolve_specified_cache_mode(
-    config_state: &model::AppConfigState,
+    config_state: &model::app::AppConfigState,
     specified_cache_mode: SpecifiedCacheMode,
 ) -> (CacheMetadataPayload, Callback) {
     match specified_cache_mode {

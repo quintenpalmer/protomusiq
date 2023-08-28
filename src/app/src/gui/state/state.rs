@@ -36,7 +36,7 @@ pub struct AppState {
 
 /// State for the Configuratino of the App
 pub struct Config {
-    pub rest: model::AppConfigState,
+    pub rest: model::app::AppConfigState,
 }
 
 /// State for the Play Queue (and Current Track and Play History)

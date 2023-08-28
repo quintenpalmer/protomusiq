@@ -14,19 +14,19 @@ use super::query;
 use super::util;
 
 pub struct Connections {
-    pub config: model::AppConfigState,
+    pub config: model::app::AppConfigState,
     pub shared_db: rusqlite::Connection,
 }
 
 impl Connections {
-    pub fn first_bootup(config_state: model::AppConfigState) -> Self {
+    pub fn first_bootup(config_state: model::app::AppConfigState) -> Self {
         let conn = Connections::new(config_state.clone());
         migrate::create_all_tables(config_state, &conn.shared_db);
 
         conn
     }
 
-    fn new(config_state: model::AppConfigState) -> Self {
+    fn new(config_state: model::app::AppConfigState) -> Self {
         let main_db = get_connection_from_config(config_state.clone());
 
         Connections {
@@ -40,7 +40,7 @@ impl Connections {
     }
 
     pub fn bootstrap_tracks(
-        config_state: model::AppConfigState,
+        config_state: model::app::AppConfigState,
         tracks: &Vec<musiqlibrary::FullTrackMetadata>,
     ) -> Self {
         let mut logger = logging::Logger::new(logging::LogType::Timing, "seed tracks");
@@ -320,7 +320,7 @@ impl Connections {
     }
 }
 
-fn get_connection_from_config(config_state: model::AppConfigState) -> rusqlite::Connection {
+fn get_connection_from_config(config_state: model::app::AppConfigState) -> rusqlite::Connection {
     let app_data_path = config_state.app_data_path.clone();
 
     let main_db_file = localfs::build_tree_for_file(&app_data_path, vec!["dbs", "main.db"]);

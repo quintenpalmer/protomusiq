@@ -62,7 +62,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 }
 
 pub fn render_entire_page<'a>(
-    config: &model::AppConfigState,
+    config: &model::app::AppConfigState,
     header: Container<'a, Message>,
     rendered_page: Container<'a, Message>,
     play_queue_view: Container<'a, Message>,

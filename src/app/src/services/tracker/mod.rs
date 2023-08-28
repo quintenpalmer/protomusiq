@@ -11,7 +11,7 @@ use crate::model;
 use crate::shared;
 
 pub fn create_backend_with_client(
-    config_state: model::AppConfigState,
+    config_state: model::app::AppConfigState,
     loader: loader::Loader,
 ) -> shared::Client<shared::TrackerMessage> {
     let (sender_for_client, recv_for_backend) = mpsc::channel();
@@ -54,7 +54,7 @@ impl datastore::traits::LiveHistoryWriteDS for ForkWriter {
 }
 
 pub fn run_forever(
-    config_state: model::AppConfigState,
+    config_state: model::app::AppConfigState,
     rx: mpsc::Receiver<shared::TrackerMessage>,
     loader: loader::Loader,
 ) {

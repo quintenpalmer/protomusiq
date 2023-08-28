@@ -5,7 +5,7 @@ use crate::model;
 
 use crate::datastore::localfs;
 
-pub fn create_all_tables(config_state: model::AppConfigState, main_db: &rusqlite::Connection) {
+pub fn create_all_tables(config_state: model::app::AppConfigState, main_db: &rusqlite::Connection) {
     let app_data_path = config_state.app_data_path.clone();
 
     let migrations_to_process_path =
