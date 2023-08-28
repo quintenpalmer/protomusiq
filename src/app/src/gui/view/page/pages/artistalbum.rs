@@ -315,7 +315,7 @@ pub fn artist_album_view_state<'a>(
                                                 dark_button(bright_paragraph(">..."))
                                                     .on_press(Message::PlaybackRequest(
                                                         message::PlaybackRequest::PlaySongs(
-                                                            model::tracks_after_including(&tracks, &track),
+                                                            model::functions::tracks_after_including(&tracks, &track),
                                                         ),
                                                     )),
                                             )

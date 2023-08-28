@@ -57,7 +57,8 @@ pub fn playlist_view<'a>(
                                 .spacing(10)
                                 .push(h1(playlist.name.clone()))
                                 .push(bright_paragraph(common::format_duration(
-                                    model::compute_track_list_duration(&full_tracks).as_secs(),
+                                    model::functions::compute_track_list_duration(&full_tracks)
+                                        .as_secs(),
                                 )))
                                 .push(
                                     Row::new()
@@ -155,7 +156,7 @@ pub fn playlist_view<'a>(
                         ))
                         .push(dark_button(bright_paragraph(">...")).on_press(
                             Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
-                                model::tracks_after_including(&tracks, &track),
+                                model::functions::tracks_after_including(&tracks, &track),
                             )),
                         ))
                         .push(
