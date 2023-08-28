@@ -1,9 +1,9 @@
 pub mod app;
-pub mod augmented;
+mod augmented;
 mod common;
 mod constants;
 pub mod functions;
-pub mod library;
+mod library;
 pub mod playlist;
 mod sorts;
 
