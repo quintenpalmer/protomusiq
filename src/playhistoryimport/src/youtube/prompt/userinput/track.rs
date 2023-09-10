@@ -8,12 +8,20 @@ pub fn prompt_user_for_track(
     found_track_name: &String,
     track_watches: &Vec<String>,
 ) -> PromptResult<musiqlibrary::TrackUniqueIdentifier> {
+    println!("-----------------");
     println!(
-        "let's try {} (with {} listens and by {:?})",
-        found_track_name,
-        track_watches.len(),
-        maybe_artist_name
+        " > {}\t<= track",
+        found_track_name
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ")
     );
+    println!(
+        "   > {}\t<- artist",
+        maybe_artist_name.unwrap_or(&"<unmatched>".to_string())
+    );
+    println!("  > {} listens", track_watches.len());
+    println!("-----------------");
 
     let mut input = String::new();
 
