@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use super::super::{sort, ytmodel};
 
@@ -9,6 +9,7 @@ pub fn get_all_track_info_resolved(
     raw_library: &musiqlibrary::RawLibrary,
     perfect_artist_map: &BTreeMap<String, String>,
     manual_artist_map: &BTreeMap<String, String>,
+    ignore_artists: &BTreeSet<String>,
 ) -> BTreeMap<String, musiqlibrary::TrackUniqueIdentifier> {
     let mut manual_track_map = intermediate::load_intermediate_tracks();
 
@@ -46,24 +47,29 @@ pub fn get_all_track_info_resolved(
                             println!("could not find an actual artist, will search all songs");
                         }
                     };
-                    let track_id_result = userinput::prompt_user_for_track(
-                        raw_library,
-                        matched_artist,
-                        track_name,
-                        watched_ats,
-                    );
 
-                    match track_id_result {
-                        ytmodel::PromptResult::Answer(confirmed_track) => {
-                            println!("found this maybe track_id: {:?}", confirmed_track);
-                            manual_track_map.insert(track_name.clone(), confirmed_track);
-                        }
-                        ytmodel::PromptResult::NothingFound => {
-                            println!("skipping this track: {}", track_name)
-                        }
-                        ytmodel::PromptResult::Stop => {
-                            println!("breaking as instructed");
-                            keep_looping = false;
+                    if ignore_artists.contains(artist) {
+                        println!("artist: {} is in the ignore list, so skipping", artist);
+                    } else {
+                        let track_id_result = userinput::prompt_user_for_track(
+                            raw_library,
+                            matched_artist,
+                            track_name,
+                            watched_ats,
+                        );
+
+                        match track_id_result {
+                            ytmodel::PromptResult::Answer(confirmed_track) => {
+                                println!("found this maybe track_id: {:?}", confirmed_track);
+                                manual_track_map.insert(track_name.clone(), confirmed_track);
+                            }
+                            ytmodel::PromptResult::NothingFound => {
+                                println!("skipping this track: {}", track_name)
+                            }
+                            ytmodel::PromptResult::Stop => {
+                                println!("breaking as instructed");
+                                keep_looping = false;
+                            }
                         }
                     }
                 }

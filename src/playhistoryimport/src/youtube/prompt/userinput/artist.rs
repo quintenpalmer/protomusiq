@@ -2,6 +2,27 @@ use crate::youtube::ytmodel::*;
 
 use std::io;
 
+pub fn prompt_user_for_ignore_artist(found_artist_name: &String) -> PromptResult<()> {
+    println!("should we skip this artist? {}", found_artist_name);
+
+    let mut input = String::new();
+
+    io::stdin().read_line(&mut input).unwrap();
+    input = input.trim_end().to_string();
+
+    if input == "exit" || input == "e" {
+        return PromptResult::Stop;
+    }
+    if input == "skip" || input == "s" {
+        return PromptResult::NothingFound;
+    }
+    if input == "ignore" || input == "i" {
+        return PromptResult::Answer(());
+    }
+    println!("unknown answer, so just assuming we shouldn't ignore");
+    return PromptResult::NothingFound;
+}
+
 pub fn prompt_user_for_artist_name(
     raw_library: &musiqlibrary::RawLibrary,
     found_artist_name: &String,

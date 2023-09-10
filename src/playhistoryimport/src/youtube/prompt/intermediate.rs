@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 
 use serde_json;
@@ -33,4 +33,20 @@ pub fn save_intermediate_tracks(track_map: &BTreeMap<String, musiqlibrary::Track
     let manual_mapping_file_file =
         fs::File::create("youtube/output/debug/2_manual_track_mapping.json").unwrap();
     serde_json::to_writer_pretty(manual_mapping_file_file, track_map).unwrap();
+}
+
+pub fn load_intermediate_ignore_artists() -> BTreeSet<String> {
+    let manual_mapping_file_reader =
+        fs::File::open("youtube/intermediate/ignore_artist_mapping.json").unwrap();
+
+    let existing_manual_mapping: BTreeSet<String> =
+        serde_json::from_reader(manual_mapping_file_reader).unwrap();
+
+    existing_manual_mapping
+}
+
+pub fn save_intermediate_ignore_artists(artist_map: &BTreeSet<String>) {
+    let manual_mapping_file_file =
+        fs::File::create("youtube/output/debug/3_ignore_artist_mapping.json").unwrap();
+    serde_json::to_writer_pretty(manual_mapping_file_file, artist_map).unwrap();
 }

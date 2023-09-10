@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::model;
 
@@ -9,6 +9,7 @@ use super::{intermediate, userinput};
 pub fn get_all_artist_info_resolved(
     keyed_by_artist_sorted_by_max_song_play_count: &Vec<(String, Vec<(String, Vec<String>)>)>,
     raw_library: &musiqlibrary::RawLibrary,
+    ignore_artists: &BTreeSet<String>,
 ) -> (BTreeMap<String, String>, BTreeMap<String, String>) {
     let mut perfect_artist_map: BTreeMap<String, String> = BTreeMap::new();
 
@@ -26,25 +27,30 @@ pub fn get_all_artist_info_resolved(
                     seen_max.max(watch_info.len())
                 })
         );
-        match model::get_lowercase_artist(&raw_library, &artist) {
-            Some(_found_artist) => {
-                perfect_artist_map.insert(artist.clone(), artist.clone());
-            }
-            None => {
-                if !manual_artist_map.contains_key(artist) {
-                    if !only_take_freebies {
-                        let maybe_confirmed_name =
-                            userinput::prompt_user_for_artist_name(&raw_library, &artist);
-                        match maybe_confirmed_name {
-                            ytmodel::PromptResult::Answer(confirmed_name) => {
-                                manual_artist_map.insert(artist.clone(), confirmed_name);
+        if ignore_artists.contains(artist) {
+            println!("artist: {} is in the ignore list, so skipping", artist);
+        } else {
+            match model::get_lowercase_artist(&raw_library, &artist) {
+                Some(_found_artist) => {
+                    perfect_artist_map
+                        .insert(artist.clone(), artist.clone());
+                }
+                None => {
+                    if !manual_artist_map.contains_key(artist) {
+                        if !only_take_freebies {
+                            let maybe_confirmed_name =
+                                userinput::prompt_user_for_artist_name(&raw_library, &artist);
+                            match maybe_confirmed_name {
+                                ytmodel::PromptResult::Answer(confirmed_name) => {
+                                    manual_artist_map.insert(artist.clone(), confirmed_name);
+                                }
+                                ytmodel::PromptResult::NothingFound => (),
+                                ytmodel::PromptResult::Stop => only_take_freebies = true,
                             }
-                            ytmodel::PromptResult::NothingFound => (),
-                            ytmodel::PromptResult::Stop => only_take_freebies = true,
                         }
+                    } else {
+                        println!("we already see '{}' in the manual mapping file", artist);
                     }
-                } else {
-                    println!("we already see '{}' in the manual mapping file", artist);
                 }
             }
         }
