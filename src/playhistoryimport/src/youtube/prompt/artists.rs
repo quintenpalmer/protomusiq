@@ -31,9 +31,9 @@ pub fn get_all_artist_info_resolved(
             println!("artist: {} is in the ignore list, so skipping", artist);
         } else {
             match model::get_lowercase_artist(&raw_library, &artist) {
-                Some(_found_artist) => {
+                Some(found_artist) => {
                     perfect_artist_map
-                        .insert(artist.clone(), artist.clone());
+                        .insert(artist.clone(), found_artist.artist_info.artist_name.clone());
                 }
                 None => {
                     if !manual_artist_map.contains_key(artist) {
