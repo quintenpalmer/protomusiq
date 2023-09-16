@@ -119,17 +119,9 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
         },
         message::Action::Close => Command::batch(vec![
             Command::perform(
-                common::mpris_sender(
-                    app.player_info.mpris_message_sender.clone(),
-                    shared::MprisMessage::Close,
-                )
-                .send_message(),
-                Message::ErrorResponse,
-            ),
-            Command::perform(
-                common::sink_sender(
-                    app.player_info.sink_message_sender.clone(),
-                    shared::SinkMessage::Close,
+                common::backend_sender(
+                    app.player_info.backend_message_sender.clone(),
+                    shared::GUIToBackendMessage::ToSink(shared::SinkMessage::Close),
                 )
                 .send_message(),
                 Message::ErrorResponse,

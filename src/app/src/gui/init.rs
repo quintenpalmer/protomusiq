@@ -4,12 +4,12 @@ use iced;
 
 use super::update;
 
+use crate::backend;
 use crate::datastore::{
     self,
     jsonbacked::{self, playlists as userplaylists},
     sqlitebacked,
 };
-use crate::services::{mpris, sink, tracker};
 
 use crate::model;
 use crate::util::{config, logging};
@@ -136,14 +136,8 @@ pub fn initialize_everything() -> state::App {
     let playlists = userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
     logger.print_elapsed("loading playlists");
 
-    let (sink_client, sink_callback) = sink::create_backend_with_client_and_callback();
-    logger.print_elapsed("creating sink");
-
-    let (mpris_client, mpris_callback) = mpris::create_backend_with_client_and_callback();
-    logger.print_elapsed("registering mpris");
-
-    let tracker_client =
-        tracker::create_backend_with_client(config_state.clone(), loader.spawn_copy());
+    let (backend_client, backend_callback) = backend::create_backend_with_client_and_callback();
+    logger.print_elapsed("creating backend");
 
     logger.print_elapsed("starting tracker");
 
@@ -169,11 +163,8 @@ pub fn initialize_everything() -> state::App {
             playing: false,
             current_volume: 1.0,
             current_playback: None,
-            sink_message_sender: sink_client,
-            sink_callback_recv: RefCell::new(Some(sink_callback)),
-            mpris_message_sender: mpris_client,
-            mpris_callback_recv: RefCell::new(Some(mpris_callback)),
-            tracker_message_sender: tracker_client,
+            backend_message_sender: backend_client,
+            backend_callback_recv: RefCell::new(Some(backend_callback)),
         },
         library: model::LibraryState::new(
             augmented_library,

@@ -22,8 +22,7 @@ pub enum Message {
     HistoryNav,
     PlaybackRequest(PlaybackRequest),
     ErrorResponse(Result<(), String>),
-    SinkCallback(shared::SinkCallbackMessage),
-    MprisCallback(shared::MprisCallbackMessage),
+    BackendCallback(shared::BackendToGUIMessage),
 }
 
 #[derive(Debug, Clone)]

@@ -26,6 +26,8 @@ impl Loader {
         }
     }
 
+    // TODO re-use this
+    #[allow(unused)]
     pub fn spawn_copy(&self) -> Self {
         match self {
             Loader::NoCache => Loader::NoCache,

@@ -110,6 +110,8 @@ pub struct SqliteLiveHistoryRecorder {
 }
 
 impl SqliteLiveHistoryRecorder {
+    // TODO re-use this
+    #[allow(unused)]
     pub fn new(conn: conn::Connections) -> Self {
         let bridge = bridge::SixtyFourLibrary::new(&conn);
 

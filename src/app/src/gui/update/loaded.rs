@@ -1,5 +1,7 @@
 use iced::Command;
 
+use crate::shared;
+
 use super::super::message::Message;
 use super::super::state::AppState;
 
@@ -23,8 +25,14 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     match message {
         Message::Action(action) => action::handle_action(app, action),
         Message::PlaybackRequest(internal) => playback::handle_playback_request(app, internal),
-        Message::SinkCallback(callback) => sink::handle_sink_callback(app, callback),
-        Message::MprisCallback(callback) => mpris::handle_mpris_callback(app, callback),
+        Message::BackendCallback(callback) => match callback {
+            shared::BackendToGUIMessage::SinkReports(sink_callback) => {
+                sink::handle_sink_callback(app, sink_callback)
+            }
+            shared::BackendToGUIMessage::MprisReports(mpris_callback) => {
+                mpris::handle_mpris_callback(app, mpris_callback)
+            }
+        },
         Message::Nav(nav_message) => {
             app.page_back_history.push(app.page_current_history.clone());
             app.page_current_history = nav_message.clone();

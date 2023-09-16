@@ -94,11 +94,8 @@ pub struct PlayerInfo {
     pub current_volume: f32,
     pub current_playback: Option<CurrentPlayback>,
 
-    pub sink_message_sender: shared::Client<shared::SinkMessage>,
-    pub sink_callback_recv: RefCell<Option<shared::Callback<shared::SinkCallbackMessage>>>,
-    pub mpris_message_sender: shared::Client<shared::MprisMessage>,
-    pub mpris_callback_recv: RefCell<Option<shared::Callback<shared::MprisCallbackMessage>>>,
-    pub tracker_message_sender: shared::Client<shared::TrackerMessage>,
+    pub backend_message_sender: shared::Client<shared::GUIToBackendMessage>,
+    pub backend_callback_recv: RefCell<Option<shared::Callback<shared::BackendToGUIMessage>>>,
 }
 
 impl PlayerInfo {

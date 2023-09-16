@@ -81,4 +81,8 @@ impl<T> Callback<T> {
     pub fn recv(&self) -> Result<T, mpsc::RecvError> {
         self.receiver.recv()
     }
+
+    pub fn try_recv(&self) -> Result<T, mpsc::TryRecvError> {
+        self.receiver.try_recv()
+    }
 }

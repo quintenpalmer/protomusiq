@@ -1,24 +1,10 @@
 use crate::shared;
 
-pub fn tracker_sender<T: std::fmt::Debug>(
+pub fn backend_sender<T: std::fmt::Debug>(
     tx: shared::Client<T>,
     message: T,
 ) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Tracker".to_string(), tx, message)
-}
-
-pub fn mpris_sender<T: std::fmt::Debug>(
-    tx: shared::Client<T>,
-    message: T,
-) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Mpris".to_string(), tx, message)
-}
-
-pub fn sink_sender<T: std::fmt::Debug>(
-    tx: shared::Client<T>,
-    message: T,
-) -> MessageCommandSender<T> {
-    MessageCommandSender::new("Sink".to_string(), tx, message)
+    MessageCommandSender::new("Multi-Purpose Backend".to_string(), tx, message)
 }
 
 pub struct MessageCommandSender<T> {

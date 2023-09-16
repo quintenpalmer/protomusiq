@@ -1,12 +1,10 @@
-use std::fs;
-use std::io;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
 
 use crate::shared;
 
-const BLOCKING_TIMEOUT: u64 = 1000;
+use crate::services::{mpris, sink};
 
 pub fn create_backend_with_client_and_callback() -> (
     shared::Client<shared::GUIToBackendMessage>,
@@ -24,167 +22,135 @@ pub fn create_backend_with_client_and_callback() -> (
     )
 }
 
+struct TrackedState {
+    playing: bool,
+    sink_closed: bool,
+    mpris_closed: bool,
+    gui_closed: bool,
+}
+
+impl TrackedState {
+    fn new() -> Self {
+        TrackedState {
+            playing: false,
+            sink_closed: false,
+            mpris_closed: false,
+            gui_closed: false,
+        }
+    }
+}
+
 pub fn run_forever(
-    rx: mpsc::Receiver<shared::GUIToBackendMessage>,
-    callback: mpsc::Sender<shared::BackendToGUIMessage>,
+    gui_rx: mpsc::Receiver<shared::GUIToBackendMessage>,
+    gui_callback: mpsc::Sender<shared::BackendToGUIMessage>,
 ) {
     println!("MULTI-BACKEND:\tstarting to listen...");
 
-    let sink = SinkPlayback::new();
+    let mut tracked_state = TrackedState::new();
 
-    sink.run_forever(rx, callback);
+    let (sink_client, sink_callback) = sink::create_backend_with_client_and_callback();
+
+    let (mpris_client, mpris_callback) = mpris::create_backend_with_client_and_callback();
+
+    loop {
+        if tracked_state.gui_closed && tracked_state.mpris_closed && tracked_state.sink_closed {
+            break;
+        }
+        match gui_rx.try_recv() {
+            Ok(gui_msg) => match gui_msg {
+                shared::GUIToBackendMessage::ToSink(sink_msg) => {
+                    let maybe_mpris_msg = match sink_msg {
+                        shared::SinkMessage::PlayButton => Some(shared::MprisMessage::SetPlaying),
+                        shared::SinkMessage::PauseButton => Some(shared::MprisMessage::SetPaused),
+                        shared::SinkMessage::LoadSong(ref _file_path, ref _volume) => None,
+                        shared::SinkMessage::SetVolume(ref _volume) => None,
+                        shared::SinkMessage::Close => Some(shared::MprisMessage::Close),
+                    };
+
+                    match sink_msg {
+                        shared::SinkMessage::PlayButton => tracked_state.playing = true,
+                        shared::SinkMessage::PauseButton => tracked_state.playing = false,
+                        shared::SinkMessage::LoadSong(ref _file_path, ref _volume) => {
+                            tracked_state.playing = true
+                        }
+                        shared::SinkMessage::SetVolume(ref _volume) => (),
+                        shared::SinkMessage::Close => {
+                            tracked_state.gui_closed = true;
+                            tracked_state.sink_closed = true;
+                            tracked_state.mpris_closed = true;
+                        }
+                    };
+                    sink_client.send(sink_msg).unwrap();
+                    match maybe_mpris_msg {
+                        Some(mpris_msg) => mpris_client.send(mpris_msg).unwrap(),
+                        None => (),
+                    };
+                }
+            },
+            Err(mpsc::TryRecvError::Empty) => (),
+            Err(mpsc::TryRecvError::Disconnected) => {
+                println!("recv sees that all clients have closed");
+                tracked_state.gui_closed = true;
+            }
+        }
+
+        match mpris_callback.try_recv() {
+            Ok(mpris_message) => {
+                let maybe_sink_msg = match mpris_message {
+                    shared::MprisCallbackMessage::PlayPause => match tracked_state.playing {
+                        true => Some(shared::SinkMessage::PauseButton),
+                        false => Some(shared::SinkMessage::PlayButton),
+                    },
+                    shared::MprisCallbackMessage::Play => Some(shared::SinkMessage::PlayButton),
+                    shared::MprisCallbackMessage::Pause => Some(shared::SinkMessage::PauseButton),
+                    shared::MprisCallbackMessage::Prev => None,
+                    shared::MprisCallbackMessage::Next => None,
+                };
+
+                match mpris_message {
+                    shared::MprisCallbackMessage::PlayPause => {
+                        tracked_state.playing = !tracked_state.playing
+                    }
+                    shared::MprisCallbackMessage::Play => tracked_state.playing = true,
+                    shared::MprisCallbackMessage::Pause => tracked_state.playing = false,
+                    shared::MprisCallbackMessage::Prev => (),
+                    shared::MprisCallbackMessage::Next => (),
+                };
+
+                let _ = gui_callback.send(shared::BackendToGUIMessage::MprisReports(mpris_message));
+                match maybe_sink_msg {
+                    Some(sink_msg) => {
+                        let _ = sink_client.send(sink_msg);
+                    }
+                    None => (),
+                };
+            }
+            Err(mpsc::TryRecvError::Empty) => (),
+            Err(mpsc::TryRecvError::Disconnected) => {
+                println!("recv sees that all clients have closed");
+                tracked_state.mpris_closed = true;
+            }
+        }
+
+        match sink_callback.try_recv() {
+            Ok(sink_message) => {
+                match sink_message {
+                    shared::SinkCallbackMessage::Playing => (),
+                    shared::SinkCallbackMessage::Paused => (),
+                    shared::SinkCallbackMessage::SecondElapsed => (),
+                    shared::SinkCallbackMessage::SongEnded => (),
+                };
+                let _ = gui_callback.send(shared::BackendToGUIMessage::SinkReports(sink_message));
+            }
+            Err(mpsc::TryRecvError::Empty) => (),
+            Err(mpsc::TryRecvError::Disconnected) => {
+                println!("recv sees that all clients have closed");
+                tracked_state.sink_closed = true;
+            }
+        }
+
+        thread::sleep(time::Duration::from_millis(50));
+    }
 
     println!("MULTI-BACKEND:\tdone listening");
-}
-
-pub struct SinkPlayback {
-    sink: rodio::Sink,
-    _stream: rodio::OutputStream,
-    stream_handle: rodio::OutputStreamHandle,
-    manual_sink_status: Option<bool>,
-    time_elapsed: u64,
-}
-
-impl SinkPlayback {
-    pub fn new() -> Self {
-        let (stream, stream_handle) = rodio::OutputStream::try_default().unwrap();
-        SinkPlayback {
-            _stream: stream,
-            sink: rodio::Sink::try_new(&stream_handle).unwrap(),
-            stream_handle: stream_handle,
-            manual_sink_status: None,
-            time_elapsed: 0,
-        }
-    }
-
-    pub fn run_forever(
-        mut self,
-        rx: mpsc::Receiver<shared::GUIToBackendMessage>,
-        callback: mpsc::Sender<shared::BackendToGUIMessage>,
-    ) {
-        loop {
-            match self.manual_sink_status {
-                Some(true) => {
-                    match rx.recv_timeout(time::Duration::from_millis(BLOCKING_TIMEOUT)) {
-                        Ok(shared::GUIToBackendMessage::ToSink(msg)) => {
-                            if !self.handle_msg(msg, &callback) {
-                                break;
-                            }
-                        }
-                        Err(mpsc::RecvTimeoutError::Timeout) => self.handle_timeout(&callback),
-                        Err(mpsc::RecvTimeoutError::Disconnected) => {
-                            println!("recv sees that all clients have closed");
-                            break;
-                        }
-                    }
-                }
-                _ => {
-                    println!("SINK:\tno playing media so waiting forever on recv");
-                    match rx.recv() {
-                        Ok(shared::GUIToBackendMessage::ToSink(msg)) => {
-                            if !self.handle_msg(msg, &callback) {
-                                break;
-                            }
-                        }
-                        Err(_e) => {
-                            println!("recv sees that all clients have closed");
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    fn handle_msg(
-        &mut self,
-        msg: shared::SinkMessage,
-        callback: &mpsc::Sender<shared::BackendToGUIMessage>,
-    ) -> bool {
-        println!("SINK:\t handling resp: {:?}", msg);
-        match msg {
-            shared::SinkMessage::PlayButton => {
-                if self.manual_sink_status.is_some() {
-                    self.manual_sink_status = Some(true);
-                }
-                self.sink.play();
-                callback
-                    .send(shared::BackendToGUIMessage::SinkReports(
-                        shared::SinkCallbackMessage::Playing,
-                    ))
-                    .unwrap();
-                true
-            }
-            shared::SinkMessage::PauseButton => {
-                if self.manual_sink_status.is_some() {
-                    self.manual_sink_status = Some(false);
-                }
-                self.sink.pause();
-                callback
-                    .send(shared::BackendToGUIMessage::SinkReports(
-                        shared::SinkCallbackMessage::Paused,
-                    ))
-                    .unwrap();
-                true
-            }
-            shared::SinkMessage::LoadSong(path, volume) => {
-                self.manual_sink_status = Some(true);
-                self.sink.stop();
-                self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
-
-                let file = io::BufReader::new(fs::File::open(path).unwrap());
-                self.sink.append(rodio::Decoder::new(file).unwrap());
-                self.sink.set_volume(volume);
-                self.sink.play();
-                self.time_elapsed = 0;
-                callback
-                    .send(shared::BackendToGUIMessage::SinkReports(
-                        shared::SinkCallbackMessage::Playing,
-                    ))
-                    .unwrap();
-                true
-            }
-            shared::SinkMessage::SetVolume(new_amount) => {
-                self.sink.set_volume(new_amount);
-                //callback.send(shared::SinkCallbackMessage::Playing).unwrap();
-                true
-            }
-            shared::SinkMessage::Close => {
-                self.sink.stop();
-                false
-            }
-        }
-    }
-
-    fn handle_timeout(&mut self, callback: &mpsc::Sender<shared::BackendToGUIMessage>) {
-        if self.manual_sink_status.is_some() && self.sink.len() == 0 {
-            self.manual_sink_status = None;
-            println!("SINK:\ttimeout on recv poll and we noticed the song was over");
-            callback
-                .send(shared::BackendToGUIMessage::SinkReports(
-                    shared::SinkCallbackMessage::SongEnded,
-                ))
-                .unwrap();
-        } else {
-            match self.manual_sink_status {
-                Some(true) => {
-                    let new_time_elapsed = self.time_elapsed + BLOCKING_TIMEOUT;
-                    if self.time_elapsed / 1000 != new_time_elapsed / 1000 {
-                        callback
-                            .send(shared::BackendToGUIMessage::SinkReports(
-                                shared::SinkCallbackMessage::SecondElapsed,
-                            ))
-                            .unwrap();
-                    }
-                    self.time_elapsed = new_time_elapsed;
-                }
-                _ => (),
-            };
-            println!(
-                "SINK:\tboring, timeout on recv poll and time passed is {}.{}",
-                self.time_elapsed / 1000,
-                self.time_elapsed % 1000
-            );
-        }
-    }
 }

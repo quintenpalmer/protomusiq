@@ -6,6 +6,8 @@ use std::thread;
 use crate::shared;
 use crate::shared::{Callback, Client};
 
+// TODO re-use this
+#[allow(unused)]
 pub fn create_backend_with_client_and_callback() -> (
     Client<shared::MprisMessage>,
     Callback<shared::MprisCallbackMessage>,

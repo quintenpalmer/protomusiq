@@ -19,42 +19,21 @@ pub fn handle_playback_request(
                 Some(ref outer_current_playback) => match outer_current_playback {
                     state::CurrentPlayback::Track(ref current_playback) => {
                         app.player_info.playing = true;
-                        Command::batch(vec![
-                            Command::perform(
-                                common::mpris_sender(
-                                    app.player_info.mpris_message_sender.clone(),
-                                    shared::MprisMessage::SetMetadata(
-                                        current_playback.track.metadata.album_artist.clone(),
-                                        current_playback.track.metadata.title.clone(),
-                                    ),
-                                )
-                                .send_message(),
-                                Message::ErrorResponse,
-                            ),
-                            Command::perform(
-                                {
-                                    common::sink_sender(
-                                        app.player_info.sink_message_sender.clone(),
+                        Command::perform(
+                            {
+                                common::backend_sender(
+                                    app.player_info.backend_message_sender.clone(),
+                                    shared::GUIToBackendMessage::ToSink(
                                         shared::SinkMessage::LoadSong(
                                             current_playback.track.metadata.path.clone(),
                                             app.player_info.current_volume,
                                         ),
-                                    )
-                                    .send_message()
-                                },
-                                Message::ErrorResponse,
-                            ),
-                            Command::perform(
-                                common::tracker_sender(
-                                    app.player_info.tracker_message_sender.clone(),
-                                    shared::TrackerMessage::SongStarted(
-                                        current_playback.track.clone(),
                                     ),
                                 )
-                                .send_message(),
-                                Message::ErrorResponse,
-                            ),
-                        ])
+                                .send_message()
+                            },
+                            Message::ErrorResponse,
+                        )
                     }
                     state::CurrentPlayback::PauseBreak => {
                         //app.player_info.rest.playing = false;
@@ -169,57 +148,30 @@ pub fn handle_playback_request(
                 };
                 app.player_info.current_playback = None;
                 app.play_queue_info.current_playback = None;
-                Command::perform(
-                    common::mpris_sender(
-                        app.player_info.mpris_message_sender.clone(),
-                        shared::MprisMessage::SetStopped,
-                    )
-                    .send_message(),
-                    Message::ErrorResponse,
-                )
+                Command::none()
             }
         }
         message::PlaybackRequest::Play => {
             app.player_info.playing = true;
-            Command::batch(vec![
-                Command::perform(
-                    common::mpris_sender(
-                        app.player_info.mpris_message_sender.clone(),
-                        shared::MprisMessage::SetPlaying,
-                    )
-                    .send_message(),
-                    Message::ErrorResponse,
-                ),
-                Command::perform(
-                    common::sink_sender(
-                        app.player_info.sink_message_sender.clone(),
-                        shared::SinkMessage::PlayButton,
-                    )
-                    .send_message(),
-                    Message::ErrorResponse,
-                ),
-            ])
+            Command::perform(
+                common::backend_sender(
+                    app.player_info.backend_message_sender.clone(),
+                    shared::GUIToBackendMessage::ToSink(shared::SinkMessage::PlayButton),
+                )
+                .send_message(),
+                Message::ErrorResponse,
+            )
         }
         message::PlaybackRequest::Pause => {
             app.player_info.playing = false;
-            Command::batch(vec![
-                Command::perform(
-                    common::mpris_sender(
-                        app.player_info.mpris_message_sender.clone(),
-                        shared::MprisMessage::SetPaused,
-                    )
-                    .send_message(),
-                    Message::ErrorResponse,
-                ),
-                Command::perform(
-                    common::sink_sender(
-                        app.player_info.sink_message_sender.clone(),
-                        shared::SinkMessage::PauseButton,
-                    )
-                    .send_message(),
-                    Message::ErrorResponse,
-                ),
-            ])
+            Command::perform(
+                common::backend_sender(
+                    app.player_info.backend_message_sender.clone(),
+                    shared::GUIToBackendMessage::ToSink(shared::SinkMessage::PauseButton),
+                )
+                .send_message(),
+                Message::ErrorResponse,
+            )
         }
         message::PlaybackRequest::InsertPause => {
             let mut new_songs_to_queue =

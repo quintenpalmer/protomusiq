@@ -10,6 +10,8 @@ use crate::datastore::sqlitebacked;
 use crate::model;
 use crate::shared;
 
+// TODO re-use this
+#[allow(unused)]
 pub fn create_backend_with_client(
     config_state: model::app::AppConfigState,
     loader: loader::Loader,

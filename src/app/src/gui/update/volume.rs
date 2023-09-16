@@ -18,9 +18,11 @@ pub fn handle_volume_request(
     };
     Command::perform(
         {
-            common::sink_sender(
-                app.player_info.sink_message_sender.clone(),
-                shared::SinkMessage::SetVolume(app.player_info.current_volume),
+            common::backend_sender(
+                app.player_info.backend_message_sender.clone(),
+                shared::GUIToBackendMessage::ToSink(shared::SinkMessage::SetVolume(
+                    app.player_info.current_volume,
+                )),
             )
             .send_message()
         },
