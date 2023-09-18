@@ -4,6 +4,21 @@ use std::sync::mpsc;
 use crate::model;
 
 #[derive(Debug, Clone)]
+pub enum PlaybackRequest {
+    Play,
+    Pause,
+    Prev,
+    Next,
+
+    InsertPause,
+
+    LoadCurrentSong,
+    PlaySongs(Vec<model::AugmentedTrack>),
+    InsertSongs(Vec<model::AugmentedTrack>, bool),
+    AppendSongs(Vec<model::AugmentedTrack>, bool),
+}
+
+#[derive(Debug, Clone)]
 pub enum GUIToBackendMessage {
     ToSink(SinkMessage),
 }

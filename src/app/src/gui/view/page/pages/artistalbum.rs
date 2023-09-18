@@ -4,6 +4,7 @@ use iced::{Element, Length};
 use musiqlibrary;
 
 use crate::model;
+use crate::shared;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state::{self, ActionState, PlayerInfo};
@@ -132,7 +133,7 @@ pub fn artist_album_view_state<'a>(
                                                     bright_paragraph("> Play All"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
-                                                    message::PlaybackRequest::PlaySongs(
+                                                    shared::PlaybackRequest::PlaySongs(
                                                         if should_shuffle {
                                                             shuffle::shuffle(tracks.clone())
                                                         } else {
@@ -146,7 +147,7 @@ pub fn artist_album_view_state<'a>(
                                                     bright_paragraph(">| Insert All Next"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
-                                                    message::PlaybackRequest::InsertSongs(
+                                                    shared::PlaybackRequest::InsertSongs(
                                                         if should_shuffle {
                                                             shuffle::shuffle(tracks.clone())
                                                         } else {
@@ -161,7 +162,7 @@ pub fn artist_album_view_state<'a>(
                                                     bright_paragraph("|> Append All"),
                                                 )
                                                 .on_press(Message::PlaybackRequest(
-                                                    message::PlaybackRequest::AppendSongs(
+                                                    shared::PlaybackRequest::AppendSongs(
                                                         if should_shuffle {
                                                             shuffle::shuffle(tracks.clone())
                                                         } else {
@@ -229,7 +230,7 @@ pub fn artist_album_view_state<'a>(
                                                             bright_paragraph(">"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
-                                                            message::PlaybackRequest::PlaySongs(
+                                                            shared::PlaybackRequest::PlaySongs(
                                                                 disc.tracks.values()
                                                                     .map(|track| track.clone())
                                                                     .collect(),
@@ -247,7 +248,7 @@ pub fn artist_album_view_state<'a>(
                                                             bright_paragraph(">|"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
-                                                            message::PlaybackRequest::InsertSongs(
+                                                            shared::PlaybackRequest::InsertSongs(
                                                                 disc.tracks.values()
                                                                     .map(|track| track.clone())
                                                                     .collect(),
@@ -260,7 +261,7 @@ pub fn artist_album_view_state<'a>(
                                                             bright_paragraph("|>"),
                                                         )
                                                         .on_press(Message::PlaybackRequest(
-                                                            message::PlaybackRequest::AppendSongs(
+                                                            shared::PlaybackRequest::AppendSongs(
                                                                 disc.tracks.values()
                                                                     .map(|track| track.clone())
                                                                     .collect(),
@@ -306,7 +307,7 @@ pub fn artist_album_view_state<'a>(
                                             .push(
                                                 dark_button(bright_paragraph(">"))
                                                     .on_press(Message::PlaybackRequest(
-                                                        message::PlaybackRequest::PlaySongs(
+                                                        shared::PlaybackRequest::PlaySongs(
                                                             vec![track.clone()],
                                                         ),
                                                     )),
@@ -314,7 +315,7 @@ pub fn artist_album_view_state<'a>(
                                             .push(
                                                 dark_button(bright_paragraph(">..."))
                                                     .on_press(Message::PlaybackRequest(
-                                                        message::PlaybackRequest::PlaySongs(
+                                                        shared::PlaybackRequest::PlaySongs(
                                                             model::functions::tracks_after_including(&tracks, &track),
                                                         ),
                                                     )),
@@ -361,7 +362,7 @@ pub fn artist_album_view_state<'a>(
                                                         bright_paragraph(">|"),
                                                     )
                                                     .on_press(Message::PlaybackRequest(
-                                                        message::PlaybackRequest::InsertSongs(
+                                                        shared::PlaybackRequest::InsertSongs(
                                                             vec![track.clone()],
                                                             false,
                                                         ),
@@ -372,7 +373,7 @@ pub fn artist_album_view_state<'a>(
                                                         bright_paragraph("|>"),
                                                     )
                                                     .on_press(Message::PlaybackRequest(
-                                                        message::PlaybackRequest::AppendSongs(
+                                                        shared::PlaybackRequest::AppendSongs(
                                                             vec![track.clone()],
                                                             false,
                                                         ),

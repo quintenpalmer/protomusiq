@@ -20,7 +20,7 @@ pub enum Message {
     Action(Action),
     Nav(NavMessage),
     HistoryNav,
-    PlaybackRequest(PlaybackRequest),
+    PlaybackRequest(shared::PlaybackRequest),
     ErrorResponse(Result<(), String>),
     BackendCallback(shared::BackendToGUIMessage),
 }
@@ -46,21 +46,6 @@ pub enum Action {
     PerformSearch(String),
     TogglePlayQueueVisible,
     Close,
-}
-
-#[derive(Debug, Clone)]
-pub enum PlaybackRequest {
-    Play,
-    Pause,
-    Prev,
-    Next,
-
-    InsertPause,
-
-    LoadCurrentSong,
-    PlaySongs(Vec<model::AugmentedTrack>),
-    InsertSongs(Vec<model::AugmentedTrack>, bool),
-    AppendSongs(Vec<model::AugmentedTrack>, bool),
 }
 
 #[derive(Debug, Clone)]

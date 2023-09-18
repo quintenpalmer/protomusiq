@@ -10,11 +10,11 @@ use super::loaded;
 
 pub fn handle_playback_request(
     app: &mut AppState,
-    internal: message::PlaybackRequest,
+    internal: shared::PlaybackRequest,
 ) -> Command<message::Message> {
     println!("GUI:\thandling internal: {:?}", internal);
     match internal {
-        message::PlaybackRequest::LoadCurrentSong => {
+        shared::PlaybackRequest::LoadCurrentSong => {
             match app.player_info.current_playback {
                 Some(ref outer_current_playback) => match outer_current_playback {
                     state::CurrentPlayback::Track(ref current_playback) => {
@@ -39,18 +39,18 @@ pub fn handle_playback_request(
                         //app.player_info.rest.playing = false;
                         loaded::update_state(
                             app,
-                            Message::PlaybackRequest(message::PlaybackRequest::Pause),
+                            Message::PlaybackRequest(shared::PlaybackRequest::Pause),
                         )
                     }
                 },
                 None => Command::none(),
             }
         }
-        message::PlaybackRequest::PlaySongs(tracks) => loaded::update_state(
+        shared::PlaybackRequest::PlaySongs(tracks) => loaded::update_state(
             app,
-            Message::PlaybackRequest(message::PlaybackRequest::InsertSongs(tracks, true)),
+            Message::PlaybackRequest(shared::PlaybackRequest::InsertSongs(tracks, true)),
         ),
-        message::PlaybackRequest::AppendSongs(tracks, load_next) => {
+        shared::PlaybackRequest::AppendSongs(tracks, load_next) => {
             let mut new_songs_to_queue = Vec::new();
             for iter_track in tracks.into_iter() {
                 new_songs_to_queue.push(state::PlayQueueEntry::Track(state::PlayQueueTrack {
@@ -61,15 +61,12 @@ pub fn handle_playback_request(
                 .play_queue
                 .append(&mut new_songs_to_queue);
             if load_next {
-                loaded::update_state(
-                    app,
-                    Message::PlaybackRequest(message::PlaybackRequest::Next),
-                )
+                loaded::update_state(app, Message::PlaybackRequest(shared::PlaybackRequest::Next))
             } else {
                 Command::none()
             }
         }
-        message::PlaybackRequest::InsertSongs(tracks, load_next) => {
+        shared::PlaybackRequest::InsertSongs(tracks, load_next) => {
             let mut new_songs_to_queue = Vec::new();
             for iter_track in tracks.into_iter() {
                 new_songs_to_queue.push(state::PlayQueueEntry::Track(state::PlayQueueTrack {
@@ -80,15 +77,12 @@ pub fn handle_playback_request(
             app.play_queue_info.play_queue = new_songs_to_queue;
 
             if load_next {
-                loaded::update_state(
-                    app,
-                    Message::PlaybackRequest(message::PlaybackRequest::Next),
-                )
+                loaded::update_state(app, Message::PlaybackRequest(shared::PlaybackRequest::Next))
             } else {
                 Command::none()
             }
         }
-        message::PlaybackRequest::Prev => {
+        shared::PlaybackRequest::Prev => {
             if app.play_queue_info.play_history.len() > 0 {
                 match app.player_info.current_playback {
                     Some(ref current_playback) => {
@@ -114,13 +108,13 @@ pub fn handle_playback_request(
                 app.play_queue_info.current_playback = Some(track.clone());
                 loaded::update_state(
                     app,
-                    Message::PlaybackRequest(message::PlaybackRequest::LoadCurrentSong),
+                    Message::PlaybackRequest(shared::PlaybackRequest::LoadCurrentSong),
                 )
             } else {
                 Command::none()
             }
         }
-        message::PlaybackRequest::Next => {
+        shared::PlaybackRequest::Next => {
             if app.play_queue_info.play_queue.len() > 0 {
                 match app.player_info.current_playback {
                     Some(ref current_playback) => app
@@ -136,7 +130,7 @@ pub fn handle_playback_request(
                 app.play_queue_info.current_playback = Some(track.clone());
                 loaded::update_state(
                     app,
-                    Message::PlaybackRequest(message::PlaybackRequest::LoadCurrentSong),
+                    Message::PlaybackRequest(shared::PlaybackRequest::LoadCurrentSong),
                 )
             } else {
                 match app.player_info.current_playback {
@@ -151,7 +145,7 @@ pub fn handle_playback_request(
                 Command::none()
             }
         }
-        message::PlaybackRequest::Play => {
+        shared::PlaybackRequest::Play => {
             app.player_info.playing = true;
             Command::perform(
                 common::backend_sender(
@@ -162,7 +156,7 @@ pub fn handle_playback_request(
                 Message::ErrorResponse,
             )
         }
-        message::PlaybackRequest::Pause => {
+        shared::PlaybackRequest::Pause => {
             app.player_info.playing = false;
             Command::perform(
                 common::backend_sender(
@@ -173,7 +167,7 @@ pub fn handle_playback_request(
                 Message::ErrorResponse,
             )
         }
-        message::PlaybackRequest::InsertPause => {
+        shared::PlaybackRequest::InsertPause => {
             let mut new_songs_to_queue =
                 vec![state::PlayQueueEntry::Action(state::PlayQueueAction::Pause)];
             new_songs_to_queue.append(&mut app.play_queue_info.play_queue);

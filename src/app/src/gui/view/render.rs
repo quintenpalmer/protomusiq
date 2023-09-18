@@ -3,6 +3,7 @@ use iced::{Element, Length};
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::model;
+use crate::shared;
 use crate::state;
 
 use super::common;
@@ -508,25 +509,25 @@ fn controls_with_maybe_track_info<'a>(
                         Row::new()
                             .push(
                                 dark_button(bright_paragraph("<<")).on_press(
-                                    Message::PlaybackRequest(message::PlaybackRequest::Prev),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::Prev),
                                 ),
                             )
                             .push(if player_info.playing {
                                 dark_button(bright_paragraph("=")).on_press(
-                                    Message::PlaybackRequest(message::PlaybackRequest::Pause),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::Pause),
                                 )
                             } else {
                                 dark_button(bright_paragraph(">")).on_press(
-                                    Message::PlaybackRequest(message::PlaybackRequest::Play),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::Play),
                                 )
                             })
                             .push(
                                 dark_button(bright_paragraph(">>")).on_press(
-                                    Message::PlaybackRequest(message::PlaybackRequest::Next),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::Next),
                                 ),
                             )
                             .push(dark_button(bright_paragraph("=|")).on_press(
-                                Message::PlaybackRequest(message::PlaybackRequest::InsertPause),
+                                Message::PlaybackRequest(shared::PlaybackRequest::InsertPause),
                             )),
                     )
                     .push(duration_info)

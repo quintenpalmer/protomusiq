@@ -12,10 +12,9 @@ pub fn handle_sink_callback(
     callback: shared::SinkCallbackMessage,
 ) -> Command<message::Message> {
     match callback {
-        shared::SinkCallbackMessage::SongEnded => loaded::update_state(
-            app,
-            Message::PlaybackRequest(message::PlaybackRequest::Next),
-        ),
+        shared::SinkCallbackMessage::SongEnded => {
+            loaded::update_state(app, Message::PlaybackRequest(shared::PlaybackRequest::Next))
+        }
         shared::SinkCallbackMessage::SecondElapsed => {
             match app.player_info.current_playback {
                 Some(ref mut outer_current_playback) => match outer_current_playback {

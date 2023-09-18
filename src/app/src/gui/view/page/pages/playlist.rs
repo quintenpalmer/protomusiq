@@ -2,6 +2,7 @@ use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Sp
 use iced::Length;
 
 use crate::model;
+use crate::shared;
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state::{self, ActionState, PlayerInfo};
@@ -64,7 +65,7 @@ pub fn playlist_view<'a>(
                                     Row::new()
                                         .push(dark_button(bright_paragraph("> Play All")).on_press(
                                             Message::PlaybackRequest(
-                                                message::PlaybackRequest::PlaySongs(
+                                                shared::PlaybackRequest::PlaySongs(
                                                     if should_shuffle {
                                                         shuffle::shuffle(augmented_tracks.clone())
                                                     } else {
@@ -76,7 +77,7 @@ pub fn playlist_view<'a>(
                                         .push(
                                             dark_button(bright_paragraph(">| Insert All Next"))
                                                 .on_press(Message::PlaybackRequest(
-                                                    message::PlaybackRequest::InsertSongs(
+                                                    shared::PlaybackRequest::InsertSongs(
                                                         if should_shuffle {
                                                             shuffle::shuffle(
                                                                 augmented_tracks.clone(),
@@ -91,7 +92,7 @@ pub fn playlist_view<'a>(
                                         .push(
                                             dark_button(bright_paragraph("|> Append All"))
                                                 .on_press(Message::PlaybackRequest(
-                                                    message::PlaybackRequest::AppendSongs(
+                                                    shared::PlaybackRequest::AppendSongs(
                                                         if should_shuffle {
                                                             shuffle::shuffle(
                                                                 augmented_tracks.clone(),
@@ -150,12 +151,12 @@ pub fn playlist_view<'a>(
                             model::AlbumSize::Micro,
                         ))
                         .push(dark_button(bright_paragraph("> ")).on_press(
-                            Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(vec![
+                            Message::PlaybackRequest(shared::PlaybackRequest::PlaySongs(vec![
                                 track.clone(),
                             ])),
                         ))
                         .push(dark_button(bright_paragraph(">...")).on_press(
-                            Message::PlaybackRequest(message::PlaybackRequest::PlaySongs(
+                            Message::PlaybackRequest(shared::PlaybackRequest::PlaySongs(
                                 model::functions::tracks_after_including(&tracks, &track),
                             )),
                         ))
@@ -179,20 +180,16 @@ pub fn playlist_view<'a>(
                                     .width(Length::Fixed(50.0)),
                                 )
                                 .push(dark_button(bright_paragraph(">|")).on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::InsertSongs(
-                                            vec![track.clone()],
-                                            false,
-                                        ),
-                                    ),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::InsertSongs(
+                                        vec![track.clone()],
+                                        false,
+                                    )),
                                 ))
                                 .push(dark_button(bright_paragraph("|>")).on_press(
-                                    Message::PlaybackRequest(
-                                        message::PlaybackRequest::AppendSongs(
-                                            vec![track.clone()],
-                                            false,
-                                        ),
-                                    ),
+                                    Message::PlaybackRequest(shared::PlaybackRequest::AppendSongs(
+                                        vec![track.clone()],
+                                        false,
+                                    )),
                                 )),
                         )
                         .push({
