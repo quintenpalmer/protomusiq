@@ -137,7 +137,7 @@ pub fn initialize_everything() -> state::App {
     logger.print_elapsed("loading playlists");
 
     let (backend_client, backend_callback) =
-        backend::create_backend_with_client_and_callback(config_state.clone(), loader);
+        backend::create_backend_with_client_and_callback(config_state.clone(), loader.spawn_copy());
     logger.print_elapsed("creating backend");
 
     logger.print_elapsed("starting tracker");
