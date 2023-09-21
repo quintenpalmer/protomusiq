@@ -2,11 +2,16 @@ use std::sync::mpsc;
 use std::thread;
 use std::time;
 
+use crate::datastore::loader;
+use crate::model;
 use crate::shared;
 
-use crate::services::{mpris, sink};
+use crate::services::{mpris, sink, tracker};
 
-pub fn create_backend_with_client_and_callback() -> (
+pub fn create_backend_with_client_and_callback(
+    config_state: model::app::AppConfigState,
+    loader: loader::Loader,
+) -> (
     shared::Client<shared::GUIToBackendMessage>,
     shared::Callback<shared::BackendToGUIMessage>,
 ) {
@@ -14,7 +19,14 @@ pub fn create_backend_with_client_and_callback() -> (
 
     let (callback_from_backend, callback_to_client) = mpsc::channel();
 
-    thread::spawn(move || run_forever(recv_for_backend, callback_from_backend));
+    thread::spawn(move || {
+        run_forever(
+            config_state,
+            loader,
+            recv_for_backend,
+            callback_from_backend,
+        )
+    });
 
     (
         shared::Client::new(sender_for_client),
@@ -39,6 +51,8 @@ impl TrackedState {
 }
 
 pub fn run_forever(
+    config_state: model::app::AppConfigState,
+    loader: loader::Loader,
     gui_rx: mpsc::Receiver<shared::GUIToBackendMessage>,
     gui_callback: mpsc::Sender<shared::BackendToGUIMessage>,
 ) {
@@ -52,6 +66,8 @@ pub fn run_forever(
 
     let (mpris_client, mpris_callback) = mpris::create_backend_with_client_and_callback();
 
+    let tracker_client = tracker::create_backend_with_client(config_state, loader);
+
     loop {
         if tracked_state.gui_closed && tracked_state.mpris_closed && tracked_state.sink_closed {
             break;
@@ -63,6 +79,7 @@ pub fn run_forever(
                         &mut play_queue,
                         sink_client.clone(),
                         mpris_client.clone(),
+                        tracker_client.clone(),
                         to_playback_msg,
                     );
 
@@ -98,6 +115,7 @@ pub fn run_forever(
                     &mut play_queue,
                     sink_client.clone(),
                     mpris_client.clone(),
+                    tracker_client.clone(),
                     playback_msg,
                 );
 
@@ -125,6 +143,7 @@ pub fn run_forever(
                             &mut play_queue,
                             sink_client.clone(),
                             mpris_client.clone(),
+                            tracker_client.clone(),
                             shared::PlaybackRequest::Next,
                         );
                     }
@@ -150,6 +169,7 @@ fn handle_playback_request(
     play_queue: &mut shared::PlayQueueInfo,
     sink_client: shared::Client<shared::SinkMessage>,
     mpris_client: shared::Client<shared::MprisMessage>,
+    tracker_client: shared::Client<shared::TrackerMessage>,
     internal: shared::PlaybackRequest,
 ) {
     println!("GUI:\thandling internal: {:?}", internal);
@@ -167,6 +187,9 @@ fn handle_playback_request(
                         current_playback.track.metadata.album_artist.clone(),
                         current_playback.track.metadata.title.clone(),
                     ));
+                    let _ = tracker_client.send(shared::TrackerMessage::SongStarted(
+                        current_playback.track.clone(),
+                    ));
                 }
                 shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
                     play_queue.playing = false;
@@ -174,6 +197,7 @@ fn handle_playback_request(
                         play_queue,
                         sink_client,
                         mpris_client,
+                        tracker_client,
                         shared::PlaybackRequest::Pause,
                     );
                 }
@@ -184,6 +208,7 @@ fn handle_playback_request(
             play_queue,
             sink_client,
             mpris_client,
+            tracker_client,
             shared::PlaybackRequest::InsertSongs(tracks, true),
         ),
         shared::PlaybackRequest::AppendSongs(tracks, load_next) => {
@@ -199,6 +224,7 @@ fn handle_playback_request(
                     play_queue,
                     sink_client,
                     mpris_client,
+                    tracker_client,
                     shared::PlaybackRequest::Next,
                 );
             } else {
@@ -220,6 +246,7 @@ fn handle_playback_request(
                     play_queue,
                     sink_client,
                     mpris_client,
+                    tracker_client,
                     shared::PlaybackRequest::Next,
                 );
             } else {
@@ -252,6 +279,7 @@ fn handle_playback_request(
                     play_queue,
                     sink_client,
                     mpris_client,
+                    tracker_client,
                     shared::PlaybackRequest::LoadCurrentSong,
                 );
             } else {
@@ -275,6 +303,7 @@ fn handle_playback_request(
                     play_queue,
                     sink_client,
                     mpris_client,
+                    tracker_client,
                     shared::PlaybackRequest::LoadCurrentSong,
                 );
             } else {
