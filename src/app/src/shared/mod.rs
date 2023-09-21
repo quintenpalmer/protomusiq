@@ -23,7 +23,7 @@ pub enum PlaybackRequest {
 
 #[derive(Debug, Clone)]
 pub enum GUIToBackendMessage {
-    ToSink(PlaybackRequest),
+    BackendPlayback(PlaybackRequest),
 }
 
 #[derive(Debug, Clone)]

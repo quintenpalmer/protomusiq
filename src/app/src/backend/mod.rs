@@ -74,7 +74,7 @@ pub fn run_forever(
         }
         match gui_rx.try_recv() {
             Ok(gui_msg) => match gui_msg {
-                shared::GUIToBackendMessage::ToSink(to_playback_msg) => {
+                shared::GUIToBackendMessage::BackendPlayback(to_playback_msg) => {
                     handle_playback_request(
                         &mut play_queue,
                         sink_client.clone(),
