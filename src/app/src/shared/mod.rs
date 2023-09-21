@@ -3,8 +3,10 @@ use std::path;
 use crate::model;
 
 mod client;
+mod state;
 
 pub use client::{Callback, Client};
+pub use state::{PlayQueueAction, PlayQueueEntry, PlayQueueInfo, PlayQueueTrack};
 
 #[derive(Debug, Clone)]
 pub enum PlaybackRequest {
@@ -32,46 +34,6 @@ pub enum GUIToBackendMessage {
 #[derive(Debug, Clone)]
 pub enum BackendToGUIMessage {
     PlayQueueState(PlayQueueInfo),
-}
-
-/// State for the Play Queue (and Current Track and Play History)
-#[derive(Debug, Clone)]
-pub struct PlayQueueInfo {
-    pub current_second: u64,
-    pub playing: bool,
-    pub current_volume: f32,
-    pub play_history: Vec<PlayQueueEntry>,
-    pub current_playback: Option<PlayQueueEntry>,
-    pub play_queue: Vec<PlayQueueEntry>,
-}
-
-impl PlayQueueInfo {
-    pub fn new() -> Self {
-        PlayQueueInfo {
-            current_second: 0,
-            playing: false,
-            current_volume: 1.0,
-            play_history: Vec::new(),
-            current_playback: None,
-            play_queue: Vec::new(),
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub enum PlayQueueEntry {
-    Track(PlayQueueTrack),
-    Action(PlayQueueAction),
-}
-
-#[derive(Debug, Clone)]
-pub struct PlayQueueTrack {
-    pub track: model::AugmentedTrack,
-}
-
-#[derive(Debug, Clone)]
-pub enum PlayQueueAction {
-    Pause,
 }
 
 #[derive(Debug, Clone)]
