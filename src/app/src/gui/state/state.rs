@@ -53,6 +53,19 @@ pub enum PlayQueueEntry {
     Action(PlayQueueAction),
 }
 
+impl PlayQueueEntry {
+    pub fn from_shared(shared_repr: shared::PlayQueueEntry) -> Self {
+        match shared_repr {
+            shared::PlayQueueEntry::Track(t) => {
+                PlayQueueEntry::Track(PlayQueueTrack { track: t.track })
+            }
+            shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                PlayQueueEntry::Action(PlayQueueAction::Pause)
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct PlayQueueTrack {
     pub track: model::AugmentedTrack,
@@ -61,27 +74,6 @@ pub struct PlayQueueTrack {
 #[derive(Debug, Clone)]
 pub enum PlayQueueAction {
     Pause,
-}
-
-impl PlayQueueEntry {
-    pub fn from_playback(playback: &CurrentPlayback) -> Self {
-        match playback {
-            CurrentPlayback::Track(ref current_playback) => PlayQueueEntry::Track(PlayQueueTrack {
-                track: current_playback.track.clone(),
-            }),
-            CurrentPlayback::PauseBreak => PlayQueueEntry::Action(PlayQueueAction::Pause),
-        }
-    }
-
-    pub fn to_playback_zeroed(&self) -> CurrentPlayback {
-        match self {
-            PlayQueueEntry::Track(ref track) => CurrentPlayback::Track(CurrentTrackPlayback {
-                track: track.track.clone(),
-                current_second: 0,
-            }),
-            PlayQueueEntry::Action(PlayQueueAction::Pause) => CurrentPlayback::PauseBreak,
-        }
-    }
 }
 
 pub struct ActionState {
@@ -115,18 +107,21 @@ pub enum CurrentPlayback {
     PauseBreak,
 }
 
+impl CurrentPlayback {
+    pub fn from_shared(shared_repr: shared::PlayQueueEntry, current_second: u64) -> Self {
+        match shared_repr {
+            shared::PlayQueueEntry::Track(t) => CurrentPlayback::Track(CurrentTrackPlayback {
+                track: t.track,
+                current_second: current_second,
+            }),
+            shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                CurrentPlayback::PauseBreak
+            }
+        }
+    }
+}
+
 pub struct CurrentTrackPlayback {
     pub track: model::AugmentedTrack,
     pub current_second: u64,
-}
-
-impl CurrentPlayback {
-    pub fn from_entry_zeroed(playback: &PlayQueueEntry) -> Self {
-        playback.to_playback_zeroed()
-    }
-
-    #[allow(unused)]
-    pub fn to_entry(&self) -> PlayQueueEntry {
-        PlayQueueEntry::from_playback(self)
-    }
 }

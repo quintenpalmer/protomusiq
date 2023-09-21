@@ -20,7 +20,7 @@ pub fn handle_volume_request(
         {
             common::backend_sender(
                 app.player_info.backend_message_sender.clone(),
-                shared::GUIToBackendMessage::ToSink(shared::SinkMessage::SetVolume(
+                shared::GUIToBackendMessage::ToSink(shared::PlaybackRequest::SetVolume(
                     app.player_info.current_volume,
                 )),
             )

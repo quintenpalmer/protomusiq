@@ -6,10 +6,8 @@ use super::super::message::Message;
 use super::super::state::AppState;
 
 use super::action;
-use super::mpris;
 use super::nav;
 use super::playback;
-use super::sink;
 
 pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     println!(
@@ -26,11 +24,8 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
         Message::Action(action) => action::handle_action(app, action),
         Message::PlaybackRequest(internal) => playback::handle_playback_request(app, internal),
         Message::BackendCallback(callback) => match callback {
-            shared::BackendToGUIMessage::SinkReports(sink_callback) => {
-                sink::handle_sink_callback(app, sink_callback)
-            }
-            shared::BackendToGUIMessage::MprisReports(mpris_callback) => {
-                mpris::handle_mpris_callback(app, mpris_callback)
+            shared::BackendToGUIMessage::PlayQueueState(new_play_queue) => {
+                playback::handle_set_play_queue(app, new_play_queue)
             }
         },
         Message::Nav(nav_message) => {

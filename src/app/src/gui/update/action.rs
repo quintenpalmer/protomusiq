@@ -121,7 +121,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             Command::perform(
                 common::backend_sender(
                     app.player_info.backend_message_sender.clone(),
-                    shared::GUIToBackendMessage::ToSink(shared::SinkMessage::Close),
+                    shared::GUIToBackendMessage::ToSink(shared::PlaybackRequest::Close),
                 )
                 .send_message(),
                 Message::ErrorResponse,
