@@ -35,7 +35,7 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
                                 relative_path: path
                                     .path()
                                     .to_path_buf()
-                                    .strip_prefix(orig_prefix.clone())
+                                    .strip_prefix(orig_prefix)
                                     .unwrap()
                                     .to_path_buf(),
                                 last_modified: fs::metadata(path.path().clone())

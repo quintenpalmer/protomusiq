@@ -54,7 +54,7 @@ pub fn resolve_metadata_from_parser<P: AsRef<Path>>(
         path: parser.path(),
         relative_path: parser
             .path()
-            .strip_prefix(orig_prefix.clone())
+            .strip_prefix(orig_prefix)
             .unwrap()
             .to_path_buf(),
         last_modified: parser.last_mod(),

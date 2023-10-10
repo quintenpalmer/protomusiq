@@ -24,12 +24,12 @@ impl FlacMetadataParser {
         }
         */
 
-        let last_mod = fs::metadata(path.as_ref().clone())
+        let last_mod = fs::metadata(path.as_ref())
             .map_err(|e| format!("{:?}", e))?
             .modified()
             .map_err(|e| format!("{:?}", e))?;
 
-        let reader = claxon::FlacReader::open(path.as_ref().clone()).map_err(|_e| {
+        let reader = claxon::FlacReader::open(path.as_ref()).map_err(|_e| {
             format!(
                 "could not load flac file: {:?}",
                 path.as_ref().to_str().unwrap()

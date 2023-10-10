@@ -14,12 +14,12 @@ pub struct MP4AMetadataParser {
 
 impl MP4AMetadataParser {
     pub fn new<P: AsRef<Path>>(path: P) -> Result<Self, String> {
-        let last_mod = fs::metadata(path.as_ref().clone())
+        let last_mod = fs::metadata(path.as_ref())
             .map_err(|e| format!("{:?}", e))?
             .modified()
             .map_err(|e| format!("{:?}", e))?;
 
-        let tag = mp4ameta::Tag::read_from_path(path.as_ref().clone()).expect(
+        let tag = mp4ameta::Tag::read_from_path(path.as_ref()).expect(
             format!(
                 "could not load m4a file: {}",
                 path.as_ref().to_str().unwrap()
