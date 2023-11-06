@@ -207,9 +207,9 @@ pub fn render_play_queue<'a>(
                                 .width(Length::Fill),
                             )
                             .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::Action(
-                                    message::Action::RemoveTrackFromPlayQueue(
-                                        message::HistoryOrQueue::History,
+                                message::Message::PlaybackRequest(
+                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                        shared::HistoryOrQueue::History,
                                         index,
                                     ),
                                 ),
@@ -221,9 +221,9 @@ pub fn render_play_queue<'a>(
                             .spacing(5)
                             .push(bright_paragraph("Paused").width(Length::Fill))
                             .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::Action(
-                                    message::Action::RemoveTrackFromPlayQueue(
-                                        message::HistoryOrQueue::History,
+                                message::Message::PlaybackRequest(
+                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                        shared::HistoryOrQueue::History,
                                         index,
                                     ),
                                 ),
@@ -306,9 +306,9 @@ pub fn render_play_queue<'a>(
                                 .width(Length::Fill),
                             )
                             .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::Action(
-                                    message::Action::RemoveTrackFromPlayQueue(
-                                        message::HistoryOrQueue::Queue,
+                                message::Message::PlaybackRequest(
+                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                        shared::HistoryOrQueue::Queue,
                                         index,
                                     ),
                                 ),
@@ -320,9 +320,9 @@ pub fn render_play_queue<'a>(
                             .spacing(5)
                             .push(bright_paragraph("Paused").width(Length::Fill))
                             .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::Action(
-                                    message::Action::RemoveTrackFromPlayQueue(
-                                        message::HistoryOrQueue::History,
+                                message::Message::PlaybackRequest(
+                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                        shared::HistoryOrQueue::History,
                                         index,
                                     ),
                                 ),

@@ -23,8 +23,16 @@ pub enum PlaybackRequest {
     InsertSongs(Vec<model::AugmentedTrack>, bool),
     AppendSongs(Vec<model::AugmentedTrack>, bool),
 
+    RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
+
     SetVolume(f32),
     Close,
+}
+
+#[derive(Debug, Clone)]
+pub enum HistoryOrQueue {
+    History,
+    Queue,
 }
 
 #[derive(Debug, Clone)]

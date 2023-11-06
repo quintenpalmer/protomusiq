@@ -36,8 +36,6 @@ pub enum Action {
     RemoveTrackFromPlaylist(u32, musiqlibrary::TrackUniqueIdentifier),
     MoveTrackInPlaylist(u32, model::Direction, musiqlibrary::TrackUniqueIdentifier),
 
-    RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
-
     ToggleShuffleOnAdd,
 
     SetVolume(VolumeRequest),
@@ -83,12 +81,6 @@ pub enum NavMessage {
         model::AlbumSize,
         Option<musiqlibrary::TrackUniqueIdentifier>,
     ),
-}
-
-#[derive(Debug, Clone)]
-pub enum HistoryOrQueue {
-    History,
-    Queue,
 }
 
 pub struct MessageFuture {

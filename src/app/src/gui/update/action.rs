@@ -79,17 +79,6 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             };
             Command::none()
         }
-        message::Action::RemoveTrackFromPlayQueue(history_or_queue, index) => {
-            match history_or_queue {
-                message::HistoryOrQueue::History => {
-                    app.play_queue_info.play_history.remove(index);
-                }
-                message::HistoryOrQueue::Queue => {
-                    app.play_queue_info.play_queue.remove(index);
-                }
-            };
-            Command::none()
-        }
         message::Action::ToggleShuffleOnAdd => {
             app.action_state.group_buttons_shuffle = !app.action_state.group_buttons_shuffle;
             Command::none()

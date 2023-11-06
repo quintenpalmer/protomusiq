@@ -172,6 +172,18 @@ pub fn handle_playback_request(
         shared::PlaybackRequest::SetVolume(new_volume) => {
             let _ = sink_client.send(shared::SinkMessage::SetVolume(new_volume));
         }
+
+        shared::PlaybackRequest::RemoveTrackFromPlayQueue(history_or_queue, index) => {
+            match history_or_queue {
+                shared::HistoryOrQueue::History => {
+                    play_queue.play_history.remove(index);
+                }
+                shared::HistoryOrQueue::Queue => {
+                    play_queue.play_queue.remove(index);
+                }
+            };
+        }
+
         shared::PlaybackRequest::Close => {
             let _ = sink_client.send(shared::SinkMessage::Close);
             let _ = mpris_client.send(shared::MprisMessage::Close);
