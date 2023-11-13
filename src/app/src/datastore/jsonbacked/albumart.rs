@@ -371,7 +371,6 @@ pub fn process_cache_and_get_album_art(
         small_album_covers: small,
         mini_album_covers: mini,
         micro_album_covers: micro,
-        orig_album_covers: orig,
     }
 }
 
@@ -560,6 +559,5 @@ pub fn old_process_cache_and_get_album_art(
         small_album_covers: small,
         mini_album_covers: mini,
         micro_album_covers: micro,
-        orig_album_covers: orig,
     }
 }
