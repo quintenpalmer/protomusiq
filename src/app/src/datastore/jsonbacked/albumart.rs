@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 use std::fs;
 use std::io;
+use std::path;
 use std::path::PathBuf;
 
 use image;
@@ -24,6 +25,12 @@ trait CachedAlbumImageInfo {
         key: &musiqlibrary::AlbumUniqueIdentifier,
         album_size: model::AlbumSizeWithOrig,
     ) -> Vec<u8>;
+
+    fn get_path_for_size(
+        &self,
+        key: &musiqlibrary::AlbumUniqueIdentifier,
+        album_size: model::AlbumSizeWithOrig,
+    ) -> path::PathBuf;
 
     fn write_art_for_size(
         &self,
@@ -109,6 +116,17 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
     ) -> Vec<u8> {
         match self.get_cache_album_path(&key, album_size) {
             Some(full_album_size_path) => fs::read(full_album_size_path.clone()).unwrap(),
+            None => panic!("why didn't i know about this {:?}", key),
+        }
+    }
+
+    fn get_path_for_size(
+        &self,
+        key: &musiqlibrary::AlbumUniqueIdentifier,
+        album_size: model::AlbumSizeWithOrig,
+    ) -> path::PathBuf {
+        match self.get_cache_album_path(&key, album_size) {
+            Some(full_album_size_path) => full_album_size_path.clone(),
             None => panic!("why didn't i know about this {:?}", key),
         }
     }
@@ -336,9 +354,9 @@ pub fn process_cache_and_get_album_art(
                 }
             }
 
-            let large_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Large);
-            large.insert(key.clone(), large_bytes);
+            let large_path =
+                cached_album_art_checker.get_path_for_size(&key, model::AlbumSizeWithOrig::Large);
+            large.insert(key.clone(), large_path);
 
             let regular_bytes =
                 cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Regular);
@@ -525,8 +543,7 @@ pub fn old_process_cache_and_get_album_art(
                 }
             }
 
-            let large_bytes = fs::read(cached_large_album_art_path).unwrap();
-            large.insert(key.clone(), large_bytes);
+            large.insert(key.clone(), cached_large_album_art_path);
 
             let regular_bytes = fs::read(cached_regular_album_art_path).unwrap();
             regular.insert(key.clone(), regular_bytes);

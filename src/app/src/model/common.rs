@@ -1,4 +1,6 @@
 use std::collections::BTreeMap;
+use std::fs;
+use std::path;
 
 use serde::{Deserialize, Serialize};
 
@@ -168,7 +170,7 @@ impl<T: Clone> ListAndReversed<T> {
 
 #[derive(Debug, Clone)]
 pub struct AlbumArt {
-    pub large_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub large_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, path::PathBuf>,
     pub album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
     pub small_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
     pub mini_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
@@ -183,17 +185,44 @@ impl AlbumArt {
         album_id: musiqlibrary::ID,
     ) -> Vec<u8> {
         match album_size {
-            AlbumSize::Large => &self.large_album_covers,
-            AlbumSize::Regular => &self.album_covers,
-            AlbumSize::Small => &self.small_album_covers,
-            AlbumSize::Mini => &self.mini_album_covers,
-            AlbumSize::Micro => &self.micro_album_covers,
+            AlbumSize::Large => fs::read(
+                &self
+                    .large_album_covers
+                    .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                        artist_id, album_id,
+                    ))
+                    .unwrap(),
+            )
+            .unwrap(),
+            AlbumSize::Regular => self
+                .album_covers
+                .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                    artist_id, album_id,
+                ))
+                .unwrap()
+                .clone(),
+            AlbumSize::Small => self
+                .small_album_covers
+                .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                    artist_id, album_id,
+                ))
+                .unwrap()
+                .clone(),
+            AlbumSize::Mini => self
+                .mini_album_covers
+                .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                    artist_id, album_id,
+                ))
+                .unwrap()
+                .clone(),
+            AlbumSize::Micro => self
+                .micro_album_covers
+                .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                    artist_id, album_id,
+                ))
+                .unwrap()
+                .clone(),
         }
-        .get(&musiqlibrary::AlbumUniqueIdentifier::new(
-            artist_id, album_id,
-        ))
-        .unwrap()
-        .clone()
     }
 }
 
