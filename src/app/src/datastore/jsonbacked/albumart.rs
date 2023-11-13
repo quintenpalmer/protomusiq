@@ -146,7 +146,6 @@ pub fn process_cache_and_get_album_art(
     library: &musiqlibrary::RawLibrary,
     app_data_path: PathBuf,
 ) -> model::AlbumArt {
-    let mut orig = BTreeMap::new();
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
@@ -337,10 +336,6 @@ pub fn process_cache_and_get_album_art(
                 }
             }
 
-            let orig_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Original);
-            orig.insert(key.clone(), orig_bytes);
-
             let large_bytes =
                 cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Large);
             large.insert(key.clone(), large_bytes);
@@ -379,7 +374,6 @@ pub fn old_process_cache_and_get_album_art(
     library: &musiqlibrary::RawLibrary,
     app_data_path: PathBuf,
 ) -> model::AlbumArt {
-    let mut orig = BTreeMap::new();
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
@@ -530,9 +524,6 @@ pub fn old_process_cache_and_get_album_art(
                         .unwrap();
                 }
             }
-
-            let orig_bytes = fs::read(cached_orig_album_art_path).unwrap();
-            orig.insert(key.clone(), orig_bytes);
 
             let large_bytes = fs::read(cached_large_album_art_path).unwrap();
             large.insert(key.clone(), large_bytes);
