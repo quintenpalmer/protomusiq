@@ -211,7 +211,7 @@ impl AppCmd for TreeViewer {
         let artist_count = library.artists.keys().len() - 1;
         for (current_artist_index, artist) in library.artists.values().enumerate() {
             println!(
-                "{}Artist: '{}' ({})",
+                "{} Artist: '{}' ({})",
                 if current_artist_index == artist_count {
                     "└───"
                 } else {
@@ -223,16 +223,16 @@ impl AppCmd for TreeViewer {
             let album_count = artist.albums.keys().len() - 1;
             for (current_album_index, album) in artist.albums.values().enumerate() {
                 println!(
-                    "{}{}Album: '{}' ({})",
+                    "{}{} Album: '{}' ({})",
                     if current_artist_index == artist_count {
                         "    "
                     } else {
                         "│   "
                     },
                     if current_album_index == album_count {
-                        "└───"
+                        " └──"
                     } else {
-                        "├───"
+                        " ├──"
                     },
                     album.album_info.album_name,
                     album.album_info.album_id.hashed()
@@ -240,7 +240,7 @@ impl AppCmd for TreeViewer {
                 let disc_count = album.discs.keys().len() - 1;
                 for (current_disc_index, disc) in album.discs.values().enumerate() {
                     println!(
-                        "{}{}{}Disc: '{}' (of '{}')",
+                        "{}{}{} Disc: '{}' (of '{}')",
                         if current_artist_index == artist_count {
                             "    "
                         } else {
@@ -249,12 +249,12 @@ impl AppCmd for TreeViewer {
                         if current_album_index == album_count {
                             "    "
                         } else {
-                            "│   "
+                            " │  "
                         },
                         if current_disc_index == disc_count {
-                            "└───"
+                            " └──"
                         } else {
-                            "├───"
+                            " ├──"
                         },
                         disc.disc_no,
                         disc.tracks
@@ -277,17 +277,17 @@ impl AppCmd for TreeViewer {
                             if current_album_index == album_count {
                                 "    "
                             } else {
-                                "│   "
+                                " │  "
                             },
                             if current_disc_index == disc_count {
                                 "    "
                             } else {
-                                "│   "
+                                " │  "
                             },
                             if current_track_index == track_count {
-                                "└───"
+                                " └──"
                             } else {
-                                "├───"
+                                " ├──"
                             },
                             track.track,
                             track.title
