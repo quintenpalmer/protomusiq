@@ -208,21 +208,54 @@ impl AppCmd for TreeViewer {
     fn operate(&self, path: PathBuf) {
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
         println!("Library:");
-        for artist in library.artists.values() {
+        let artist_count = library.artists.keys().len() - 1;
+        for (current_artist_index, artist) in library.artists.values().enumerate() {
             println!(
-                "\tArtist: '{}' ({})",
+                "{}Artist: '{}' ({})",
+                if current_artist_index == artist_count {
+                    "└───"
+                } else {
+                    "├───"
+                },
                 artist.artist_info.artist_name,
                 artist.artist_info.artist_id.hashed()
             );
-            for album in artist.albums.values() {
+            let album_count = artist.albums.keys().len() - 1;
+            for (current_album_index, album) in artist.albums.values().enumerate() {
                 println!(
-                    "\t\tAlbum: '{}' ({})",
+                    "{}{}Album: '{}' ({})",
+                    if current_artist_index == artist_count {
+                        "    "
+                    } else {
+                        "│   "
+                    },
+                    if current_album_index == album_count {
+                        "└───"
+                    } else {
+                        "├───"
+                    },
                     album.album_info.album_name,
                     album.album_info.album_id.hashed()
                 );
-                for disc in album.discs.values() {
+                let disc_count = album.discs.keys().len() - 1;
+                for (current_disc_index, disc) in album.discs.values().enumerate() {
                     println!(
-                        "\t\t\tDisc: '{}' (of '{}')",
+                        "{}{}{}Disc: '{}' (of '{}')",
+                        if current_artist_index == artist_count {
+                            "    "
+                        } else {
+                            "│   "
+                        },
+                        if current_album_index == album_count {
+                            "    "
+                        } else {
+                            "│   "
+                        },
+                        if current_disc_index == disc_count {
+                            "└───"
+                        } else {
+                            "├───"
+                        },
                         disc.disc_no,
                         disc.tracks
                             .values()
@@ -232,8 +265,33 @@ impl AppCmd for TreeViewer {
                             .map(|x| x.to_string())
                             .unwrap_or("<none seen>".to_string())
                     );
-                    for track in disc.tracks.values() {
-                        println!("\t\t\t\t'{}'\t: '{}'", track.track, track.title);
+                    let track_count = disc.tracks.keys().len() - 1;
+                    for (current_track_index, track) in disc.tracks.values().enumerate() {
+                        println!(
+                            "{}{}{}{}'{}'\t: '{}'",
+                            if current_artist_index == artist_count {
+                                "    "
+                            } else {
+                                "│   "
+                            },
+                            if current_album_index == album_count {
+                                "    "
+                            } else {
+                                "│   "
+                            },
+                            if current_disc_index == disc_count {
+                                "    "
+                            } else {
+                                "│   "
+                            },
+                            if current_track_index == track_count {
+                                "└───"
+                            } else {
+                                "├───"
+                            },
+                            track.track,
+                            track.title
+                        );
                     }
                 }
             }
