@@ -268,7 +268,7 @@ impl AppCmd for TreeViewer {
                     let track_count = disc.tracks.keys().len() - 1;
                     for (current_track_index, track) in disc.tracks.values().enumerate() {
                         println!(
-                            "{}{}{}{} {}\t: '{}'",
+                            "{}{}{}{} {}\t: '{}'{}",
                             if current_artist_index == artist_count {
                                 "    "
                             } else {
@@ -290,7 +290,12 @@ impl AppCmd for TreeViewer {
                                 " ├──"
                             },
                             track.track,
-                            track.title
+                            track.title,
+                            if track.track_artist != track.album_artist {
+                                format!("\t\t(with: {})", track.track_artist)
+                            } else {
+                                "".to_string()
+                            }
                         );
                     }
                 }
