@@ -16,6 +16,7 @@ use crate::gui::state;
 pub enum RunMode {
     GUI,
     Background,
+    BackgroundClient,
     ReportToTracker,
     GenerateReport,
     Prototype,
@@ -26,6 +27,7 @@ pub enum RunMode {
 pub enum AppError {
     Iced(IcedError),
     BackgroundServer(altmodes::background::Error),
+    BackgroundClient(altmodes::backgroundclient::Error),
     Tracker(altmodes::repl::TrackerError),
     ReportGeneration(altmodes::report::Error),
     Prototype(altmodes::proto::Error),
@@ -40,6 +42,9 @@ pub fn main() -> Result<(), AppError> {
     for arg in args.into_iter() {
         if arg == "--background" {
             run_mode = RunMode::Background;
+        }
+        if arg == "--backgroundclient" {
+            run_mode = RunMode::BackgroundClient;
         }
         if arg == "--tracker" {
             run_mode = RunMode::ReportToTracker;
@@ -59,6 +64,9 @@ pub fn main() -> Result<(), AppError> {
         RunMode::GUI => state::App::run(iced::Settings::default()).map_err(AppError::Iced),
         RunMode::Background => {
             altmodes::background::run_server().map_err(AppError::BackgroundServer)
+        }
+        RunMode::BackgroundClient => {
+            altmodes::backgroundclient::run_client().map_err(AppError::BackgroundClient)
         }
         RunMode::ReportToTracker => altmodes::repl::report_tracks().map_err(AppError::Tracker),
         RunMode::GenerateReport => {
