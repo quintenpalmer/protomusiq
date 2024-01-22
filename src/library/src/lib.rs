@@ -3,6 +3,7 @@ pub mod model;
 mod organizer;
 mod parser;
 mod scanner;
+pub mod video;
 
 pub use claxon;
 pub use id3;
