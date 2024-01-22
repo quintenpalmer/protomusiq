@@ -17,7 +17,7 @@ pub struct MovieMetadata {
 }
 
 /// Recursively find the paths for all movie files in a directory
-pub fn find_movies(current_path: path::PathBuf) -> Vec<path::PathBuf> {
+pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
     if current_path.is_file() {
         let fileext = current_path.extension().unwrap().to_str().unwrap();
 
@@ -33,7 +33,7 @@ pub fn find_movies(current_path: path::PathBuf) -> Vec<path::PathBuf> {
         let mut ret = Vec::new();
         for entry in current_path.read_dir().unwrap() {
             let entry = entry.unwrap();
-            let mut children = find_movies(entry.path());
+            let mut children = find_movie_paths(entry.path());
             ret.append(&mut children);
         }
         return ret;

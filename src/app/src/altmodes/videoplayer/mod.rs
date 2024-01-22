@@ -9,7 +9,7 @@ pub fn run_app() -> Result<(), Error> {
 
     println!("searching ~/storage/media/movies");
 
-    let movie_files = video::find_movies(path::Path::new(movie_dir_filename).to_path_buf());
+    let movie_files = video::find_movie_paths(path::Path::new(movie_dir_filename).to_path_buf());
 
     println!("found {} files", movie_files.len());
 
