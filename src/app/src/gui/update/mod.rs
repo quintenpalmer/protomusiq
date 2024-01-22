@@ -6,9 +6,6 @@ mod nav;
 mod playback;
 mod volume;
 
-pub use loaded::update_state;
-pub use loading::update_from_loading_state;
-
 use iced::Command;
 
 use super::message::Message;
