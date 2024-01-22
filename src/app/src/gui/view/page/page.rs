@@ -14,6 +14,7 @@ use super::pages;
 pub fn render_page<'a>(
     current_page: &'a Page,
     library: &'a model::LibraryState,
+    movie_library: &'a model::VideoLibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
     play_queue_info: &PlayQueueInfo,
@@ -51,5 +52,6 @@ pub fn render_page<'a>(
         Page::ArtistFeaturedTrackView(ref state) => {
             pages::artistfeatured::artist_featured_track_view_state(&library, &player_info, state)
         }
+        Page::MovieList(ref state) => pages::movielist::movie_list(&movie_library, state),
     }
 }

@@ -76,6 +76,11 @@ pub enum AlbumSortKey {
 }
 
 #[derive(Debug, Clone)]
+pub enum MovieSortKey {
+    ByTitle,
+}
+
+#[derive(Debug, Clone)]
 pub enum Direction {
     Up,
     Down,

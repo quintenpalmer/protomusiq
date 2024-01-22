@@ -150,5 +150,13 @@ pub fn handle_nav(
             });
             Command::none()
         }
+        NavMessage::MovieList(page, sort, sort_order) => {
+            app.current_page = Page::MovieList(state::MovieListState {
+                page: page,
+                sort_key: sort,
+                sort_order: sort_order,
+            });
+            Command::none()
+        }
     }
 }

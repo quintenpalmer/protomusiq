@@ -81,6 +81,7 @@ pub enum NavMessage {
         model::AlbumSize,
         Option<musiqlibrary::TrackUniqueIdentifier>,
     ),
+    MovieList(usize, model::MovieSortKey, model::SortOrder),
 }
 
 pub struct MessageFuture {

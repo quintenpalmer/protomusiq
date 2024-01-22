@@ -27,6 +27,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         app.current_page.super_simple_debug_string()
     );
     let library = &app.library;
+    let movie_library = &app.video_library;
     let config = &app.config.rest;
     let app_images = &app.app_images;
     let current_page = &app.current_page;
@@ -37,6 +38,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
         &library,
+        &movie_library,
         &app_images,
         &action_state,
         &play_queue_info,
