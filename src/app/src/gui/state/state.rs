@@ -19,6 +19,7 @@ pub enum App {
 pub struct AppState {
     pub current_page: page::Page,
     pub library: model::LibraryState,
+    pub video_library: model::VideoLibraryState,
     pub action_state: ActionState,
     pub player_info: PlayerInfo,
     pub play_queue_info: PlayQueueInfo,

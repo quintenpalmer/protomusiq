@@ -159,6 +159,7 @@ pub fn initialize_everything() -> state::App {
             play_queue: Vec::new(),
             current_playback: None,
         },
+        video_library: model::VideoLibraryState::new(&config_state.movie_path),
         config: state::Config { rest: config_state },
         player_info: state::PlayerInfo {
             playing: false,
