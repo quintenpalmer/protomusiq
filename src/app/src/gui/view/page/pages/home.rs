@@ -105,10 +105,24 @@ pub fn home_page<'a>(
             )))
             .on_press(user_nav_message(NavMessage::Config));
 
+            let dvd = dark_button(Container::new(bottom_label(
+                album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
+                bright_paragraph(common::abr_str(
+                    "Movies".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(user_nav_message(NavMessage::MovieList(
+                0,
+                model::MovieSortKey::ByTitle,
+                model::SortOrder::Regular,
+            )));
+
             let page = Container::new(Scrollable::new(
                 Column::new()
                     .push(Row::new().push(album_list).push(artist_list).push(search))
-                    .push(Row::new().push(track_list).push(playlist).push(settings)),
+                    .push(Row::new().push(track_list).push(playlist).push(settings))
+                    .push(Row::new().push(dvd)),
             ));
 
             (Vec::new(), page)
