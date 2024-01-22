@@ -4,6 +4,7 @@ mod loaded;
 mod loading;
 mod nav;
 mod playback;
+mod spawner;
 mod volume;
 
 use iced::Command;

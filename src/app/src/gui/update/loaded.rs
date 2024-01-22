@@ -8,6 +8,7 @@ use super::super::state::AppState;
 use super::action;
 use super::nav;
 use super::playback;
+use super::spawner;
 
 pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     println!(
@@ -49,5 +50,6 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             };
             Command::none()
         }
+        Message::ExternalSpawn(spawn_cmd) => spawner::exec_cmd(spawn_cmd),
     }
 }

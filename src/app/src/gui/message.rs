@@ -1,4 +1,4 @@
-use std::pin;
+use std::{path, pin};
 
 use iced;
 
@@ -23,6 +23,7 @@ pub enum Message {
     PlaybackRequest(shared::PlaybackRequest),
     ErrorResponse(Result<(), String>),
     BackendCallback(shared::BackendToGUIMessage),
+    ExternalSpawn(ExternalSpawn),
 }
 
 #[derive(Debug, Clone)]
@@ -82,6 +83,11 @@ pub enum NavMessage {
         Option<musiqlibrary::TrackUniqueIdentifier>,
     ),
     MovieList(usize, model::MovieSortKey, model::SortOrder),
+}
+
+#[derive(Debug, Clone)]
+pub enum ExternalSpawn {
+    Mpv(path::PathBuf),
 }
 
 pub struct MessageFuture {
