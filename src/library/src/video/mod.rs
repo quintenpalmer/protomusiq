@@ -16,6 +16,24 @@ pub struct MovieMetadata {
     pub path: path::PathBuf,
 }
 
+/// Recursively find all movies with metadata
+pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetadata> {
+    let all_paths = find_movie_paths(movie_path.as_ref().to_path_buf());
+    let all_movie_metadata: Vec<_> = all_paths
+        .iter()
+        .map(find_movie_metadata)
+        .filter_map(|x| {
+            match x {
+                Ok(_) => (),
+                Err(ref e) => println!("error: {:?}", e),
+            };
+            x.ok()
+        })
+        .collect();
+
+    all_movie_metadata
+}
+
 /// Recursively find the paths for all movie files in a directory
 pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
     if current_path.is_file() {
