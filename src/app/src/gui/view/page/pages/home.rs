@@ -121,8 +121,8 @@ pub fn home_page<'a>(
             let page = Container::new(Scrollable::new(
                 Column::new()
                     .push(Row::new().push(album_list).push(artist_list).push(search))
-                    .push(Row::new().push(track_list).push(playlist).push(settings))
-                    .push(Row::new().push(dvd)),
+                    .push(Row::new().push(track_list).push(dvd).push(playlist))
+                    .push(Row::new().push(settings)),
             ));
 
             (Vec::new(), page)
