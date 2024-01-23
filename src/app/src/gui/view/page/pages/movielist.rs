@@ -20,7 +20,7 @@ pub fn movie_list<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
         state::MovieListState {
-            page: _page,
+            page,
             sort_key,
             sort_order,
         } => {
@@ -33,9 +33,19 @@ pub fn movie_list<'a>(
                 )),
             )];
 
+            let page: usize = page.clone();
+
+            let indices = common::get_page(
+                movie_library
+                    .movie_sorts
+                    .from_sort_key(&sort_key, &sort_order),
+                page,
+                grid_info.get_page_size_usize(),
+            );
+
             let mut buttons: Vec<Button<Message>> = Vec::new();
 
-            for movie in movie_library.movies.iter() {
+            for movie in indices.iter() {
                 let mut movie_info = Column::new();
                 movie_info = movie_info.push(bright_paragraph(common::abr_str(
                     movie

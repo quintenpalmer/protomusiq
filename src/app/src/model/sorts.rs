@@ -1,6 +1,6 @@
 use rand::seq::SliceRandom;
 
-use musiqlibrary;
+use musiqlibrary::{self, video};
 
 use super::{augmented, common};
 
@@ -732,6 +732,36 @@ impl TrackSorts {
             common::TrackSortKey::ByDuration => &self.by_duration,
             common::TrackSortKey::ByPlayedAmount => &self.by_played_amount,
             common::TrackSortKey::ByRandom => &self.random,
+        }
+        .sort_ordered(&sort_order)
+    }
+}
+
+pub struct MovieSorts {
+    pub by_title: common::ListAndReversed<video::MovieMetadata>,
+}
+
+impl MovieSorts {
+    pub fn new(movies: &Vec<video::MovieMetadata>) -> Self {
+        MovieSorts {
+            by_title: {
+                let mut movies_by_title = movies.clone();
+
+                movies_by_title
+                    .sort_unstable_by(|a, b| a.title.to_lowercase().cmp(&b.title.to_lowercase()));
+
+                common::ListAndReversed::new(movies_by_title.iter().map(|a| a.clone()).collect())
+            },
+        }
+    }
+
+    pub fn from_sort_key(
+        &self,
+        sort_key: &common::MovieSortKey,
+        sort_order: &common::SortOrder,
+    ) -> &Vec<video::MovieMetadata> {
+        match sort_key {
+            common::MovieSortKey::ByTitle => &self.by_title,
         }
         .sort_ordered(&sort_order)
     }

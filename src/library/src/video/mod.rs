@@ -10,7 +10,7 @@ pub enum Error {
 }
 
 /// Parsed and Normalized Movie Data
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
