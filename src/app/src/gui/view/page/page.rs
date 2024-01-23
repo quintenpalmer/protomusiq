@@ -52,8 +52,12 @@ pub fn render_page<'a>(
         Page::ArtistFeaturedTrackView(ref state) => {
             pages::artistfeatured::artist_featured_track_view_state(&library, &player_info, state)
         }
-        Page::MovieList(ref state) => {
-            pages::movielist::movie_list(&movie_library, state, &app_images)
-        }
+        Page::MovieList(ref state) => pages::movielist::movie_list(
+            &movie_library,
+            state,
+            &play_queue_info,
+            &library.grid_info,
+            &app_images,
+        ),
     }
 }

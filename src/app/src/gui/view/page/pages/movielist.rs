@@ -1,4 +1,4 @@
-use iced::widget::{Button, Column, Container, Scrollable};
+use iced::widget::{Button, Column, Container, Row, Scrollable};
 
 use crate::model;
 
@@ -14,6 +14,8 @@ use super::super::super::elements::*;
 pub fn movie_list<'a>(
     movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieListState,
+    play_queue_info: &state::PlayQueueInfo,
+    grid_info: &model::GridInfo,
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
@@ -61,15 +63,35 @@ pub fn movie_list<'a>(
                 );
             }
 
-            let mut button_column = Column::new();
-            for button in buttons.into_iter() {
-                button_column = button_column.push(button);
+            let mut columns: Column<Message> = Column::new();
+            if play_queue_info.play_queue_visible {
+                for _i in 0..(grid_info.get_layout_height() * 2) {
+                    let mut rows = Row::new();
+                    for _j in 0..(grid_info.get_layout_width() / 2) {
+                        if buttons.len() > 0 {
+                            let button = buttons.remove(0);
+                            rows = rows.push(button);
+                        }
+                    }
+                    columns = columns.push(rows);
+                }
+            } else {
+                for _i in 0..grid_info.get_layout_height() {
+                    let mut rows = Row::new();
+                    for _j in 0..grid_info.get_layout_width() {
+                        if buttons.len() > 0 {
+                            let button = buttons.remove(0);
+                            rows = rows.push(button);
+                        }
+                    }
+                    columns = columns.push(rows);
+                }
             }
 
             let body = Container::new(
                 Column::new()
                     .push(h1("Movies"))
-                    .push(Scrollable::new(button_column)),
+                    .push(Scrollable::new(columns)),
             );
 
             (breadcrumbs, body)
