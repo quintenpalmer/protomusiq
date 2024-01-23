@@ -1,4 +1,4 @@
-use musiqlibrary;
+use musiqlibrary::{self, video};
 
 use crate::model;
 
@@ -23,6 +23,7 @@ pub enum Page {
     ArtistFeaturedTrackView(ArtistFeaturedTrackViewState),
     ArtistAlbumView(ArtistAlbumViewState),
     MovieList(MovieListState),
+    MovieView(MovieViewState),
 }
 
 impl Page {
@@ -42,6 +43,7 @@ impl Page {
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
             Page::MovieList(_) => "MovieList",
+            Page::MovieView(_) => "MovieView",
         }
         .to_string()
     }
@@ -129,4 +131,9 @@ pub struct MovieListState {
     pub sort_key: model::MovieSortKey,
     pub sort_order: model::SortOrder,
     pub page: usize,
+}
+
+#[derive(Debug)]
+pub struct MovieViewState {
+    pub movie: video::MovieMetadata,
 }

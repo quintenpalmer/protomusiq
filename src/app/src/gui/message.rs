@@ -1,5 +1,7 @@
 use std::{path, pin};
 
+use musiqlibrary::video;
+
 use iced;
 
 use iced::futures::task::{Context, Poll};
@@ -83,6 +85,7 @@ pub enum NavMessage {
         Option<musiqlibrary::TrackUniqueIdentifier>,
     ),
     MovieList(usize, model::MovieSortKey, model::SortOrder),
+    MovieView(video::MovieMetadata),
 }
 
 #[derive(Debug, Clone)]

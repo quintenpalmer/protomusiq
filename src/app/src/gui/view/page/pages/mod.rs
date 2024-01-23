@@ -6,6 +6,7 @@ pub mod artistfeatured;
 pub mod artisttracks;
 pub mod config;
 pub mod home;
+pub mod movie;
 pub mod movielist;
 pub mod playlist;
 pub mod playlists;

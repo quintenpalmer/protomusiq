@@ -158,5 +158,9 @@ pub fn handle_nav(
             });
             Command::none()
         }
+        NavMessage::MovieView(movie) => {
+            app.current_page = Page::MovieView(state::MovieViewState { movie });
+            Command::none()
+        }
     }
 }

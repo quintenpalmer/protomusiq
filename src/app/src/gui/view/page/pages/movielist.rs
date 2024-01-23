@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, ExternalSpawn, Message, NavMessage};
+use crate::gui::message::{user_nav_message, Message, NavMessage};
 use crate::state;
 
 use super::super::consts;
@@ -68,9 +68,7 @@ pub fn movie_list<'a>(
                             .into(),
                         movie_info,
                     ))
-                    .on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
-                        movie.path.clone().to_path_buf(),
-                    ))),
+                    .on_press(user_nav_message(NavMessage::MovieView(movie.clone()))),
                 );
             }
 

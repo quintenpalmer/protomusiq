@@ -59,5 +59,6 @@ pub fn render_page<'a>(
             &library.grid_info,
             &app_images,
         ),
+        Page::MovieView(ref state) => pages::movie::movie_page(&movie_library, state, &app_images),
     }
 }
