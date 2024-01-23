@@ -26,7 +26,7 @@ pub fn movie_list<'a>(
             sort_order,
         } => {
             let breadcrumbs = vec![(
-                "Tracks".to_string(),
+                "Movies".to_string(),
                 user_nav_message(NavMessage::MovieList(
                     0,
                     sort_key.clone(),

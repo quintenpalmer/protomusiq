@@ -14,7 +14,7 @@ pub fn movie_page<'a>(
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let breadcrumbs = vec![(
-        "Tracks".to_string(),
+        "Movies".to_string(),
         user_nav_message(NavMessage::MovieList(
             0,
             model::MovieSortKey::ByTitle,
