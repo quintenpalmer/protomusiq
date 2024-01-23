@@ -1,4 +1,5 @@
-use iced::widget::{Button, Column, Container, Row, Scrollable};
+use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
+use iced::Length;
 
 use crate::model;
 
@@ -98,9 +99,111 @@ pub fn movie_list<'a>(
                 }
             }
 
+            let first_page = 0;
+            let back_page = {
+                if page == 0 {
+                    0
+                } else {
+                    page - 1
+                }
+            };
+            let forward_page = {
+                if ((page + 1) * grid_info.get_page_size_usize()) >= movie_library.movies.len() {
+                    page
+                } else {
+                    page + 1
+                }
+            };
+            let last_page = {
+                let maybe_last_page = movie_library.movies.len() / grid_info.get_page_size_usize();
+                if maybe_last_page * grid_info.get_page_size_usize() >= movie_library.movies.len() {
+                    maybe_last_page - 1
+                } else {
+                    maybe_last_page
+                }
+            };
+
+            let page_buttons = line_row().push(line_row().push(paragraph("Sort By: ")).push(
+                dark_button(bright_paragraph("Title")).on_press(user_nav_message(
+                    NavMessage::MovieList(
+                        0,
+                        model::MovieSortKey::ByTitle,
+                        model::SortOrder::Regular,
+                    ),
+                )),
+            ));
+
+            let extra_page_buttons = line_row()
+                .push(
+                    line_row()
+                        .push(
+                            dark_button(bright_paragraph("<<")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    first_page,
+                                    sort_key.clone(),
+                                    sort_order.clone(),
+                                ),
+                            )),
+                        )
+                        .push(
+                            dark_button(bright_paragraph("<")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    back_page,
+                                    sort_key.clone(),
+                                    sort_order.clone(),
+                                ),
+                            )),
+                        )
+                        .push(bright_paragraph(page.to_string()))
+                        .push(
+                            dark_button(bright_paragraph(">")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    forward_page,
+                                    sort_key.clone(),
+                                    sort_order.clone(),
+                                ),
+                            )),
+                        )
+                        .push(
+                            dark_button(bright_paragraph(">>")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    last_page,
+                                    sort_key.clone(),
+                                    sort_order.clone(),
+                                ),
+                            )),
+                        ),
+                )
+                .push(Space::with_width(Length::Fill))
+                .push(
+                    line_row()
+                        .push(paragraph("Order: "))
+                        .push(
+                            dark_button(bright_paragraph("^")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    0,
+                                    sort_key.clone(),
+                                    model::SortOrder::Reversed,
+                                ),
+                            )),
+                        )
+                        .push(
+                            dark_button(bright_paragraph("v")).on_press(user_nav_message(
+                                NavMessage::MovieList(
+                                    0,
+                                    sort_key.clone(),
+                                    model::SortOrder::Regular,
+                                ),
+                            )),
+                        ),
+                );
+
             let body = Container::new(
                 Column::new()
+                    .spacing(10)
                     .push(h1("Movies"))
+                    .push(page_buttons)
+                    .push(extra_page_buttons)
                     .push(Scrollable::new(columns)),
             );
 
