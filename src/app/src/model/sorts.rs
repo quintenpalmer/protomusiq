@@ -739,6 +739,7 @@ impl TrackSorts {
 
 pub struct MovieSorts {
     pub by_title: common::ListAndReversed<video::MovieMetadata>,
+    pub random: common::ListAndReversed<video::MovieMetadata>,
 }
 
 impl MovieSorts {
@@ -752,6 +753,15 @@ impl MovieSorts {
 
                 common::ListAndReversed::new(movies_by_title.iter().map(|a| a.clone()).collect())
             },
+
+            random: {
+                let mut rng = rand::thread_rng();
+
+                let mut movies_by_title = movies.clone();
+
+                movies_by_title.shuffle(&mut rng);
+                common::ListAndReversed::new(movies_by_title)
+            },
         }
     }
 
@@ -762,6 +772,7 @@ impl MovieSorts {
     ) -> &Vec<video::MovieMetadata> {
         match sort_key {
             common::MovieSortKey::ByTitle => &self.by_title,
+            common::MovieSortKey::Random => &self.random,
         }
         .sort_ordered(&sort_order)
     }

@@ -78,6 +78,7 @@ pub enum AlbumSortKey {
 #[derive(Debug, Clone)]
 pub enum MovieSortKey {
     ByTitle,
+    Random,
 }
 
 #[derive(Debug, Clone)]

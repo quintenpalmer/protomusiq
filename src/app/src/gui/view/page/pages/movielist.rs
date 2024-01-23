@@ -123,15 +123,28 @@ pub fn movie_list<'a>(
                 }
             };
 
-            let page_buttons = line_row().push(line_row().push(paragraph("Sort By: ")).push(
-                dark_button(bright_paragraph("Title")).on_press(user_nav_message(
-                    NavMessage::MovieList(
-                        0,
-                        model::MovieSortKey::ByTitle,
-                        model::SortOrder::Regular,
+            let page_buttons = line_row().push(
+                line_row()
+                    .push(paragraph("Sort By: "))
+                    .push(
+                        dark_button(bright_paragraph("Title")).on_press(user_nav_message(
+                            NavMessage::MovieList(
+                                0,
+                                model::MovieSortKey::ByTitle,
+                                model::SortOrder::Regular,
+                            ),
+                        )),
+                    )
+                    .push(
+                        dark_button(bright_paragraph("Random")).on_press(user_nav_message(
+                            NavMessage::MovieList(
+                                0,
+                                model::MovieSortKey::Random,
+                                model::SortOrder::Regular,
+                            ),
+                        )),
                     ),
-                )),
-            ));
+            );
 
             let extra_page_buttons = line_row()
                 .push(
