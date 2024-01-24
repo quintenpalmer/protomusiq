@@ -9,13 +9,15 @@ pub fn run_app() -> Result<(), Error> {
 
     println!("searching ~/storage/media/movies");
 
-    let movie_files = video::find_movie_paths(path::Path::new(movie_dir_filename).to_path_buf());
+    let scan_path = path::Path::new(movie_dir_filename).to_path_buf();
+
+    let movie_files = video::find_movie_paths(scan_path.clone());
 
     println!("found {} files", movie_files.len());
 
     let all_movie_metadata: Vec<_> = movie_files
         .iter()
-        .map(video::find_movie_metadata)
+        .map(|x| video::find_movie_metadata(&scan_path, x))
         .filter_map(|x| {
             match x {
                 Ok(_) => (),

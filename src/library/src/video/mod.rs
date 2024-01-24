@@ -14,6 +14,7 @@ pub enum Error {
 pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
+    pub relative_path: path::PathBuf,
 }
 
 /// Recursively find all movies with metadata
@@ -21,7 +22,7 @@ pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetad
     let all_paths = find_movie_paths(movie_path.as_ref().to_path_buf());
     let all_movie_metadata: Vec<_> = all_paths
         .iter()
-        .map(find_movie_metadata)
+        .map(|x| find_movie_metadata(&movie_path.as_ref().to_path_buf(), x))
         .filter_map(|x| {
             match x {
                 Ok(_) => (),
@@ -64,7 +65,10 @@ pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
 }
 
 /// Extract the movie metadata from a given movie file path
-pub fn find_movie_metadata(movie_path: &path::PathBuf) -> Result<MovieMetadata, Error> {
+pub fn find_movie_metadata(
+    orig_scan_path: &path::PathBuf,
+    movie_path: &path::PathBuf,
+) -> Result<MovieMetadata, Error> {
     println!(
         "path: {}",
         movie_path.clone().into_os_string().to_string_lossy()
@@ -76,7 +80,7 @@ pub fn find_movie_metadata(movie_path: &path::PathBuf) -> Result<MovieMetadata, 
         .unwrap();
 
     match fileext {
-        "m4v" | "mp4" => find_mp4_metadata(movie_path),
+        "m4v" | "mp4" => find_mp4_metadata(orig_scan_path, movie_path),
         _ => Err(Error::NonMP4File),
     }
 }
@@ -84,7 +88,10 @@ pub fn find_movie_metadata(movie_path: &path::PathBuf) -> Result<MovieMetadata, 
 /// Extract the movie metadata for a "MPEG-4 Part 14" or "MP4" file
 /// https://en.wikipedia.org/wiki/MP4_file_format
 /// https://en.wikipedia.org/wiki/Comparison_of_video_container_formats
-fn find_mp4_metadata(movie_path: &path::PathBuf) -> Result<MovieMetadata, Error> {
+fn find_mp4_metadata(
+    orig_scan_path: &path::PathBuf,
+    movie_path: &path::PathBuf,
+) -> Result<MovieMetadata, Error> {
     let movie_file = fs::File::open(movie_path).unwrap();
     let raw_metadata = mp4::read_mp4(movie_file).unwrap();
 
@@ -109,5 +116,10 @@ fn find_mp4_metadata(movie_path: &path::PathBuf) -> Result<MovieMetadata, Error>
     Ok(MovieMetadata {
         title: title,
         path: movie_path.clone(),
+        relative_path: movie_path
+            .to_path_buf()
+            .strip_prefix(orig_scan_path)
+            .unwrap()
+            .to_path_buf(),
     })
 }
