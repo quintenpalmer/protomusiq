@@ -34,7 +34,6 @@ pub fn initialize_everything() -> state::App {
 
     let loaded_library =
         jsonbacked::tracklibrary::load_library_from_cache_and_scan(&config_state, &loader);
-
     logger.print_elapsed("loading library (with cache)");
 
     let loaded_images = jsonbacked::albumart::process_cache_and_get_album_art(
