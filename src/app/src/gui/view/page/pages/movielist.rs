@@ -62,13 +62,12 @@ pub fn movie_list<'a>(
                     consts::ICON_STR_LENGTH,
                 )));
 
+                let movie_image_element =
+                    album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small);
+
                 buttons.push(
-                    dark_button(bottom_label(
-                        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small)
-                            .into(),
-                        movie_info,
-                    ))
-                    .on_press(user_nav_message(NavMessage::MovieView(movie.clone()))),
+                    dark_button(bottom_label(movie_image_element.into(), movie_info))
+                        .on_press(user_nav_message(NavMessage::MovieView(movie.clone()))),
                 );
             }
 
