@@ -12,7 +12,15 @@ pub struct MovieTitle(String);
 
 impl MovieTitle {
     pub fn from_metadata(movie: &video::MovieMetadata) -> Self {
-        MovieTitle(movie.title.clone())
+        MovieTitle(
+            movie
+                .relative_path
+                .parent()
+                .unwrap()
+                .as_os_str()
+                .to_string_lossy()
+                .to_string(),
+        )
     }
 }
 
