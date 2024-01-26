@@ -1,10 +1,11 @@
+use std::collections::BTreeMap;
 use std::path;
 
 use musiqlibrary::video;
 
 use super::sorts;
 
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct MovieTitle(String);
 
 impl MovieTitle {
@@ -40,4 +41,10 @@ impl VideoLibraryState {
             movie_sorts,
         }
     }
+}
+
+pub struct MovieArt {
+    pub large_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
+    pub regular_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
+    pub micro_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
 }
