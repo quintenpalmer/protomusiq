@@ -45,7 +45,13 @@ pub fn initialize_everything() -> state::App {
     );
     logger.print_elapsed("processing album art (with cache)");
 
-    let video_library_state = model::VideoLibraryState::new(video_library);
+    let loaded_movie_images = jsonbacked::movieart::process_cache_and_get_movie_art(
+        &video_library,
+        config_state.app_data_path.to_path_buf(),
+    );
+    logger.print_elapsed("processing album art (with cache)");
+
+    let video_library_state = model::VideoLibraryState::new(video_library, loaded_movie_images);
 
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {

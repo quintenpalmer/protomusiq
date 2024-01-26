@@ -3,6 +3,8 @@ use std::path;
 
 use musiqlibrary::video;
 
+use crate::model;
+
 use super::sorts;
 
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
@@ -29,15 +31,18 @@ impl VideoLibrary {
 pub struct VideoLibraryState {
     pub movies: VideoLibrary,
 
+    pub art: model::MovieArt,
+
     pub movie_sorts: sorts::MovieSorts,
 }
 
 impl VideoLibraryState {
-    pub fn new(movies: VideoLibrary) -> Self {
+    pub fn new(movies: VideoLibrary, art: model::MovieArt) -> Self {
         let movie_sorts = sorts::MovieSorts::new(&movies.movies);
 
         VideoLibraryState {
             movies,
+            art,
             movie_sorts,
         }
     }
