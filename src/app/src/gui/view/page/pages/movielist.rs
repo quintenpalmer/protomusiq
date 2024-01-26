@@ -62,8 +62,17 @@ pub fn movie_list<'a>(
                     consts::ICON_STR_LENGTH,
                 )));
 
-                let movie_image_element =
-                    album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small);
+                let movie_image_element = match movie_library.art.get_movie_cover(
+                    model::MovieSize::Small,
+                    model::MovieTitle::from_metadata(&movie),
+                ) {
+                    Some(movie_image_bytes) => {
+                        movie_image(movie_image_bytes, model::MovieSize::Small)
+                    }
+                    None => {
+                        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small)
+                    }
+                };
 
                 buttons.push(
                     dark_button(bottom_label(movie_image_element.into(), movie_info))
