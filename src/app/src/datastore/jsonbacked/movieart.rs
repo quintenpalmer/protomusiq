@@ -138,16 +138,22 @@ pub fn process_cache_and_get_movie_art(
                         .save(cached_micro_movie_art_path.clone())
                         .unwrap();
                 }
-
-                let large_bytes = fs::read(cached_large_movie_art_path).unwrap();
-                large_movie_covers.insert(key.clone(), large_bytes);
-
-                let regular_bytes = fs::read(cached_regular_movie_art_path).unwrap();
-                regular_movie_covers.insert(key.clone(), regular_bytes);
-
-                let micro_bytes = fs::read(cached_micro_movie_art_path).unwrap();
-                micro_movie_covers.insert(key.clone(), micro_bytes);
             }
+        }
+
+        if localfs::check_exists(&cached_large_movie_art_path) {
+            let large_bytes = fs::read(cached_large_movie_art_path).unwrap();
+            large_movie_covers.insert(key.clone(), large_bytes);
+        }
+
+        if localfs::check_exists(&cached_regular_movie_art_path) {
+            let regular_bytes = fs::read(cached_regular_movie_art_path).unwrap();
+            regular_movie_covers.insert(key.clone(), regular_bytes);
+        }
+
+        if localfs::check_exists(&cached_micro_movie_art_path) {
+            let micro_bytes = fs::read(cached_micro_movie_art_path).unwrap();
+            micro_movie_covers.insert(key.clone(), micro_bytes);
         }
     }
 
