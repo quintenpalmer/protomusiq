@@ -49,15 +49,6 @@ pub fn movie_list<'a>(
             for movie in indices.iter() {
                 let mut movie_info = Column::new();
                 movie_info = movie_info.push(bright_paragraph(common::abr_str(
-                    movie
-                        .path
-                        .clone()
-                        .into_os_string()
-                        .to_string_lossy()
-                        .to_string(),
-                    consts::ICON_STR_LENGTH,
-                )));
-                movie_info = movie_info.push(bright_paragraph(common::abr_str(
                     movie.title.clone(),
                     consts::ICON_STR_LENGTH,
                 )));
