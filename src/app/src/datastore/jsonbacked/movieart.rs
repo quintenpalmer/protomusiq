@@ -16,6 +16,7 @@ pub fn process_cache_and_get_movie_art(
 ) -> model::MovieArt {
     let mut large_movie_covers = BTreeMap::new();
     let mut regular_movie_covers = BTreeMap::new();
+    let mut small_movie_covers = BTreeMap::new();
     let mut micro_movie_covers = BTreeMap::new();
 
     let mut found_cache_entries = 0;
@@ -37,11 +38,13 @@ pub fn process_cache_and_get_movie_art(
 
         let cached_large_movie_art_path = cache_movie_dir.join("large.png");
         let cached_regular_movie_art_path = cache_movie_dir.join("regular.png");
+        let cached_small_movie_art_path = cache_movie_dir.join("small.png");
         let cached_micro_movie_art_path = cache_movie_dir.join("micro.png");
         let cached_orig_movie_art_path = cache_movie_dir.join("orig.jpg");
 
         if localfs::check_exists(&cached_large_movie_art_path)
             && localfs::check_exists(&cached_regular_movie_art_path)
+            && localfs::check_exists(&cached_small_movie_art_path)
             && localfs::check_exists(&cached_micro_movie_art_path)
             && localfs::check_exists(&cached_orig_movie_art_path)
         {
@@ -123,6 +126,22 @@ pub fn process_cache_and_get_movie_art(
                         .unwrap();
                 }
 
+                if !localfs::check_exists(&cached_small_movie_art_path) {
+                    println!(
+                        "translating small size movie art to cache dir for {:?}",
+                        local_dir
+                    );
+                    let small_movie_art = image::imageops::resize(
+                        &orig_movie_art,
+                        ((model::DVD_SMALL_ICON_HEIGHT as u32) * orig_width) / orig_height,
+                        model::DVD_SMALL_ICON_HEIGHT as u32,
+                        image::imageops::FilterType::Lanczos3,
+                    );
+                    small_movie_art
+                        .save(cached_small_movie_art_path.clone())
+                        .unwrap();
+                }
+
                 if !localfs::check_exists(&cached_micro_movie_art_path) {
                     println!(
                         "translating micro size movie art to cache dir for {:?}",
@@ -151,6 +170,11 @@ pub fn process_cache_and_get_movie_art(
             regular_movie_covers.insert(key.clone(), regular_bytes);
         }
 
+        if localfs::check_exists(&cached_small_movie_art_path) {
+            let small_bytes = fs::read(cached_small_movie_art_path).unwrap();
+            small_movie_covers.insert(key.clone(), small_bytes);
+        }
+
         if localfs::check_exists(&cached_micro_movie_art_path) {
             let micro_bytes = fs::read(cached_micro_movie_art_path).unwrap();
             micro_movie_covers.insert(key.clone(), micro_bytes);
@@ -162,6 +186,7 @@ pub fn process_cache_and_get_movie_art(
     model::MovieArt {
         large_movie_covers,
         regular_movie_covers,
+        small_movie_covers,
         micro_movie_covers,
     }
 }
