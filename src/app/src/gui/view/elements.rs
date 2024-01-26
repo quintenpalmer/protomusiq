@@ -90,6 +90,6 @@ pub fn album_image(album_cover_bytes: Vec<u8>, size: model::AlbumSize) -> Image<
 
 pub fn movie_image(movie_cover_bytes: Vec<u8>, size: model::MovieSize) -> Image<image::Handle> {
     Image::new(iced::widget::image::Handle::from_memory(movie_cover_bytes))
-        .width(Length::Shrink)
+        .width(Length::Fixed(size.height() as f32))
         .height(Length::Fixed(size.height() as f32))
 }
