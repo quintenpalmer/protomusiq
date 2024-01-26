@@ -23,14 +23,11 @@ pub fn movie_page<'a>(
     )];
 
     let movie_image_element = match movie_library.art.get_movie_cover(
-        model::MovieSize::Regular,
+        model::MovieSize::Large,
         model::MovieTitle::from_metadata(&state.movie),
     ) {
-        Some(movie_image_bytes) => movie_image(movie_image_bytes, model::MovieSize::Regular),
-        None => album_image(
-            app_images.get_dvd_image().clone(),
-            model::AlbumSize::Regular,
-        ),
+        Some(movie_image_bytes) => movie_image(movie_image_bytes, model::MovieSize::Large),
+        None => album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Large),
     };
 
     let contents = Column::new().spacing(10).push(
