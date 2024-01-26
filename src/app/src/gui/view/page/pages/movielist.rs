@@ -106,15 +106,20 @@ pub fn movie_list<'a>(
                 }
             };
             let forward_page = {
-                if ((page + 1) * grid_info.get_page_size_usize()) >= movie_library.movies.len() {
+                if ((page + 1) * grid_info.get_page_size_usize())
+                    >= movie_library.movies.movies.len()
+                {
                     page
                 } else {
                     page + 1
                 }
             };
             let last_page = {
-                let maybe_last_page = movie_library.movies.len() / grid_info.get_page_size_usize();
-                if maybe_last_page * grid_info.get_page_size_usize() >= movie_library.movies.len() {
+                let maybe_last_page =
+                    movie_library.movies.movies.len() / grid_info.get_page_size_usize();
+                if maybe_last_page * grid_info.get_page_size_usize()
+                    >= movie_library.movies.movies.len()
+                {
                     maybe_last_page - 1
                 } else {
                     maybe_last_page

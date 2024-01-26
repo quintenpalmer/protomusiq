@@ -4,16 +4,36 @@ use musiqlibrary::video;
 
 use super::sorts;
 
-pub struct VideoLibraryState {
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
+pub struct MovieTitle(String);
+
+impl MovieTitle {
+    pub fn from_metadata(movie: &video::MovieMetadata) -> Self {
+        MovieTitle(movie.title.clone())
+    }
+}
+
+pub struct VideoLibrary {
     pub movies: Vec<video::MovieMetadata>,
+}
+
+impl VideoLibrary {
+    pub fn new<P: AsRef<path::Path>>(movie_path: P) -> Self {
+        let movies = video::find_movies_in_dir(movie_path);
+
+        VideoLibrary { movies }
+    }
+}
+
+pub struct VideoLibraryState {
+    pub movies: VideoLibrary,
 
     pub movie_sorts: sorts::MovieSorts,
 }
 
 impl VideoLibraryState {
-    pub fn new<P: AsRef<path::Path>>(movie_path: P) -> Self {
-        let movies = video::find_movies_in_dir(movie_path);
-        let movie_sorts = sorts::MovieSorts::new(&movies);
+    pub fn new(movies: VideoLibrary) -> Self {
+        let movie_sorts = sorts::MovieSorts::new(&movies.movies);
 
         VideoLibraryState {
             movies,

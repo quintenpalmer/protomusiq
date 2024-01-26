@@ -36,11 +36,16 @@ pub fn initialize_everything() -> state::App {
         jsonbacked::tracklibrary::load_library_from_cache_and_scan(&config_state, &loader);
     logger.print_elapsed("loading library (with cache)");
 
+    let video_library = model::VideoLibrary::new(&config_state.movie_path);
+    logger.print_elapsed("loading video library");
+
     let loaded_images = jsonbacked::albumart::process_cache_and_get_album_art(
         &loaded_library,
         config_state.app_data_path.to_path_buf(),
     );
     logger.print_elapsed("processing album art (with cache)");
+
+    let video_library_state = model::VideoLibraryState::new(video_library);
 
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
@@ -158,7 +163,7 @@ pub fn initialize_everything() -> state::App {
             play_queue: Vec::new(),
             current_playback: None,
         },
-        video_library: model::VideoLibraryState::new(&config_state.movie_path),
+        video_library: video_library_state,
         config: state::Config { rest: config_state },
         player_info: state::PlayerInfo {
             playing: false,
