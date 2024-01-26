@@ -22,21 +22,19 @@ pub fn movie_page<'a>(
         )),
     )];
 
+    let movie_image_element =
+        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small);
+
     let contents = Column::new().spacing(10).push(
-        Row::new()
-            .push(album_image(
-                app_images.get_dvd_image().clone(),
-                model::AlbumSize::Small,
-            ))
-            .push(
-                Column::new()
-                    .padding(10)
-                    .spacing(10)
-                    .push(h2(state.movie.title.clone()))
-                    .push(dark_button(h3("Play")).on_press(Message::ExternalSpawn(
-                        ExternalSpawn::Mpv(state.movie.path.clone().to_path_buf()),
-                    ))),
-            ),
+        Row::new().push(movie_image_element).push(
+            Column::new()
+                .padding(10)
+                .spacing(10)
+                .push(h2(state.movie.title.clone()))
+                .push(dark_button(h3("Play")).on_press(Message::ExternalSpawn(
+                    ExternalSpawn::Mpv(state.movie.path.clone().to_path_buf()),
+                ))),
+        ),
     );
 
     let body = Container::new(Column::new().spacing(10).push(h1("Movies")).push(contents));
