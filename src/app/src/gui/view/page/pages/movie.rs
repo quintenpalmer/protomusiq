@@ -9,7 +9,7 @@ use crate::state;
 use super::super::super::elements::*;
 
 pub fn movie_page<'a>(
-    _movie_library: &'a model::VideoLibraryState,
+    movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieViewState,
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
@@ -22,8 +22,16 @@ pub fn movie_page<'a>(
         )),
     )];
 
-    let movie_image_element =
-        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small);
+    let movie_image_element = match movie_library.art.get_movie_cover(
+        model::MovieSize::Regular,
+        model::MovieTitle::from_metadata(&state.movie),
+    ) {
+        Some(movie_image_bytes) => movie_image(movie_image_bytes, model::MovieSize::Regular),
+        None => album_image(
+            app_images.get_dvd_image().clone(),
+            model::AlbumSize::Regular,
+        ),
+    };
 
     let contents = Column::new().spacing(10).push(
         Row::new().push(movie_image_element).push(

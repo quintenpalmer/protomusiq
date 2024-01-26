@@ -101,6 +101,16 @@ pub enum MovieSize {
     Large,
 }
 
+impl MovieSize {
+    pub fn height(&self) -> u16 {
+        match self {
+            MovieSize::Micro => constants::DVD_MICRO_ICON_HEIGHT,
+            MovieSize::Regular => constants::DVD_REGULAR_ICON_HEIGHT,
+            MovieSize::Large => constants::DVD_LARGE_ICON_HEIGHT,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum AlbumSize {
     Micro,
