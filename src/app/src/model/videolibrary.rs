@@ -53,3 +53,19 @@ pub struct MovieArt {
     pub regular_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
     pub micro_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
 }
+
+impl MovieArt {
+    pub fn get_movie_cover(
+        &self,
+        album_size: model::MovieSize,
+        movie_key: MovieTitle,
+    ) -> Option<Vec<u8>> {
+        match album_size {
+            model::MovieSize::Large => self.large_movie_covers.get(&movie_key).map(|x| x.clone()),
+            model::MovieSize::Regular => {
+                self.regular_movie_covers.get(&movie_key).map(|x| x.clone())
+            }
+            model::MovieSize::Micro => self.micro_movie_covers.get(&movie_key).map(|x| x.clone()),
+        }
+    }
+}

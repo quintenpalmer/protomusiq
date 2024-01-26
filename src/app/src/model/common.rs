@@ -95,6 +95,13 @@ pub struct PrehistoryRecord {
 }
 
 #[derive(Debug, Clone)]
+pub enum MovieSize {
+    Micro,
+    Regular,
+    Large,
+}
+
+#[derive(Debug, Clone)]
 pub enum AlbumSize {
     Micro,
     Mini,
