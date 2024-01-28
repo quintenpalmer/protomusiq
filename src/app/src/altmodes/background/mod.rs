@@ -20,8 +20,12 @@ pub fn run_server() -> Result<(), Error> {
 
     loop {
         let maybe_req = server.try_recv().unwrap();
-        match maybe_req {
-            None => println!("BACKEND:\tnothing for the sink to recv yet"),
+        let do_close = match maybe_req {
+            None => {
+                // Nothing to do if try_recv returns nothing yet
+                // and "return" false to say that we should not close
+                false
+            }
             Some(mut req) => {
                 let m_response = match req.url() {
                     "/play" => match req.method() {
@@ -91,10 +95,12 @@ pub fn run_server() -> Result<(), Error> {
                     Err(_) => println!("could not send response"),
                 };
 
-                if close {
-                    break;
-                }
+                close
             }
+        };
+
+        if do_close {
+            break;
         }
 
         thread::sleep(time::Duration::from_millis(50));
