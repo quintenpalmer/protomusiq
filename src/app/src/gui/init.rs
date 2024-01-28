@@ -146,8 +146,11 @@ pub fn initialize_everything() -> state::App {
     let playlists = userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
     logger.print_elapsed("loading playlists");
 
-    let (backend_client, backend_callback) =
-        backend::create_backend_with_client_and_callback(config_state.clone(), loader.spawn_copy());
+    let (backend_client, backend_callback) = backend::create_backend_with_client_and_callback(
+        config_state.clone(),
+        loader.spawn_copy(),
+        config_state.get_safe_sink_mode(),
+    );
     logger.print_elapsed("creating backend");
 
     logger.print_elapsed("starting tracker");

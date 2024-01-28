@@ -2,6 +2,8 @@ use std::path;
 
 use serde::Deserialize;
 
+use crate::shared::SinkMode;
+
 use super::common::LoadMode;
 
 #[derive(Debug, Clone)]
@@ -12,6 +14,7 @@ pub struct AppConfigState {
     pub app_data_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+    pub sink_mode: Option<SinkMode>,
 
     pub split_ratio_left: u16,
     pub split_ratio_right: u16,
@@ -33,6 +36,13 @@ impl AppConfigState {
             None => LoadMode::JSON,
         }
     }
+
+    pub fn get_safe_sink_mode(&self) -> SinkMode {
+        match self.sink_mode {
+            Some(ref v) => v.clone(),
+            None => SinkMode::Local,
+        }
+    }
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -42,6 +52,7 @@ pub struct RawAppConfigState {
 
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
+    pub sink_mode: Option<SinkMode>,
 
     pub split_ratio_left: Option<u16>,
     pub split_ratio_right: Option<u16>,
@@ -64,6 +75,7 @@ impl RawAppConfigState {
             app_data_path: app_data_path.as_ref().to_path_buf(),
             hostname: self.hostname,
             load_mode: self.load_mode,
+            sink_mode: self.sink_mode,
             split_ratio_left: self.split_ratio_left.unwrap_or(3),
             split_ratio_right: self.split_ratio_right.unwrap_or(2),
             grid_layout_width: self.grid_layout_width,

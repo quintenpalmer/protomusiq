@@ -13,6 +13,7 @@ mod playback;
 pub fn create_backend_with_client_and_callback(
     config_state: model::app::AppConfigState,
     loader: loader::Loader,
+    sink_mode: shared::SinkMode,
 ) -> (
     shared::Client<shared::GUIToBackendMessage>,
     shared::Callback<shared::BackendToGUIMessage>,
@@ -25,6 +26,7 @@ pub fn create_backend_with_client_and_callback(
         run_forever(
             config_state,
             loader,
+            sink_mode,
             recv_for_backend,
             callback_from_backend,
         )
@@ -55,6 +57,7 @@ impl TrackedState {
 pub fn run_forever(
     config_state: model::app::AppConfigState,
     loader: loader::Loader,
+    sink_mode: shared::SinkMode,
     gui_rx: mpsc::Receiver<shared::GUIToBackendMessage>,
     gui_callback: mpsc::Sender<shared::BackendToGUIMessage>,
 ) {
@@ -64,7 +67,10 @@ pub fn run_forever(
 
     let mut play_queue = shared::PlayQueueInfo::new();
 
-    let (sink_client, sink_callback) = sink::create_backend_with_client_and_callback();
+    let (sink_client, sink_callback) = match sink_mode {
+        shared::SinkMode::Local => sink::create_backend_with_client_and_callback(),
+        shared::SinkMode::Remote => sink::create_remote_backend_with_client_and_callback(),
+    };
 
     let (mpris_client, mpris_callback) = mpris::create_backend_with_client_and_callback();
 
