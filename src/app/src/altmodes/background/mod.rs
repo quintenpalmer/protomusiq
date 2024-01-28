@@ -16,7 +16,8 @@ pub fn run_server() -> Result<(), Error> {
 
     let server = Server::http("0.0.0.0:5269").unwrap();
 
-    for mut req in server.incoming_requests() {
+    loop {
+        let mut req = server.recv().unwrap();
         let m_response = match req.url() {
             "/play" => match req.method() {
                 Method::Post => {
