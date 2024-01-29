@@ -107,7 +107,7 @@ pub fn run_server() -> Result<(), Error> {
                         ureq::post("http://localhost:5270/playing").call().unwrap();
                     }
                     SinkCallbackMessage::Paused => {
-                        ureq::post("http://localhost:5270/playing").call().unwrap();
+                        ureq::post("http://localhost:5270/paused").call().unwrap();
                     }
                     SinkCallbackMessage::SecondElapsed => {
                         ureq::post("http://localhost:5270/second_elapsed")
