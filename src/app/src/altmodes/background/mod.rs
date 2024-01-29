@@ -1,10 +1,11 @@
 use tiny_http::{Method, Response, Server};
 
 use std::path;
+use std::sync::mpsc;
 use std::thread;
 use std::time;
 
-use crate::shared::SinkMessage;
+use crate::shared::{SinkCallbackMessage, SinkMessage};
 
 use crate::services::sink;
 
@@ -14,7 +15,7 @@ pub enum Error {
 }
 
 pub fn run_server() -> Result<(), Error> {
-    let (sink_client, _sink_callback) = sink::create_backend_with_client_and_callback();
+    let (sink_client, sink_callback) = sink::create_backend_with_client_and_callback();
 
     let server = Server::http("0.0.0.0:5269").unwrap();
 
@@ -99,7 +100,36 @@ pub fn run_server() -> Result<(), Error> {
             }
         };
 
-        if do_close {
+        let close_from_callback = match sink_callback.try_recv() {
+            Ok(callback_msg) => {
+                match callback_msg {
+                    SinkCallbackMessage::Playing => {
+                        ureq::post("http://localhost:5270/playing").call().unwrap();
+                    }
+                    SinkCallbackMessage::Paused => {
+                        ureq::post("http://localhost:5270/playing").call().unwrap();
+                    }
+                    SinkCallbackMessage::SecondElapsed => {
+                        ureq::post("http://localhost:5270/second_elapsed")
+                            .call()
+                            .unwrap();
+                    }
+                    SinkCallbackMessage::SongEnded => {
+                        ureq::post("http://localhost:5270/song_ended")
+                            .call()
+                            .unwrap();
+                    }
+                };
+                false
+            }
+            Err(mpsc::TryRecvError::Empty) => false,
+            Err(mpsc::TryRecvError::Disconnected) => {
+                println!("recv sees that all clients have closed");
+                true
+            }
+        };
+
+        if do_close || close_from_callback {
             break;
         }
 
