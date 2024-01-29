@@ -30,6 +30,8 @@ pub fn run_forever(
         if !keep_running {
             break;
         }
+
+        thread::sleep(time::Duration::from_millis(50));
     }
 
     println!("SINK:\tdone relaying");
