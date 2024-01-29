@@ -1,17 +1,32 @@
 use std::sync::mpsc;
+use std::thread;
+use std::time;
 
 use crate::shared;
 
+use super::remotehandler;
+
 pub fn run_forever(
     rx: mpsc::Receiver<shared::SinkMessage>,
-    _callback: mpsc::Sender<shared::SinkCallbackMessage>,
+    callback: mpsc::Sender<shared::SinkCallbackMessage>,
 ) {
     println!("SINK:\tstarting to relay...");
 
     // TODO: Actually relay using a web layer
 
+    let callback_server = remotehandler::CallbackServer::new();
+
     loop {
         let keep_running = relay_msg(rx.try_recv());
+        match callback_server.try_recv() {
+            Some(Ok(msg)) => callback.send(msg).unwrap(),
+            Some(Err(e)) => {
+                println!("error on remote bridge: {:?}", e);
+                break;
+            }
+            None => (),
+        }
+
         if !keep_running {
             break;
         }
