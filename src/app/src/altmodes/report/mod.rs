@@ -33,7 +33,7 @@ pub fn generate_year_end_report() -> Result<(), Error> {
                     .filter(|x| {
                         x >= &&chrono::Local
                             .from_local_datetime(
-                                &chrono::NaiveDate::from_ymd_opt(2022, 1, 1)
+                                &chrono::NaiveDate::from_ymd_opt(2023, 1, 1)
                                     .unwrap()
                                     .and_hms_opt(0, 0, 0)
                                     .unwrap(),
