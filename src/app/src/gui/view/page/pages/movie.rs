@@ -27,7 +27,8 @@ pub fn movie_page<'a>(
         model::MovieTitle::from_metadata(&state.movie),
     ) {
         Some(movie_image_bytes) => {
-            Container::new(movie_image(movie_image_bytes, model::MovieSize::Large))
+            let movie_image = movie_image(movie_image_bytes, model::MovieSize::Large);
+            Container::new(movie_image)
         }
         None => Container::new(album_image(
             app_images.get_dvd_image().clone(),
