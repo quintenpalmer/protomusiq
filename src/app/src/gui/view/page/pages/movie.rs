@@ -22,7 +22,7 @@ pub fn movie_page<'a>(
         )),
     )];
 
-    let cover_size = model::MovieSize::Large;
+    let cover_size = state.movie_size.clone();
 
     let movie_image_element = match movie_library.art.get_movie_cover(
         cover_size.clone(),
