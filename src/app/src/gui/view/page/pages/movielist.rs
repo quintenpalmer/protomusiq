@@ -66,8 +66,12 @@ pub fn movie_list<'a>(
                 };
 
                 buttons.push(
-                    dark_button(bottom_label(movie_image_element.into(), movie_info))
-                        .on_press(user_nav_message(NavMessage::MovieView(movie.clone()))),
+                    dark_button(bottom_label(movie_image_element.into(), movie_info)).on_press(
+                        user_nav_message(NavMessage::MovieView(
+                            movie.clone(),
+                            model::MovieSize::Large,
+                        )),
+                    ),
                 );
             }
 

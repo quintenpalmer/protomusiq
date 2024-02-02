@@ -136,4 +136,5 @@ pub struct MovieListState {
 #[derive(Debug)]
 pub struct MovieViewState {
     pub movie: video::MovieMetadata,
+    pub movie_size: model::MovieSize,
 }

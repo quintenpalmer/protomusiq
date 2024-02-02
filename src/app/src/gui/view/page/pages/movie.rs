@@ -29,7 +29,7 @@ pub fn movie_page<'a>(
         model::MovieTitle::from_metadata(&state.movie),
     ) {
         Some(movie_image_bytes) => {
-            let (current, _toggle_to) = match cover_size {
+            let (current, toggle_to) = match cover_size {
                 model::MovieSize::Micro => (model::MovieSize::Micro, model::MovieSize::Small),
                 model::MovieSize::Small => (model::MovieSize::Small, model::MovieSize::Regular),
                 model::MovieSize::Regular => (model::MovieSize::Regular, model::MovieSize::Large),
@@ -38,8 +38,9 @@ pub fn movie_page<'a>(
 
             let movie_image = movie_image(movie_image_bytes, current);
 
-            let movie_button = dark_button(movie_image)
-                .on_press(user_nav_message(NavMessage::MovieView(state.movie.clone())));
+            let movie_button = dark_button(movie_image).on_press(user_nav_message(
+                NavMessage::MovieView(state.movie.clone(), toggle_to),
+            ));
 
             Container::new(movie_button)
         }

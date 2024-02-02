@@ -85,7 +85,7 @@ pub enum NavMessage {
         Option<musiqlibrary::TrackUniqueIdentifier>,
     ),
     MovieList(usize, model::MovieSortKey, model::SortOrder),
-    MovieView(video::MovieMetadata),
+    MovieView(video::MovieMetadata, model::MovieSize),
 }
 
 #[derive(Debug, Clone)]
