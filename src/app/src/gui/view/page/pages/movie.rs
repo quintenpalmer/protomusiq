@@ -22,13 +22,26 @@ pub fn movie_page<'a>(
         )),
     )];
 
+    let cover_size = model::MovieSize::Large;
+
     let movie_image_element = match movie_library.art.get_movie_cover(
-        model::MovieSize::Large,
+        cover_size.clone(),
         model::MovieTitle::from_metadata(&state.movie),
     ) {
         Some(movie_image_bytes) => {
-            let movie_image = movie_image(movie_image_bytes, model::MovieSize::Large);
-            Container::new(movie_image)
+            let (current, _toggle_to) = match cover_size {
+                model::MovieSize::Micro => (model::MovieSize::Micro, model::MovieSize::Small),
+                model::MovieSize::Small => (model::MovieSize::Small, model::MovieSize::Regular),
+                model::MovieSize::Regular => (model::MovieSize::Regular, model::MovieSize::Large),
+                model::MovieSize::Large => (model::MovieSize::Large, model::MovieSize::Micro),
+            };
+
+            let movie_image = movie_image(movie_image_bytes, current);
+
+            let movie_button = dark_button(movie_image)
+                .on_press(user_nav_message(NavMessage::MovieView(state.movie.clone())));
+
+            Container::new(movie_button)
         }
         None => Container::new(album_image(
             app_images.get_dvd_image().clone(),
