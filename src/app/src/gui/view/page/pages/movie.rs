@@ -50,7 +50,7 @@ pub fn movie_page<'a>(
         )),
     };
 
-    let movie_info = Column::new()
+    let mut movie_info = Column::new()
         .padding(10)
         .spacing(10)
         .push(h2(state.movie.title.clone()))
@@ -59,6 +59,16 @@ pub fn movie_page<'a>(
                 state.movie.path.clone().to_path_buf(),
             ))),
         );
+
+    match state.movie.extra {
+        Some(ref extra_movie_metadata) => {
+            movie_info = movie_info.push(h2(extra_movie_metadata
+                .release
+                .format("%Y/%m/%d")
+                .to_string()))
+        }
+        None => (),
+    };
 
     let contents = Column::new()
         .spacing(10)
