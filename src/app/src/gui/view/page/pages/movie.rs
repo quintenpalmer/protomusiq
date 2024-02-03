@@ -62,7 +62,8 @@ pub fn movie_page<'a>(
 
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
-            movie_info = movie_info.push(h2(extra_movie_metadata
+            movie_info = movie_info.push(h2("Release"));
+            movie_info = movie_info.push(h3(extra_movie_metadata
                 .release
                 .format("%Y/%m/%d")
                 .to_string()))
