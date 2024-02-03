@@ -3,6 +3,7 @@ use std::{fs, path, str};
 use chrono::NaiveDate;
 use mp4;
 use serde::Deserialize;
+use serde_json;
 
 /// Possible Errors from Movie Searching/Decoding
 #[derive(Debug)]
@@ -17,6 +18,7 @@ pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
     pub relative_path: path::PathBuf,
+    pub extra: Option<ExtraMetadata>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -124,6 +126,8 @@ fn find_mp4_metadata(
         _ => Err(Error::NonMP4File),
     }?;
 
+    let extra = find_extra_metadata(movie_path);
+
     Ok(MovieMetadata {
         title: title,
         path: movie_path.clone(),
@@ -132,5 +136,31 @@ fn find_mp4_metadata(
             .strip_prefix(orig_scan_path)
             .unwrap()
             .to_path_buf(),
+        extra,
     })
+}
+
+fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
+    let parent_dir = movie_path.parent().unwrap();
+
+    let metadata_json_file = parent_dir.join("metadata.json");
+
+    let maybe_raw: Option<ExtraMetadata> = match fs::File::open(metadata_json_file.clone()) {
+        Ok(reader) => match serde_json::from_reader(reader) {
+            Ok(metadata) => Some(metadata),
+            Err(_) => {
+                println!(
+                    "could not deserialize data from path: {:?}",
+                    metadata_json_file.display()
+                );
+                None
+            }
+        },
+        Err(_) => {
+            println!("could not load file: {:?}", metadata_json_file.display());
+            None
+        }
+    };
+
+    maybe_raw
 }
