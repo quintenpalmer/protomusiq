@@ -23,6 +23,7 @@ pub struct MovieMetadata {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct ExtraMetadata {
+    #[serde(with = "slash_date")]
     pub release: NaiveDate,
     pub genres: Vec<String>,
     pub cast: Vec<String>,
@@ -148,19 +149,40 @@ fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
     let maybe_raw: Option<ExtraMetadata> = match fs::File::open(metadata_json_file.clone()) {
         Ok(reader) => match serde_json::from_reader(reader) {
             Ok(metadata) => Some(metadata),
-            Err(_) => {
+            Err(e) => {
                 println!(
-                    "could not deserialize data from path: {:?}",
-                    metadata_json_file.display()
+                    "could not deserialize data from path: {:?} {:?}",
+                    metadata_json_file.display(),
+                    e
                 );
                 None
             }
         },
-        Err(_) => {
-            println!("could not load file: {:?}", metadata_json_file.display());
+        Err(e) => {
+            println!(
+                "could not load file: {:?} {:?}",
+                metadata_json_file.display(),
+                e
+            );
             None
         }
     };
 
     maybe_raw
+}
+
+mod slash_date {
+    use chrono::NaiveDate;
+    use serde::{self, Deserialize, Deserializer};
+
+    const FORMAT: &'static str = "%Y/%m/%d";
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<NaiveDate, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        let date = NaiveDate::parse_from_str(&s, FORMAT).map_err(serde::de::Error::custom)?;
+        Ok(date)
+    }
 }
