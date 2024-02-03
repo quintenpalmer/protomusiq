@@ -2458,6 +2458,7 @@ dependencies = [
 name = "musiqlibrary"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "claxon",
  "id3",
  "mp3-duration",

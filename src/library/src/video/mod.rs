@@ -1,6 +1,8 @@
 use std::{fs, path, str};
 
+use chrono::NaiveDate;
 use mp4;
+use serde::Deserialize;
 
 /// Possible Errors from Movie Searching/Decoding
 #[derive(Debug)]
@@ -15,6 +17,15 @@ pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
     pub relative_path: path::PathBuf,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ExtraMetadata {
+    pub release: NaiveDate,
+    pub genres: Vec<String>,
+    pub cast: Vec<String>,
+    pub directors: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 /// Recursively find all movies with metadata
