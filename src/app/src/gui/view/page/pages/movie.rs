@@ -50,19 +50,19 @@ pub fn movie_page<'a>(
         )),
     };
 
+    let movie_info = Column::new()
+        .padding(10)
+        .spacing(10)
+        .push(h2(state.movie.title.clone()))
+        .push(
+            dark_button(h3("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
+                state.movie.path.clone().to_path_buf(),
+            ))),
+        );
+
     let contents = Column::new()
         .spacing(10)
-        .push(
-            Row::new().push(movie_image_element).push(
-                Column::new()
-                    .padding(10)
-                    .spacing(10)
-                    .push(h2(state.movie.title.clone()))
-                    .push(dark_button(h3("Play")).on_press(Message::ExternalSpawn(
-                        ExternalSpawn::Mpv(state.movie.path.clone().to_path_buf()),
-                    ))),
-            ),
-        )
+        .push(Row::new().push(movie_image_element).push(movie_info))
         .push(bright_paragraph(
             state
                 .movie
