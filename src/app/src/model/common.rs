@@ -154,21 +154,6 @@ pub enum AlbumSizeWithOrig {
     Original,
 }
 
-#[derive(Debug)]
-pub struct Pair<F, S> {
-    pub first: F,
-    pub second: S,
-}
-
-impl<F> Pair<F, ()> {
-    pub fn new_empty(f: F) -> Self {
-        Pair {
-            first: f,
-            second: (),
-        }
-    }
-}
-
 pub struct ListAndReversed<T> {
     pub regular: Vec<T>,
     pub reversed: Vec<T>,
@@ -257,12 +242,4 @@ pub struct SimpleSearchResults {
     pub albums: Vec<musiqlibrary::ArtistAlbumInfo>,
     pub tracks: Vec<augmented::AugmentedTrack>,
     pub track_artists: Vec<augmented::AugmentedTrack>,
-}
-
-#[derive(Debug)]
-pub struct SearchResults<T> {
-    pub artists: Vec<Pair<musiqlibrary::ArtistInfo, T>>,
-    pub albums: Vec<Pair<musiqlibrary::ArtistAlbumInfo, T>>,
-    pub tracks: Vec<Pair<augmented::AugmentedTrack, T>>,
-    pub track_artists: Vec<Pair<augmented::AugmentedTrack, T>>,
 }
