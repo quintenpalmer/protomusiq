@@ -57,7 +57,7 @@ pub struct ConfigState {}
 
 #[derive(Debug)]
 pub struct SearchPageState {
-    pub results: Option<model::SearchResults<()>>,
+    pub results: Option<model::SimpleSearchResults>,
 
     pub query: String,
 }

@@ -221,7 +221,7 @@ impl LibraryState {
             .get_album_cover(album_size, artist_id, album_id)
     }
 
-    pub fn search(&self, query: String) -> common::SearchResults<()> {
+    pub fn search(&self, query: String) -> common::SimpleSearchResults {
         let mut artists = Vec::new();
         let mut artist_albums = Vec::new();
         let mut tracks = Vec::new();
@@ -234,10 +234,10 @@ impl LibraryState {
                 .to_lowercase()
                 .contains(&query.to_lowercase())
             {
-                artists.push(common::Pair::new_empty(musiqlibrary::ArtistInfo {
+                artists.push(musiqlibrary::ArtistInfo {
                     artist_id: artist.artist_info.artist_id.clone(),
                     artist_name: artist.artist_info.artist_name.clone(),
-                }));
+                });
             }
             for album in artist.albums.values() {
                 if album
@@ -246,10 +246,10 @@ impl LibraryState {
                     .to_lowercase()
                     .contains(&query.to_lowercase())
                 {
-                    artist_albums.push(common::Pair::new_empty(musiqlibrary::ArtistAlbumInfo {
+                    artist_albums.push(musiqlibrary::ArtistAlbumInfo {
                         artist: artist.artist_info.clone(),
                         album: album.album_info.clone(),
-                    }));
+                    });
                 }
 
                 for disc in album.discs.values() {
@@ -260,7 +260,7 @@ impl LibraryState {
                             .to_lowercase()
                             .contains(&query.to_lowercase())
                         {
-                            tracks.push(common::Pair::new_empty(track.clone()));
+                            tracks.push(track.clone());
                         }
                         if track.metadata.track_artist != track.metadata.album_artist {
                             if track
@@ -269,7 +269,7 @@ impl LibraryState {
                                 .to_lowercase()
                                 .contains(&query.to_lowercase())
                             {
-                                track_artists.push(common::Pair::new_empty(track.clone()));
+                                track_artists.push(track.clone());
                             }
                         }
                     }
@@ -277,26 +277,23 @@ impl LibraryState {
             }
         }
 
-        artists
-            .sort_unstable_by(|a, b| a.first.artist_name.cmp(&b.first.artist_name.to_lowercase()));
+        artists.sort_unstable_by(|a, b| a.artist_name.cmp(&b.artist_name.to_lowercase()));
 
         artist_albums.sort_unstable_by(|a, b| {
-            a.first
-                .album
+            a.album
                 .album_name
                 .to_lowercase()
-                .cmp(&b.first.album.album_name.to_lowercase())
+                .cmp(&b.album.album_name.to_lowercase())
         });
 
         tracks.sort_unstable_by(|a, b| {
-            a.first
-                .metadata
+            a.metadata
                 .title
                 .to_lowercase()
-                .cmp(&b.first.metadata.title.to_lowercase())
+                .cmp(&b.metadata.title.to_lowercase())
         });
 
-        common::SearchResults {
+        common::SimpleSearchResults {
             artists: artists,
             albums: artist_albums,
             tracks: tracks,

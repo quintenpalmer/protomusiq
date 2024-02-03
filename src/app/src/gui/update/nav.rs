@@ -39,39 +39,11 @@ pub fn handle_nav(
             let computed_results = match perform_search {
                 true => {
                     let search_results = app.library.search(query.clone());
-                    let mapped_search_results = model::SearchResults {
-                        artists: search_results
-                            .artists
-                            .into_iter()
-                            .map(|artist| model::Pair {
-                                first: artist.first,
-                                second: (),
-                            })
-                            .collect(),
-                        albums: search_results
-                            .albums
-                            .into_iter()
-                            .map(|artist_album| model::Pair {
-                                first: artist_album.first,
-                                second: (),
-                            })
-                            .collect(),
-                        tracks: search_results
-                            .tracks
-                            .into_iter()
-                            .map(|track| model::Pair {
-                                first: track.first,
-                                second: (),
-                            })
-                            .collect(),
-                        track_artists: search_results
-                            .track_artists
-                            .into_iter()
-                            .map(|track_artist| model::Pair {
-                                first: track_artist.first,
-                                second: (),
-                            })
-                            .collect(),
+                    let mapped_search_results = model::SimpleSearchResults {
+                        artists: search_results.artists.into_iter().collect(),
+                        albums: search_results.albums.into_iter().collect(),
+                        tracks: search_results.tracks.into_iter().collect(),
+                        track_artists: search_results.track_artists.into_iter().collect(),
                     };
                     Some(mapped_search_results)
                 }

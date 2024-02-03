@@ -42,22 +42,20 @@ pub fn search_page<'a>(
                                             .push(album_image(
                                                 library.get_album_cover(
                                                     model::AlbumSize::Micro,
-                                                    result.first.artist.artist_id.clone(),
-                                                    result.first.album.album_id.clone(),
+                                                    result.artist.artist_id.clone(),
+                                                    result.album.album_id.clone(),
                                                 ),
                                                 model::AlbumSize::Micro,
                                             ))
                                             .push(
-                                                bright_paragraph(
-                                                    result.first.album.album_name.clone(),
-                                                )
-                                                .width(Length::Fill),
+                                                bright_paragraph(result.album.album_name.clone())
+                                                    .width(Length::Fill),
                                             ),
                                     )
                                     .on_press(
                                         user_nav_message(NavMessage::ArtistAlbumView(
-                                            result.first.artist.artist_id.clone(),
-                                            result.first.album.album_id.clone(),
+                                            result.artist.artist_id.clone(),
+                                            result.album.album_id.clone(),
                                             model::AlbumSize::Regular,
                                             None,
                                         )),
@@ -75,18 +73,18 @@ pub fn search_page<'a>(
                                             .push(album_image(
                                                 library.get_artists_first_album_cover(
                                                     model::AlbumSize::Micro,
-                                                    result.first.artist_id.clone(),
+                                                    result.artist_id.clone(),
                                                 ),
                                                 model::AlbumSize::Micro,
                                             ))
                                             .push(
-                                                bright_paragraph(result.first.artist_name.clone())
+                                                bright_paragraph(result.artist_name.clone())
                                                     .width(Length::Fill),
                                             ),
                                     )
                                     .on_press(
                                         user_nav_message(NavMessage::ArtistAlbumsView(
-                                            result.first.artist_id.clone(),
+                                            result.artist_id.clone(),
                                         )),
                                     ),
                                 )
@@ -102,19 +100,17 @@ pub fn search_page<'a>(
                                             .push(album_image(
                                                 library.get_album_cover(
                                                     model::AlbumSize::Micro,
-                                                    result.first.metadata.album_artist_id.clone(),
-                                                    result.first.metadata.album_id.clone(),
+                                                    result.metadata.album_artist_id.clone(),
+                                                    result.metadata.album_id.clone(),
                                                 ),
                                                 model::AlbumSize::Micro,
                                             ))
                                             .push(
-                                                bright_paragraph(
-                                                    result.first.metadata.title.clone(),
-                                                )
-                                                .width(Length::Fill),
+                                                bright_paragraph(result.metadata.title.clone())
+                                                    .width(Length::Fill),
                                             ),
                                     )
-                                    .on_press(components::track_link(&result.first.metadata)),
+                                    .on_press(components::track_link(&result.metadata)),
                                 )
                             },
                         ));
@@ -129,25 +125,21 @@ pub fn search_page<'a>(
                                                 .push(album_image(
                                                     library.get_album_cover(
                                                         model::AlbumSize::Micro,
-                                                        result
-                                                            .first
-                                                            .metadata
-                                                            .album_artist_id
-                                                            .clone(),
-                                                        result.first.metadata.album_id.clone(),
+                                                        result.metadata.album_artist_id.clone(),
+                                                        result.metadata.album_id.clone(),
                                                     ),
                                                     model::AlbumSize::Micro,
                                                 ))
                                                 .push(
                                                     bright_paragraph(format!(
                                                         "{} ({})",
-                                                        result.first.metadata.title.clone(),
-                                                        result.first.metadata.track_artist.clone(),
+                                                        result.metadata.title.clone(),
+                                                        result.metadata.track_artist.clone(),
                                                     ))
                                                     .width(Length::Fill),
                                                 ),
                                         )
-                                        .on_press(components::track_link(&result.first.metadata)),
+                                        .on_press(components::track_link(&result.metadata)),
                                     )
                                 },
                             ));
