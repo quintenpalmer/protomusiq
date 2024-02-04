@@ -138,12 +138,6 @@ pub fn artist_list<'a>(
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Random",
-                                        model::ArtistSortKey::Random,
-                                        model::SortOrder::Regular,
-                                        &sort_key,
-                                    ))
-                                    .push(sort_button(
                                         "Play Count",
                                         model::ArtistSortKey::ByPlayCount,
                                         model::SortOrder::Reversed,
@@ -171,6 +165,12 @@ pub fn artist_list<'a>(
                                         "Duration Played",
                                         model::ArtistSortKey::ByPlayedDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
+                                    ))
+                                    .push(sort_button(
+                                        "Random",
+                                        model::ArtistSortKey::Random,
+                                        model::SortOrder::Regular,
                                         &sort_key,
                                     )),
                             ),
