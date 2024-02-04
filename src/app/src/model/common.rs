@@ -63,7 +63,7 @@ pub enum ArtistSortKey {
     Random,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum AlbumSortKey {
     ByName,
     ByParent,

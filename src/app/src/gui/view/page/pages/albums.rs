@@ -149,41 +149,49 @@ pub fn album_list<'a>(
                                         "Artist Name",
                                         model::AlbumSortKey::ByParent,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Name",
                                         model::AlbumSortKey::ByName,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Added",
                                         model::AlbumSortKey::ByLastMod,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Duration",
                                         model::AlbumSortKey::ByDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Total Play Count",
                                         model::AlbumSortKey::ByTotalPlayCount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Total Played Duration",
                                         model::AlbumSortKey::ByTotalPlayedDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Date",
                                         model::AlbumSortKey::ByDate,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::AlbumSortKey::Random,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     )),
                             ),
                         )
@@ -250,11 +258,16 @@ pub fn album_list<'a>(
     }
 }
 
-fn sort_button(
+fn sort_button<'a>(
     display_text: &'static str,
     sort_key: model::AlbumSortKey,
     order: model::SortOrder,
-) -> Button<Message> {
-    dark_button(bright_paragraph(display_text))
-        .on_press(user_nav_message(NavMessage::AlbumList(0, sort_key, order)))
+    current_sort_key: &'a model::AlbumSortKey,
+) -> Button<'a, Message> {
+    let text_element = if &sort_key == current_sort_key {
+        dark_paragraph(display_text)
+    } else {
+        bright_paragraph(display_text)
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::AlbumList(0, sort_key, order)))
 }
