@@ -145,64 +145,45 @@ pub fn album_list<'a>(
                             line_row().push(
                                 line_row()
                                     .push(paragraph("Sort By: "))
-                                    .push(dark_button(bright_paragraph("Artist Name")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::ByParent,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Artist Name",
+                                        model::AlbumSortKey::ByParent,
+                                        model::SortOrder::Regular,
                                     ))
-                                    .push(dark_button(bright_paragraph("Name")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::ByName,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Name",
+                                        model::AlbumSortKey::ByName,
+                                        model::SortOrder::Regular,
                                     ))
-                                    .push(dark_button(bright_paragraph("Added")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::ByLastMod,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Added",
+                                        model::AlbumSortKey::ByLastMod,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Duration")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::ByDuration,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Duration",
+                                        model::AlbumSortKey::ByDuration,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(
-                                        dark_button(bright_paragraph("Total Play Count")).on_press(
-                                            user_nav_message(NavMessage::AlbumList(
-                                                0,
-                                                model::AlbumSortKey::ByTotalPlayCount,
-                                                model::SortOrder::Reversed,
-                                            )),
-                                        ),
-                                    )
-                                    .push(
-                                        dark_button(bright_paragraph("Total Played Duration"))
-                                            .on_press(user_nav_message(NavMessage::AlbumList(
-                                                0,
-                                                model::AlbumSortKey::ByTotalPlayedDuration,
-                                                model::SortOrder::Reversed,
-                                            ))),
-                                    )
-                                    .push(dark_button(bright_paragraph("Date")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::ByDate,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Total Play Count",
+                                        model::AlbumSortKey::ByTotalPlayCount,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Random")).on_press(
-                                        user_nav_message(NavMessage::AlbumList(
-                                            0,
-                                            model::AlbumSortKey::Random,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Total Played Duration",
+                                        model::AlbumSortKey::ByTotalPlayedDuration,
+                                        model::SortOrder::Reversed,
+                                    ))
+                                    .push(sort_button(
+                                        "Date",
+                                        model::AlbumSortKey::ByDate,
+                                        model::SortOrder::Reversed,
+                                    ))
+                                    .push(sort_button(
+                                        "Random",
+                                        model::AlbumSortKey::Random,
+                                        model::SortOrder::Regular,
                                     )),
                             ),
                         )
@@ -267,4 +248,13 @@ pub fn album_list<'a>(
             (breadcrumbs, body)
         }
     }
+}
+
+fn sort_button(
+    display_text: &'static str,
+    sort_key: model::AlbumSortKey,
+    order: model::SortOrder,
+) -> Button<Message> {
+    dark_button(bright_paragraph(display_text))
+        .on_press(user_nav_message(NavMessage::AlbumList(0, sort_key, order)))
 }
