@@ -1,4 +1,4 @@
-use std::{fs, path, str};
+use std::{fs, path, str, time};
 
 use chrono::NaiveDate;
 use mp4;
@@ -18,6 +18,7 @@ pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
     pub relative_path: path::PathBuf,
+    pub last_modified: time::SystemTime,
     pub extra: Option<ExtraMetadata>,
 }
 
@@ -127,6 +128,8 @@ fn find_mp4_metadata(
         _ => Err(Error::NonMP4File),
     }?;
 
+    let last_mod = fs::metadata(movie_path).unwrap().modified().unwrap();
+
     let extra = find_extra_metadata(movie_path);
 
     Ok(MovieMetadata {
@@ -137,6 +140,7 @@ fn find_mp4_metadata(
             .strip_prefix(orig_scan_path)
             .unwrap()
             .to_path_buf(),
+        last_modified: last_mod,
         extra,
     })
 }
