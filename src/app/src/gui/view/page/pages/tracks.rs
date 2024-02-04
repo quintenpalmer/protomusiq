@@ -155,26 +155,31 @@ pub fn track_list<'a>(
                                         "Name",
                                         model::TrackSortKey::ByName,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Play Count",
                                         model::TrackSortKey::ByPlayCount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Duration",
                                         model::TrackSortKey::ByDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Played Duration",
                                         model::TrackSortKey::ByPlayedAmount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::TrackSortKey::ByRandom,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     )),
                             ),
                         )
@@ -241,11 +246,16 @@ pub fn track_list<'a>(
     }
 }
 
-fn sort_button(
+fn sort_button<'a>(
     display_text: &'static str,
     sort_key: model::TrackSortKey,
     order: model::SortOrder,
-) -> Button<Message> {
-    dark_button(bright_paragraph(display_text))
-        .on_press(user_nav_message(NavMessage::TrackList(0, sort_key, order)))
+    current_sort: &'a model::TrackSortKey,
+) -> Button<'a, Message> {
+    let text_element = if &sort_key == current_sort {
+        bright_paragraph(display_text)
+    } else {
+        dark_paragraph(display_text)
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::TrackList(0, sort_key, order)))
 }

@@ -23,7 +23,7 @@ pub enum SortOrder {
     Reversed,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum TrackSortKey {
     ByName,
     ByPlayCount,
