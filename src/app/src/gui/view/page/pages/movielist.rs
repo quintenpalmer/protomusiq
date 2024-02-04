@@ -142,6 +142,15 @@ pub fn movie_list<'a>(
                         )),
                     )
                     .push(
+                        dark_button(bright_paragraph("Added")).on_press(user_nav_message(
+                            NavMessage::MovieList(
+                                0,
+                                model::MovieSortKey::LastModified,
+                                model::SortOrder::Reversed,
+                            ),
+                        )),
+                    )
+                    .push(
                         dark_button(bright_paragraph("Random")).on_press(user_nav_message(
                             NavMessage::MovieList(
                                 0,
