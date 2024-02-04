@@ -164,14 +164,14 @@ pub fn track_list<'a>(
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Duration",
-                                        model::TrackSortKey::ByDuration,
+                                        "Played Duration",
+                                        model::TrackSortKey::ByPlayedAmount,
                                         model::SortOrder::Reversed,
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Played Duration",
-                                        model::TrackSortKey::ByPlayedAmount,
+                                        "Duration",
+                                        model::TrackSortKey::ByDuration,
                                         model::SortOrder::Reversed,
                                         &sort_key,
                                     ))
