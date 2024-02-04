@@ -135,36 +135,43 @@ pub fn artist_list<'a>(
                                         "Name",
                                         model::ArtistSortKey::ByName,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::ArtistSortKey::Random,
                                         model::SortOrder::Regular,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Play Count",
                                         model::ArtistSortKey::ByPlayCount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Album Count",
                                         model::ArtistSortKey::ByAlbumCount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Track Count",
                                         model::ArtistSortKey::ByTrackCount,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Track Duration",
                                         model::ArtistSortKey::ByTrackDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     ))
                                     .push(sort_button(
                                         "Duration Played",
                                         model::ArtistSortKey::ByPlayedDuration,
                                         model::SortOrder::Reversed,
+                                        &sort_key,
                                     )),
                             ),
                         )
@@ -229,11 +236,16 @@ pub fn artist_list<'a>(
     }
 }
 
-fn sort_button(
+fn sort_button<'a>(
     display_text: &'static str,
     sort_key: model::ArtistSortKey,
     order: model::SortOrder,
-) -> Button<Message> {
-    dark_button(bright_paragraph(display_text))
-        .on_press(user_nav_message(NavMessage::ArtistList(0, sort_key, order)))
+    current_sort: &'a model::ArtistSortKey,
+) -> Button<'a, Message> {
+    let text_element = if &sort_key == current_sort {
+        bright_paragraph(display_text)
+    } else {
+        dark_paragraph(display_text)
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::ArtistList(0, sort_key, order)))
 }
