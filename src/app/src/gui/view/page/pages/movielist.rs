@@ -136,16 +136,19 @@ pub fn movie_list<'a>(
                         "Title",
                         model::MovieSortKey::ByTitle,
                         model::SortOrder::Regular,
+                        &sort_key,
                     ))
                     .push(sort_button(
                         "Added",
                         model::MovieSortKey::LastModified,
                         model::SortOrder::Reversed,
+                        &sort_key,
                     ))
                     .push(sort_button(
                         "Random",
                         model::MovieSortKey::Random,
                         model::SortOrder::Regular,
+                        &sort_key,
                     )),
             );
 
@@ -228,11 +231,16 @@ pub fn movie_list<'a>(
     }
 }
 
-fn sort_button(
+fn sort_button<'a>(
     display_text: &'static str,
     sort_key: model::MovieSortKey,
     order: model::SortOrder,
-) -> Button<Message> {
-    dark_button(bright_paragraph(display_text))
-        .on_press(user_nav_message(NavMessage::MovieList(0, sort_key, order)))
+    current_sort: &'a model::MovieSortKey,
+) -> Button<'a, Message> {
+    let text_element = if &sort_key == current_sort {
+        bright_paragraph(display_text)
+    } else {
+        dark_paragraph(display_text)
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::MovieList(0, sort_key, order)))
 }
