@@ -265,9 +265,9 @@ fn sort_button<'a>(
     current_sort_key: &'a model::AlbumSortKey,
 ) -> Button<'a, Message> {
     let text_element = if &sort_key == current_sort_key {
-        dark_paragraph(display_text)
-    } else {
         bright_paragraph(display_text)
+    } else {
+        dark_paragraph(display_text)
     };
     dark_button(text_element).on_press(user_nav_message(NavMessage::AlbumList(0, sort_key, order)))
 }
