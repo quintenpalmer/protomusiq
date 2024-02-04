@@ -131,57 +131,41 @@ pub fn artist_list<'a>(
                             line_row().push(
                                 line_row()
                                     .push(paragraph("Sort By: "))
-                                    .push(dark_button(bright_paragraph("Name")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::ByName,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Name",
+                                        model::ArtistSortKey::ByName,
+                                        model::SortOrder::Regular,
                                     ))
-                                    .push(dark_button(bright_paragraph("Random")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::Random,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Random",
+                                        model::ArtistSortKey::Random,
+                                        model::SortOrder::Regular,
                                     ))
-                                    .push(dark_button(bright_paragraph("Play Count")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::ByPlayCount,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Play Count",
+                                        model::ArtistSortKey::ByPlayCount,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Album Count")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::ByAlbumCount,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Album Count",
+                                        model::ArtistSortKey::ByAlbumCount,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Track Count")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::ByTrackCount,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Track Count",
+                                        model::ArtistSortKey::ByTrackCount,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Track Duration")).on_press(
-                                        user_nav_message(NavMessage::ArtistList(
-                                            0,
-                                            model::ArtistSortKey::ByTrackDuration,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Track Duration",
+                                        model::ArtistSortKey::ByTrackDuration,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(
-                                        dark_button(bright_paragraph("Duration Played")).on_press(
-                                            user_nav_message(NavMessage::ArtistList(
-                                                0,
-                                                model::ArtistSortKey::ByPlayedDuration,
-                                                model::SortOrder::Reversed,
-                                            )),
-                                        ),
-                                    ),
+                                    .push(sort_button(
+                                        "Duration Played",
+                                        model::ArtistSortKey::ByPlayedDuration,
+                                        model::SortOrder::Reversed,
+                                    )),
                             ),
                         )
                         .push(
@@ -243,4 +227,13 @@ pub fn artist_list<'a>(
             },
         ),
     }
+}
+
+fn sort_button(
+    display_text: &'static str,
+    sort_key: model::ArtistSortKey,
+    order: model::SortOrder,
+) -> Button<Message> {
+    dark_button(bright_paragraph(display_text))
+        .on_press(user_nav_message(NavMessage::ArtistList(0, sort_key, order)))
 }
