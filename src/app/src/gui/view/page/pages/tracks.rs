@@ -151,42 +151,30 @@ pub fn track_list<'a>(
                             line_row().push(
                                 line_row()
                                     .push(paragraph("Sort By: "))
-                                    .push(dark_button(bright_paragraph("Name")).on_press(
-                                        user_nav_message(NavMessage::TrackList(
-                                            0,
-                                            model::TrackSortKey::ByName,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Name",
+                                        model::TrackSortKey::ByName,
+                                        model::SortOrder::Regular,
                                     ))
-                                    .push(dark_button(bright_paragraph("Play Count")).on_press(
-                                        user_nav_message(NavMessage::TrackList(
-                                            0,
-                                            model::TrackSortKey::ByPlayCount,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Play Count",
+                                        model::TrackSortKey::ByPlayCount,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(dark_button(bright_paragraph("Duration")).on_press(
-                                        user_nav_message(NavMessage::TrackList(
-                                            0,
-                                            model::TrackSortKey::ByDuration,
-                                            model::SortOrder::Reversed,
-                                        )),
+                                    .push(sort_button(
+                                        "Duration",
+                                        model::TrackSortKey::ByDuration,
+                                        model::SortOrder::Reversed,
                                     ))
-                                    .push(
-                                        dark_button(bright_paragraph("Played Duration")).on_press(
-                                            user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                model::TrackSortKey::ByPlayedAmount,
-                                                model::SortOrder::Reversed,
-                                            )),
-                                        ),
-                                    )
-                                    .push(dark_button(bright_paragraph("Random")).on_press(
-                                        user_nav_message(NavMessage::TrackList(
-                                            0,
-                                            model::TrackSortKey::ByRandom,
-                                            model::SortOrder::Regular,
-                                        )),
+                                    .push(sort_button(
+                                        "Played Duration",
+                                        model::TrackSortKey::ByPlayedAmount,
+                                        model::SortOrder::Reversed,
+                                    ))
+                                    .push(sort_button(
+                                        "Random",
+                                        model::TrackSortKey::ByRandom,
+                                        model::SortOrder::Regular,
                                     )),
                             ),
                         )
@@ -251,4 +239,13 @@ pub fn track_list<'a>(
             (breadcrumbs, body)
         }
     }
+}
+
+fn sort_button(
+    display_text: &'static str,
+    sort_key: model::TrackSortKey,
+    order: model::SortOrder,
+) -> Button<Message> {
+    dark_button(bright_paragraph(display_text))
+        .on_press(user_nav_message(NavMessage::TrackList(0, sort_key, order)))
 }
