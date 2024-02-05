@@ -310,7 +310,8 @@ pub struct MovieTreeViewer {}
 
 impl AppCmd for MovieTreeViewer {
     fn operate(&self, path: PathBuf) {
-        let movies = video::find_movies_in_dir(path.clone());
+        let mut movies = video::find_movies_in_dir(path.clone());
+        movies.sort_by(|a, b| a.title.cmp(&b.title));
         println!("Movie Library:");
         let movie_count = movies.len() - 1;
         for (current_movie_index, movie) in movies.iter().enumerate() {
@@ -322,6 +323,10 @@ impl AppCmd for MovieTreeViewer {
                     "├───"
                 },
                 movie.title,
+            );
+            println!(
+                "    └─── {}",
+                movie.path.clone().into_os_string().to_string_lossy()
             );
         }
     }
