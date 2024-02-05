@@ -44,9 +44,9 @@ pub fn movie_page<'a>(
 
             Container::new(movie_button)
         }
-        None => Container::new(album_image(
+        None => Container::new(movie_image(
             app_images.get_dvd_image().clone(),
-            model::AlbumSize::Regular,
+            model::MovieSize::Regular,
         )),
     };
 
