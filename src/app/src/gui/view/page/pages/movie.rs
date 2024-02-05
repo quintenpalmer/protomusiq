@@ -6,6 +6,7 @@ use crate::datastore::staticassets::embedded;
 use crate::gui::message::{user_nav_message, ExternalSpawn, Message, NavMessage};
 use crate::state;
 
+use super::super::super::common;
 use super::super::super::elements::*;
 
 pub fn movie_page<'a>(
@@ -75,6 +76,9 @@ pub fn movie_page<'a>(
         }
         None => (),
     };
+
+    movie_info = movie_info.push(h2("Duration"));
+    movie_info = movie_info.push(h3(common::format_duration(state.movie.duration.as_secs())));
 
     let contents = Column::new()
         .spacing(10)
