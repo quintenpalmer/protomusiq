@@ -32,7 +32,12 @@ pub fn movie_page<'a>(
             let (current, toggle_to) = match cover_size {
                 model::MovieSize::Micro => (model::MovieSize::Micro, model::MovieSize::Small),
                 model::MovieSize::Small => (model::MovieSize::Small, model::MovieSize::Regular),
-                model::MovieSize::Regular => (model::MovieSize::Regular, model::MovieSize::Large),
+                model::MovieSize::Regular => {
+                    (model::MovieSize::Regular, model::MovieSize::SemiLarge)
+                }
+                model::MovieSize::SemiLarge => {
+                    (model::MovieSize::SemiLarge, model::MovieSize::Large)
+                }
                 model::MovieSize::Large => (model::MovieSize::Large, model::MovieSize::Micro),
             };
 

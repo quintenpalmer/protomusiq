@@ -100,6 +100,7 @@ pub enum MovieSize {
     Micro,
     Small,
     Regular,
+    SemiLarge,
     Large,
 }
 
@@ -109,6 +110,7 @@ impl MovieSize {
             MovieSize::Micro => constants::DVD_MICRO_ICON_HEIGHT,
             MovieSize::Small => constants::DVD_SMALL_ICON_HEIGHT,
             MovieSize::Regular => constants::DVD_REGULAR_ICON_HEIGHT,
+            MovieSize::SemiLarge => constants::DVD_SEMILARGE_ICON_HEIGHT,
             MovieSize::Large => constants::DVD_LARGE_ICON_HEIGHT,
         }
     }

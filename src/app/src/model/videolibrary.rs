@@ -72,6 +72,10 @@ impl MovieArt {
     ) -> Option<Vec<u8>> {
         match album_size {
             model::MovieSize::Large => self.large_movie_covers.get(&movie_key).map(|x| x.clone()),
+            model::MovieSize::SemiLarge => self
+                .semilarge_movie_covers
+                .get(&movie_key)
+                .map(|x| x.clone()),
             model::MovieSize::Small => self.small_movie_covers.get(&movie_key).map(|x| x.clone()),
             model::MovieSize::Regular => {
                 self.regular_movie_covers.get(&movie_key).map(|x| x.clone())
