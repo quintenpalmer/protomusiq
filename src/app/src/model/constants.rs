@@ -15,6 +15,8 @@ pub const MICRO_ICON_HEIGHT: u16 = 30;
 
 pub const DVD_LARGE_ICON_HEIGHT: u16 = 600;
 
+pub const DVD_SEMILARGE_ICON_HEIGHT: u16 = 400;
+
 pub const DVD_REGULAR_ICON_HEIGHT: u16 = 225;
 
 pub const DVD_SMALL_ICON_HEIGHT: u16 = 170;

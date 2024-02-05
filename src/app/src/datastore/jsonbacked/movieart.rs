@@ -15,6 +15,7 @@ pub fn process_cache_and_get_movie_art(
     app_data_path: path::PathBuf,
 ) -> model::MovieArt {
     let mut large_movie_covers = BTreeMap::new();
+    let mut semilarge_movie_covers = BTreeMap::new();
     let mut regular_movie_covers = BTreeMap::new();
     let mut small_movie_covers = BTreeMap::new();
     let mut micro_movie_covers = BTreeMap::new();
@@ -37,12 +38,14 @@ pub fn process_cache_and_get_movie_art(
         localfs::confirm_dir(&cache_movie_dir).unwrap();
 
         let cached_large_movie_art_path = cache_movie_dir.join("large.png");
+        let cached_semilarge_movie_art_path = cache_movie_dir.join("semilarge.png");
         let cached_regular_movie_art_path = cache_movie_dir.join("regular.png");
         let cached_small_movie_art_path = cache_movie_dir.join("small.png");
         let cached_micro_movie_art_path = cache_movie_dir.join("micro.png");
         let cached_orig_movie_art_path = cache_movie_dir.join("orig.jpg");
 
         if localfs::check_exists(&cached_large_movie_art_path)
+            && localfs::check_exists(&cached_semilarge_movie_art_path)
             && localfs::check_exists(&cached_regular_movie_art_path)
             && localfs::check_exists(&cached_small_movie_art_path)
             && localfs::check_exists(&cached_micro_movie_art_path)
@@ -110,6 +113,22 @@ pub fn process_cache_and_get_movie_art(
                         .unwrap();
                 }
 
+                if !localfs::check_exists(&cached_semilarge_movie_art_path) {
+                    println!(
+                        "translating semi-large size movie art to cache dir for {:?}",
+                        local_dir
+                    );
+                    let semilarge_movie_art = image::imageops::resize(
+                        &orig_movie_art,
+                        ((model::DVD_SEMILARGE_ICON_HEIGHT as u32) * orig_width) / orig_height,
+                        model::DVD_SEMILARGE_ICON_HEIGHT as u32,
+                        image::imageops::FilterType::Lanczos3,
+                    );
+                    semilarge_movie_art
+                        .save(cached_semilarge_movie_art_path.clone())
+                        .unwrap();
+                }
+
                 if !localfs::check_exists(&cached_regular_movie_art_path) {
                     println!(
                         "translating regular size movie art to cache dir for {:?}",
@@ -165,6 +184,11 @@ pub fn process_cache_and_get_movie_art(
             large_movie_covers.insert(key.clone(), large_bytes);
         }
 
+        if localfs::check_exists(&cached_semilarge_movie_art_path) {
+            let large_bytes = fs::read(cached_semilarge_movie_art_path).unwrap();
+            semilarge_movie_covers.insert(key.clone(), large_bytes);
+        }
+
         if localfs::check_exists(&cached_regular_movie_art_path) {
             let regular_bytes = fs::read(cached_regular_movie_art_path).unwrap();
             regular_movie_covers.insert(key.clone(), regular_bytes);
@@ -185,6 +209,7 @@ pub fn process_cache_and_get_movie_art(
 
     model::MovieArt {
         large_movie_covers,
+        semilarge_movie_covers,
         regular_movie_covers,
         small_movie_covers,
         micro_movie_covers,

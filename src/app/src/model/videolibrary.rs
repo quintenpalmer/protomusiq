@@ -58,6 +58,7 @@ impl VideoLibraryState {
 
 pub struct MovieArt {
     pub large_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
+    pub semilarge_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
     pub regular_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
     pub small_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
     pub micro_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
