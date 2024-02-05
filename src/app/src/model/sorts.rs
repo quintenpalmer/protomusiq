@@ -741,6 +741,7 @@ pub struct MovieSorts {
     pub by_title: common::ListAndReversed<video::MovieMetadata>,
     pub by_last_modified: common::ListAndReversed<video::MovieMetadata>,
     pub by_duration: common::ListAndReversed<video::MovieMetadata>,
+    pub by_release: common::ListAndReversed<video::MovieMetadata>,
     pub random: common::ListAndReversed<video::MovieMetadata>,
 }
 
@@ -772,6 +773,19 @@ impl MovieSorts {
                 common::ListAndReversed::new(movies_by_duration.iter().map(|a| a.clone()).collect())
             },
 
+            by_release: {
+                let mut movies_by_release = movies.clone();
+
+                movies_by_release.sort_unstable_by(|a, b| {
+                    a.extra
+                        .as_ref()
+                        .map(|x| x.release)
+                        .cmp(&b.extra.as_ref().map(|x| x.release))
+                });
+
+                common::ListAndReversed::new(movies_by_release.iter().map(|a| a.clone()).collect())
+            },
+
             random: {
                 let mut rng = rand::thread_rng();
 
@@ -792,6 +806,7 @@ impl MovieSorts {
             common::MovieSortKey::ByTitle => &self.by_title,
             common::MovieSortKey::LastModified => &self.by_last_modified,
             common::MovieSortKey::ByDuration => &self.by_duration,
+            common::MovieSortKey::ByRelease => &self.by_release,
             common::MovieSortKey::Random => &self.random,
         }
         .sort_ordered(&sort_order)

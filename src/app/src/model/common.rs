@@ -80,6 +80,7 @@ pub enum MovieSortKey {
     ByTitle,
     LastModified,
     ByDuration,
+    ByRelease,
     Random,
 }
 

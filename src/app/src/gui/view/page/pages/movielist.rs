@@ -151,6 +151,12 @@ pub fn movie_list<'a>(
                         &sort_key,
                     ))
                     .push(sort_button(
+                        "Release",
+                        model::MovieSortKey::ByRelease,
+                        model::SortOrder::Reversed,
+                        &sort_key,
+                    ))
+                    .push(sort_button(
                         "Random",
                         model::MovieSortKey::Random,
                         model::SortOrder::Regular,
