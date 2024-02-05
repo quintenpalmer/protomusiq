@@ -61,7 +61,7 @@ pub fn movie_list<'a>(
                         movie_image(movie_image_bytes, model::MovieSize::Small)
                     }
                     None => {
-                        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small)
+                        movie_image(app_images.get_dvd_image().clone(), model::MovieSize::Small)
                     }
                 };
 
