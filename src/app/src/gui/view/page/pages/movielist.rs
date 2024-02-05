@@ -210,7 +210,14 @@ pub fn movie_list<'a>(
                     line_row()
                         .push(paragraph("Order: "))
                         .push(
-                            dark_button(bright_paragraph("^")).on_press(user_nav_message(
+                            dark_button({
+                                if sort_order == &model::SortOrder::Reversed {
+                                    bright_paragraph("^")
+                                } else {
+                                    dark_paragraph("^")
+                                }
+                            })
+                            .on_press(user_nav_message(
                                 NavMessage::MovieList(
                                     0,
                                     sort_key.clone(),
@@ -219,7 +226,14 @@ pub fn movie_list<'a>(
                             )),
                         )
                         .push(
-                            dark_button(bright_paragraph("v")).on_press(user_nav_message(
+                            dark_button({
+                                if sort_order == &model::SortOrder::Regular {
+                                    bright_paragraph("v")
+                                } else {
+                                    dark_paragraph("v")
+                                }
+                            })
+                            .on_press(user_nav_message(
                                 NavMessage::MovieList(
                                     0,
                                     sort_key.clone(),
