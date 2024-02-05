@@ -69,7 +69,7 @@ pub fn movie_list<'a>(
                     dark_button(bottom_label(movie_image_element.into(), movie_info)).on_press(
                         user_nav_message(NavMessage::MovieView(
                             movie.clone(),
-                            model::MovieSize::Regular,
+                            model::MovieSize::SemiLarge,
                         )),
                     ),
                 );

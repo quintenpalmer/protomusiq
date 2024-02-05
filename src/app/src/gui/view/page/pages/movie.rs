@@ -51,7 +51,7 @@ pub fn movie_page<'a>(
         }
         None => Container::new(movie_image(
             app_images.get_dvd_image().clone(),
-            model::MovieSize::Regular,
+            model::MovieSize::SemiLarge,
         )),
     };
 
