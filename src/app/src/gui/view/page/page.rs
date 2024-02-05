@@ -31,7 +31,9 @@ pub fn render_page<'a>(
             pages::playlist::playlist_view(&library, &action_state, &player_info, state)
         }
         Page::PlaylistList(ref state) => pages::playlists::playlist_list_view(&library, state),
-        Page::Search(ref state) => pages::search::search_page(&library, state),
+        Page::Search(ref state) => {
+            pages::search::search_page(&library, &movie_library, &app_images, state)
+        }
         Page::TrackList(ref state) => pages::tracks::track_list(&library, state),
         Page::AlbumList(ref state) => pages::albums::album_list(&library, &play_queue_info, state),
         Page::ArtistList(ref state) => {

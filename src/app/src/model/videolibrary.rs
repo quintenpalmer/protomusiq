@@ -55,6 +55,10 @@ impl VideoLibraryState {
         }
     }
 
+    pub fn get_movie_cover(&self, size: model::MovieSize, title: MovieTitle) -> Option<Vec<u8>> {
+        self.art.get_movie_cover(size, title)
+    }
+
     pub fn search_movies(&self, query: String) -> common::MovieSearchResults {
         let mut titles = Vec::new();
 

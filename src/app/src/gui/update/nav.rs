@@ -52,6 +52,15 @@ pub fn handle_nav(
                         false => None,
                     })
                 }
+                message::SearchDomain::Movies => {
+                    state::SearchDomainResults::Movies(match perform_search {
+                        true => {
+                            let search_results = app.video_library.search_movies(query.clone());
+                            Some(search_results)
+                        }
+                        false => None,
+                    })
+                }
             };
 
             app.current_page = Page::Search(state::SearchPageState {

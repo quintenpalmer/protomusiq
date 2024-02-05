@@ -91,6 +91,7 @@ pub enum NavMessage {
 #[derive(Debug, Clone)]
 pub enum SearchDomain {
     Music,
+    Movies,
 }
 
 #[derive(Debug, Clone)]

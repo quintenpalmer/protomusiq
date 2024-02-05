@@ -65,6 +65,7 @@ pub struct SearchPageState {
 #[derive(Debug)]
 pub enum SearchDomainResults {
     Music(Option<model::SimpleSearchResults>),
+    Movies(Option<model::MovieSearchResults>),
 }
 
 #[derive(Debug)]
