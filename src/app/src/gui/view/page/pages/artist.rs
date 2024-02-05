@@ -156,7 +156,7 @@ pub fn artist_list<'a>(
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Track Duration",
+                                        "Track Length",
                                         model::ArtistSortKey::ByTrackDuration,
                                         model::SortOrder::Reversed,
                                         &sort_key,

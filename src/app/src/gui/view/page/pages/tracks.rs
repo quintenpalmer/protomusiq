@@ -170,7 +170,7 @@ pub fn track_list<'a>(
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Duration",
+                                        "Length",
                                         model::TrackSortKey::ByDuration,
                                         model::SortOrder::Reversed,
                                         &sort_key,

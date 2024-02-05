@@ -164,7 +164,7 @@ pub fn album_list<'a>(
                                         &sort_key,
                                     ))
                                     .push(sort_button(
-                                        "Duration",
+                                        "Length",
                                         model::AlbumSortKey::ByDuration,
                                         model::SortOrder::Reversed,
                                         &sort_key,

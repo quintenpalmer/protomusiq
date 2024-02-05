@@ -112,7 +112,7 @@ pub fn artist_featured_track_view_state<'a>(
                         )),
                     )
                     .push(
-                        dark_button(bright_paragraph("Duration")).on_press(user_nav_message(
+                        dark_button(bright_paragraph("Length")).on_press(user_nav_message(
                             NavMessage::ArtistFeaturedTrackView(
                                 artist.artist_id.clone(),
                                 model::ArtistFeaturedTrackSortKey::ByDuration,
