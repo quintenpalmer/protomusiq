@@ -45,7 +45,7 @@ pub fn search_page<'a>(
                 }
             };
 
-            let body = match domain_results {
+            let domain_specific = match domain_results {
                 state::SearchDomainResults::Music(results) => {
                     match results {
                         Some(_) => {
@@ -202,63 +202,59 @@ pub fn search_page<'a>(
                             ),
                         };
 
-                    let body = {
-                        Container::new(
-                            Column::new()
-                                .spacing(10)
-                                .push(h1("Search your Library"))
-                                .push(
-                                    Row::new()
-                                        .push(
-                                            TextInput::new("Search...", query)
-                                                .on_input(|s| {
-                                                    Message::Action(message::Action::UpdateText(s))
-                                                })
-                                                .on_submit(Message::Action(
-                                                    message::Action::PerformSearch(
-                                                        query.clone(),
-                                                        message::SearchDomain::Music,
-                                                    ),
-                                                ))
-                                                .id(state::TEXT_INPUT_ID.clone()),
-                                        )
-                                        .width(Length::Fill),
-                                )
-                                .push(
-                                    Row::new()
-                                        .spacing(5)
-                                        .push(
-                                            Column::new()
-                                                .push(h2("Artists"))
-                                                .push(artist_results)
-                                                .width(Length::FillPortion(1)),
-                                        )
-                                        .push(
-                                            Column::new()
-                                                .push(h2("Albums"))
-                                                .push(album_results)
-                                                .width(Length::FillPortion(1)),
-                                        )
-                                        .push(
-                                            Column::new()
-                                                .push(h2("Tracks"))
-                                                .push(track_results)
-                                                .width(Length::FillPortion(1)),
-                                        )
-                                        .push(
-                                            Column::new()
-                                                .push(h2("Artist for Track"))
-                                                .push(featured_artist_results)
-                                                .width(Length::FillPortion(1)),
-                                        )
-                                        .width(Length::Fill)
-                                        .height(Length::Fill),
-                                ),
-                        )
+                    let domain_specific = {
+                        Row::new()
+                            .spacing(5)
+                            .push(
+                                Column::new()
+                                    .push(h2("Artists"))
+                                    .push(artist_results)
+                                    .width(Length::FillPortion(1)),
+                            )
+                            .push(
+                                Column::new()
+                                    .push(h2("Albums"))
+                                    .push(album_results)
+                                    .width(Length::FillPortion(1)),
+                            )
+                            .push(
+                                Column::new()
+                                    .push(h2("Tracks"))
+                                    .push(track_results)
+                                    .width(Length::FillPortion(1)),
+                            )
+                            .push(
+                                Column::new()
+                                    .push(h2("Artist for Track"))
+                                    .push(featured_artist_results)
+                                    .width(Length::FillPortion(1)),
+                            )
+                            .width(Length::Fill)
+                            .height(Length::Fill)
                     };
-                    body
+                    domain_specific
                 }
             };
+
+            let body = Container::new(
+                Column::new()
+                    .spacing(10)
+                    .push(h1("Search your Library"))
+                    .push(
+                        Row::new()
+                            .push(
+                                TextInput::new("Search...", query)
+                                    .on_input(|s| Message::Action(message::Action::UpdateText(s)))
+                                    .on_submit(Message::Action(message::Action::PerformSearch(
+                                        query.clone(),
+                                        message::SearchDomain::Music,
+                                    )))
+                                    .id(state::TEXT_INPUT_ID.clone()),
+                            )
+                            .width(Length::Fill),
+                    )
+                    .push(domain_specific),
+            );
 
             (breadcrumbs, body)
         }
