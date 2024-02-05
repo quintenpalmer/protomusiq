@@ -19,6 +19,7 @@ pub struct MovieMetadata {
     pub path: path::PathBuf,
     pub relative_path: path::PathBuf,
     pub last_modified: time::SystemTime,
+    pub duration: time::Duration,
     pub extra: Option<ExtraMetadata>,
 }
 
@@ -111,6 +112,7 @@ fn find_mp4_metadata(
     let raw_metadata = mp4::read_mp4(movie_file).unwrap();
 
     let udta = raw_metadata.moov.udta.unwrap();
+    let mvhd = raw_metadata.moov.mvhd;
 
     let title = match udta.meta.unwrap() {
         mp4::MetaBox::Mdir { ilst } => {
@@ -128,6 +130,8 @@ fn find_mp4_metadata(
         _ => Err(Error::NonMP4File),
     }?;
 
+    let duration = time::Duration::from_millis(mvhd.duration);
+
     let last_mod = fs::metadata(movie_path).unwrap().modified().unwrap();
 
     let extra = find_extra_metadata(movie_path);
@@ -141,6 +145,7 @@ fn find_mp4_metadata(
             .unwrap()
             .to_path_buf(),
         last_modified: last_mod,
+        duration,
         extra,
     })
 }
