@@ -18,6 +18,10 @@ pub fn search_page<'a>(
             query,
             domain_results,
         } => {
+            let domain = match domain_results {
+                state::SearchDomainResults::Music(ref _res) => message::SearchDomain::Music,
+            };
+
             let mut breadcrumbs = vec![(
                 "Search".to_string(),
                 user_nav_message(NavMessage::SearchPage(
@@ -256,7 +260,7 @@ pub fn search_page<'a>(
                                     .on_input(|s| Message::Action(message::Action::UpdateText(s)))
                                     .on_submit(Message::Action(message::Action::PerformSearch(
                                         query.clone(),
-                                        message::SearchDomain::Music,
+                                        domain,
                                     )))
                                     .id(state::TEXT_INPUT_ID.clone()),
                             )
