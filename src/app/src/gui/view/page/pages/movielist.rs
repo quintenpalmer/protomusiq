@@ -50,7 +50,7 @@ pub fn movie_list<'a>(
                 let mut movie_info = Column::new();
                 movie_info = movie_info.push(bright_paragraph(common::abr_str(
                     movie.title.clone(),
-                    consts::ICON_STR_LENGTH,
+                    consts::MOVIE_SUB_STR_LENGTH,
                 )));
 
                 let movie_image_element = match movie_library.art.get_movie_cover(
