@@ -5,6 +5,7 @@ use std::path::{Path, PathBuf};
 use std::time;
 
 use musiqlibrary as library;
+use musiqlibrary::video;
 
 use musiqlibrary::claxon;
 
@@ -29,6 +30,7 @@ fn main() {
             ("length", Box::new(LengthCalcer {})),
             ("length-check", Box::new(LengthChecker {})),
             ("tree", Box::new(TreeViewer {})),
+            ("movie-tree", Box::new(MovieTreeViewer {})),
             ("yearendreport", Box::new(YearEndReporter {})),
             ("flac-tags", Box::new(FlacTagCollector {})),
         ];
@@ -300,6 +302,27 @@ impl AppCmd for TreeViewer {
                     }
                 }
             }
+        }
+    }
+}
+
+pub struct MovieTreeViewer {}
+
+impl AppCmd for MovieTreeViewer {
+    fn operate(&self, path: PathBuf) {
+        let movies = video::find_movies_in_dir(path.clone());
+        println!("Movie Library:");
+        let movie_count = movies.len() - 1;
+        for (current_movie_index, movie) in movies.iter().enumerate() {
+            println!(
+                "{} Movie: '{}'",
+                if current_movie_index == movie_count {
+                    "└───"
+                } else {
+                    "├───"
+                },
+                movie.title,
+            );
         }
     }
 }
