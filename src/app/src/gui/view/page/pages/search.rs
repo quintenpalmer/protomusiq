@@ -51,20 +51,6 @@ pub fn search_page<'a>(
 
             let domain_specific = match domain_results {
                 state::SearchDomainResults::Music(results) => {
-                    match results {
-                        Some(_) => {
-                            breadcrumbs.push((
-                                format!("\"{}\"", query.clone()),
-                                user_nav_message(NavMessage::SearchPage(
-                                    query.clone(),
-                                    message::SearchDomain::Music,
-                                    true,
-                                )),
-                            ));
-                        }
-                        _ => (),
-                    };
-
                     let (album_results, artist_results, track_results, featured_artist_results) =
                         match results {
                             Some(results) => {
