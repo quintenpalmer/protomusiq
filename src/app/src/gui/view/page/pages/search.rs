@@ -241,6 +241,15 @@ pub fn search_page<'a>(
                     .spacing(10)
                     .push(h1("Search your Library"))
                     .push(
+                        Row::new().push(dark_button(h2("Music")).on_press(user_nav_message(
+                            NavMessage::SearchPage(
+                                "".to_string(),
+                                message::SearchDomain::Music,
+                                false,
+                            ),
+                        ))),
+                    )
+                    .push(
                         Row::new()
                             .push(
                                 TextInput::new("Search...", query)
