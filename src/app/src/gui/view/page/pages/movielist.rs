@@ -145,6 +145,12 @@ pub fn movie_list<'a>(
                         &sort_key,
                     ))
                     .push(sort_button(
+                        "Length",
+                        model::MovieSortKey::ByDuration,
+                        model::SortOrder::Reversed,
+                        &sort_key,
+                    ))
+                    .push(sort_button(
                         "Random",
                         model::MovieSortKey::Random,
                         model::SortOrder::Regular,

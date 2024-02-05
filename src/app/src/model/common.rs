@@ -79,6 +79,7 @@ pub enum AlbumSortKey {
 pub enum MovieSortKey {
     ByTitle,
     LastModified,
+    ByDuration,
     Random,
 }
 
