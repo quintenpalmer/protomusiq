@@ -34,10 +34,29 @@ pub fn run_app() -> Result<(), Error> {
 
     for movie in all_movie_metadata.into_iter() {
         println!("Movie: {}", movie.title);
+        println!("     : {}", format_duration(movie.duration.as_secs()));
         println!("     : {}", movie.path.into_os_string().to_string_lossy());
     }
 
     println!("exiting");
 
     Ok(())
+}
+
+fn format_duration(seconds: u64) -> String {
+    let to_display_seconds = seconds % 60;
+    let to_display_minutes = (seconds / 60) % 60;
+    let to_display_hours = (seconds / 3600) % 60;
+    if to_display_hours > 0 {
+        format!(
+            "{}:{:02}:{:02}",
+            to_display_hours, to_display_minutes, to_display_seconds
+        )
+    } else {
+        if to_display_minutes > 0 {
+            format!("{}:{:02}", seconds / 60, seconds % 60)
+        } else {
+            format!("0:{:02}", seconds)
+        }
+    }
 }
