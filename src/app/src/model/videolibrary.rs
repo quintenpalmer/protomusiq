@@ -5,7 +5,7 @@ use musiqlibrary::video;
 
 use crate::model;
 
-use super::sorts;
+use super::{common, sorts};
 
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct MovieTitle(String);
@@ -53,6 +53,18 @@ impl VideoLibraryState {
             art,
             movie_sorts,
         }
+    }
+
+    pub fn search_movies(&self, query: String) -> common::MovieSearchResults {
+        let mut titles = Vec::new();
+
+        for movie in self.movies.movies.iter() {
+            if movie.title.to_lowercase().contains(&query.to_lowercase()) {
+                titles.push(movie.clone());
+            }
+        }
+
+        common::MovieSearchResults { titles }
     }
 }
 

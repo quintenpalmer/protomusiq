@@ -4,7 +4,7 @@ use std::path;
 
 use serde::{Deserialize, Serialize};
 
-use musiqlibrary;
+use musiqlibrary::{self, video};
 
 use super::augmented;
 use super::constants;
@@ -247,4 +247,9 @@ pub struct SimpleSearchResults {
     pub albums: Vec<musiqlibrary::ArtistAlbumInfo>,
     pub tracks: Vec<augmented::AugmentedTrack>,
     pub track_artists: Vec<augmented::AugmentedTrack>,
+}
+
+#[derive(Debug, Clone)]
+pub struct MovieSearchResults {
+    pub titles: Vec<video::MovieMetadata>,
 }
