@@ -17,7 +17,7 @@ pub enum LoadMode {
     Sqlite,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum SortOrder {
     Regular,
     Reversed,
