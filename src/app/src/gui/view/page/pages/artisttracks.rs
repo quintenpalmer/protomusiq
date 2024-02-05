@@ -129,22 +129,32 @@ pub fn artist_track_view_state<'a>(
             let sort_order_bar = line_row()
                 .push(paragraph("Order: "))
                 .push(
-                    dark_button(bright_paragraph("^")).on_press(user_nav_message(
-                        NavMessage::ArtistTrackView(
-                            artist.artist_id.clone(),
-                            sort_key.clone(),
-                            model::SortOrder::Reversed,
-                        ),
-                    )),
+                    dark_button({
+                        if sort_order == &model::SortOrder::Reversed {
+                            bright_paragraph("^")
+                        } else {
+                            dark_paragraph("^")
+                        }
+                    })
+                    .on_press(user_nav_message(NavMessage::ArtistTrackView(
+                        artist.artist_id.clone(),
+                        sort_key.clone(),
+                        model::SortOrder::Reversed,
+                    ))),
                 )
                 .push(
-                    dark_button(bright_paragraph("v")).on_press(user_nav_message(
-                        NavMessage::ArtistTrackView(
-                            artist.artist_id.clone(),
-                            sort_key.clone(),
-                            model::SortOrder::Regular,
-                        ),
-                    )),
+                    dark_button({
+                        if sort_order == &model::SortOrder::Regular {
+                            bright_paragraph("v")
+                        } else {
+                            dark_paragraph("v")
+                        }
+                    })
+                    .on_press(user_nav_message(NavMessage::ArtistTrackView(
+                        artist.artist_id.clone(),
+                        sort_key.clone(),
+                        model::SortOrder::Regular,
+                    ))),
                 );
 
             for track in tracks.into_iter() {
