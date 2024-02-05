@@ -35,24 +35,28 @@ pub fn handle_nav(
             });
             Command::none()
         }
-        NavMessage::SearchPage(query, perform_search) => {
-            let computed_results = match perform_search {
-                true => {
-                    let search_results = app.library.search(query.clone());
-                    let mapped_search_results = model::SimpleSearchResults {
-                        artists: search_results.artists.into_iter().collect(),
-                        albums: search_results.albums.into_iter().collect(),
-                        tracks: search_results.tracks.into_iter().collect(),
-                        track_artists: search_results.track_artists.into_iter().collect(),
-                    };
-                    Some(mapped_search_results)
+        NavMessage::SearchPage(query, domain, perform_search) => {
+            let computed_results = match domain {
+                message::SearchDomain::Music => {
+                    state::SearchDomainResults::Music(match perform_search {
+                        true => {
+                            let search_results = app.library.search(query.clone());
+                            let mapped_search_results = model::SimpleSearchResults {
+                                artists: search_results.artists.into_iter().collect(),
+                                albums: search_results.albums.into_iter().collect(),
+                                tracks: search_results.tracks.into_iter().collect(),
+                                track_artists: search_results.track_artists.into_iter().collect(),
+                            };
+                            Some(mapped_search_results)
+                        }
+                        false => None,
+                    })
                 }
-                false => None,
             };
 
             app.current_page = Page::Search(state::SearchPageState {
                 query: query,
-                results: computed_results,
+                domain_results: computed_results,
             });
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }

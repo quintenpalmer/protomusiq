@@ -59,7 +59,12 @@ pub struct ConfigState {}
 pub struct SearchPageState {
     pub query: String,
 
-    pub results: Option<model::SimpleSearchResults>,
+    pub domain_results: SearchDomainResults,
+}
+
+#[derive(Debug)]
+pub enum SearchDomainResults {
+    Music(Option<model::SimpleSearchResults>),
 }
 
 #[derive(Debug)]

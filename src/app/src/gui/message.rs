@@ -44,7 +44,7 @@ pub enum Action {
     SetVolume(VolumeRequest),
 
     UpdateText(String),
-    PerformSearch(String),
+    PerformSearch(String, SearchDomain),
     TogglePlayQueueVisible,
     Close,
 }
@@ -61,7 +61,7 @@ pub enum NavMessage {
     Home,
     Config,
     PlayQueueFocus,
-    SearchPage(String, bool),
+    SearchPage(String, SearchDomain, bool),
     PlaylistList(String),
     PlaylistView(u32),
     TrackList(usize, model::TrackSortKey, model::SortOrder),
@@ -86,6 +86,11 @@ pub enum NavMessage {
     ),
     MovieList(usize, model::MovieSortKey, model::SortOrder),
     MovieView(video::MovieMetadata, model::MovieSize),
+}
+
+#[derive(Debug, Clone)]
+pub enum SearchDomain {
+    Music,
 }
 
 #[derive(Debug, Clone)]

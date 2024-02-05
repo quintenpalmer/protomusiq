@@ -149,7 +149,11 @@ pub fn render_header<'a>(additional_breadcrumbs: Vec<(String, Message)>) -> Cont
                 line_row()
                     .push(
                         dark_button(bright_paragraph("Search")).on_press(user_nav_message(
-                            message::NavMessage::SearchPage("".to_string(), false),
+                            message::NavMessage::SearchPage(
+                                "".to_string(),
+                                message::SearchDomain::Music,
+                                false,
+                            ),
                         )),
                     )
                     .push(

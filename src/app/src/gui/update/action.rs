@@ -99,10 +99,10 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             };
             Command::none()
         }
-        message::Action::PerformSearch(query) => match app.current_page {
+        message::Action::PerformSearch(query, domain) => match app.current_page {
             state::Page::Search(ref _search_state) => loaded::update_state(
                 app,
-                message::user_nav_message(message::NavMessage::SearchPage(query, true)),
+                message::user_nav_message(message::NavMessage::SearchPage(query, domain, true)),
             ),
             _ => Command::none(),
         },
