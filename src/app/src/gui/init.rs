@@ -161,6 +161,7 @@ pub fn initialize_everything() -> state::App {
         page_forward_history: Vec::new(),
         current_page: state::Page::Home(state::HomeState {}),
         should_close: false,
+        messages: Vec::new(),
         error_messages: Vec::new(),
         app_images: embedded::AppImages::new(&config_state.app_data_path),
         action_state: state::ActionState {

@@ -5,6 +5,7 @@ use crate::shared;
 use super::super::message::{self, Message};
 use super::super::state::{self, AppState};
 
+use super::action;
 use super::common;
 
 pub fn handle_set_play_queue(
@@ -38,6 +39,29 @@ pub fn handle_playback_request(
     app: &mut AppState,
     playback_request: shared::PlaybackRequest,
 ) -> Command<message::Message> {
+    let maybe_tracks = match playback_request {
+        shared::PlaybackRequest::PlaySongs(ref tracks) => Some(tracks),
+        shared::PlaybackRequest::InsertSongs(ref tracks, ref _play) => Some(tracks),
+        shared::PlaybackRequest::AppendSongs(ref tracks, ref _play) => Some(tracks),
+        _ => None,
+    };
+
+    match maybe_tracks {
+        Some(ref tracks) => {
+            for track in tracks.iter() {
+                let _follow_up_empty_action = action::handle_action(
+                    app,
+                    message::Action::Notify(message::NotificationMessage::OnScreen(
+                        message::NotificationAction::AddedToPlayQueue,
+                        format!("track titled: {}", track.metadata.title),
+                    )),
+                );
+            }
+            ()
+        }
+        None => (),
+    };
+
     Command::perform(
         common::backend_sender(
             app.player_info.backend_message_sender.clone(),

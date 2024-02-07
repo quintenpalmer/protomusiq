@@ -23,6 +23,7 @@ pub struct AppState {
     pub action_state: ActionState,
     pub player_info: PlayerInfo,
     pub play_queue_info: PlayQueueInfo,
+    pub messages: Vec<MessageInfo>,
     pub config: Config,
     pub should_close: bool,
 
@@ -33,6 +34,12 @@ pub struct AppState {
     pub app_images: embedded::AppImages,
 
     pub error_messages: Vec<String>,
+}
+
+/// A Single Message
+pub struct MessageInfo {
+    pub notification_type: message::NotificationAction,
+    pub message: String,
 }
 
 /// State for the Configuratino of the App

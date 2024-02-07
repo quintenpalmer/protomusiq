@@ -215,3 +215,20 @@ impl container::StyleSheet for ContainerDarkInset {
         }
     }
 }
+
+pub struct NotificationGreenBackground;
+
+impl container::StyleSheet for NotificationGreenBackground {
+    type Style = iced::Theme;
+
+    fn appearance(&self, _theme: &iced::Theme) -> container::Appearance {
+        container::Appearance {
+            background: Some(Background::Color(Color::from_rgb8(0x13, 0x53, 0x13))),
+            text_color: Some(Color::from_rgb8(0x30, 0xa0, 0x30)),
+            border_color: Color::from_rgb8(0x30, 0xa0, 0x30),
+            border_radius: 1.0.into(),
+            border_width: 1.0,
+            ..container::Appearance::default()
+        }
+    }
+}

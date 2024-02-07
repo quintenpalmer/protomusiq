@@ -29,6 +29,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let library = &app.library;
     let movie_library = &app.video_library;
     let config = &app.config.rest;
+    let messages = &app.messages;
     let app_images = &app.app_images;
     let current_page = &app.current_page;
     let action_state = &app.action_state;
@@ -45,7 +46,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         &player_info,
     );
 
-    let header = render_header(additional_breadcrumbs);
+    let header = render_header(additional_breadcrumbs, messages);
 
     let (play_queue_view, play_queue_expanded) = render_play_queue(&library, &play_queue_info);
 
@@ -111,7 +112,10 @@ pub fn render_entire_page<'a>(
     ret.width(Length::Fill).into()
 }
 
-pub fn render_header<'a>(additional_breadcrumbs: Vec<(String, Message)>) -> Container<'a, Message> {
+pub fn render_header<'a>(
+    additional_breadcrumbs: Vec<(String, Message)>,
+    messages: &Vec<state::MessageInfo>,
+) -> Container<'a, Message> {
     let mut breadcrumbs: Vec<Element<Message>> = vec![dark_button(bright_paragraph("Home"))
         .on_press(user_nav_message(NavMessage::Home))
         .into()];
@@ -147,6 +151,19 @@ pub fn render_header<'a>(additional_breadcrumbs: Vec<(String, Message)>) -> Cont
             )
             .push(
                 line_row()
+                    .push({
+                        match messages.as_slice() {
+                            [.., last] => match last.notification_type {
+                                message::NotificationAction::AddedToPlayQueue => {
+                                    green_notification(format!(
+                                        "added to play queue: '{}'",
+                                        last.message
+                                    ))
+                                }
+                            },
+                            _ => green_notification("<no history> "),
+                        }
+                    })
                     .push(
                         dark_button(bright_paragraph("Search")).on_press(user_nav_message(
                             message::NavMessage::SearchPage(

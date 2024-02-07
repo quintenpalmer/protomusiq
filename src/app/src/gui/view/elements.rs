@@ -1,5 +1,5 @@
 use iced::widget::image;
-use iced::widget::{Button, Column, Image, Row, Text};
+use iced::widget::{Button, Column, Container, Image, Row, Text};
 use iced::{self, Alignment, Element, Length};
 
 use crate::model;
@@ -46,6 +46,14 @@ pub fn dark_paragraph<S: Into<String>>(s: S) -> Text<'static> {
     Text::new(s.into())
         .size(13)
         .style(iced::Color::from_rgb8(0x70, 0x70, 0x70))
+}
+
+pub fn green_notification<S: Into<String>>(s: S) -> Container<'static, Message> {
+    Container::new(Text::new(s.into()).size(13))
+        .style(iced::theme::Container::Custom(Box::new(
+            style::NotificationGreenBackground {},
+        )))
+        .padding([2, 4])
 }
 
 pub fn bright(t: Text) -> Text {

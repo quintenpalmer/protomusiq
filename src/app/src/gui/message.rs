@@ -46,7 +46,18 @@ pub enum Action {
     UpdateText(String),
     PerformSearch(String, SearchDomain),
     TogglePlayQueueVisible,
+    Notify(NotificationMessage),
     Close,
+}
+
+#[derive(Debug, Clone)]
+pub enum NotificationMessage {
+    OnScreen(NotificationAction, String),
+}
+
+#[derive(Debug, Clone)]
+pub enum NotificationAction {
+    AddedToPlayQueue,
 }
 
 #[derive(Debug, Clone)]
