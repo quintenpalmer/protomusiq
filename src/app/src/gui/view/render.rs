@@ -8,6 +8,7 @@ use crate::state;
 
 use super::common;
 use super::components;
+use super::consts;
 use super::elements::*;
 use super::page;
 use super::style;
@@ -155,10 +156,15 @@ pub fn render_header<'a>(
                         match messages.as_slice() {
                             [.., last] => match last.notification_type {
                                 message::NotificationAction::AddedToPlayQueue => Row::new()
-                                    .push(green_notification(format!(
-                                        "added to play queue: '{}'",
-                                        last.message
-                                    )))
+                                    .push(
+                                        green_notification(format!(
+                                            "added to play queue: '{}'",
+                                            last.message
+                                        ))
+                                        .width(
+                                            Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
+                                        ),
+                                    )
                                     .push(dark_button("-").on_press(message::Message::Action(
                                         message::Action::Notify(
                                             message::NotificationMessage::PopOnScreen,
