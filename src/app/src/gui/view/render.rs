@@ -153,9 +153,10 @@ pub fn render_header<'a>(
             .push(
                 line_row()
                     .push({
+                        let row = Row::new();
                         match messages.as_slice() {
                             [.., last] => match last.notification_type {
-                                message::NotificationAction::AddedToPlayQueue => Row::new()
+                                message::NotificationAction::AddedToPlayQueue => row
                                     .push(
                                         green_notification(format!("+queue: {}", last.message))
                                             .width(Length::Fixed(
@@ -173,7 +174,7 @@ pub fn render_header<'a>(
                                         ),
                                     ))),
                             },
-                            _ => Row::new().push(green_notification("<no history> ")),
+                            _ => row.push(green_notification("<no history> ")),
                         }
                     })
                     .push(
