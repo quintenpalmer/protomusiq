@@ -107,11 +107,10 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             _ => Command::none(),
         },
         message::Action::Notify(notification_message) => match notification_message {
-            message::NotificationMessage::OnScreen(notification_type, message) => {
-                println!("Got this message: {}", message);
+            message::NotificationMessage::OnScreen(notification_type) => {
+                println!("Got this message: {:?}", notification_type);
                 app.messages.push(state::MessageInfo {
                     notification_type: notification_type,
-                    message: message,
                 });
                 Command::none()
             }

@@ -52,8 +52,7 @@ pub fn handle_playback_request(
                 let _follow_up_empty_action = action::handle_action(
                     app,
                     message::Action::Notify(message::NotificationMessage::OnScreen(
-                        message::NotificationAction::AddedToPlayQueue,
-                        track.metadata.title.clone(),
+                        message::NotificationAction::AddedToPlayQueue(track.metadata.title.clone()),
                     )),
                 );
             }

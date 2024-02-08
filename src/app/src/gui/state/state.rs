@@ -39,7 +39,6 @@ pub struct AppState {
 /// A Single Message
 pub struct MessageInfo {
     pub notification_type: message::NotificationAction,
-    pub message: String,
 }
 
 /// State for the Configuratino of the App

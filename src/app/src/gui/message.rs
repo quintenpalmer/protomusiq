@@ -52,14 +52,14 @@ pub enum Action {
 
 #[derive(Debug, Clone)]
 pub enum NotificationMessage {
-    OnScreen(NotificationAction, String),
+    OnScreen(NotificationAction),
     PopOnScreen,
     ClearOnScreen,
 }
 
 #[derive(Debug, Clone)]
 pub enum NotificationAction {
-    AddedToPlayQueue,
+    AddedToPlayQueue(String),
 }
 
 #[derive(Debug, Clone)]

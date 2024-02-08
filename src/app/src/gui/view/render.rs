@@ -156,11 +156,11 @@ pub fn render_header<'a>(
                         let row = Row::new().align_items(Alignment::Center);
                         match messages.as_slice() {
                             [.., last] => match last.notification_type {
-                                message::NotificationAction::AddedToPlayQueue => row
+                                message::NotificationAction::AddedToPlayQueue(ref title) => row
                                     .push(
                                         green_notification(format!(
                                             "+queue: {}",
-                                            common::abr_str(last.message.clone(), 20)
+                                            common::abr_str(title.clone(), 20)
                                         ))
                                         .width(
                                             Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
