@@ -56,6 +56,14 @@ pub fn green_notification<S: Into<String>>(s: S) -> Container<'static, Message> 
         .padding([2, 4])
 }
 
+pub fn grey_notification<S: Into<String>>(s: S) -> Container<'static, Message> {
+    Container::new(Text::new(s.into()).size(13))
+        .style(iced::theme::Container::Custom(Box::new(
+            style::NotificationGreyBackground {},
+        )))
+        .padding([2, 4])
+}
+
 pub fn bright(t: Text) -> Text {
     t.style(iced::Color::from_rgb8(0xd8, 0xd8, 0xd8))
 }
