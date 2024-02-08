@@ -119,6 +119,10 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
                 let _popped = app.messages.pop();
                 Command::none()
             }
+            message::NotificationMessage::ClearOnScreen => {
+                app.messages = Vec::new();
+                Command::none()
+            }
         },
         message::Action::Close => Command::batch(vec![
             Command::perform(

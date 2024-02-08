@@ -163,6 +163,11 @@ pub fn render_header<'a>(
                                         message::Action::Notify(
                                             message::NotificationMessage::PopOnScreen,
                                         ),
+                                    )))
+                                    .push(dark_button("x").on_press(message::Message::Action(
+                                        message::Action::Notify(
+                                            message::NotificationMessage::ClearOnScreen,
+                                        ),
                                     ))),
                             },
                             _ => Row::new().push(green_notification("<no history> ")),

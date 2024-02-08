@@ -54,6 +54,7 @@ pub enum Action {
 pub enum NotificationMessage {
     OnScreen(NotificationAction, String),
     PopOnScreen,
+    ClearOnScreen,
 }
 
 #[derive(Debug, Clone)]
