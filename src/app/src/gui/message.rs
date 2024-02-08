@@ -60,6 +60,7 @@ pub enum NotificationMessage {
 #[derive(Debug, Clone)]
 pub enum NotificationAction {
     AddedToPlayQueue(String),
+    AddedToPlaylist(String, String),
 }
 
 #[derive(Debug, Clone)]

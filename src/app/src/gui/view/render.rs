@@ -184,6 +184,38 @@ pub fn render_header<'a>(
                                             ))
                                             .width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)),
                                     ),
+                                message::NotificationAction::AddedToPlaylist(
+                                    ref title,
+                                    ref playlist,
+                                ) => row
+                                    .push(
+                                        green_notification(format!(
+                                            "+playlist '{}': {}",
+                                            common::abr_str(playlist.clone(), 20),
+                                            common::abr_str(title.clone(), 20)
+                                        ))
+                                        .width(
+                                            Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
+                                        ),
+                                    )
+                                    .push(
+                                        dark_button("-")
+                                            .on_press(message::Message::Action(
+                                                message::Action::Notify(
+                                                    message::NotificationMessage::PopOnScreen,
+                                                ),
+                                            ))
+                                            .width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)),
+                                    )
+                                    .push(
+                                        dark_button("x")
+                                            .on_press(message::Message::Action(
+                                                message::Action::Notify(
+                                                    message::NotificationMessage::ClearOnScreen,
+                                                ),
+                                            ))
+                                            .width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)),
+                                    ),
                             },
                             _ => row
                                 .push(

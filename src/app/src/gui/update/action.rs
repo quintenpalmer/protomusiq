@@ -32,13 +32,31 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             Command::none()
         }
         message::Action::AddTracksToPlaylist(playlist_id, track_ids) => {
+            let playlist_name = app
+                .library
+                .user_playlists
+                .get_playlist(playlist_id)
+                .unwrap()
+                .name
+                .clone();
             for track_id in track_ids.into_iter() {
                 match app
                     .library
                     .user_playlists
-                    .add_track_to_playlist(playlist_id, track_id)
+                    .add_track_to_playlist(playlist_id, track_id.clone())
                 {
-                    Ok(_) => (),
+                    Ok(_) => {
+                        let track = app.library.get_track(&track_id);
+                        let _follow_up_empty_action = handle_action(
+                            app,
+                            message::Action::Notify(message::NotificationMessage::OnScreen(
+                                message::NotificationAction::AddedToPlaylist(
+                                    track.metadata.title.clone(),
+                                    playlist_name.clone(),
+                                ),
+                            )),
+                        );
+                    }
                     Err(err_string) => {
                         println!("error adding track to playlist: {}", err_string)
                     }
