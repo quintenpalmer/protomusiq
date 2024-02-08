@@ -8,9 +8,8 @@ use crate::gui::message::{user_nav_message, Message, NavMessage};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
+use super::super::super::consts;
 use super::super::super::elements::*;
-
-use super::super::consts;
 
 pub fn artist_album_list<'a>(
     library: &'a model::LibraryState,

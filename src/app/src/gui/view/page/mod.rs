@@ -1,4 +1,3 @@
-mod consts;
 mod page;
 mod pages;
 

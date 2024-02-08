@@ -6,9 +6,8 @@ use crate::datastore::staticassets::embedded;
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state;
 
-use super::super::consts;
-
 use super::super::super::common;
+use super::super::super::consts;
 use super::super::super::elements::*;
 
 pub fn home_page<'a>(

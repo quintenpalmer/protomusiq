@@ -11,10 +11,9 @@ use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
 use super::super::super::common;
+use super::super::super::consts;
 use super::super::super::elements::*;
 use super::super::super::style;
-
-use super::super::consts;
 
 pub fn artist_album_view_state<'a>(
     library: &'a model::LibraryState,

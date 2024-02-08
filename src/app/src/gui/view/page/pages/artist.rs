@@ -6,9 +6,8 @@ use crate::model;
 use crate::gui::message::{user_nav_message, Message, NavMessage};
 use crate::state::{self, PlayQueueInfo};
 
-use super::super::consts;
-
 use super::super::super::common;
+use super::super::super::consts;
 use super::super::super::elements::*;
 
 pub fn artist_list<'a>(
