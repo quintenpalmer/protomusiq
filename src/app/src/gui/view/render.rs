@@ -1,5 +1,5 @@
 use iced::widget::{Column, Container, Row, Scrollable, Space};
-use iced::{Element, Length};
+use iced::{Alignment, Element, Length};
 
 use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::model;
@@ -153,7 +153,7 @@ pub fn render_header<'a>(
             .push(
                 line_row()
                     .push({
-                        let row = Row::new();
+                        let row = Row::new().align_items(Alignment::Center);
                         match messages.as_slice() {
                             [.., last] => match last.notification_type {
                                 message::NotificationAction::AddedToPlayQueue => row
