@@ -154,14 +154,18 @@ pub fn render_header<'a>(
                     .push({
                         match messages.as_slice() {
                             [.., last] => match last.notification_type {
-                                message::NotificationAction::AddedToPlayQueue => {
-                                    green_notification(format!(
+                                message::NotificationAction::AddedToPlayQueue => Row::new()
+                                    .push(green_notification(format!(
                                         "added to play queue: '{}'",
                                         last.message
-                                    ))
-                                }
+                                    )))
+                                    .push(dark_button("-").on_press(message::Message::Action(
+                                        message::Action::Notify(
+                                            message::NotificationMessage::PopOnScreen,
+                                        ),
+                                    ))),
                             },
-                            _ => green_notification("<no history> "),
+                            _ => Row::new().push(green_notification("<no history> ")),
                         }
                     })
                     .push(
