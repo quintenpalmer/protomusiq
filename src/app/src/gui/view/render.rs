@@ -166,21 +166,33 @@ pub fn render_header<'a>(
                                             Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
                                         ),
                                     )
-                                    .push(dark_button("-").on_press(message::Message::Action(
-                                        message::Action::Notify(
-                                            message::NotificationMessage::PopOnScreen,
-                                        ),
-                                    )))
-                                    .push(dark_button("x").on_press(message::Message::Action(
-                                        message::Action::Notify(
-                                            message::NotificationMessage::ClearOnScreen,
-                                        ),
-                                    ))),
+                                    .push(
+                                        dark_button("-")
+                                            .on_press(message::Message::Action(
+                                                message::Action::Notify(
+                                                    message::NotificationMessage::PopOnScreen,
+                                                ),
+                                            ))
+                                            .width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)),
+                                    )
+                                    .push(
+                                        dark_button("x")
+                                            .on_press(message::Message::Action(
+                                                message::Action::Notify(
+                                                    message::NotificationMessage::ClearOnScreen,
+                                                ),
+                                            ))
+                                            .width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)),
+                                    ),
                             },
-                            _ => row.push(
-                                green_notification("<no history> ")
-                                    .width(Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH)),
-                            ),
+                            _ => row
+                                .push(
+                                    green_notification("<no history> ").width(Length::Fixed(
+                                        consts::NOTIFICATION_TEXT_PIXEL_WIDTH,
+                                    )),
+                                )
+                                .push(Space::with_width(Length::Fixed(consts::SINGLE_CHAR_WIDTH)))
+                                .push(Space::with_width(Length::Fixed(consts::SINGLE_CHAR_WIDTH))),
                         }
                     })
                     .push(
