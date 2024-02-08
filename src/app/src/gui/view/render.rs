@@ -158,10 +158,13 @@ pub fn render_header<'a>(
                             [.., last] => match last.notification_type {
                                 message::NotificationAction::AddedToPlayQueue => row
                                     .push(
-                                        green_notification(format!("+queue: {}", last.message))
-                                            .width(Length::Fixed(
-                                                consts::NOTIFICATION_TEXT_PIXEL_WIDTH,
-                                            )),
+                                        green_notification(format!(
+                                            "+queue: {}",
+                                            common::abr_str(last.message.clone(), 20)
+                                        ))
+                                        .width(
+                                            Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
+                                        ),
                                     )
                                     .push(dark_button("-").on_press(message::Message::Action(
                                         message::Action::Notify(
