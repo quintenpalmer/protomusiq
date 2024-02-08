@@ -53,7 +53,7 @@ pub fn handle_playback_request(
                     app,
                     message::Action::Notify(message::NotificationMessage::OnScreen(
                         message::NotificationAction::AddedToPlayQueue,
-                        format!("track titled: {}", track.metadata.title),
+                        track.metadata.title.clone(),
                     )),
                 );
             }

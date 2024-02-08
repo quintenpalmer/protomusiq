@@ -157,13 +157,10 @@ pub fn render_header<'a>(
                             [.., last] => match last.notification_type {
                                 message::NotificationAction::AddedToPlayQueue => Row::new()
                                     .push(
-                                        green_notification(format!(
-                                            "added to play queue: '{}'",
-                                            last.message
-                                        ))
-                                        .width(
-                                            Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH),
-                                        ),
+                                        green_notification(format!("+queue: {}", last.message))
+                                            .width(Length::Fixed(
+                                                consts::NOTIFICATION_TEXT_PIXEL_WIDTH,
+                                            )),
                                     )
                                     .push(dark_button("-").on_press(message::Message::Action(
                                         message::Action::Notify(
