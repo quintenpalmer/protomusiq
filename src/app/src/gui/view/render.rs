@@ -174,7 +174,10 @@ pub fn render_header<'a>(
                                         ),
                                     ))),
                             },
-                            _ => row.push(green_notification("<no history> ")),
+                            _ => row.push(
+                                green_notification("<no history> ")
+                                    .width(Length::Fixed(consts::NOTIFICATION_TEXT_PIXEL_WIDTH)),
+                            ),
                         }
                     })
                     .push(
