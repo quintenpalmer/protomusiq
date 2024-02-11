@@ -120,7 +120,10 @@ pub fn movie_page<'a>(
                 writers = writers.push(h3(writer.clone()));
             }
 
-            let director_writer = Row::new().spacing(10).push(directors).push(writers);
+            let director_writer = Row::new()
+                .spacing(10)
+                .push(directors.width(Length::FillPortion(1)))
+                .push(writers.width(Length::FillPortion(1)));
             movie_info = movie_info.push(director_writer);
         }
         None => (),
