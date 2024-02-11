@@ -81,9 +81,12 @@ pub fn movie_page<'a>(
     movie_info = movie_info.push(h2("Length"));
     movie_info = movie_info.push(h3(common::format_duration(state.movie.duration.as_secs())));
 
-    let top_header = Row::new().push(movie_image_element).push(movie_info);
+    let top_header = Row::new()
+        .padding(10)
+        .push(movie_image_element)
+        .push(movie_info);
 
-    let mut bottom_footer = Column::new();
+    let mut bottom_footer = Column::new().padding(10);
 
     match state.movie.extra {
         Some(ref extra) => {
