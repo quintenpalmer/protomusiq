@@ -82,15 +82,17 @@ pub fn movie_page<'a>(
 
     let top_header = Row::new().push(movie_image_element).push(movie_info);
 
-    let bottom_footer = Column::new().push(bright_paragraph(
-        state
-            .movie
-            .path
-            .clone()
-            .into_os_string()
-            .to_string_lossy()
-            .to_string(),
-    ));
+    let bottom_footer = Column::new()
+        .push(dark_paragraph("Filepath:"))
+        .push(bright_paragraph(
+            state
+                .movie
+                .path
+                .clone()
+                .into_os_string()
+                .to_string_lossy()
+                .to_string(),
+        ));
 
     let contents = Column::new()
         .spacing(10)
