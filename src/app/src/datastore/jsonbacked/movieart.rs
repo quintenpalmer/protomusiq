@@ -27,7 +27,7 @@ pub fn process_cache_and_get_movie_art(
 
     //let cached_movie_art_checker = FilesystemCachedMovieArt::new(library, app_data_path);
 
-    for movie in library.movies.iter() {
+    for movie in library.movies.values() {
         let key = model::MovieRelPath::from_metadata(&movie);
 
         let full_movie_path = movie.path.clone();

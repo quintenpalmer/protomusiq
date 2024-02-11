@@ -25,14 +25,21 @@ impl MovieRelPath {
 }
 
 pub struct VideoLibrary {
-    pub movies: Vec<video::MovieMetadata>,
+    pub movies: BTreeMap<MovieRelPath, video::MovieMetadata>,
 }
 
 impl VideoLibrary {
     pub fn new<P: AsRef<path::Path>>(movie_path: P) -> Self {
         let movies = video::find_movies_in_dir(movie_path);
 
-        VideoLibrary { movies }
+        let mut movie_btree = BTreeMap::new();
+        for movie in movies.into_iter() {
+            movie_btree.insert(MovieRelPath::from_metadata(&movie), movie);
+        }
+
+        VideoLibrary {
+            movies: movie_btree,
+        }
     }
 }
 
@@ -46,7 +53,13 @@ pub struct VideoLibraryState {
 
 impl VideoLibraryState {
     pub fn new(movies: VideoLibrary, art: model::MovieArt) -> Self {
-        let movie_sorts = sorts::MovieSorts::new(&movies.movies);
+        let movie_sorts = sorts::MovieSorts::new(
+            &movies
+                .movies
+                .values()
+                .map(|x| x.clone())
+                .collect::<Vec<video::MovieMetadata>>(),
+        );
 
         VideoLibraryState {
             movies,
@@ -62,7 +75,7 @@ impl VideoLibraryState {
     pub fn search_movies(&self, query: String) -> common::MovieSearchResults {
         let mut titles = Vec::new();
 
-        for movie in self.movies.movies.iter() {
+        for movie in self.movies.movies.values() {
             if movie.title.to_lowercase().contains(&query.to_lowercase()) {
                 titles.push(movie.clone());
             }
