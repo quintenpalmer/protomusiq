@@ -8,11 +8,11 @@ use crate::model;
 use super::{common, sorts};
 
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct MovieTitle(String);
+pub struct MovieRelPath(String);
 
-impl MovieTitle {
+impl MovieRelPath {
     pub fn from_metadata(movie: &video::MovieMetadata) -> Self {
-        MovieTitle(
+        MovieRelPath(
             movie
                 .relative_path
                 .parent()
@@ -55,7 +55,7 @@ impl VideoLibraryState {
         }
     }
 
-    pub fn get_movie_cover(&self, size: model::MovieSize, title: MovieTitle) -> Option<Vec<u8>> {
+    pub fn get_movie_cover(&self, size: model::MovieSize, title: MovieRelPath) -> Option<Vec<u8>> {
         self.art.get_movie_cover(size, title)
     }
 
@@ -73,18 +73,18 @@ impl VideoLibraryState {
 }
 
 pub struct MovieArt {
-    pub large_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
-    pub semilarge_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
-    pub regular_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
-    pub small_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
-    pub micro_movie_covers: BTreeMap<MovieTitle, Vec<u8>>,
+    pub large_movie_covers: BTreeMap<MovieRelPath, Vec<u8>>,
+    pub semilarge_movie_covers: BTreeMap<MovieRelPath, Vec<u8>>,
+    pub regular_movie_covers: BTreeMap<MovieRelPath, Vec<u8>>,
+    pub small_movie_covers: BTreeMap<MovieRelPath, Vec<u8>>,
+    pub micro_movie_covers: BTreeMap<MovieRelPath, Vec<u8>>,
 }
 
 impl MovieArt {
     pub fn get_movie_cover(
         &self,
         album_size: model::MovieSize,
-        movie_key: MovieTitle,
+        movie_key: MovieRelPath,
     ) -> Option<Vec<u8>> {
         match album_size {
             model::MovieSize::Large => self.large_movie_covers.get(&movie_key).map(|x| x.clone()),

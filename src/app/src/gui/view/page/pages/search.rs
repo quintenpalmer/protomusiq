@@ -257,7 +257,7 @@ pub fn search_page<'a>(
                                                     movie_library
                                                         .get_movie_cover(
                                                             model::MovieSize::Micro,
-                                                            model::MovieTitle::from_metadata(
+                                                            model::MovieRelPath::from_metadata(
                                                                 result,
                                                             ),
                                                         )

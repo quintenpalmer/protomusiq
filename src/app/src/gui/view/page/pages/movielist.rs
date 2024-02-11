@@ -54,7 +54,7 @@ pub fn movie_list<'a>(
 
                 let movie_image_element = match movie_library.art.get_movie_cover(
                     model::MovieSize::Small,
-                    model::MovieTitle::from_metadata(&movie),
+                    model::MovieRelPath::from_metadata(&movie),
                 ) {
                     Some(movie_image_bytes) => {
                         movie_image(movie_image_bytes, model::MovieSize::Small)

@@ -28,7 +28,7 @@ pub fn movie_page<'a>(
 
     let movie_image_element = match movie_library.art.get_movie_cover(
         cover_size.clone(),
-        model::MovieTitle::from_metadata(&state.movie),
+        model::MovieRelPath::from_metadata(&state.movie),
     ) {
         Some(movie_image_bytes) => {
             let (current, toggle_to) = match cover_size {
