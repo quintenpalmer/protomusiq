@@ -60,9 +60,9 @@ pub fn movie_page<'a>(
     let mut movie_info = Column::new()
         .padding(10)
         .spacing(10)
-        .push(h2(state.movie.title.clone()))
+        .push(h1(state.movie.title.clone()))
         .push(
-            dark_button(h3("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
+            dark_button(h2("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
                 state.movie.path.clone().to_path_buf(),
             ))),
         );
