@@ -68,6 +68,10 @@ impl VideoLibraryState {
         }
     }
 
+    pub fn get_movie(&self, title: &MovieRelPath) -> video::MovieMetadata {
+        self.movies.movies.get(title).unwrap().clone()
+    }
+
     pub fn get_movie_cover(&self, size: model::MovieSize, title: MovieRelPath) -> Option<Vec<u8>> {
         self.art.get_movie_cover(size, title)
     }
