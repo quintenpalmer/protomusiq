@@ -89,6 +89,23 @@ pub fn movie_page<'a>(
 
     movie_info = movie_info.push(release_and_length);
 
+    match state.movie.extra {
+        Some(ref extra) => {
+            let mut genre_list = Row::new().spacing(10);
+            for genre in extra.genres.iter() {
+                genre_list = genre_list.push(h3(genre.clone()));
+            }
+
+            let genres = Column::new()
+                .padding([10, 0])
+                .push(h2("Genres"))
+                .push(genre_list);
+
+            movie_info = movie_info.push(genres);
+        }
+        None => (),
+    }
+
     let top_header = Row::new()
         .padding(10)
         .push(movie_image_element)
