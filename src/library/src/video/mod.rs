@@ -28,6 +28,7 @@ pub struct ExtraMetadata {
     #[serde(with = "slash_date")]
     pub release: NaiveDate,
     pub genres: Vec<String>,
+    pub production: Vec<String>,
     pub cast: Vec<String>,
     pub directors: Vec<String>,
     pub writers: Vec<String>,
