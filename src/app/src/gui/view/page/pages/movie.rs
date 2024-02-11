@@ -71,6 +71,11 @@ pub fn movie_page<'a>(
                 ))),
             );
 
+    let mut length = Column::new();
+    length = length.push(h2("Length"));
+    length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
+    play_release_and_length = play_release_and_length.push(length);
+
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
             let mut release = Column::new();
@@ -83,11 +88,6 @@ pub fn movie_page<'a>(
         }
         None => (),
     };
-
-    let mut length = Column::new();
-    length = length.push(h2("Length"));
-    length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
-    play_release_and_length = play_release_and_length.push(length);
 
     movie_info = movie_info.push(play_release_and_length);
 
