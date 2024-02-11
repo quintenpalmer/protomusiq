@@ -80,9 +80,11 @@ pub fn movie_page<'a>(
     movie_info = movie_info.push(h2("Length"));
     movie_info = movie_info.push(h3(common::format_duration(state.movie.duration.as_secs())));
 
+    let top_header = Row::new().push(movie_image_element).push(movie_info);
+
     let contents = Column::new()
         .spacing(10)
-        .push(Row::new().push(movie_image_element).push(movie_info))
+        .push(top_header)
         .push(bright_paragraph(
             state
                 .movie
