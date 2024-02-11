@@ -126,6 +126,17 @@ pub fn movie_page<'a>(
         None => (),
     }
 
+    match state.movie.extra {
+        Some(ref extra) => {
+            let mut production_entities = Column::new().push(h2("Production"));
+            for prod in extra.production.iter() {
+                production_entities = production_entities.push(h3(prod.clone()));
+            }
+            movie_info = movie_info.push(production_entities);
+        }
+        None => (),
+    }
+
     let top_header = Row::new()
         .padding(10)
         .push(movie_image_element)
