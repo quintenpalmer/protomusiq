@@ -24,6 +24,7 @@ pub enum Page {
     ArtistAlbumView(ArtistAlbumViewState),
     MovieList(MovieListState),
     MovieView(MovieViewState),
+    MovieQuery(MovieQueryState),
 }
 
 impl Page {
@@ -43,6 +44,7 @@ impl Page {
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
             Page::MovieList(_) => "MovieList",
+            Page::MovieQuery(_) => "MovieQuery",
             Page::MovieView(_) => "MovieView",
         }
         .to_string()
@@ -143,4 +145,9 @@ pub struct MovieListState {
 pub struct MovieViewState {
     pub movie: video::MovieMetadata,
     pub movie_size: model::MovieSize,
+}
+
+#[derive(Debug)]
+pub struct MovieQueryState {
+    pub query: model::MovieQueryParams,
 }

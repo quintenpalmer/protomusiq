@@ -143,6 +143,10 @@ pub fn handle_nav(
             });
             Command::none()
         }
+        NavMessage::MovieQuery(query) => {
+            app.current_page = Page::MovieQuery(state::MovieQueryState { query });
+            Command::none()
+        }
         NavMessage::MovieView(movie, movie_size) => {
             app.current_page = Page::MovieView(state::MovieViewState { movie, movie_size });
             Command::none()

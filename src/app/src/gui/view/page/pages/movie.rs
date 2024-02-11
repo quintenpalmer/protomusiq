@@ -99,7 +99,10 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut genre_list = Row::new().spacing(10);
             for genre in extra.genres.iter() {
-                genre_list = genre_list.push(h3(genre.clone()));
+                genre_list =
+                    genre_list.push(dark_button(h3(genre.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Genre(genre.clone())),
+                    )));
             }
 
             let genres = Column::new()

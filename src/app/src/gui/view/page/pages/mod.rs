@@ -8,6 +8,7 @@ pub mod config;
 pub mod home;
 pub mod movie;
 pub mod movielist;
+pub mod moviequery;
 pub mod playlist;
 pub mod playlists;
 pub mod search;
