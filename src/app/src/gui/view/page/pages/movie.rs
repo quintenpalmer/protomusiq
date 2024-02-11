@@ -70,7 +70,10 @@ pub fn movie_page<'a>(
     length = length.push(h2("Length"));
     length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
 
-    let play_and_length = Row::new().spacing(10).push(play_button).push(length);
+    let play_and_length = Row::new()
+        .spacing(10)
+        .push(play_button.width(Length::FillPortion(1)))
+        .push(length.width(Length::FillPortion(1)));
 
     let mut play_release_and_length = Row::new()
         .spacing(10)
