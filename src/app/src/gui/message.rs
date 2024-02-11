@@ -102,7 +102,7 @@ pub enum NavMessage {
     MovieView(video::MovieMetadata, model::MovieSize),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum SearchDomain {
     Music,
     Movies,

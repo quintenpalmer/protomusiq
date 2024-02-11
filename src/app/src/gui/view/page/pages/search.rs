@@ -1,4 +1,4 @@
-use iced::widget::{Column, Container, Row, Scrollable, Space, TextInput};
+use iced::widget::{Button, Column, Container, Row, Scrollable, Space, TextInput};
 use iced::Length;
 
 use crate::model;
@@ -304,20 +304,18 @@ pub fn search_page<'a>(
                     .push(h1("Search your Library"))
                     .push(
                         Row::new()
-                            .push(dark_button(h2("Music")).on_press(user_nav_message(
-                                NavMessage::SearchPage(
-                                    query.clone(),
-                                    message::SearchDomain::Music,
-                                    true,
-                                ),
-                            )))
-                            .push(dark_button(h2("Movies")).on_press(user_nav_message(
-                                NavMessage::SearchPage(
-                                    query.clone(),
-                                    message::SearchDomain::Movies,
-                                    true,
-                                ),
-                            ))),
+                            .push(domain_button(
+                                "Music",
+                                query.clone(),
+                                message::SearchDomain::Music,
+                                domain.clone(),
+                            ))
+                            .push(domain_button(
+                                "Movies",
+                                query.clone(),
+                                message::SearchDomain::Movies,
+                                domain.clone(),
+                            )),
                     )
                     .push(
                         Row::new()
@@ -326,7 +324,7 @@ pub fn search_page<'a>(
                                     .on_input(|s| Message::Action(message::Action::UpdateText(s)))
                                     .on_submit(Message::Action(message::Action::PerformSearch(
                                         query.clone(),
-                                        domain,
+                                        domain.clone(),
                                     )))
                                     .id(state::TEXT_INPUT_ID.clone()),
                             )
@@ -338,4 +336,20 @@ pub fn search_page<'a>(
             (breadcrumbs, body)
         }
     }
+}
+
+fn domain_button<'a>(
+    display_text: &'static str,
+    query: String,
+    domain: message::SearchDomain,
+    current_domain: message::SearchDomain,
+) -> Button<'a, Message> {
+    let text_element = if domain == current_domain {
+        h2(display_text)
+    } else {
+        dark(h2(display_text))
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::SearchPage(
+        query, domain, true,
+    )))
 }
