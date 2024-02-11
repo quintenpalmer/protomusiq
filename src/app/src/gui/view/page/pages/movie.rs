@@ -67,19 +67,27 @@ pub fn movie_page<'a>(
             ))),
         );
 
+    let mut release_and_length = Row::new().padding([10, 0]);
+
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
-            movie_info = movie_info.push(h2("Release"));
-            movie_info = movie_info.push(h3(extra_movie_metadata
+            let mut release = Column::new().padding([0, 10]);
+            release = release.push(h2("Release"));
+            release = release.push(h3(extra_movie_metadata
                 .release
                 .format("%Y/%m/%d")
-                .to_string()))
+                .to_string()));
+            release_and_length = release_and_length.push(release);
         }
         None => (),
     };
 
-    movie_info = movie_info.push(h2("Length"));
-    movie_info = movie_info.push(h3(common::format_duration(state.movie.duration.as_secs())));
+    let mut length = Column::new().padding([0, 10]);
+    length = length.push(h2("Length"));
+    length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
+    release_and_length = release_and_length.push(length);
+
+    movie_info = movie_info.push(release_and_length);
 
     let top_header = Row::new()
         .padding(10)
