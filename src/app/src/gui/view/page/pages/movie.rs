@@ -72,7 +72,9 @@ pub fn movie_page<'a>(
 
     let play_and_length = Row::new().spacing(10).push(play_button).push(length);
 
-    let mut play_release_and_length = Row::new().spacing(10).push(play_and_length);
+    let mut play_release_and_length = Row::new()
+        .spacing(10)
+        .push(play_and_length.width(Length::FillPortion(1)));
 
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
@@ -82,7 +84,8 @@ pub fn movie_page<'a>(
                 .release
                 .format("%Y/%m/%d")
                 .to_string()));
-            play_release_and_length = play_release_and_length.push(release);
+            play_release_and_length =
+                play_release_and_length.push(release.width(Length::FillPortion(1)));
         }
         None => (),
     };
