@@ -97,7 +97,7 @@ pub fn movie_page<'a>(
         .push(top_header)
         .push(bottom_footer);
 
-    let body = Container::new(Column::new().spacing(10).push(h1("Movies")).push(contents));
+    let body = Container::new(contents);
 
     (breadcrumbs, body)
 }
