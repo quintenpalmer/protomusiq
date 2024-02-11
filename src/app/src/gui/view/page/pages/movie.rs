@@ -62,14 +62,11 @@ pub fn movie_page<'a>(
         .spacing(10)
         .push(h1(state.movie.title.clone()));
 
-    let mut play_release_and_length =
-        Row::new()
-            .spacing(10)
-            .push(
-                dark_button(h2("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
-                    state.movie.path.clone().to_path_buf(),
-                ))),
-            );
+    let play_button = dark_button(h2("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
+        state.movie.path.clone().to_path_buf(),
+    )));
+
+    let mut play_release_and_length = Row::new().spacing(10).push(play_button);
 
     let mut length = Column::new();
     length = length.push(h2("Length"));
