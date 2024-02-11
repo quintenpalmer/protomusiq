@@ -106,6 +106,24 @@ pub fn movie_page<'a>(
         None => (),
     }
 
+    match state.movie.extra {
+        Some(ref extra) => {
+            let mut directors = Column::new().push(h2("Director(s)"));
+            for director in extra.directors.iter() {
+                directors = directors.push(h3(director.clone()));
+            }
+
+            let mut writers = Column::new().push(h2("Writer(s)"));
+            for writer in extra.writers.iter() {
+                writers = writers.push(h3(writer.clone()));
+            }
+
+            let director_writer = Row::new().spacing(10).push(directors).push(writers);
+            movie_info = movie_info.push(director_writer);
+        }
+        None => (),
+    }
+
     let top_header = Row::new()
         .padding(10)
         .push(movie_image_element)
