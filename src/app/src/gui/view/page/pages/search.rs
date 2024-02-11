@@ -306,16 +306,16 @@ pub fn search_page<'a>(
                         Row::new()
                             .push(dark_button(h2("Music")).on_press(user_nav_message(
                                 NavMessage::SearchPage(
-                                    "".to_string(),
+                                    query.clone(),
                                     message::SearchDomain::Music,
-                                    false,
+                                    true,
                                 ),
                             )))
                             .push(dark_button(h2("Movies")).on_press(user_nav_message(
                                 NavMessage::SearchPage(
-                                    "".to_string(),
+                                    query.clone(),
                                     message::SearchDomain::Movies,
-                                    false,
+                                    true,
                                 ),
                             ))),
                     )
