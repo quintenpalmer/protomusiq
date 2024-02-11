@@ -31,7 +31,7 @@ pub fn movie_page<'a>(
         model::MovieRelPath::from_metadata(&state.movie),
     ) {
         Some(movie_image_bytes) => {
-            let (current, toggle_to) = match cover_size {
+            let (current, toggle_to) = match cover_size.clone() {
                 model::MovieSize::Micro => (model::MovieSize::Micro, model::MovieSize::Small),
                 model::MovieSize::Small => (model::MovieSize::Small, model::MovieSize::Regular),
                 model::MovieSize::Regular => {
@@ -163,7 +163,7 @@ pub fn movie_page<'a>(
     let top_header = Row::new()
         .padding(10)
         .push(movie_image_element)
-        .push(movie_info);
+        .push(Scrollable::new(movie_info).height(Length::Fixed(cover_size.height() as f32)));
 
     let mut cast_main_container = Column::new().padding([10, 30]);
 
