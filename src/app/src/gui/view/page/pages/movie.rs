@@ -149,22 +149,23 @@ pub fn movie_page<'a>(
         .push(movie_image_element)
         .push(movie_info);
 
-    let mut bottom_footer = Column::new().padding([10, 30]);
+    let mut cast_main_container = Column::new().padding([10, 30]);
 
     match state.movie.extra {
         Some(ref extra) => {
-            bottom_footer = bottom_footer.push(h1("Cast:"));
+            cast_main_container = cast_main_container.push(h1("Cast:"));
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
                 cast = cast.push(h2(actor.clone()));
             }
             let cast_scrollable = Scrollable::new(cast);
-            bottom_footer = bottom_footer.push(cast_scrollable);
+            cast_main_container = cast_main_container.push(cast_scrollable);
         }
         None => (),
     }
 
-    bottom_footer = bottom_footer
+    let bottom_footer = Column::new()
+        .padding(10)
         .push(Space::new(Length::Fill, Length::Fill))
         .push(dark_paragraph("Filepath:"))
         .push(bright_paragraph(
@@ -180,6 +181,7 @@ pub fn movie_page<'a>(
     let contents = Column::new()
         .spacing(10)
         .push(top_header)
+        .push(cast_main_container)
         .push(bottom_footer);
 
     let body = Container::new(contents);
