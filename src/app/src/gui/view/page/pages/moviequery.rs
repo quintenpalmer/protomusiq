@@ -13,5 +13,9 @@ pub fn movie_query<'a>(
     _state: &'a state::MovieQueryState,
     _app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    (vec![], Container::new(h1("Movie Query")))
+    let breadcrumbs = vec![];
+
+    let body = Container::new(h1("Movie Query"));
+
+    (breadcrumbs, body)
 }
