@@ -26,6 +26,8 @@ pub fn movie_page<'a>(
 
     let cover_size = state.movie_size.clone();
 
+    let title_element = h1(state.movie.title.clone());
+
     let movie_image_element = match movie_library.art.get_movie_cover(
         cover_size.clone(),
         model::MovieRelPath::from_metadata(&state.movie),
@@ -57,10 +59,7 @@ pub fn movie_page<'a>(
         )),
     };
 
-    let mut movie_info = Column::new()
-        .padding(10)
-        .spacing(10)
-        .push(h1(state.movie.title.clone()));
+    let mut movie_info = Column::new().padding(10).spacing(10);
 
     let play_button = Container::new(dark_button(h2("Play")).on_press(Message::ExternalSpawn(
         ExternalSpawn::Mpv(state.movie.path.clone().to_path_buf()),
@@ -195,6 +194,7 @@ pub fn movie_page<'a>(
 
     let contents = Column::new()
         .spacing(10)
+        .push(title_element)
         .push(top_header)
         .push(cast_main_container.height(Length::Fill))
         .push(bottom_footer);
