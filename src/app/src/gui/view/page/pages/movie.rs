@@ -83,7 +83,9 @@ pub fn movie_page<'a>(
 
     let top_header = Row::new().push(movie_image_element).push(movie_info);
 
-    let bottom_footer = Column::new()
+    let mut bottom_footer = Column::new();
+
+    bottom_footer = bottom_footer
         .push(Space::new(Length::Fill, Length::Fill))
         .push(dark_paragraph("Filepath:"))
         .push(bright_paragraph(
