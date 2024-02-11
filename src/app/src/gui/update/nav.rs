@@ -144,7 +144,29 @@ pub fn handle_nav(
             Command::none()
         }
         NavMessage::MovieQuery(query) => {
-            app.current_page = Page::MovieQuery(state::MovieQueryState { query });
+            let mut movie_keys = Vec::new();
+
+            match query {
+                model::MovieQueryParams::Genre(ref queried_genre) => {
+                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for found_genre in extra.genres.iter() {
+                                    if found_genre == queried_genre {
+                                        movie_keys.push(movie_key.clone())
+                                    }
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                }
+            }
+
+            app.current_page = Page::MovieQuery(state::MovieQueryState {
+                query: query.clone(),
+                matched_keys: movie_keys,
+            });
             Command::none()
         }
         NavMessage::MovieView(movie, movie_size) => {

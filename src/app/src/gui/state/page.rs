@@ -150,4 +150,5 @@ pub struct MovieViewState {
 #[derive(Debug)]
 pub struct MovieQueryState {
     pub query: model::MovieQueryParams,
+    pub matched_keys: Vec<model::MovieRelPath>,
 }
