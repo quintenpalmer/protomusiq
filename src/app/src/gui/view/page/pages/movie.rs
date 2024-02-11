@@ -66,12 +66,15 @@ pub fn movie_page<'a>(
         state.movie.path.clone().to_path_buf(),
     )));
 
-    let mut play_release_and_length = Row::new().spacing(10).push(play_button);
+    let mut play_release_and_length = Row::new().spacing(10);
 
     let mut length = Column::new();
     length = length.push(h2("Length"));
     length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
-    play_release_and_length = play_release_and_length.push(length);
+
+    let play_and_length = Row::new().spacing(10).push(play_button).push(length);
+
+    play_release_and_length = play_release_and_length.push(play_and_length);
 
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
