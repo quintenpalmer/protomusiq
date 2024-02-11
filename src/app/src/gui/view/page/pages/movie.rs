@@ -60,14 +60,16 @@ pub fn movie_page<'a>(
     let mut movie_info = Column::new()
         .padding(10)
         .spacing(10)
-        .push(h1(state.movie.title.clone()))
-        .push(
-            dark_button(h2("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
-                state.movie.path.clone().to_path_buf(),
-            ))),
-        );
+        .push(h1(state.movie.title.clone()));
 
-    let mut release_and_length = Row::new().spacing(10);
+    let mut play_release_and_length =
+        Row::new()
+            .spacing(10)
+            .push(
+                dark_button(h2("Play")).on_press(Message::ExternalSpawn(ExternalSpawn::Mpv(
+                    state.movie.path.clone().to_path_buf(),
+                ))),
+            );
 
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
@@ -77,7 +79,7 @@ pub fn movie_page<'a>(
                 .release
                 .format("%Y/%m/%d")
                 .to_string()));
-            release_and_length = release_and_length.push(release);
+            play_release_and_length = play_release_and_length.push(release);
         }
         None => (),
     };
@@ -85,9 +87,9 @@ pub fn movie_page<'a>(
     let mut length = Column::new();
     length = length.push(h2("Length"));
     length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
-    release_and_length = release_and_length.push(length);
+    play_release_and_length = play_release_and_length.push(length);
 
-    movie_info = movie_info.push(release_and_length);
+    movie_info = movie_info.push(play_release_and_length);
 
     match state.movie.extra {
         Some(ref extra) => {
