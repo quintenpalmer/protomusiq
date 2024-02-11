@@ -7,7 +7,7 @@ use crate::model;
 
 use super::{common, sorts};
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct MovieRelPath(String);
 
 impl MovieRelPath {
