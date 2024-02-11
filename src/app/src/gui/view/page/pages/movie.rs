@@ -97,12 +97,25 @@ pub fn movie_page<'a>(
 
     match state.movie.extra {
         Some(ref extra) => {
-            let mut genre_list = Row::new().spacing(10);
-            for genre in extra.genres.iter() {
-                genre_list =
-                    genre_list.push(dark_button(h3(genre.clone())).on_press(user_nav_message(
+            let mut genre_list = Column::new().spacing(10);
+            let mut genre_row = Row::new().spacing(10);
+            let mut genre_row_count = 0;
+            for (index, genre) in extra.genres.iter().enumerate() {
+                genre_row =
+                    genre_row.push(dark_button(h3(genre.clone())).on_press(user_nav_message(
                         NavMessage::MovieQuery(model::MovieQueryParams::Genre(genre.clone())),
                     )));
+                genre_row_count += 1;
+
+                if index % 3 == 2 {
+                    genre_list = genre_list.push(genre_row);
+                    genre_row = Row::new().spacing(10);
+                    genre_row_count = 0;
+                }
+            }
+
+            if genre_row_count != 0 {
+                genre_list = genre_list.push(genre_row);
             }
 
             let genres = Column::new()
