@@ -1,4 +1,5 @@
-use iced::widget::{Column, Container, Row};
+use iced::widget::{Column, Container, Row, Space};
+use iced::Length;
 
 use crate::model;
 
@@ -83,6 +84,7 @@ pub fn movie_page<'a>(
     let top_header = Row::new().push(movie_image_element).push(movie_info);
 
     let bottom_footer = Column::new()
+        .push(Space::new(Length::Fill, Length::Fill))
         .push(dark_paragraph("Filepath:"))
         .push(bright_paragraph(
             state
