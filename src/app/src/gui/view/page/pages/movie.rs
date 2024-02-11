@@ -149,7 +149,7 @@ pub fn movie_page<'a>(
         .push(movie_image_element)
         .push(movie_info);
 
-    let mut bottom_footer = Column::new().padding(10);
+    let mut bottom_footer = Column::new().padding([10, 30]);
 
     match state.movie.extra {
         Some(ref extra) => {
