@@ -90,10 +90,10 @@ pub fn movie_page<'a>(
 
     match state.movie.extra {
         Some(ref extra) => {
-            bottom_footer = bottom_footer.push(h2("Cast:"));
+            bottom_footer = bottom_footer.push(h1("Cast:"));
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
-                cast = cast.push(h3(actor.clone()));
+                cast = cast.push(h2(actor.clone()));
             }
             let cast_scrollable = Scrollable::new(cast);
             bottom_footer = bottom_footer.push(cast_scrollable);
