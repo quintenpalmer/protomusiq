@@ -1,4 +1,4 @@
-use iced::widget::{Column, Container, Row, Space};
+use iced::widget::{Column, Container, Row, Scrollable, Space};
 use iced::Length;
 
 use crate::model;
@@ -84,6 +84,19 @@ pub fn movie_page<'a>(
     let top_header = Row::new().push(movie_image_element).push(movie_info);
 
     let mut bottom_footer = Column::new();
+
+    match state.movie.extra {
+        Some(ref extra) => {
+            bottom_footer = bottom_footer.push(h2("Cast:"));
+            let mut cast = Column::new();
+            for actor in extra.cast.iter() {
+                cast = cast.push(h3(actor.clone()));
+            }
+            let cast_scrollable = Scrollable::new(cast);
+            bottom_footer = bottom_footer.push(cast_scrollable);
+        }
+        None => (),
+    }
 
     bottom_footer = bottom_footer
         .push(Space::new(Length::Fill, Length::Fill))
