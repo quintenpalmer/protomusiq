@@ -67,11 +67,11 @@ pub fn movie_page<'a>(
             ))),
         );
 
-    let mut release_and_length = Row::new().padding([10, 0]);
+    let mut release_and_length = Row::new().spacing(10);
 
     match state.movie.extra {
         Some(ref extra_movie_metadata) => {
-            let mut release = Column::new().padding([0, 10]);
+            let mut release = Column::new();
             release = release.push(h2("Release"));
             release = release.push(h3(extra_movie_metadata
                 .release
@@ -82,7 +82,7 @@ pub fn movie_page<'a>(
         None => (),
     };
 
-    let mut length = Column::new().padding([0, 10]);
+    let mut length = Column::new();
     length = length.push(h2("Length"));
     length = length.push(h3(common::format_duration(state.movie.duration.as_secs())));
     release_and_length = release_and_length.push(length);
