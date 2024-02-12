@@ -136,7 +136,10 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut directors = Column::new().push(h2("Director(s)"));
             for director in extra.directors.iter() {
-                directors = directors.push(h3(director.clone()));
+                directors = directors.push(
+                    dark_button(h3(director.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Director(director.clone())),
+                    )));
             }
 
             let mut writers = Column::new().push(h2("Writer(s)"));

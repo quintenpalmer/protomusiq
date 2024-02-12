@@ -245,6 +245,7 @@ impl AlbumArt {
 pub enum MovieQueryParams {
     Genre(String),
     Production(String),
+    Director(String),
 }
 
 #[derive(Debug, Clone)]
