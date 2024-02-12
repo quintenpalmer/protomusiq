@@ -247,6 +247,7 @@ pub enum MovieQueryParams {
     Production(String),
     Director(String),
     Screenplay(String),
+    CastMember(String),
 }
 
 #[derive(Debug, Clone)]

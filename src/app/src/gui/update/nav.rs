@@ -203,6 +203,20 @@ pub fn handle_nav(
                         }
                     }
                 }
+                model::MovieQueryParams::CastMember(ref queried_actor) => {
+                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for found_actor in extra.cast.iter() {
+                                    if found_actor == queried_actor {
+                                        movie_keys.push(movie_key.clone())
+                                    }
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                }
             }
 
             app.current_page = Page::MovieQuery(state::MovieQueryState {

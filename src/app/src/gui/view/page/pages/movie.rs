@@ -186,7 +186,10 @@ pub fn movie_page<'a>(
             cast_main_container = cast_main_container.push(h1("Cast:"));
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
-                cast = cast.push(h2(actor.clone()));
+                cast = cast.push(
+                    dark_button(h2(actor.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
+                    )));
             }
             let cast_scrollable = Scrollable::new(cast);
             cast_main_container = cast_main_container.push(cast_scrollable);
