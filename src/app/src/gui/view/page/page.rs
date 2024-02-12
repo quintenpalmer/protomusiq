@@ -61,6 +61,7 @@ pub fn render_page<'a>(
             &library.grid_info,
             &app_images,
         ),
+        Page::MovieAttributes(ref state) => pages::movieattrs::movie_attributes(state),
         Page::MovieQuery(ref state) => {
             pages::moviequery::movie_query(&movie_library, state, &app_images)
         }

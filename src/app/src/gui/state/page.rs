@@ -25,6 +25,7 @@ pub enum Page {
     MovieList(MovieListState),
     MovieView(MovieViewState),
     MovieQuery(MovieQueryState),
+    MovieAttributes(MovieAttributeState),
 }
 
 impl Page {
@@ -44,6 +45,7 @@ impl Page {
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
             Page::MovieList(_) => "MovieList",
+            Page::MovieAttributes(_) => "MovieAttributes",
             Page::MovieQuery(_) => "MovieQuery",
             Page::MovieView(_) => "MovieView",
         }
@@ -151,4 +153,10 @@ pub struct MovieViewState {
 pub struct MovieQueryState {
     pub query: model::MovieQueryParams,
     pub matched_keys: Vec<model::MovieRelPath>,
+}
+
+#[derive(Debug)]
+pub struct MovieAttributeState {
+    pub attribute: model::MovieAttribute,
+    pub attribute_results: Vec<String>,
 }

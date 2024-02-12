@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use iced::widget::text_input;
 use iced::Command;
 
@@ -140,6 +142,30 @@ pub fn handle_nav(
                 page: page,
                 sort_key: sort,
                 sort_order: sort_order,
+            });
+            Command::none()
+        }
+        NavMessage::MovieAttributes(attr) => {
+            let attribute_results = match attr {
+                model::MovieAttribute::Genres => {
+                    let mut genre_set = BTreeSet::new();
+                    for movie in app.video_library.movies.movies.values() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for genre in extra.genres.iter() {
+                                    genre_set.insert(genre.clone());
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                    genre_set.into_iter().collect()
+                }
+            };
+
+            app.current_page = Page::MovieAttributes(state::MovieAttributeState {
+                attribute: attr.clone(),
+                attribute_results,
             });
             Command::none()
         }

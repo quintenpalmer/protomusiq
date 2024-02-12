@@ -251,6 +251,11 @@ pub enum MovieQueryParams {
 }
 
 #[derive(Debug, Clone)]
+pub enum MovieAttribute {
+    Genres,
+}
+
+#[derive(Debug, Clone)]
 pub struct SimpleSearchResults {
     pub artists: Vec<musiqlibrary::ArtistInfo>,
     pub albums: Vec<musiqlibrary::ArtistAlbumInfo>,
