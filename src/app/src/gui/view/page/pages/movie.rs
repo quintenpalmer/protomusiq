@@ -142,7 +142,7 @@ pub fn movie_page<'a>(
                     )));
             }
 
-            let mut writers = Column::new().push(h2("Writer(s)"));
+            let mut writers = Column::new().push(h2("Screenplay Writer(s)"));
             for writer in extra.writers.iter() {
                 writers = writers.push(
                     dark_button(h3(writer.clone())).on_press(user_nav_message(
