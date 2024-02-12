@@ -161,6 +161,20 @@ pub fn handle_nav(
                         }
                     }
                 }
+                model::MovieQueryParams::Production(ref queried_production_company) => {
+                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for found_production_company in extra.production.iter() {
+                                    if found_production_company == queried_production_company {
+                                        movie_keys.push(movie_key.clone())
+                                    }
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                }
             }
 
             app.current_page = Page::MovieQuery(state::MovieQueryState {

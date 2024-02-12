@@ -25,6 +25,14 @@ pub fn movie_query<'a>(
                     .push(h3(genre.clone())),
             )
         }
+        model::MovieQueryParams::Production(ref prod) => {
+            Column::new().spacing(10).push(h2("Params:")).push(
+                line_row()
+                    .spacing(5)
+                    .push(h3("Production Company:"))
+                    .push(h3(prod.clone())),
+            )
+        }
     };
 
     let mut movie_list = Column::new().spacing(10);

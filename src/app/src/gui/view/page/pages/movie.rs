@@ -157,7 +157,11 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut production_entities = Column::new().push(h2("Production"));
             for prod in extra.production.iter() {
-                production_entities = production_entities.push(h3(prod.clone()));
+                production_entities = production_entities.push(
+                    dark_button(h3(prod.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Production(prod.clone())),
+                    )),
+                );
             }
             movie_info = movie_info.push(production_entities);
         }

@@ -244,6 +244,7 @@ impl AlbumArt {
 #[derive(Debug, Clone)]
 pub enum MovieQueryParams {
     Genre(String),
+    Production(String),
 }
 
 #[derive(Debug, Clone)]
