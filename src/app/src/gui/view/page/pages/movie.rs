@@ -144,7 +144,10 @@ pub fn movie_page<'a>(
 
             let mut writers = Column::new().push(h2("Writer(s)"));
             for writer in extra.writers.iter() {
-                writers = writers.push(h3(writer.clone()));
+                writers = writers.push(
+                    dark_button(h3(writer.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),
+                    )));
             }
 
             let director_writer = Row::new()

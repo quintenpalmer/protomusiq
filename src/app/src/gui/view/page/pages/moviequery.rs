@@ -41,6 +41,14 @@ pub fn movie_query<'a>(
                     .push(h3(director.clone())),
             )
         }
+        model::MovieQueryParams::Screenplay(ref writer) => {
+            Column::new().spacing(10).push(h2("Params:")).push(
+                line_row()
+                    .spacing(5)
+                    .push(h3("Screenplay:"))
+                    .push(h3(writer.clone())),
+            )
+        }
     };
 
     let mut movie_list = Column::new().spacing(10);
