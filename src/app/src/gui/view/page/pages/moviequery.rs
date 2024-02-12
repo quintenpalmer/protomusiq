@@ -34,10 +34,7 @@ pub fn movie_query<'a>(
 
         let movie_info = h1(movie.title.clone());
 
-        let movie_link = user_nav_message(NavMessage::MovieView(
-            movie.clone(),
-            model::MovieSize::SemiLarge,
-        ));
+        let movie_link = user_nav_message(NavMessage::MovieView(movie.clone(), None));
 
         let movie_image_element = match movie_library.art.get_movie_cover(
             model::MovieSize::Small,

@@ -100,7 +100,7 @@ pub enum NavMessage {
     ),
     MovieList(usize, model::MovieSortKey, model::SortOrder),
     MovieQuery(model::MovieQueryParams),
-    MovieView(video::MovieMetadata, model::MovieSize),
+    MovieView(video::MovieMetadata, Option<model::MovieSize>),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]

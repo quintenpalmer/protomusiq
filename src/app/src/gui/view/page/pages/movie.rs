@@ -24,7 +24,12 @@ pub fn movie_page<'a>(
         )),
     )];
 
-    let cover_size = state.movie_size.clone();
+    let maybe_cover_size = state.movie_size.clone();
+
+    let cover_size = match maybe_cover_size {
+        Some(c) => c,
+        None => model::MovieSize::SemiLarge,
+    };
 
     let title_element = h1(state.movie.title.clone());
 
@@ -48,7 +53,7 @@ pub fn movie_page<'a>(
             let movie_image = movie_image(movie_image_bytes, current);
 
             let movie_button = dark_button(movie_image).on_press(user_nav_message(
-                NavMessage::MovieView(state.movie.clone(), toggle_to),
+                NavMessage::MovieView(state.movie.clone(), Some(toggle_to)),
             ));
 
             Container::new(movie_button)

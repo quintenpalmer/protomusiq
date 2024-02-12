@@ -274,7 +274,7 @@ pub fn search_page<'a>(
                                         .on_press(
                                             user_nav_message(NavMessage::MovieView(
                                                 result.clone(),
-                                                model::MovieSize::SemiLarge,
+                                                None,
                                             )),
                                         ),
                                     )
