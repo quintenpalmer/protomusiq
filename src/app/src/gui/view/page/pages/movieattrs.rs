@@ -1,4 +1,5 @@
 use iced::widget::{Column, Container, Scrollable};
+use iced::Length;
 
 use crate::model;
 
@@ -28,9 +29,11 @@ pub fn movie_attributes<'a>(
                 model::MovieAttribute::Genres => {
                     let mut table = Column::new().spacing(10);
                     for result in attribute_results.into_iter() {
-                        table = table.push(h3(result));
+                        table = table.push(dark_button(h3(result)).on_press(user_nav_message(
+                            NavMessage::MovieQuery(model::MovieQueryParams::Genre(result.clone())),
+                        )));
                     }
-                    (h2("Genres:"), Scrollable::new(table))
+                    (h2("Genres:"), Scrollable::new(table.width(Length::Fill)))
                 }
             };
 
