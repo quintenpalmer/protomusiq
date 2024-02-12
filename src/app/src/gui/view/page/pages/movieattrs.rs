@@ -38,11 +38,13 @@ pub fn movie_attributes<'a>(
             };
 
             let body = Container::new(
-                Column::new()
-                    .spacing(10)
-                    .push(h1("Movie Attributes"))
-                    .push(attribute_name)
-                    .push(attribute_table),
+                Column::new().spacing(10).push(h1("Movie Attributes")).push(
+                    Column::new()
+                        .padding(20)
+                        .spacing(10)
+                        .push(attribute_name)
+                        .push(attribute_table),
+                ),
             );
 
             (breadcrumbs, body)
