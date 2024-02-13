@@ -36,7 +36,9 @@ pub fn movie_query<'a>(
                     .spacing(5)
                     .push(h3("Production Company"))
                     .push(h3(":"))
-                    .push(h3(prod.clone())),
+                    .push(dark_button(h3(prod.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Production(prod.clone())),
+                    ))),
             )
         }
         model::MovieQueryParams::Director(ref director) => {
@@ -45,7 +47,9 @@ pub fn movie_query<'a>(
                     .spacing(5)
                     .push(h3("Director"))
                     .push(h3(":"))
-                    .push(h3(director.clone())),
+                    .push(dark_button(h3(director.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Director(director.clone())),
+                    ))),
             )
         }
         model::MovieQueryParams::Screenplay(ref writer) => {
@@ -54,7 +58,9 @@ pub fn movie_query<'a>(
                     .spacing(5)
                     .push(h3("Screenplay"))
                     .push(h3(":"))
-                    .push(h3(writer.clone())),
+                    .push(dark_button(h3(writer.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),
+                    ))),
             )
         }
         model::MovieQueryParams::CastMember(ref actor) => {
@@ -63,7 +69,9 @@ pub fn movie_query<'a>(
                     .spacing(5)
                     .push(h3("Cast Member"))
                     .push(h3(":"))
-                    .push(h3(actor.clone())),
+                    .push(dark_button(h3(actor.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
+                    ))),
             )
         }
     };
