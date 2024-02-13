@@ -256,6 +256,11 @@ pub enum MovieAttribute {
 }
 
 #[derive(Debug, Clone)]
+pub enum AttributesList {
+    Genre(Vec<String>),
+}
+
+#[derive(Debug, Clone)]
 pub struct SimpleSearchResults {
     pub artists: Vec<musiqlibrary::ArtistInfo>,
     pub albums: Vec<musiqlibrary::ArtistAlbumInfo>,

@@ -157,6 +157,5 @@ pub struct MovieQueryState {
 
 #[derive(Debug)]
 pub struct MovieAttributeState {
-    pub attribute: model::MovieAttribute,
-    pub attribute_results: Vec<String>,
+    pub attribute_results: model::AttributesList,
 }

@@ -159,14 +159,12 @@ pub fn handle_nav(
                             None => (),
                         }
                     }
-                    genre_set.into_iter().collect()
+                    model::AttributesList::Genre(genre_set.into_iter().collect())
                 }
             };
 
-            app.current_page = Page::MovieAttributes(state::MovieAttributeState {
-                attribute: attr.clone(),
-                attribute_results,
-            });
+            app.current_page =
+                Page::MovieAttributes(state::MovieAttributeState { attribute_results });
             Command::none()
         }
         NavMessage::MovieQuery(query) => {

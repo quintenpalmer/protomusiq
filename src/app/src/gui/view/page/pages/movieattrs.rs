@@ -12,10 +12,7 @@ pub fn movie_attributes<'a>(
     state: &'a state::MovieAttributeState,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match state {
-        state::MovieAttributeState {
-            attribute,
-            attribute_results,
-        } => {
+        state::MovieAttributeState { attribute_results } => {
             let breadcrumbs = vec![(
                 "Movies".to_string(),
                 user_nav_message(NavMessage::MovieList(
@@ -25,8 +22,8 @@ pub fn movie_attributes<'a>(
                 )),
             )];
 
-            let (attribute_name, attribute_table) = match attribute {
-                model::MovieAttribute::Genres => {
+            let (attribute_name, attribute_table) = match attribute_results {
+                model::AttributesList::Genre(attribute_results) => {
                     let mut table = Column::new().spacing(10);
 
                     let mut genre_row = Row::new().spacing(10);
