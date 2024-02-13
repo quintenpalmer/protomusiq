@@ -178,7 +178,7 @@ pub fn movie_page<'a>(
         .push(movie_image_element)
         .push(Scrollable::new(movie_info).height(Length::Fixed(cover_size.height() as f32)));
 
-    let mut cast_main_container = Column::new().padding([10, 30]);
+    let mut cast_main_container = Column::new().padding([0, 30]);
 
     match state.movie.extra {
         Some(ref extra) => {
