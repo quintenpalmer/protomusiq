@@ -1,4 +1,5 @@
 use iced::widget::{Column, Container, Row, Scrollable};
+use iced::Length;
 
 use crate::model;
 
@@ -120,6 +121,7 @@ pub fn home_page<'a>(
 
             let page = Container::new(Scrollable::new(
                 Column::new()
+                    .width(Length::Fill)
                     .push(Row::new().push(album_list).push(artist_list).push(search))
                     .push(Row::new().push(track_list).push(dvd).push(playlist))
                     .push(Row::new().push(settings)),
