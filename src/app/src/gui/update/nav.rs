@@ -161,6 +161,20 @@ pub fn handle_nav(
                     }
                     model::AttributesList::Genre(genre_set.into_iter().collect())
                 }
+                model::MovieAttribute::Production => {
+                    let mut production_set = BTreeSet::new();
+                    for movie in app.video_library.movies.movies.values() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for prod in extra.production.iter() {
+                                    production_set.insert(prod.clone());
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                    model::AttributesList::Production(production_set.into_iter().collect())
+                }
             };
 
             app.current_page =

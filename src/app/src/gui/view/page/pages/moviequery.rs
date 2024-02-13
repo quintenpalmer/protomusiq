@@ -34,7 +34,11 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Production Company"))
+                    .push(
+                        dark_button(h3("Production Company")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(model::MovieAttribute::Production),
+                        )),
+                    )
                     .push(h3(":"))
                     .push(dark_button(h3(prod.clone())).on_press(user_nav_message(
                         NavMessage::MovieQuery(model::MovieQueryParams::Production(prod.clone())),
