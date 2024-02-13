@@ -256,6 +256,7 @@ pub enum MovieAttribute {
     Production,
     Directors,
     Screenplay,
+    CastMembers,
 }
 
 #[derive(Debug, Clone)]
@@ -264,6 +265,7 @@ pub enum AttributesList {
     Production(Vec<String>),
     Director(Vec<String>),
     Screenplay(Vec<String>),
+    CastMember(Vec<String>),
 }
 
 #[derive(Debug, Clone)]

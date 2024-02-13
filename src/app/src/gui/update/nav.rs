@@ -203,6 +203,20 @@ pub fn handle_nav(
                     }
                     model::AttributesList::Screenplay(result_set.into_iter().collect())
                 }
+                model::MovieAttribute::CastMembers => {
+                    let mut result_set = BTreeSet::new();
+                    for movie in app.video_library.movies.movies.values() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for actor in extra.cast.iter() {
+                                    result_set.insert(actor.clone());
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                    model::AttributesList::CastMember(result_set.into_iter().collect())
+                }
             };
 
             app.current_page =

@@ -75,7 +75,9 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Cast Member"))
+                    .push(dark_button(h3("Cast Member")).on_press(user_nav_message(
+                        NavMessage::MovieAttributes(model::MovieAttribute::CastMembers),
+                    )))
                     .push(h3(":"))
                     .push(dark_button(h3(actor.clone())).on_press(user_nav_message(
                         NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
