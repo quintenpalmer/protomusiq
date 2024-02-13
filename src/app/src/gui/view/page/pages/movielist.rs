@@ -244,7 +244,7 @@ pub fn movie_list<'a>(
                     .push(h1("Movies"))
                     .push(page_buttons)
                     .push(extra_page_buttons)
-                    .push(Scrollable::new(columns)),
+                    .push(Scrollable::new(columns.width(Length::Fill))),
             );
 
             (breadcrumbs, body)
