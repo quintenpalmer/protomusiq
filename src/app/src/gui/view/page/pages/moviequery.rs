@@ -34,7 +34,8 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Production Company:"))
+                    .push(h3("Production Company"))
+                    .push(h3(":"))
                     .push(h3(prod.clone())),
             )
         }
@@ -42,7 +43,8 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Director:"))
+                    .push(h3("Director"))
+                    .push(h3(":"))
                     .push(h3(director.clone())),
             )
         }
@@ -50,7 +52,8 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Screenplay:"))
+                    .push(h3("Screenplay"))
+                    .push(h3(":"))
                     .push(h3(writer.clone())),
             )
         }
@@ -58,7 +61,8 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Cast Member:"))
+                    .push(h3("Cast Member"))
+                    .push(h3(":"))
                     .push(h3(actor.clone())),
             )
         }
