@@ -189,7 +189,7 @@ pub fn movie_page<'a>(
                     NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
                 )));
             }
-            let cast_scrollable = Scrollable::new(cast);
+            let cast_scrollable = Scrollable::new(cast.width(Length::Fill));
             cast_main_container = cast_main_container.push(cast_scrollable);
         }
         None => (),
