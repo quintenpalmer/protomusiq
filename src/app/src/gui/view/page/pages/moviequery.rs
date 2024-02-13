@@ -62,7 +62,9 @@ pub fn movie_query<'a>(
             Column::new().spacing(10).push(h2("Params:")).push(
                 line_row()
                     .spacing(5)
-                    .push(h3("Screenplay"))
+                    .push(dark_button(h3("Screenplay")).on_press(user_nav_message(
+                        NavMessage::MovieAttributes(model::MovieAttribute::Screenplay),
+                    )))
                     .push(h3(":"))
                     .push(dark_button(h3(writer.clone())).on_press(user_nav_message(
                         NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),

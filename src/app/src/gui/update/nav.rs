@@ -189,6 +189,20 @@ pub fn handle_nav(
                     }
                     model::AttributesList::Director(director_set.into_iter().collect())
                 }
+                model::MovieAttribute::Screenplay => {
+                    let mut result_set = BTreeSet::new();
+                    for movie in app.video_library.movies.movies.values() {
+                        match movie.extra {
+                            Some(ref extra) => {
+                                for writer in extra.writers.iter() {
+                                    result_set.insert(writer.clone());
+                                }
+                            }
+                            None => (),
+                        }
+                    }
+                    model::AttributesList::Screenplay(result_set.into_iter().collect())
+                }
             };
 
             app.current_page =
