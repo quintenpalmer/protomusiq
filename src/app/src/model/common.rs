@@ -254,12 +254,14 @@ pub enum MovieQueryParams {
 pub enum MovieAttribute {
     Genres,
     Production,
+    Directors,
 }
 
 #[derive(Debug, Clone)]
 pub enum AttributesList {
     Genre(Vec<String>),
     Production(Vec<String>),
+    Director(Vec<String>),
 }
 
 #[derive(Debug, Clone)]
