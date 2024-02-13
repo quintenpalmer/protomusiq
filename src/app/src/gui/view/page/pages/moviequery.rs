@@ -24,7 +24,9 @@ pub fn movie_query<'a>(
                     .push(dark_button(h3("Genre:")).on_press(user_nav_message(
                         NavMessage::MovieAttributes(model::MovieAttribute::Genres),
                     )))
-                    .push(h3(genre.clone())),
+                    .push(dark_button(h3(genre.clone())).on_press(user_nav_message(
+                        NavMessage::MovieQuery(model::MovieQueryParams::Genre(genre.clone())),
+                    ))),
             )
         }
         model::MovieQueryParams::Production(ref prod) => {
