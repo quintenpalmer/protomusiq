@@ -136,18 +136,17 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut directors = Column::new().push(h2("Director(s)"));
             for director in extra.directors.iter() {
-                directors = directors.push(
-                    dark_button(h3(director.clone())).on_press(user_nav_message(
+                directors =
+                    directors.push(dark_button(h3(director.clone())).on_press(user_nav_message(
                         NavMessage::MovieQuery(model::MovieQueryParams::Director(director.clone())),
                     )));
             }
 
             let mut writers = Column::new().push(h2("Screenplay Writer(s)"));
             for writer in extra.writers.iter() {
-                writers = writers.push(
-                    dark_button(h3(writer.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),
-                    )));
+                writers = writers.push(dark_button(h3(writer.clone())).on_press(user_nav_message(
+                    NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),
+                )));
             }
 
             let director_writer = Row::new()
@@ -186,10 +185,9 @@ pub fn movie_page<'a>(
             cast_main_container = cast_main_container.push(h1("Cast:"));
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
-                cast = cast.push(
-                    dark_button(h2(actor.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
-                    )));
+                cast = cast.push(dark_button(h2(actor.clone())).on_press(user_nav_message(
+                    NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
+                )));
             }
             let cast_scrollable = Scrollable::new(cast);
             cast_main_container = cast_main_container.push(cast_scrollable);
