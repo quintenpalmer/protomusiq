@@ -15,10 +15,13 @@ pub fn movie_attributes<'a>(
         state::MovieAttributeState {
             attribute_results: maybe_attribute_results,
         } => {
-            let breadcrumbs = vec![(
-                "Movie Attributes".to_string(),
-                user_nav_message(NavMessage::MovieAttributes(None)),
-            )];
+            let breadcrumbs = vec![
+                ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+                (
+                    "Movie Attributes".to_string(),
+                    user_nav_message(NavMessage::MovieAttributes(None)),
+                ),
+            ];
 
             let (attribute_name, attribute_table) = match maybe_attribute_results {
                 Some(attribute_results) => match attribute_results {

@@ -15,14 +15,17 @@ pub fn movie_page<'a>(
     state: &'a state::MovieViewState,
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let breadcrumbs = vec![(
-        "Movies".to_string(),
-        user_nav_message(NavMessage::MovieList(
-            0,
-            model::MovieSortKey::ByTitle,
-            model::SortOrder::Regular,
-        )),
-    )];
+    let breadcrumbs = vec![
+        ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+        (
+            "Movies".to_string(),
+            user_nav_message(NavMessage::MovieList(
+                0,
+                model::MovieSortKey::ByTitle,
+                model::SortOrder::Regular,
+            )),
+        ),
+    ];
 
     let maybe_cover_size = state.movie_size.clone();
 

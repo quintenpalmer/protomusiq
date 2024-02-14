@@ -54,6 +54,7 @@ pub fn render_page<'a>(
         Page::ArtistFeaturedTrackView(ref state) => {
             pages::artistfeatured::artist_featured_track_view_state(&library, &player_info, state)
         }
+        Page::MovieHome => pages::moviehome::movie_home(),
         Page::MovieList(ref state) => pages::movielist::movie_list(
             &movie_library,
             state,

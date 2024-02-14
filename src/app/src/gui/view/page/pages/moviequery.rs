@@ -14,10 +14,13 @@ pub fn movie_query<'a>(
     state: &'a state::MovieQueryState,
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let breadcrumbs = vec![(
-        "Query Movies".to_string(),
-        user_nav_message(NavMessage::MovieQuery(None)),
-    )];
+    let breadcrumbs = vec![
+        ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+        (
+            "Query Movies".to_string(),
+            user_nav_message(NavMessage::MovieQuery(None)),
+        ),
+    ];
 
     let input_query_element = match state.query {
         Some(ref query) => match query {

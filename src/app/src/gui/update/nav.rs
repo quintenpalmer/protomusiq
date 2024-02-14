@@ -137,6 +137,10 @@ pub fn handle_nav(
             });
             Command::none()
         }
+        NavMessage::MovieHome => {
+            app.current_page = Page::MovieHome;
+            Command::none()
+        }
         NavMessage::MovieList(page, sort, sort_order) => {
             app.current_page = Page::MovieList(state::MovieListState {
                 page: page,

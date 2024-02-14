@@ -24,14 +24,17 @@ pub fn movie_list<'a>(
             sort_key,
             sort_order,
         } => {
-            let breadcrumbs = vec![(
-                "Movies".to_string(),
-                user_nav_message(NavMessage::MovieList(
-                    0,
-                    sort_key.clone(),
-                    sort_order.clone(),
-                )),
-            )];
+            let breadcrumbs = vec![
+                ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+                (
+                    "Movies".to_string(),
+                    user_nav_message(NavMessage::MovieList(
+                        0,
+                        sort_key.clone(),
+                        sort_order.clone(),
+                    )),
+                ),
+            ];
 
             let page: usize = page.clone();
 
