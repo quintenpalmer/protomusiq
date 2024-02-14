@@ -106,7 +106,7 @@ pub fn album_list<'a>(
                     }
                 }
 
-                let scrollable = Scrollable::new(columns);
+                let scrollable = Scrollable::new(columns.width(Length::Fill));
                 let first_page = 0;
                 let back_page = {
                     if page == 0 {
