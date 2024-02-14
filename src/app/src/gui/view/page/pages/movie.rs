@@ -53,7 +53,7 @@ pub fn movie_page<'a>(
                 model::MovieSize::Large => (model::MovieSize::Large, model::MovieSize::Micro),
             };
 
-            let movie_image = movie_image(movie_image_bytes, current);
+            let movie_image = movie_image(movie_image_bytes, current, false);
 
             let movie_button = dark_button(movie_image).on_press(user_nav_message(
                 NavMessage::MovieView(state.movie.clone(), Some(toggle_to)),
@@ -64,6 +64,7 @@ pub fn movie_page<'a>(
         None => Container::new(movie_image(
             app_images.get_dvd_image().clone(),
             model::MovieSize::SemiLarge,
+            false,
         )),
     };
 

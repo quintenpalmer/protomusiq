@@ -108,8 +108,16 @@ pub fn album_image(album_cover_bytes: Vec<u8>, size: model::AlbumSize) -> Image<
         .height(Length::Fixed(size.height() as f32))
 }
 
-pub fn movie_image(movie_cover_bytes: Vec<u8>, size: model::MovieSize) -> Image<image::Handle> {
+pub fn movie_image(
+    movie_cover_bytes: Vec<u8>,
+    size: model::MovieSize,
+    fixed_width: bool,
+) -> Image<image::Handle> {
     Image::new(iced::widget::image::Handle::from_memory(movie_cover_bytes))
-        .width(Length::Fixed(size.height() as f32 * 2.4 / 3.0))
+        .width(if fixed_width {
+            Length::Fixed(size.height() as f32 * 2.4 / 3.0)
+        } else {
+            Length::Shrink
+        })
         .height(Length::Fixed(size.height() as f32))
 }

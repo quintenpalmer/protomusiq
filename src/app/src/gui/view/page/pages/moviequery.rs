@@ -122,11 +122,13 @@ pub fn movie_query<'a>(
                     model::MovieRelPath::from_metadata(&movie),
                 ) {
                     Some(movie_image_bytes) => {
-                        movie_image(movie_image_bytes, model::MovieSize::Small)
+                        movie_image(movie_image_bytes, model::MovieSize::Small, true)
                     }
-                    None => {
-                        movie_image(app_images.get_dvd_image().clone(), model::MovieSize::Small)
-                    }
+                    None => movie_image(
+                        app_images.get_dvd_image().clone(),
+                        model::MovieSize::Small,
+                        true,
+                    ),
                 };
 
                 let movie_button = Row::new()

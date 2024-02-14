@@ -265,6 +265,7 @@ pub fn search_page<'a>(
                                                             app_images.get_dvd_image().clone(),
                                                         ),
                                                     model::MovieSize::Micro,
+                                                    true,
                                                 ))
                                                 .push(
                                                     bright_paragraph(result.title.clone())
