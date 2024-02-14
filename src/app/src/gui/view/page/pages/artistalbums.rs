@@ -1,4 +1,5 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable};
+use iced::Length;
 
 use musiqlibrary;
 
@@ -112,7 +113,7 @@ pub fn artist_album_list<'a>(
                     }
                 }
 
-                let scrollable = Scrollable::new(album_grid_columns);
+                let scrollable = Scrollable::new(album_grid_columns.width(Length::Fill));
 
                 let artist_view_button_row = line_row()
                     .push(dark_button(h2("Albums")).on_press(user_nav_message(
