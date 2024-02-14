@@ -35,6 +35,10 @@ pub fn keybinding_subscription_fn(_app: &state::App) -> iced::Subscription<messa
                 } => Some(message::Message::Action(
                     message::Action::TogglePlayQueueVisible,
                 )),
+                iced::keyboard::Event::KeyPressed {
+                    key_code: iced::keyboard::KeyCode::Backspace,
+                    ..
+                } => Some(message::Message::HistoryNav),
                 _ => None,
             },
             _ => None,
