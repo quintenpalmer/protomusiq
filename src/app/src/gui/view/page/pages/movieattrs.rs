@@ -16,7 +16,7 @@ pub fn movie_attributes<'a>(
             attribute_results: maybe_attribute_results,
         } => {
             let breadcrumbs = vec![(
-                "Query Attributes".to_string(),
+                "Movie Attributes".to_string(),
                 user_nav_message(NavMessage::MovieAttributes(None)),
             )];
 
