@@ -145,78 +145,91 @@ pub fn handle_nav(
             });
             Command::none()
         }
-        NavMessage::MovieAttributes(attr) => {
-            let attribute_results = match attr {
-                model::MovieAttribute::Genres => {
-                    let mut genre_set = BTreeSet::new();
-                    for movie in app.video_library.movies.movies.values() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for genre in extra.genres.iter() {
-                                    genre_set.insert(genre.clone());
+        NavMessage::MovieAttributes(maybe_attr) => {
+            let attribute_results = match maybe_attr {
+                Some(attr) => match attr {
+                    model::MovieAttribute::Genres => {
+                        let mut genre_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for genre in extra.genres.iter() {
+                                        genre_set.insert(genre.clone());
+                                    }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(model::AttributesList::Genre(
+                            genre_set.into_iter().collect(),
+                        ))
                     }
-                    model::AttributesList::Genre(genre_set.into_iter().collect())
-                }
-                model::MovieAttribute::Production => {
-                    let mut production_set = BTreeSet::new();
-                    for movie in app.video_library.movies.movies.values() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for prod in extra.production.iter() {
-                                    production_set.insert(prod.clone());
+                    model::MovieAttribute::Production => {
+                        let mut production_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for prod in extra.production.iter() {
+                                        production_set.insert(prod.clone());
+                                    }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(model::AttributesList::Production(
+                            production_set.into_iter().collect(),
+                        ))
                     }
-                    model::AttributesList::Production(production_set.into_iter().collect())
-                }
-                model::MovieAttribute::Directors => {
-                    let mut director_set = BTreeSet::new();
-                    for movie in app.video_library.movies.movies.values() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for prod in extra.directors.iter() {
-                                    director_set.insert(prod.clone());
+                    model::MovieAttribute::Directors => {
+                        let mut director_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for prod in extra.directors.iter() {
+                                        director_set.insert(prod.clone());
+                                    }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(model::AttributesList::Director(
+                            director_set.into_iter().collect(),
+                        ))
                     }
-                    model::AttributesList::Director(director_set.into_iter().collect())
-                }
-                model::MovieAttribute::Screenplay => {
-                    let mut result_set = BTreeSet::new();
-                    for movie in app.video_library.movies.movies.values() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for writer in extra.writers.iter() {
-                                    result_set.insert(writer.clone());
+                    model::MovieAttribute::Screenplay => {
+                        let mut result_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for writer in extra.writers.iter() {
+                                        result_set.insert(writer.clone());
+                                    }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(model::AttributesList::Screenplay(
+                            result_set.into_iter().collect(),
+                        ))
                     }
-                    model::AttributesList::Screenplay(result_set.into_iter().collect())
-                }
-                model::MovieAttribute::CastMembers => {
-                    let mut result_set = BTreeSet::new();
-                    for movie in app.video_library.movies.movies.values() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for actor in extra.cast.iter() {
-                                    result_set.insert(actor.clone());
+                    model::MovieAttribute::CastMembers => {
+                        let mut result_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for actor in extra.cast.iter() {
+                                        result_set.insert(actor.clone());
+                                    }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(model::AttributesList::CastMember(
+                            result_set.into_iter().collect(),
+                        ))
                     }
-                    model::AttributesList::CastMember(result_set.into_iter().collect())
-                }
+                },
+                None => None,
             };
 
             app.current_page =

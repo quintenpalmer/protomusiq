@@ -157,5 +157,5 @@ pub struct MovieQueryState {
 
 #[derive(Debug)]
 pub struct MovieAttributeState {
-    pub attribute_results: model::AttributesList,
+    pub attribute_results: Option<model::AttributesList>,
 }

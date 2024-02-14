@@ -22,7 +22,7 @@ pub fn movie_query<'a>(
                 line_row()
                     .spacing(5)
                     .push(dark_button(h3("Genre")).on_press(user_nav_message(
-                        NavMessage::MovieAttributes(model::MovieAttribute::Genres),
+                        NavMessage::MovieAttributes(Some(model::MovieAttribute::Genres)),
                     )))
                     .push(h3(":"))
                     .push(dark_button(h3(genre.clone())).on_press(user_nav_message(
@@ -36,7 +36,7 @@ pub fn movie_query<'a>(
                     .spacing(5)
                     .push(
                         dark_button(h3("Production Company")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(model::MovieAttribute::Production),
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Production)),
                         )),
                     )
                     .push(h3(":"))
@@ -50,7 +50,7 @@ pub fn movie_query<'a>(
                 line_row()
                     .spacing(5)
                     .push(dark_button(h3("Director")).on_press(user_nav_message(
-                        NavMessage::MovieAttributes(model::MovieAttribute::Directors),
+                        NavMessage::MovieAttributes(Some(model::MovieAttribute::Directors)),
                     )))
                     .push(h3(":"))
                     .push(dark_button(h3(director.clone())).on_press(user_nav_message(
@@ -63,7 +63,7 @@ pub fn movie_query<'a>(
                 line_row()
                     .spacing(5)
                     .push(dark_button(h3("Screenplay")).on_press(user_nav_message(
-                        NavMessage::MovieAttributes(model::MovieAttribute::Screenplay),
+                        NavMessage::MovieAttributes(Some(model::MovieAttribute::Screenplay)),
                     )))
                     .push(h3(":"))
                     .push(dark_button(h3(writer.clone())).on_press(user_nav_message(
@@ -76,7 +76,7 @@ pub fn movie_query<'a>(
                 line_row()
                     .spacing(5)
                     .push(dark_button(h3("Cast Member")).on_press(user_nav_message(
-                        NavMessage::MovieAttributes(model::MovieAttribute::CastMembers),
+                        NavMessage::MovieAttributes(Some(model::MovieAttribute::CastMembers)),
                     )))
                     .push(h3(":"))
                     .push(dark_button(h3(actor.clone())).on_press(user_nav_message(
