@@ -107,7 +107,7 @@ pub fn movie_page<'a>(
             for (index, genre) in extra.genres.iter().enumerate() {
                 genre_row =
                     genre_row.push(dark_button(h3(genre.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(model::MovieQueryParams::Genre(genre.clone())),
+                        NavMessage::MovieQuery(Some(model::MovieQueryParams::Genre(genre.clone()))),
                     )));
                 genre_row_count += 1;
 
@@ -136,16 +136,19 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut directors = Column::new().push(h2("Director(s)"));
             for director in extra.directors.iter() {
-                directors =
-                    directors.push(dark_button(h3(director.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(model::MovieQueryParams::Director(director.clone())),
-                    )));
+                directors = directors.push(dark_button(h3(director.clone())).on_press(
+                    user_nav_message(NavMessage::MovieQuery(Some(
+                        model::MovieQueryParams::Director(director.clone()),
+                    ))),
+                ));
             }
 
             let mut writers = Column::new().push(h2("Screenplay Writer(s)"));
             for writer in extra.writers.iter() {
                 writers = writers.push(dark_button(h3(writer.clone())).on_press(user_nav_message(
-                    NavMessage::MovieQuery(model::MovieQueryParams::Screenplay(writer.clone())),
+                    NavMessage::MovieQuery(Some(model::MovieQueryParams::Screenplay(
+                        writer.clone(),
+                    ))),
                 )));
             }
 
@@ -162,11 +165,12 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut production_entities = Column::new().push(h2("Production"));
             for prod in extra.production.iter() {
-                production_entities = production_entities.push(
-                    dark_button(h3(prod.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(model::MovieQueryParams::Production(prod.clone())),
-                    )),
-                );
+                production_entities =
+                    production_entities.push(dark_button(h3(prod.clone())).on_press(
+                        user_nav_message(NavMessage::MovieQuery(Some(
+                            model::MovieQueryParams::Production(prod.clone()),
+                        ))),
+                    ));
             }
             movie_info = movie_info.push(production_entities);
         }
@@ -186,7 +190,9 @@ pub fn movie_page<'a>(
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
                 cast = cast.push(dark_button(h2(actor.clone())).on_press(user_nav_message(
-                    NavMessage::MovieQuery(model::MovieQueryParams::CastMember(actor.clone())),
+                    NavMessage::MovieQuery(Some(model::MovieQueryParams::CastMember(
+                        actor.clone(),
+                    ))),
                 )));
             }
             let cast_scrollable = Scrollable::new(cast.width(Length::Fill));

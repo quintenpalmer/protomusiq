@@ -29,9 +29,9 @@ pub fn movie_attributes<'a>(
                         let mut genre_row_count = 0;
                         for (index, result) in attribute_results.into_iter().enumerate() {
                             genre_row = genre_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(
+                                user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Genre(result.clone()),
-                                )),
+                                ))),
                             ));
                             genre_row_count += 1;
 
@@ -56,9 +56,9 @@ pub fn movie_attributes<'a>(
                         for (index, result) in attribute_results.into_iter().enumerate() {
                             production_row =
                                 production_row.push(dark_button(h3(result.clone())).on_press(
-                                    user_nav_message(NavMessage::MovieQuery(
+                                    user_nav_message(NavMessage::MovieQuery(Some(
                                         model::MovieQueryParams::Production(result.clone()),
-                                    )),
+                                    ))),
                                 ));
                             production_row_count += 1;
 
@@ -85,9 +85,9 @@ pub fn movie_attributes<'a>(
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.into_iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(
+                                user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Director(result.clone()),
-                                )),
+                                ))),
                             ));
                             result_row_count += 1;
 
@@ -111,9 +111,9 @@ pub fn movie_attributes<'a>(
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.into_iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(
+                                user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Screenplay(result.clone()),
-                                )),
+                                ))),
                             ));
                             result_row_count += 1;
 
@@ -140,9 +140,9 @@ pub fn movie_attributes<'a>(
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.into_iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(
+                                user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::CastMember(result.clone()),
-                                )),
+                                ))),
                             ));
                             result_row_count += 1;
 

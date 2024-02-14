@@ -236,84 +236,95 @@ pub fn handle_nav(
                 Page::MovieAttributes(state::MovieAttributeState { attribute_results });
             Command::none()
         }
-        NavMessage::MovieQuery(query) => {
-            let mut movie_keys = Vec::new();
-
-            match query {
-                model::MovieQueryParams::Genre(ref queried_genre) => {
-                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for found_genre in extra.genres.iter() {
-                                    if found_genre == queried_genre {
-                                        movie_keys.push(movie_key.clone())
+        NavMessage::MovieQuery(ref maybe_query) => {
+            let movie_keys = match maybe_query {
+                Some(query) => match query {
+                    model::MovieQueryParams::Genre(ref queried_genre) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_genre in extra.genres.iter() {
+                                        if found_genre == queried_genre {
+                                            movie_keys.push(movie_key.clone())
+                                        }
                                     }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(movie_keys)
                     }
-                }
-                model::MovieQueryParams::Production(ref queried_production_company) => {
-                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for found_production_company in extra.production.iter() {
-                                    if found_production_company == queried_production_company {
-                                        movie_keys.push(movie_key.clone())
+                    model::MovieQueryParams::Production(ref queried_production_company) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_production_company in extra.production.iter() {
+                                        if found_production_company == queried_production_company {
+                                            movie_keys.push(movie_key.clone())
+                                        }
                                     }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(movie_keys)
                     }
-                }
-                model::MovieQueryParams::Director(ref queried_director) => {
-                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for found_director in extra.directors.iter() {
-                                    if found_director == queried_director {
-                                        movie_keys.push(movie_key.clone())
+                    model::MovieQueryParams::Director(ref queried_director) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_director in extra.directors.iter() {
+                                        if found_director == queried_director {
+                                            movie_keys.push(movie_key.clone())
+                                        }
                                     }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(movie_keys)
                     }
-                }
-                model::MovieQueryParams::Screenplay(ref queried_writer) => {
-                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for found_writer in extra.writers.iter() {
-                                    if found_writer == queried_writer {
-                                        movie_keys.push(movie_key.clone())
+                    model::MovieQueryParams::Screenplay(ref queried_writer) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_writer in extra.writers.iter() {
+                                        if found_writer == queried_writer {
+                                            movie_keys.push(movie_key.clone())
+                                        }
                                     }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(movie_keys)
                     }
-                }
-                model::MovieQueryParams::CastMember(ref queried_actor) => {
-                    for (movie_key, movie) in app.video_library.movies.movies.iter() {
-                        match movie.extra {
-                            Some(ref extra) => {
-                                for found_actor in extra.cast.iter() {
-                                    if found_actor == queried_actor {
-                                        movie_keys.push(movie_key.clone())
+                    model::MovieQueryParams::CastMember(ref queried_actor) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_actor in extra.cast.iter() {
+                                        if found_actor == queried_actor {
+                                            movie_keys.push(movie_key.clone())
+                                        }
                                     }
                                 }
+                                None => (),
                             }
-                            None => (),
                         }
+                        Some(movie_keys)
                     }
-                }
-            }
+                },
+                None => None,
+            };
 
             app.current_page = Page::MovieQuery(state::MovieQueryState {
-                query: query.clone(),
+                query: maybe_query.clone(),
                 matched_keys: movie_keys,
             });
             Command::none()
