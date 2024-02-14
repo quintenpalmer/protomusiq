@@ -1,5 +1,5 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
-use iced::{Element, Length};
+use iced::Length;
 
 use crate::model;
 
@@ -91,9 +91,8 @@ pub fn artist_list<'a>(
                         columns = columns.push(rows);
                     }
                 }
-                let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(grid);
+                let scrollable = Scrollable::new(columns);
                 let first_page = 0;
                 let back_page = {
                     if page == 0 {
