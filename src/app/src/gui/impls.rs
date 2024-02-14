@@ -33,7 +33,10 @@ impl Application for state::App {
     }
 
     fn subscription(&self) -> iced::Subscription<Self::Message> {
-        subscription::backend_callback(&self)
+        iced::Subscription::batch(vec![
+            subscription::backend_callback(&self),
+            subscription::keybinding_subscription_fn(&self),
+        ])
     }
 
     fn theme(&self) -> iced::Theme {

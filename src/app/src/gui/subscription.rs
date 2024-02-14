@@ -1,3 +1,5 @@
+use iced;
+
 use super::message;
 use super::state;
 
@@ -16,4 +18,26 @@ pub fn backend_callback(app: &state::App) -> iced::Subscription<message::Message
             iced::Subscription::none()
         }
     }
+}
+
+pub fn keybinding_subscription_fn(_app: &state::App) -> iced::Subscription<message::Message> {
+    iced::subscription::events_with(|event, status| {
+        match status {
+            iced::event::Status::Captured => return None,
+            iced::event::Status::Ignored => (),
+        };
+
+        match event {
+            iced::event::Event::Keyboard(keypress_event) => match keypress_event {
+                iced::keyboard::Event::KeyPressed {
+                    key_code: iced::keyboard::KeyCode::P,
+                    ..
+                } => Some(message::Message::Action(
+                    message::Action::TogglePlayQueueVisible,
+                )),
+                _ => None,
+            },
+            _ => None,
+        }
+    })
 }
