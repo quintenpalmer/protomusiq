@@ -1,5 +1,5 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
-use iced::{self, Element, Length};
+use iced::{self, Length};
 
 use crate::model;
 
@@ -105,9 +105,8 @@ pub fn album_list<'a>(
                         columns = columns.push(rows);
                     }
                 }
-                let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(grid);
+                let scrollable = Scrollable::new(columns);
                 let first_page = 0;
                 let back_page = {
                     if page == 0 {
