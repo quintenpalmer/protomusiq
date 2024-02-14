@@ -163,10 +163,35 @@ pub fn movie_attributes<'a>(
                         )
                     }
                 },
-                None => (
-                    h2("Select Attribute"),
-                    Scrollable::new(h3("Attributes here")),
-                ),
+                None => {
+                    let attribute_list = Column::new()
+                        .spacing(10)
+                        .padding(10)
+                        .push(dark_button(h2("Genres")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Genres)),
+                        )))
+                        .push(
+                            dark_button(h2("Production Companies")).on_press(user_nav_message(
+                                NavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Production,
+                                )),
+                            )),
+                        )
+                        .push(dark_button(h2("Directors")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Directors)),
+                        )))
+                        .push(
+                            dark_button(h2("Screenplay Writers")).on_press(user_nav_message(
+                                NavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Screenplay,
+                                )),
+                            )),
+                        )
+                        .push(dark_button(h2("Cast Members")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::CastMembers)),
+                        )));
+                    (h2("Select Attribute"), Scrollable::new(attribute_list))
+                }
             };
 
             let body = Container::new(
