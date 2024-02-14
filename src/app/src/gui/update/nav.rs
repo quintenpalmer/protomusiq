@@ -39,7 +39,7 @@ pub fn handle_nav(
         }
         NavMessage::SearchPage(query, domain, perform_search) => {
             let computed_results = match domain {
-                message::SearchDomain::Music => {
+                model::SearchDomain::Music => {
                     state::SearchDomainResults::Music(match perform_search {
                         true => {
                             let search_results = app.library.search(query.clone());
@@ -54,7 +54,7 @@ pub fn handle_nav(
                         false => None,
                     })
                 }
-                message::SearchDomain::Movies => {
+                model::SearchDomain::Movies => {
                     state::SearchDomainResults::Movies(match perform_search {
                         true => {
                             let search_results = app.video_library.search_movies(query.clone());

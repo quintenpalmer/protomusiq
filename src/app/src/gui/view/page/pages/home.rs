@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{self, user_nav_message, Message, NavMessage};
+use crate::gui::message::{user_nav_message, Message, NavMessage};
 use crate::state;
 
 use super::super::super::common;
@@ -90,7 +90,7 @@ pub fn home_page<'a>(
             )))
             .on_press(user_nav_message(NavMessage::SearchPage(
                 "".to_string(),
-                message::SearchDomain::Music,
+                model::SearchDomain::Music,
                 false,
             )));
             let settings = dark_button(Container::new(bottom_label(

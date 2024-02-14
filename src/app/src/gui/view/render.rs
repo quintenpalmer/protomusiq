@@ -231,7 +231,7 @@ pub fn render_header<'a>(
                         dark_button(bright_paragraph("Search")).on_press(user_nav_message(
                             message::NavMessage::SearchPage(
                                 "".to_string(),
-                                message::SearchDomain::Music,
+                                model::SearchDomain::Music,
                                 false,
                             ),
                         )),

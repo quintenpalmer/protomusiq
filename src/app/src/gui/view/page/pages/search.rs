@@ -22,15 +22,15 @@ pub fn search_page<'a>(
             domain_results,
         } => {
             let domain = match domain_results {
-                state::SearchDomainResults::Music(ref _res) => message::SearchDomain::Music,
-                state::SearchDomainResults::Movies(ref _res) => message::SearchDomain::Movies,
+                state::SearchDomainResults::Music(ref _res) => model::SearchDomain::Music,
+                state::SearchDomainResults::Movies(ref _res) => model::SearchDomain::Movies,
             };
 
             let mut breadcrumbs = vec![(
                 "Search".to_string(),
                 user_nav_message(NavMessage::SearchPage(
                     "".to_string(),
-                    message::SearchDomain::Music,
+                    model::SearchDomain::Music,
                     false,
                 )),
             )];
@@ -43,7 +43,7 @@ pub fn search_page<'a>(
                                 format!("\"{}\"", query.clone()),
                                 user_nav_message(NavMessage::SearchPage(
                                     query.clone(),
-                                    message::SearchDomain::Music,
+                                    model::SearchDomain::Music,
                                     true,
                                 )),
                             ));
@@ -58,7 +58,7 @@ pub fn search_page<'a>(
                                 format!("\"{}\"", query.clone()),
                                 user_nav_message(NavMessage::SearchPage(
                                     query.clone(),
-                                    message::SearchDomain::Movies,
+                                    model::SearchDomain::Movies,
                                     true,
                                 )),
                             ));
@@ -308,13 +308,13 @@ pub fn search_page<'a>(
                             .push(domain_button(
                                 "Music",
                                 query.clone(),
-                                message::SearchDomain::Music,
+                                model::SearchDomain::Music,
                                 domain.clone(),
                             ))
                             .push(domain_button(
                                 "Movies",
                                 query.clone(),
-                                message::SearchDomain::Movies,
+                                model::SearchDomain::Movies,
                                 domain.clone(),
                             )),
                     )
@@ -342,8 +342,8 @@ pub fn search_page<'a>(
 fn domain_button<'a>(
     display_text: &'static str,
     query: String,
-    domain: message::SearchDomain,
-    current_domain: message::SearchDomain,
+    domain: model::SearchDomain,
+    current_domain: model::SearchDomain,
 ) -> Button<'a, Message> {
     let text_element = if domain == current_domain {
         h2(display_text)

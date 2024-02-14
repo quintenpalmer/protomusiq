@@ -90,6 +90,12 @@ pub enum Direction {
     Down,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+pub enum SearchDomain {
+    Music,
+    Movies,
+}
+
 #[derive(Debug)]
 pub struct PrehistoryRecord {
     pub source: String,
