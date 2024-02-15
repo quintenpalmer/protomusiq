@@ -51,7 +51,7 @@ impl Application for state::App {
             }
         }
 
-        iced::theme::Application::from(dark_background as fn(&iced::theme::Theme) -> _)
+        iced::theme::Application::custom(dark_background)
     }
 
     fn scale_factor(&self) -> f64 {
