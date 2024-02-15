@@ -1,4 +1,4 @@
-use iced::widget::{Column, Container, ProgressBar, Scrollable, Space};
+use iced::widget::{Button, Column, Container, ProgressBar, Scrollable, Space};
 use iced::Length;
 
 use crate::model;
@@ -81,61 +81,50 @@ pub fn artist_featured_track_view_state<'a>(
 
             let mut stripe_marker = false;
 
-            let sort_bar =
-                line_row()
-                    .push(paragraph("Sort By: "))
-                    .push(
-                        dark_button(bright_paragraph("Album")).on_press(user_nav_message(
-                            NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_id.clone(),
-                                model::ArtistFeaturedTrackSortKey::ByParent,
-                                model::SortOrder::Regular,
-                            ),
-                        )),
-                    )
-                    .push(
-                        dark_button(bright_paragraph("Name")).on_press(user_nav_message(
-                            NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_id.clone(),
-                                model::ArtistFeaturedTrackSortKey::ByName,
-                                model::SortOrder::Regular,
-                            ),
-                        )),
-                    )
-                    .push(
-                        dark_button(bright_paragraph("Play Count")).on_press(user_nav_message(
-                            NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_id.clone(),
-                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                                model::SortOrder::Reversed,
-                            ),
-                        )),
-                    )
-                    .push(
-                        dark_button(bright_paragraph("Length")).on_press(user_nav_message(
-                            NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_id.clone(),
-                                model::ArtistFeaturedTrackSortKey::ByDuration,
-                                model::SortOrder::Reversed,
-                            ),
-                        )),
-                    )
-                    .push(dark_button(bright_paragraph("Played Duration")).on_press(
-                        user_nav_message(NavMessage::ArtistFeaturedTrackView(
-                            artist.artist_id.clone(),
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration,
-                            model::SortOrder::Reversed,
-                        )),
-                    ))
-                    .push(
-                        dark_button(bright_paragraph("Random")).on_press(user_nav_message(
-                            NavMessage::ArtistFeaturedTrackView(
-                                artist.artist_id.clone(),
-                                model::ArtistFeaturedTrackSortKey::Random,
-                                model::SortOrder::Regular,
-                            ),
-                        )),
-                    );
+            let sort_bar = line_row()
+                .push(paragraph("Sort By: "))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Album",
+                    model::ArtistFeaturedTrackSortKey::ByParent,
+                    model::SortOrder::Regular,
+                    &sort_key,
+                ))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Name",
+                    model::ArtistFeaturedTrackSortKey::ByName,
+                    model::SortOrder::Regular,
+                    &sort_key,
+                ))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Play Count",
+                    model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                    model::SortOrder::Reversed,
+                    &sort_key,
+                ))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Length",
+                    model::ArtistFeaturedTrackSortKey::ByDuration,
+                    model::SortOrder::Reversed,
+                    &sort_key,
+                ))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Played Duration",
+                    model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration,
+                    model::SortOrder::Reversed,
+                    &sort_key,
+                ))
+                .push(sort_button(
+                    &artist.artist_id,
+                    "Random",
+                    model::ArtistFeaturedTrackSortKey::Random,
+                    model::SortOrder::Regular,
+                    &sort_key,
+                ));
 
             let sort_order_bar = line_row()
                 .push(paragraph("Order: "))
@@ -245,4 +234,23 @@ pub fn artist_featured_track_view_state<'a>(
             (breadcrumbs, body)
         }
     }
+}
+
+fn sort_button<'a>(
+    artist_id: &musiqlibrary::ID,
+    display_text: &'static str,
+    sort_key: model::ArtistFeaturedTrackSortKey,
+    order: model::SortOrder,
+    current_sort: &'a model::ArtistFeaturedTrackSortKey,
+) -> Button<'a, Message> {
+    let text_element = if &sort_key == current_sort {
+        bright_paragraph(display_text)
+    } else {
+        dark_paragraph(display_text)
+    };
+    dark_button(text_element).on_press(user_nav_message(NavMessage::ArtistFeaturedTrackView(
+        artist_id.clone(),
+        sort_key,
+        order,
+    )))
 }

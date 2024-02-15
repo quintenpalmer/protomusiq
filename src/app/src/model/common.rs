@@ -42,7 +42,7 @@ pub enum ArtistTrackSortKey {
     Random,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ArtistFeaturedTrackSortKey {
     ByName,
     ByParent,
