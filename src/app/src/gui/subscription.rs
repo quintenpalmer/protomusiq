@@ -39,6 +39,26 @@ pub fn keybinding_subscription_fn(_app: &state::App) -> iced::Subscription<messa
                     key_code: iced::keyboard::KeyCode::Backspace,
                     ..
                 } => Some(message::Message::HistoryNav),
+                iced::keyboard::Event::KeyPressed {
+                    key_code: iced::keyboard::KeyCode::H,
+                    modifiers,
+                } => {
+                    if modifiers.shift() {
+                        Some(message::Message::NavRelative(message::NavRelMsg::First))
+                    } else {
+                        Some(message::Message::NavRelative(message::NavRelMsg::Backwards))
+                    }
+                }
+                iced::keyboard::Event::KeyPressed {
+                    key_code: iced::keyboard::KeyCode::L,
+                    modifiers,
+                } => {
+                    if modifiers.shift() {
+                        Some(message::Message::NavRelative(message::NavRelMsg::Last))
+                    } else {
+                        Some(message::Message::NavRelative(message::NavRelMsg::Forwards))
+                    }
+                }
                 _ => None,
             },
             _ => None,
