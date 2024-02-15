@@ -31,6 +31,33 @@ pub fn handle_nav_relative(
                 sort_order.clone(),
             )))
         }
+        Page::TrackList(state::TrackListState {
+            ref sort_key,
+            ref sort_order,
+            ref page,
+        }) => {
+            let mut total_tracks = 0;
+            for (_, artist) in app.library.get_artist_map().iter() {
+                for (_, album) in artist.albums.iter() {
+                    for (_, disc) in album.discs.iter() {
+                        total_tracks = total_tracks + disc.tracks.len();
+                    }
+                }
+            }
+
+            let new_page = get_rel_page(
+                page.clone(),
+                &nav_message,
+                &app.library.grid_info,
+                total_tracks,
+            );
+
+            Some(message::Message::Nav(message::NavMessage::TrackList(
+                new_page,
+                sort_key.clone(),
+                sort_order.clone(),
+            )))
+        }
         _ => None,
     };
 
