@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
@@ -93,34 +93,6 @@ pub fn artist_list<'a>(
                 }
 
                 let scrollable = Scrollable::new(columns.width(Length::Fill));
-                let first_page = 0;
-                let back_page = {
-                    if page == 0 {
-                        0
-                    } else {
-                        page - 1
-                    }
-                };
-                let forward_page = {
-                    if ((page + 1) * library.grid_info.get_page_size_usize())
-                        >= library.get_artist_map().keys().len()
-                    {
-                        page
-                    } else {
-                        page + 1
-                    }
-                };
-                let last_page = {
-                    let maybe_last_page = library.get_artist_map().keys().len()
-                        / library.grid_info.get_page_size_usize();
-                    if maybe_last_page * library.grid_info.get_page_size_usize()
-                        >= library.get_artist_map().keys().len()
-                    {
-                        maybe_last_page - 1
-                    } else {
-                        maybe_last_page
-                    }
-                };
                 Container::new(
                     Column::new()
                         .spacing(10)
@@ -177,35 +149,25 @@ pub fn artist_list<'a>(
                             line_row()
                                 .push(
                                     line_row()
-                                        .push(dark_button(bright_paragraph("<<")).on_press(
-                                            user_nav_message(NavMessage::ArtistList(
-                                                first_page,
-                                                sort_key.clone(),
-                                                sort_order.clone(),
-                                            )),
-                                        ))
-                                        .push(dark_button(bright_paragraph("<")).on_press(
-                                            user_nav_message(NavMessage::ArtistList(
-                                                back_page,
-                                                sort_key.clone(),
-                                                sort_order.clone(),
-                                            )),
-                                        ))
+                                        .push(
+                                            dark_button(bright_paragraph("<<"))
+                                                .on_press(Message::NavRelative(NavRelMsg::First)),
+                                        )
+                                        .push(
+                                            dark_button(bright_paragraph("<")).on_press(
+                                                Message::NavRelative(NavRelMsg::Backwards),
+                                            ),
+                                        )
                                         .push(bright_paragraph(page.to_string()))
-                                        .push(dark_button(bright_paragraph(">")).on_press(
-                                            user_nav_message(NavMessage::ArtistList(
-                                                forward_page,
-                                                sort_key.clone(),
-                                                sort_order.clone(),
-                                            )),
-                                        ))
-                                        .push(dark_button(bright_paragraph(">>")).on_press(
-                                            user_nav_message(NavMessage::ArtistList(
-                                                last_page,
-                                                sort_key.clone(),
-                                                sort_order.clone(),
-                                            )),
-                                        )),
+                                        .push(
+                                            dark_button(bright_paragraph(">")).on_press(
+                                                Message::NavRelative(NavRelMsg::Forwards),
+                                            ),
+                                        )
+                                        .push(
+                                            dark_button(bright_paragraph(">>"))
+                                                .on_press(Message::NavRelative(NavRelMsg::Last)),
+                                        ),
                                 )
                                 .push(Space::with_width(Length::Fill))
                                 .push(
