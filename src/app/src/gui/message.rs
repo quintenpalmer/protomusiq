@@ -21,6 +21,7 @@ pub fn user_nav_message(nav: NavMessage) -> Message {
 pub enum Message {
     Action(Action),
     Nav(NavMessage),
+    NavRelative(NavRelMsg),
     HistoryNav,
     PlaybackRequest(shared::PlaybackRequest),
     ErrorResponse(Result<(), String>),
@@ -103,6 +104,14 @@ pub enum NavMessage {
     MovieAttributes(Option<model::MovieAttribute>),
     MovieQuery(Option<model::MovieQueryParams>),
     MovieView(video::MovieMetadata, Option<model::MovieSize>),
+}
+
+#[derive(Debug, Clone)]
+pub enum NavRelMsg {
+    First,
+    Backwards,
+    Forwards,
+    Last,
 }
 
 #[derive(Debug, Clone)]

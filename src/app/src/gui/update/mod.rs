@@ -3,6 +3,7 @@ mod common;
 mod loaded;
 mod loading;
 mod nav;
+mod navrel;
 mod playback;
 mod spawner;
 mod volume;

@@ -7,6 +7,7 @@ use super::super::state::AppState;
 
 use super::action;
 use super::nav;
+use super::navrel;
 use super::playback;
 use super::spawner;
 
@@ -34,6 +35,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             app.page_current_history = nav_message.clone();
             nav::handle_nav(app, nav_message)
         }
+        Message::NavRelative(nav_message) => navrel::handle_nav_relative(app, nav_message),
         Message::HistoryNav => match app.page_back_history.pop() {
             Some(history_message) => {
                 let old_current = app.page_current_history.clone();
