@@ -119,14 +119,14 @@ pub fn artist_album_list<'a>(
                     .push(dark_button(h2("Albums")).on_press(user_nav_message(
                         NavMessage::ArtistAlbumsView(artist_id.clone()),
                     )))
-                    .push(dark_button(h2("Tracks")).on_press(user_nav_message(
+                    .push(dark_button(dark(h2("Tracks"))).on_press(user_nav_message(
                         NavMessage::ArtistTrackView(
                             artist_id.clone(),
                             model::ArtistTrackSortKey::ByTotalPlayCount,
                             model::SortOrder::Reversed,
                         ),
                     )))
-                    .push(dark_button(h2("Featured")).on_press(user_nav_message(
+                    .push(dark_button(dark(h2("Featured"))).on_press(user_nav_message(
                         NavMessage::ArtistFeaturedTrackView(
                             artist_id.clone(),
                             model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,

@@ -42,10 +42,10 @@ pub fn artist_featured_track_view_state<'a>(
             ];
 
             let artist_view_button_row = line_row()
-                .push(dark_button(h2("Albums")).on_press(user_nav_message(
+                .push(dark_button(dark(h2("Albums"))).on_press(user_nav_message(
                     NavMessage::ArtistAlbumsView(artist_id.clone()),
                 )))
-                .push(dark_button(h2("Tracks")).on_press(user_nav_message(
+                .push(dark_button(dark(h2("Tracks"))).on_press(user_nav_message(
                     NavMessage::ArtistTrackView(
                         artist_id.clone(),
                         model::ArtistTrackSortKey::ByTotalPlayCount,
