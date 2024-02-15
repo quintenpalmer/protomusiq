@@ -44,9 +44,17 @@ pub fn keybinding_subscription_fn(_app: &state::App) -> iced::Subscription<messa
                     modifiers,
                 } => {
                     if modifiers.shift() {
-                        Some(message::Message::NavRelative(message::NavRelMsg::First))
+                        Some(message::Message::NavRelative(
+                            message::NavRelMsg::PagifiedMovement(
+                                message::PagifiedMovementMsg::First,
+                            ),
+                        ))
                     } else {
-                        Some(message::Message::NavRelative(message::NavRelMsg::Backwards))
+                        Some(message::Message::NavRelative(
+                            message::NavRelMsg::PagifiedMovement(
+                                message::PagifiedMovementMsg::Backwards,
+                            ),
+                        ))
                     }
                 }
                 iced::keyboard::Event::KeyPressed {
@@ -54,9 +62,17 @@ pub fn keybinding_subscription_fn(_app: &state::App) -> iced::Subscription<messa
                     modifiers,
                 } => {
                     if modifiers.shift() {
-                        Some(message::Message::NavRelative(message::NavRelMsg::Last))
+                        Some(message::Message::NavRelative(
+                            message::NavRelMsg::PagifiedMovement(
+                                message::PagifiedMovementMsg::Last,
+                            ),
+                        ))
                     } else {
-                        Some(message::Message::NavRelative(message::NavRelMsg::Forwards))
+                        Some(message::Message::NavRelative(
+                            message::NavRelMsg::PagifiedMovement(
+                                message::PagifiedMovementMsg::Forwards,
+                            ),
+                        ))
                     }
                 }
                 _ => None,

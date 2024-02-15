@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg};
+use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
 use crate::state;
 
 use super::super::super::common;
@@ -139,21 +139,25 @@ pub fn movie_list<'a>(
                 .push(
                     line_row()
                         .push(
-                            dark_button(bright_paragraph("<<"))
-                                .on_press(Message::NavRelative(NavRelMsg::First)),
+                            dark_button(bright_paragraph("<<")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::First),
+                            )),
                         )
                         .push(
-                            dark_button(bright_paragraph("<"))
-                                .on_press(Message::NavRelative(NavRelMsg::Backwards)),
+                            dark_button(bright_paragraph("<")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Backwards),
+                            )),
                         )
                         .push(bright_paragraph(page.to_string()))
                         .push(
-                            dark_button(bright_paragraph(">"))
-                                .on_press(Message::NavRelative(NavRelMsg::Forwards)),
+                            dark_button(bright_paragraph(">")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Forwards),
+                            )),
                         )
                         .push(
-                            dark_button(bright_paragraph(">>"))
-                                .on_press(Message::NavRelative(NavRelMsg::Last)),
+                            dark_button(bright_paragraph(">>")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Last),
+                            )),
                         ),
                 )
                 .push(Space::with_width(Length::Fill))

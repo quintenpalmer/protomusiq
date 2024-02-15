@@ -108,6 +108,11 @@ pub enum NavMessage {
 
 #[derive(Debug, Clone)]
 pub enum NavRelMsg {
+    PagifiedMovement(PagifiedMovementMsg),
+}
+
+#[derive(Debug, Clone)]
+pub enum PagifiedMovementMsg {
     First,
     Backwards,
     Forwards,

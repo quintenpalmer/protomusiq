@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg};
+use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
@@ -149,25 +149,27 @@ pub fn artist_list<'a>(
                             line_row()
                                 .push(
                                     line_row()
-                                        .push(
-                                            dark_button(bright_paragraph("<<"))
-                                                .on_press(Message::NavRelative(NavRelMsg::First)),
-                                        )
-                                        .push(
-                                            dark_button(bright_paragraph("<")).on_press(
-                                                Message::NavRelative(NavRelMsg::Backwards),
-                                            ),
-                                        )
+                                        .push(dark_button(bright_paragraph("<<")).on_press(
+                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                                PagifiedMovementMsg::First,
+                                            )),
+                                        ))
+                                        .push(dark_button(bright_paragraph("<")).on_press(
+                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                                PagifiedMovementMsg::Backwards,
+                                            )),
+                                        ))
                                         .push(bright_paragraph(page.to_string()))
-                                        .push(
-                                            dark_button(bright_paragraph(">")).on_press(
-                                                Message::NavRelative(NavRelMsg::Forwards),
-                                            ),
-                                        )
-                                        .push(
-                                            dark_button(bright_paragraph(">>"))
-                                                .on_press(Message::NavRelative(NavRelMsg::Last)),
-                                        ),
+                                        .push(dark_button(bright_paragraph(">")).on_press(
+                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                                PagifiedMovementMsg::Forwards,
+                                            )),
+                                        ))
+                                        .push(dark_button(bright_paragraph(">>")).on_press(
+                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                                PagifiedMovementMsg::Last,
+                                            )),
+                                        )),
                                 )
                                 .push(Space::with_width(Length::Fill))
                                 .push(
