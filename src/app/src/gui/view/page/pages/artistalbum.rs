@@ -202,6 +202,7 @@ pub fn artist_album_view_state<'a>(
                                                         Checkbox::new(
                                                             "",
                                                             should_shuffle,
+                                                        ).on_toggle(
                                                             |_| Message::Action(message::Action::ToggleShuffleOnAdd),
                                                         )
                                                     )

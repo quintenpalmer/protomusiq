@@ -107,7 +107,7 @@ pub fn playlist_view<'a>(
                                 )
                                 .push(
                                     Row::new()
-                                        .push(Checkbox::new("", should_shuffle, |_| {
+                                        .push(Checkbox::new("", should_shuffle).on_toggle(|_| {
                                             Message::Action(message::Action::ToggleShuffleOnAdd)
                                         }))
                                         .push(bright_paragraph("Shuffle (on add)")),
