@@ -105,7 +105,7 @@ pub fn track_list<'a>(
 
                 let grid: Element<Message> = columns.into();
 
-                let scrollable = Scrollable::new(grid);
+                let scrollable = Scrollable::new(grid).height(Length::Fill);
 
                 let mut total_tracks = 0;
                 for (_, artist) in library.get_artist_map().iter() {

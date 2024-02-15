@@ -106,7 +106,7 @@ pub fn album_list<'a>(
                     }
                 }
 
-                let scrollable = Scrollable::new(columns.width(Length::Fill));
+                let scrollable = Scrollable::new(columns.width(Length::Fill)).height(Length::Fill);
                 Container::new(
                     Column::new()
                         .spacing(10)
