@@ -13,8 +13,7 @@ impl button::StyleSheet for DarkTextLikeButton {
     fn active(&self, _theme: &iced::Theme) -> button::Appearance {
         button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
-            border_radius: 0.0.into(),
-            border_width: 0.0,
+            border: iced::Border::with_radius(0.0),
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
             ..button::Appearance::default()
@@ -30,8 +29,11 @@ impl button::StyleSheet for DarkButton {
     fn active(&self, _theme: &iced::Theme) -> button::Appearance {
         button::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x30, 0x30, 0x30))),
-            border_radius: [1.0, 1.0, 1.0, 1.0].into(),
-            border_width: 1.0,
+            border: iced::Border {
+                width: 1.0,
+                radius: 1.0.into(),
+                ..iced::Border::default()
+            },
             //shadow_offset: Vector::new(1.0, 1.0),
             text_color: Color::from_rgb8(0xd8, 0xd8, 0xd8),
             ..button::Appearance::default()
@@ -225,9 +227,11 @@ impl container::StyleSheet for NotificationGreyBackground {
         container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x13, 0x13, 0x13))),
             text_color: Some(Color::from_rgb8(0x30, 0x30, 0x30)),
-            border_color: Color::from_rgb8(0x30, 0x30, 0x30),
-            border_radius: 1.0.into(),
-            border_width: 1.0,
+            border: iced::Border {
+                width: 1.0,
+                radius: 1.0.into(),
+                color: iced::Color::from_rgb8(0x30, 0x30, 0x30),
+            },
             ..container::Appearance::default()
         }
     }
@@ -242,9 +246,11 @@ impl container::StyleSheet for NotificationGreenBackground {
         container::Appearance {
             background: Some(Background::Color(Color::from_rgb8(0x13, 0x53, 0x13))),
             text_color: Some(Color::from_rgb8(0x30, 0xa0, 0x30)),
-            border_color: Color::from_rgb8(0x30, 0xa0, 0x30),
-            border_radius: 1.0.into(),
-            border_width: 1.0,
+            border: iced::Border {
+                width: 1.0,
+                radius: 1.0.into(),
+                color: Color::from_rgb8(0x30, 0xa0, 0x30),
+            },
             ..container::Appearance::default()
         }
     }
