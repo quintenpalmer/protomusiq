@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg};
 use crate::state;
 
 use super::super::super::common;
@@ -100,35 +100,6 @@ pub fn movie_list<'a>(
                 }
             }
 
-            let first_page = 0;
-            let back_page = {
-                if page == 0 {
-                    0
-                } else {
-                    page - 1
-                }
-            };
-            let forward_page = {
-                if ((page + 1) * grid_info.get_page_size_usize())
-                    >= movie_library.movies.movies.len()
-                {
-                    page
-                } else {
-                    page + 1
-                }
-            };
-            let last_page = {
-                let maybe_last_page =
-                    movie_library.movies.movies.len() / grid_info.get_page_size_usize();
-                if maybe_last_page * grid_info.get_page_size_usize()
-                    >= movie_library.movies.movies.len()
-                {
-                    maybe_last_page - 1
-                } else {
-                    maybe_last_page
-                }
-            };
-
             let page_buttons = line_row().push(
                 line_row()
                     .push(paragraph("Sort By: "))
@@ -168,41 +139,21 @@ pub fn movie_list<'a>(
                 .push(
                     line_row()
                         .push(
-                            dark_button(bright_paragraph("<<")).on_press(user_nav_message(
-                                NavMessage::MovieList(
-                                    first_page,
-                                    sort_key.clone(),
-                                    sort_order.clone(),
-                                ),
-                            )),
+                            dark_button(bright_paragraph("<<"))
+                                .on_press(Message::NavRelative(NavRelMsg::First)),
                         )
                         .push(
-                            dark_button(bright_paragraph("<")).on_press(user_nav_message(
-                                NavMessage::MovieList(
-                                    back_page,
-                                    sort_key.clone(),
-                                    sort_order.clone(),
-                                ),
-                            )),
+                            dark_button(bright_paragraph("<"))
+                                .on_press(Message::NavRelative(NavRelMsg::Backwards)),
                         )
                         .push(bright_paragraph(page.to_string()))
                         .push(
-                            dark_button(bright_paragraph(">")).on_press(user_nav_message(
-                                NavMessage::MovieList(
-                                    forward_page,
-                                    sort_key.clone(),
-                                    sort_order.clone(),
-                                ),
-                            )),
+                            dark_button(bright_paragraph(">"))
+                                .on_press(Message::NavRelative(NavRelMsg::Forwards)),
                         )
                         .push(
-                            dark_button(bright_paragraph(">>")).on_press(user_nav_message(
-                                NavMessage::MovieList(
-                                    last_page,
-                                    sort_key.clone(),
-                                    sort_order.clone(),
-                                ),
-                            )),
+                            dark_button(bright_paragraph(">>"))
+                                .on_press(Message::NavRelative(NavRelMsg::Last)),
                         ),
                 )
                 .push(Space::with_width(Length::Fill))

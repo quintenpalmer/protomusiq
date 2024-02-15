@@ -76,6 +76,26 @@ pub fn handle_nav_relative(
                 sort_order.clone(),
             )))
         }
+        Page::MovieList(state::MovieListState {
+            ref page,
+            ref sort_key,
+            ref sort_order,
+        }) => {
+            let entity_length = app.video_library.movies.movies.len();
+
+            let new_page = get_rel_page(
+                page.clone(),
+                &nav_message,
+                app.library.grid_info.get_page_size_usize(),
+                entity_length,
+            );
+
+            Some(message::Message::Nav(message::NavMessage::MovieList(
+                new_page,
+                sort_key.clone(),
+                sort_order.clone(),
+            )))
+        }
         _ => None,
     };
 
