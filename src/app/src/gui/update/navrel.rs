@@ -1,7 +1,5 @@
 use iced::Command;
 
-use crate::model;
-
 use crate::gui::message::{self};
 use crate::gui::state::{self, AppState, Page};
 
@@ -22,7 +20,7 @@ pub fn handle_nav_relative(
             let new_page = get_rel_page(
                 page.clone(),
                 &nav_message,
-                &app.library.grid_info,
+                app.library.grid_info.get_page_size_usize(),
                 entity_length,
             );
             Some(message::Message::Nav(message::NavMessage::AlbumList(
@@ -48,7 +46,7 @@ pub fn handle_nav_relative(
             let new_page = get_rel_page(
                 page.clone(),
                 &nav_message,
-                &app.library.grid_info,
+                app.library.grid_info.get_track_page_size_usize(),
                 total_tracks,
             );
 
@@ -70,7 +68,7 @@ pub fn handle_nav_relative(
 fn get_rel_page(
     page: usize,
     nav_message: &message::NavRelMsg,
-    grid_info: &model::GridInfo,
+    page_size: usize,
     entity_length: usize,
 ) -> usize {
     match nav_message {
@@ -83,15 +81,15 @@ fn get_rel_page(
             }
         }
         message::NavRelMsg::Forwards => {
-            if ((page + 1) * grid_info.get_page_size_usize()) >= entity_length {
+            if ((page + 1) * page_size) >= entity_length {
                 page
             } else {
                 page + 1
             }
         }
         message::NavRelMsg::Last => {
-            let maybe_last_page = entity_length / grid_info.get_page_size_usize();
-            if maybe_last_page * grid_info.get_page_size_usize() >= entity_length {
+            let maybe_last_page = entity_length / page_size;
+            if maybe_last_page * page_size >= entity_length {
                 maybe_last_page - 1
             } else {
                 maybe_last_page
