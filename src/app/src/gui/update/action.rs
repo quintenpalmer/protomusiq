@@ -150,7 +150,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
                 .send_message(),
                 Message::ErrorResponse,
             ),
-            iced::window::close(),
+            iced::window::close(iced::window::Id::MAIN),
         ]),
     }
 }
