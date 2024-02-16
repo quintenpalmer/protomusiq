@@ -30,7 +30,6 @@ pub fn keybinding_subscription_fn(
         keyboard::Key::Character("p") => Some(message::Message::Action(
             message::Action::TogglePlayQueueVisible,
         )),
-        keyboard::Key::Named(key::Named::Backspace) => Some(message::Message::HistoryNav),
         keyboard::Key::Character("h") => {
             if modifiers.shift() {
                 Some(message::Message::NavRelative(
@@ -53,6 +52,27 @@ pub fn keybinding_subscription_fn(
                 ))
             }
         }
+        keyboard::Key::Named(key::Named::Backspace) => Some(message::Message::HistoryNav),
+        keyboard::Key::Named(key::Named::BrowserBack) => Some(message::Message::HistoryNav),
+
+        keyboard::Key::Named(key::Named::ArrowUp) => Some(message::Message::NavRelative(
+            message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::First),
+        )),
+        keyboard::Key::Named(key::Named::ArrowLeft) => {
+            if modifiers.alt() {
+                Some(message::Message::HistoryNav)
+            } else {
+                Some(message::Message::NavRelative(
+                    message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Backwards),
+                ))
+            }
+        }
+        keyboard::Key::Named(key::Named::ArrowRight) => Some(message::Message::NavRelative(
+            message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Forwards),
+        )),
+        keyboard::Key::Named(key::Named::ArrowDown) => Some(message::Message::NavRelative(
+            message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Last),
+        )),
         _ => None,
     }
 }
