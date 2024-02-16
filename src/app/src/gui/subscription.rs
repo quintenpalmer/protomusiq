@@ -1,6 +1,7 @@
 use iced;
 use iced::keyboard;
 use iced::keyboard::key;
+use iced::mouse;
 
 use super::message;
 use super::state;
@@ -19,6 +20,13 @@ pub fn backend_callback(app: &state::App) -> iced::Subscription<message::Message
             println!("CALLBACK:\tbackend subscription not started yet, app is not loaded");
             iced::Subscription::none()
         }
+    }
+}
+
+pub fn on_mouse_event(mouse_event: mouse::Event) -> Option<message::Message> {
+    match mouse_event {
+        mouse::Event::ButtonPressed(mouse::Button::Back) => Some(message::Message::HistoryNav),
+        _ => None,
     }
 }
 
