@@ -47,6 +47,9 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Named(key::Named::BrowserBack), Mods::None) => {
             Some(message::Message::HistoryNav)
         }
+        (keyboard::Key::Named(key::Named::GoBack), Mods::None) => {
+            Some(message::Message::HistoryNav)
+        }
         (keyboard::Key::Named(key::Named::ArrowLeft), Mods::Alt) => {
             Some(message::Message::HistoryNav)
         }
