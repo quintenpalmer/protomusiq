@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io;
 
 use musiqlibrary;
 
@@ -20,7 +21,7 @@ pub fn update_manual_track_mapping(
     let existing_manual_mapping_vec: Vec<(
         gmodel::GPlayMusicKey,
         (musiqlibrary::FullTrackMetadata, u32),
-    )> = serde_json::from_reader(manual_mapping_file_reader).unwrap();
+    )> = serde_json::from_reader(io::BufReader::new(manual_mapping_file_reader)).unwrap();
 
     let existing_manual_mapping = existing_manual_mapping_vec.into_iter().collect();
 

@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io;
 
 use musiqlibrary;
 
@@ -17,7 +18,7 @@ pub fn update_album_mapping(
         fs::File::open("spotify/intermediate/manual_album_mapping.json").unwrap();
 
     let existing_manual_mapping_vec: Vec<((String, String), musiqlibrary::ArtistAlbumInfo)> =
-        serde_json::from_reader(manual_mapping_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(manual_mapping_file_reader)).unwrap();
 
     let existing_album_manual_mapping = existing_manual_mapping_vec.into_iter().collect();
 
@@ -25,7 +26,7 @@ pub fn update_album_mapping(
     let ignore_file_reader = fs::File::open("spotify/intermediate/ignore_albums.json").unwrap();
 
     let existing_ignore_vec: Vec<(String, String)> =
-        serde_json::from_reader(ignore_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(ignore_file_reader)).unwrap();
 
     let existing_ignore_albums = existing_ignore_vec.into_iter().collect();
 

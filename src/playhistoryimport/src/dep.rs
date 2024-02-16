@@ -21,7 +21,7 @@ fn _translate_manual_mapping() {
         fs::File::open("jellyfin/intermediate/manual_mapping.json").unwrap();
 
     let existing_manual_mapping: BTreeMap<String, (musiqlibrary::TrackUniqueIdentifier, u32)> =
-        serde_json::from_reader(manual_mapping_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(manual_mapping_file_reader)).unwrap();
 
     let resulting_manual_mapping: BTreeMap<String, (musiqlibrary::FullTrackMetadata, u32)> =
         existing_manual_mapping

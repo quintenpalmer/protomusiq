@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 use std::path;
 
 use super::super::{smodel, util};
@@ -10,7 +11,7 @@ pub fn match_spotify_music_data_for_musiqapp() -> smodel::DebugInfo {
     let all_spotify_music_tracks_file = fs::File::open("spotify/input/play_history.json").unwrap();
 
     let clean_line_items: Vec<smodel::CleanedLineItem> =
-        serde_json::from_reader(all_spotify_music_tracks_file).unwrap();
+        serde_json::from_reader(io::BufReader::new(all_spotify_music_tracks_file)).unwrap();
 
     let play_info_line_items: BTreeMap<smodel::SpotifyKey, Vec<smodel::CleanedLineItem>> =
         clean_line_items

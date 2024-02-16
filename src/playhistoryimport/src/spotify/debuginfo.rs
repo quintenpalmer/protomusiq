@@ -1,4 +1,5 @@
 use std::fs;
+use std::io;
 
 use serde_json;
 
@@ -13,8 +14,11 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
         );
 
         let sort_file = fs::File::create("spotify/output/debug/10_sorted.json").unwrap();
-        serde_json::to_writer_pretty(sort_file, &resulting_information.play_info_lines_count)
-            .unwrap();
+        serde_json::to_writer_pretty(
+            io::BufWriter::new(sort_file),
+            &resulting_information.play_info_lines_count,
+        )
+        .unwrap();
     }
 
     // Not Found
@@ -38,7 +42,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
         not_found_vec.reverse();
 
         let not_found_file = fs::File::create("spotify/output/debug/0_not_found.json").unwrap();
-        serde_json::to_writer_pretty(not_found_file, &not_found_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(not_found_file), &not_found_vec).unwrap();
     }
 
     // Not Found Albums
@@ -57,7 +61,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
         not_found_vec.reverse();
 
         let not_found_file = fs::File::create("spotify/output/debug/1_not_found.json").unwrap();
-        serde_json::to_writer_pretty(not_found_file, &not_found_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(not_found_file), &not_found_vec).unwrap();
     }
 
     // Keyed Library
@@ -75,7 +79,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
                 .collect();
 
         let sort_file = fs::File::create("spotify/output/debug/2_keyed_library.json").unwrap();
-        serde_json::to_writer_pretty(sort_file, &keyed_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(sort_file), &keyed_vec).unwrap();
     }
 
     // Manual Track Mapping
@@ -93,7 +97,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
 
         let sort_file =
             fs::File::create("spotify/output/debug/3_manual_track_mapping.json").unwrap();
-        serde_json::to_writer_pretty(sort_file, &keyed_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(sort_file), &keyed_vec).unwrap();
     }
 
     // Manual Album Mapping
@@ -111,7 +115,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
 
         let sort_file =
             fs::File::create("spotify/output/debug/4_manual_album_mapping.json").unwrap();
-        serde_json::to_writer_pretty(sort_file, &keyed_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(sort_file), &keyed_vec).unwrap();
     }
 
     // Manual Album Ingore
@@ -129,7 +133,7 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
 
         let sort_file =
             fs::File::create("spotify/output/debug/5_manual_album_ignore.json").unwrap();
-        serde_json::to_writer_pretty(sort_file, &keyed_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(sort_file), &keyed_vec).unwrap();
     }
 
     // Matched
@@ -160,6 +164,6 @@ pub fn write_debug_info_to_disc(resulting_information: &smodel::DebugInfo) {
         matched_vec.reverse();
 
         let matched_json_file = fs::File::create("spotify/output/debug/7_matched.json").unwrap();
-        serde_json::to_writer_pretty(matched_json_file, &matched_vec).unwrap();
+        serde_json::to_writer_pretty(io::BufWriter::new(matched_json_file), &matched_vec).unwrap();
     }
 }

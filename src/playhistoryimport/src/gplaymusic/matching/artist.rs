@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 
 use musiqlibrary;
 
@@ -13,7 +14,7 @@ pub fn update_artist_mapping(
         fs::File::open("gplaymusic/intermediate/manual_artist_mapping.json").unwrap();
 
     let existing_artist_manual_mapping: BTreeMap<String, musiqlibrary::ArtistInfo> =
-        serde_json::from_reader(album_manual_mapping_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(album_manual_mapping_file_reader)).unwrap();
 
     let artist_album_track_vecs = util::compute_track_artist_album_track_map(&not_initially_found);
 

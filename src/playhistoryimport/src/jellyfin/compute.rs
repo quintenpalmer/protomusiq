@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 use std::path;
 
 use serde_json;
@@ -15,7 +16,7 @@ pub fn compute_jellyfin_play_history_for_musiqapp() -> ResultingInformation {
     let jellyfin_json_file_reader = fs::File::open("jellyfin/input/jellyfin.json").unwrap();
 
     let raw_line_items: Vec<UserDataPlayInfo> =
-        serde_json::from_reader(jellyfin_json_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(jellyfin_json_file_reader)).unwrap();
 
     let (all_zero_line_items, non_zero_line_items) =
         model::split_on_criteria(raw_line_items, |x| x.play_count == 0);
@@ -60,7 +61,7 @@ pub fn compute_jellyfin_play_history_for_musiqapp() -> ResultingInformation {
         fs::File::open("jellyfin/intermediate/manual_mapping.json").unwrap();
 
     let existing_manual_mapping: BTreeMap<String, (musiqlibrary::FullTrackMetadata, u32)> =
-        serde_json::from_reader(manual_mapping_file_reader).unwrap();
+        serde_json::from_reader(io::BufReader::new(manual_mapping_file_reader)).unwrap();
 
     let (manual_mapping, not_found) = repl::prompt_user_for_manual_mappings(
         &raw_library,

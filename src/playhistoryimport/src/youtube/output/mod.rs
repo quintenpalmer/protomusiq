@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 
 use crate::model;
 
@@ -53,5 +54,9 @@ fn write_release_files(release_ready_play_history: &Vec<model::MusiqHistoricalPl
     );
     let release_file =
         fs::File::create("youtube/output/release/youtube_musiq_play_history.json").unwrap();
-    serde_json::to_writer_pretty(release_file, &release_ready_play_history).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(release_file),
+        &release_ready_play_history,
+    )
+    .unwrap();
 }

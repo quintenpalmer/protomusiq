@@ -1,4 +1,5 @@
 use std::fs;
+use std::io;
 
 use serde_json;
 
@@ -15,7 +16,11 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
         println!("INFO:\twriting 0 length file of all zeros");
     }
     let zeros_file = fs::File::create("gplaymusic/output/debug/0_zeros.json").unwrap();
-    serde_json::to_writer_pretty(zeros_file, &resulting_information.all_zero_line_items).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(zeros_file),
+        &resulting_information.all_zero_line_items,
+    )
+    .unwrap();
 
     // Not Found
     if resulting_information.not_found.len() > 0 {
@@ -27,7 +32,11 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
         println!("INFO:\twriting 0 length file of entries not matched");
     }
     let not_found_file = fs::File::create("gplaymusic/output/debug/1_not_found.json").unwrap();
-    serde_json::to_writer_pretty(not_found_file, &resulting_information.not_found).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(not_found_file),
+        &resulting_information.not_found,
+    )
+    .unwrap();
 
     // No New Matches
     println!(
@@ -39,7 +48,7 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
     let existing_with_no_matches_file =
         fs::File::create("gplaymusic/output/debug/2_existing_not_matched.json").unwrap();
     serde_json::to_writer_pretty(
-        existing_with_no_matches_file,
+        io::BufWriter::new(existing_with_no_matches_file),
         &resulting_information.existing_library_with_zero_new_count,
     )
     .unwrap();
@@ -61,7 +70,8 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
 
     let manual_track_file =
         fs::File::create("gplaymusic/output/debug/3_manual_track_mapping.json").unwrap();
-    serde_json::to_writer_pretty(manual_track_file, &manual_mapping_vec).unwrap();
+    serde_json::to_writer_pretty(io::BufWriter::new(manual_track_file), &manual_mapping_vec)
+        .unwrap();
 
     // Manual Artist Mapping
     println!(
@@ -72,7 +82,7 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
     let manual_artist_file =
         fs::File::create("gplaymusic/output/debug/4_manual_artist_mapping.json").unwrap();
     serde_json::to_writer_pretty(
-        manual_artist_file,
+        io::BufWriter::new(manual_artist_file),
         &resulting_information.manual_artist_mapping,
     )
     .unwrap();
@@ -92,7 +102,11 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
 
     let manual_track_file =
         fs::File::create("gplaymusic/output/debug/5_manual_album_mapping.json").unwrap();
-    serde_json::to_writer_pretty(manual_track_file, &manual_album_mapping_vec).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(manual_track_file),
+        &manual_album_mapping_vec,
+    )
+    .unwrap();
 
     // Ignore Albums
     println!(
@@ -107,7 +121,11 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
 
     let manual_track_file =
         fs::File::create("gplaymusic/output/debug/6_manual_album_ignore.json").unwrap();
-    serde_json::to_writer_pretty(manual_track_file, &manual_album_mapping_vec).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(manual_track_file),
+        &manual_album_mapping_vec,
+    )
+    .unwrap();
 
     // Ignore Albums Map
     println!(
@@ -129,7 +147,7 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
     let ignore_album_info_with_play_counts_file =
         fs::File::create("gplaymusic/output/debug/7_manual_album_ignore_map.json").unwrap();
     serde_json::to_writer_pretty(
-        ignore_album_info_with_play_counts_file,
+        io::BufWriter::new(ignore_album_info_with_play_counts_file),
         &ignore_album_info_with_play_counts_vec,
     )
     .unwrap();
@@ -145,7 +163,7 @@ pub fn write_debug_info_to_disc(resulting_information: &gmodel::BestEffortMatche
     }
     let matched_file = fs::File::create("gplaymusic/output/debug/8_matched.json").unwrap();
     serde_json::to_writer_pretty(
-        matched_file,
+        io::BufWriter::new(matched_file),
         &resulting_information.matched_tracks_json_ready,
     )
     .unwrap();

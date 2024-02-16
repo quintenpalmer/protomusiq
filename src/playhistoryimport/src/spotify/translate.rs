@@ -22,7 +22,7 @@ pub fn clean_and_convert_json() {
     let in_all_tracks_file = fs::File::open(RAW_SPOTIFY_JSON).unwrap();
 
     let raw_line_items: Vec<smodel::RawLineItem> =
-        serde_json::from_reader(in_all_tracks_file).unwrap();
+        serde_json::from_reader(io::BufReader::new(in_all_tracks_file)).unwrap();
 
     let cleaned_line_items: Vec<smodel::CleanedLineItem> = raw_line_items
         .into_iter()
@@ -53,5 +53,5 @@ pub fn clean_and_convert_json() {
         .collect();
 
     let out_json_file = fs::File::create(CLEAN_SPOTIFY_JSON).unwrap();
-    serde_json::to_writer_pretty(out_json_file, &cleaned_line_items).unwrap();
+    serde_json::to_writer_pretty(io::BufWriter::new(out_json_file), &cleaned_line_items).unwrap();
 }

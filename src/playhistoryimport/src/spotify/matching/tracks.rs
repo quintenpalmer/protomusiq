@@ -1,16 +1,23 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io;
 
 use musiqlibrary;
 
-use super::super::{smodel, repl};
+use super::super::{repl, smodel};
 
 pub fn update_manual_track_mapping(
     raw_library: &musiqlibrary::RawLibrary,
     manual_ignore_albums: &BTreeSet<(String, String)>,
     not_initially_found: BTreeMap<smodel::SpotifyKey, Vec<smodel::CleanedLineItem>>,
 ) -> (
-    BTreeMap<smodel::SpotifyKey, (musiqlibrary::FullTrackMetadata, Vec<smodel::CleanedLineItem>)>,
+    BTreeMap<
+        smodel::SpotifyKey,
+        (
+            musiqlibrary::FullTrackMetadata,
+            Vec<smodel::CleanedLineItem>,
+        ),
+    >,
     BTreeMap<smodel::SpotifyKey, Vec<smodel::CleanedLineItem>>,
 ) {
     let manual_mapping_file_reader =
@@ -18,8 +25,11 @@ pub fn update_manual_track_mapping(
 
     let existing_manual_mapping_vec: Vec<(
         smodel::SpotifyKey,
-        (musiqlibrary::FullTrackMetadata, Vec<smodel::CleanedLineItem>),
-    )> = serde_json::from_reader(manual_mapping_file_reader).unwrap();
+        (
+            musiqlibrary::FullTrackMetadata,
+            Vec<smodel::CleanedLineItem>,
+        ),
+    )> = serde_json::from_reader(io::BufReader::new(manual_mapping_file_reader)).unwrap();
 
     let existing_manual_mapping = existing_manual_mapping_vec.into_iter().collect();
 

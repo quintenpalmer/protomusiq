@@ -60,7 +60,7 @@ pub fn clean_and_convert_to_json() {
     }
 
     let json_file = fs::File::create(ALL_TRACKS_JSON).unwrap();
-    serde_json::to_writer_pretty(json_file, &json_vec).unwrap();
+    serde_json::to_writer_pretty(io::BufWriter::new(json_file), &json_vec).unwrap();
 }
 
 fn html_decode(s: String) -> String {

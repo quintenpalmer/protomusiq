@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io;
 
 use super::gmodel::BestEffortMatchedInformation;
 use crate::model::MusiqHistoricalPlayHistoryTuple;
@@ -55,5 +56,9 @@ pub fn write_release_files(release_ready_play_history: &Vec<MusiqHistoricalPlayH
     );
     let release_file =
         fs::File::create("gplaymusic/output/release/gplaymusic_musiq_play_history.json").unwrap();
-    serde_json::to_writer_pretty(release_file, &release_ready_play_history).unwrap();
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(release_file),
+        &release_ready_play_history,
+    )
+    .unwrap();
 }

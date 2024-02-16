@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io;
 use std::path;
 
 use musiqlibrary;
@@ -14,7 +15,7 @@ pub fn match_gplay_music_data_for_musiqapp() -> gmodel::BestEffortMatchedInforma
     let all_gplay_music_tracks_file = fs::File::open("gplaymusic/input/all_tracks.json").unwrap();
 
     let raw_line_items: Vec<gmodel::CleanedLineItem> =
-        serde_json::from_reader(all_gplay_music_tracks_file).unwrap();
+        serde_json::from_reader(io::BufReader::new(all_gplay_music_tracks_file)).unwrap();
 
     let (all_zero_line_items, non_zero_line_items) =
         model::split_on_criteria(raw_line_items, |x| x.play_count == 0);
