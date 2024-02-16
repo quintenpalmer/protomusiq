@@ -1,4 +1,4 @@
-use std::{fs, path, str, time};
+use std::{fs, io, path, str, time};
 
 use chrono::NaiveDate;
 use mp4;
@@ -157,7 +157,7 @@ fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
     let metadata_json_file = parent_dir.join("metadata.json");
 
     let maybe_raw: Option<ExtraMetadata> = match fs::File::open(metadata_json_file.clone()) {
-        Ok(reader) => match serde_json::from_reader(reader) {
+        Ok(reader) => match serde_json::from_reader(io::BufReader::new(reader)) {
             Ok(metadata) => Some(metadata),
             Err(e) => {
                 println!(
