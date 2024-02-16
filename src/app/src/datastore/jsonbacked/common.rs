@@ -1,5 +1,6 @@
 use std::collections::BTreeSet;
 use std::fs;
+use std::io;
 use std::path::PathBuf;
 
 use serde::de::DeserializeOwned;
@@ -14,14 +15,18 @@ pub fn _create_new_raw_data<T: Serialize, S: Into<String>>(
 ) -> (T, PathBuf) {
     let final_path = localfs::build_tree_for_file(&app_data_path, child_list);
 
-    serde_json::to_writer(fs::File::create(final_path.clone()).unwrap(), &raw).unwrap();
+    serde_json::to_writer(
+        io::BufWriter::new(fs::File::create(final_path.clone()).unwrap()),
+        &raw,
+    )
+    .unwrap();
 
     (raw, final_path)
 }
 
 pub fn maybe_get_existing_raw_data<T: DeserializeOwned>(json_db_path: &PathBuf) -> Option<T> {
     let maybe_raw: Option<T> = match fs::File::open(json_db_path.clone()) {
-        Ok(reader) => match serde_json::from_reader(reader) {
+        Ok(reader) => match serde_json::from_reader(io::BufReader::new(reader)) {
             Ok(tracker) => Some(tracker),
             Err(_) => {
                 println!(
@@ -51,7 +56,11 @@ pub fn bootstrap_raw_data<T: Default + DeserializeOwned + Serialize, S: Into<Str
     let raw = match maybe_raw {
         None => {
             let empty = T::default();
-            serde_json::to_writer(fs::File::create(json_db_path.clone()).unwrap(), &empty).unwrap();
+            serde_json::to_writer(
+                io::BufWriter::new(fs::File::create(json_db_path.clone()).unwrap()),
+                &empty,
+            )
+            .unwrap();
             empty
         }
         Some(x) => x,

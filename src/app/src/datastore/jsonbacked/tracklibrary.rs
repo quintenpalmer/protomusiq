@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
@@ -102,7 +103,7 @@ impl Callback {
                     arbitrary_serialize_sort(&organized);
 
                 serde_json::to_writer(
-                    fs::File::create(metadata_json_file).unwrap(),
+                    io::BufWriter::new(fs::File::create(metadata_json_file).unwrap()),
                     &new_metadata_payload,
                 )
                 .unwrap();

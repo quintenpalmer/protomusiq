@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
@@ -310,7 +311,11 @@ impl InnerPlaylistData {
     }
 
     fn write_json(&self, json_db_path: &PathBuf) {
-        serde_json::to_writer(fs::File::create(&json_db_path).unwrap(), &self.to_raw()).unwrap()
+        serde_json::to_writer(
+            io::BufWriter::new(fs::File::create(&json_db_path).unwrap()),
+            &self.to_raw(),
+        )
+        .unwrap()
     }
 
     fn to_vec(&self) -> Vec<model::playlist::PlaylistEntry> {

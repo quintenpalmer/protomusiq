@@ -1,6 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::env;
 use std::fs;
+use std::io;
 
 //use chrono::{DateTime, Local};
 use serde::de::DeserializeOwned;
@@ -69,7 +70,7 @@ fn merge_two_files(first_history_file: &str, second_history_file: &str) -> Resul
 
 fn load_json<T: DeserializeOwned>(filename: &str) -> Option<T> {
     match fs::File::open(filename) {
-        Ok(reader) => match serde_json::from_reader(reader) {
+        Ok(reader) => match serde_json::from_reader(io::BufReader::new(reader)) {
             Ok(tracker) => Some(tracker),
             Err(e) => {
                 println!("error!? {:?}", e);

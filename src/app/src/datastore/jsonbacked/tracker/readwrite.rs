@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::io;
 use std::path::PathBuf;
 
 use chrono::{DateTime, Local};
@@ -77,7 +78,7 @@ impl datastore::traits::LiveHistoryWriteDS for JSONTracker {
         let raw_tracker = RawTrackedPayload::from_btree_map(&self.local_tracks);
 
         serde_json::to_writer(
-            fs::File::create(&self.tracker_db_json_path).unwrap(),
+            io::BufWriter::new(fs::File::create(&self.tracker_db_json_path).unwrap()),
             &raw_tracker,
         )
         .unwrap();
@@ -98,7 +99,7 @@ impl datastore::traits::LiveHistoryWriteDS for JSONTracker {
         let raw_tracker = RawTrackedPayload::from_btree_map(&self.local_tracks);
 
         serde_json::to_writer(
-            fs::File::create(&self.tracker_db_json_path).unwrap(),
+            io::BufWriter::new(fs::File::create(&self.tracker_db_json_path).unwrap()),
             &raw_tracker,
         )
         .unwrap();
