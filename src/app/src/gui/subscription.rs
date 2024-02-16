@@ -31,6 +31,17 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("p"), Mods::None) => Some(message::Message::Action(
             message::Action::TogglePlayQueueVisible,
         )),
+
+        (keyboard::Key::Named(key::Named::Backspace), Mods::None) => {
+            Some(message::Message::HistoryNav)
+        }
+        (keyboard::Key::Named(key::Named::BrowserBack), Mods::None) => {
+            Some(message::Message::HistoryNav)
+        }
+        (keyboard::Key::Named(key::Named::ArrowLeft), Mods::Alt) => {
+            Some(message::Message::HistoryNav)
+        }
+
         (keyboard::Key::Character("h"), Mods::Shift) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::First),
         )),
@@ -43,15 +54,6 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("l"), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Forwards),
         )),
-        (keyboard::Key::Named(key::Named::Backspace), Mods::None) => {
-            Some(message::Message::HistoryNav)
-        }
-        (keyboard::Key::Named(key::Named::BrowserBack), Mods::None) => {
-            Some(message::Message::HistoryNav)
-        }
-        (keyboard::Key::Named(key::Named::ArrowLeft), Mods::Alt) => {
-            Some(message::Message::HistoryNav)
-        }
 
         (keyboard::Key::Named(key::Named::ArrowUp), Mods::None) => {
             Some(message::Message::NavRelative(
