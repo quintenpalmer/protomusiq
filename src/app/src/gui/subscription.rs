@@ -35,6 +35,7 @@ pub fn keybinding_subscription_fn(
     modifiers: keyboard::Modifiers,
 ) -> Option<message::Message> {
     let mod_enum = Mods::from_iced(modifiers);
+    println!("Handle Key: {:?} (with mods: {:?})", key, mod_enum);
     match (key.as_ref(), mod_enum) {
         (keyboard::Key::Character("p"), Mods::None) => Some(message::Message::Action(
             message::Action::TogglePlayQueueVisible,
@@ -85,6 +86,7 @@ pub fn keybinding_subscription_fn(
     }
 }
 
+#[derive(Debug)]
 enum Mods {
     None,
     Shift,
