@@ -60,11 +60,11 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("h"), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Backwards),
         )),
-        (keyboard::Key::Character("L"), Mods::Shift) => Some(message::Message::NavRelative(
-            message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Last),
-        )),
         (keyboard::Key::Character("l"), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Forwards),
+        )),
+        (keyboard::Key::Character("L"), Mods::Shift) => Some(message::Message::NavRelative(
+            message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Last),
         )),
 
         (keyboard::Key::Named(key::Named::ArrowUp), Mods::None) => {
