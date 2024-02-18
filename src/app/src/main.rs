@@ -19,7 +19,6 @@ pub enum RunMode {
     ReportToTracker,
     GenerateReport,
     Prototype,
-    Video,
     ReconcileHistory,
 }
 
@@ -30,7 +29,6 @@ pub enum AppError {
     Tracker(altmodes::repl::TrackerError),
     ReportGeneration(altmodes::report::Error),
     Prototype(altmodes::proto::Error),
-    Video(altmodes::videoplayer::Error),
     ReconcileHistory(altmodes::reconcile::Error),
 }
 
@@ -52,9 +50,6 @@ pub fn main() -> Result<(), AppError> {
         if arg == "--prototype" {
             run_mode = RunMode::Prototype;
         }
-        if arg == "--video" {
-            run_mode = RunMode::Video;
-        }
         if arg == "--reconcile" {
             run_mode = RunMode::ReconcileHistory;
         }
@@ -70,7 +65,6 @@ pub fn main() -> Result<(), AppError> {
             altmodes::report::generate_year_end_report().map_err(AppError::ReportGeneration)
         }
         RunMode::Prototype => altmodes::proto::entry_point().map_err(AppError::Prototype),
-        RunMode::Video => altmodes::videoplayer::run_app().map_err(AppError::Video),
         RunMode::ReconcileHistory => {
             altmodes::reconcile::entry_point().map_err(AppError::ReconcileHistory)
         }
