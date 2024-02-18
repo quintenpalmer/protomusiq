@@ -73,7 +73,9 @@ pub fn keybinding_subscription_fn(
             ))
         }
         (keyboard::Key::Named(key::Named::ArrowLeft), Mods::None) => {
-            Some(message::Message::HistoryNav)
+            Some(message::Message::NavRelative(
+                message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Backwards),
+            ))
         }
         (keyboard::Key::Named(key::Named::ArrowRight), Mods::None) => {
             Some(message::Message::NavRelative(
