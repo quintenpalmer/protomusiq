@@ -243,7 +243,7 @@ fn prompt_for_only_albums(
         println!("try a more narrow search query");
         return prompt_for_only_albums(&raw_library);
     }
-    if albums.len() <= 0 {
+    if albums.len() == 0 {
         println!("couldn't find anything with that search query; try again");
         return prompt_for_only_albums(&raw_library);
     }
@@ -424,7 +424,7 @@ fn prompt_for_track(
         println!("try a more narrow search query");
         return prompt_for_track(&raw_library);
     }
-    if tracks.len() <= 0 {
+    if tracks.len() == 0 {
         println!("couldn't find anything with that search query; try again");
         return prompt_for_track(&raw_library);
     }
@@ -503,7 +503,7 @@ fn prompt_for_playlist(
         println!("try a more narrow search query");
         return prompt_for_playlist(&raw_library, &playlist_data);
     }
-    if playlists.len() <= 0 {
+    if playlists.len() == 0 {
         println!("couldn't find anything with that search query; try again");
         return prompt_for_playlist(&raw_library, &playlist_data);
     }
