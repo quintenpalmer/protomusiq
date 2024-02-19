@@ -169,7 +169,11 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut producers = Column::new().push(h2("Producers"));
             for prod in extra.producers.iter() {
-                producers = producers.push(h3(prod.clone()));
+                producers = producers.push(dark_button(h3(prod.clone())).on_press(
+                    user_nav_message(NavMessage::MovieQuery(Some(
+                        model::MovieQueryParams::Producers(prod.clone()),
+                    ))),
+                ));
             }
 
             let mut production_entities = Column::new().push(h2("Production"));

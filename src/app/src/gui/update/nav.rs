@@ -184,6 +184,22 @@ pub fn handle_nav(
                             production_set.into_iter().collect(),
                         ))
                     }
+                    model::MovieAttribute::Producers => {
+                        let mut producer_set = BTreeSet::new();
+                        for movie in app.video_library.movies.movies.values() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for prod in extra.producers.iter() {
+                                        producer_set.insert(prod.clone());
+                                    }
+                                }
+                                None => (),
+                            }
+                        }
+                        Some(model::AttributesList::Producers(
+                            producer_set.into_iter().collect(),
+                        ))
+                    }
                     model::MovieAttribute::Directors => {
                         let mut director_set = BTreeSet::new();
                         for movie in app.video_library.movies.movies.values() {
@@ -266,6 +282,22 @@ pub fn handle_nav(
                                 Some(ref extra) => {
                                     for found_production_company in extra.production.iter() {
                                         if found_production_company == queried_production_company {
+                                            movie_keys.push(movie_key.clone())
+                                        }
+                                    }
+                                }
+                                None => (),
+                            }
+                        }
+                        Some(movie_keys)
+                    }
+                    model::MovieQueryParams::Producers(ref queried_producers) => {
+                        let mut movie_keys = Vec::new();
+                        for (movie_key, movie) in app.video_library.movies.movies.iter() {
+                            match movie.extra {
+                                Some(ref extra) => {
+                                    for found_producer in extra.producers.iter() {
+                                        if found_producer == queried_producers {
                                             movie_keys.push(movie_key.clone())
                                         }
                                     }

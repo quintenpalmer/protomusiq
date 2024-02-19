@@ -58,6 +58,21 @@ pub fn movie_query<'a>(
                         ))),
                 )
             }
+            model::MovieQueryParams::Producers(ref prod) => {
+                Column::new().spacing(10).push(h2("Params:")).push(
+                    line_row()
+                        .spacing(5)
+                        .push(dark_button(h3("Producers")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Producers)),
+                        )))
+                        .push(h3(":"))
+                        .push(dark_button(h3(prod.clone())).on_press(user_nav_message(
+                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Producers(
+                                prod.clone(),
+                            ))),
+                        ))),
+                )
+            }
             model::MovieQueryParams::Director(ref director) => {
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()

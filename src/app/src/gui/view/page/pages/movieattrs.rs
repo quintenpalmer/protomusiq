@@ -81,6 +81,34 @@ pub fn movie_attributes<'a>(
                             Scrollable::new(table.width(Length::Fill)),
                         )
                     }
+
+                    model::AttributesList::Producers(attribute_results) => {
+                        let mut table = Column::new().spacing(10);
+
+                        let mut producers_row = Row::new().spacing(10);
+                        let mut producers_row_count = 0;
+                        for (index, result) in attribute_results.into_iter().enumerate() {
+                            producers_row =
+                                producers_row.push(dark_button(h3(result.clone())).on_press(
+                                    user_nav_message(NavMessage::MovieQuery(Some(
+                                        model::MovieQueryParams::Producers(result.clone()),
+                                    ))),
+                                ));
+                            producers_row_count += 1;
+
+                            if index % 2 == 1 {
+                                table = table.push(producers_row);
+                                producers_row = Row::new().spacing(10);
+                                producers_row_count = 0;
+                            }
+                        }
+
+                        if producers_row_count != 0 {
+                            table = table.push(producers_row);
+                        }
+
+                        (h2("Producers:"), Scrollable::new(table.width(Length::Fill)))
+                    }
                     model::AttributesList::Director(attribute_results) => {
                         let mut table = Column::new().spacing(10);
 
@@ -180,6 +208,9 @@ pub fn movie_attributes<'a>(
                                 )),
                             )),
                         )
+                        .push(dark_button(h2("Producers")).on_press(user_nav_message(
+                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Producers)),
+                        )))
                         .push(dark_button(h2("Directors")).on_press(user_nav_message(
                             NavMessage::MovieAttributes(Some(model::MovieAttribute::Directors)),
                         )))

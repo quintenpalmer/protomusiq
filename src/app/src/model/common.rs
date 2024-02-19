@@ -251,6 +251,7 @@ impl AlbumArt {
 pub enum MovieQueryParams {
     Genre(String),
     Production(String),
+    Producers(String),
     Director(String),
     Screenplay(String),
     CastMember(String),
@@ -260,6 +261,7 @@ pub enum MovieQueryParams {
 pub enum MovieAttribute {
     Genres,
     Production,
+    Producers,
     Directors,
     Screenplay,
     CastMembers,
@@ -269,6 +271,7 @@ pub enum MovieAttribute {
 pub enum AttributesList {
     Genre(Vec<String>),
     Production(Vec<String>),
+    Producers(Vec<String>),
     Director(Vec<String>),
     Screenplay(Vec<String>),
     CastMember(Vec<String>),
