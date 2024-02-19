@@ -9,7 +9,7 @@ mod util;
 
 use std::env;
 
-use iced::{Application, Error as IcedError};
+use iced::{self, Application};
 
 use crate::gui::state;
 
@@ -24,7 +24,7 @@ pub enum RunMode {
 
 #[derive(Debug)]
 pub enum AppError {
-    Iced(IcedError),
+    Iced(iced::Error),
     BackgroundServer(altmodes::background::Error),
     Tracker(altmodes::repl::TrackerError),
     ReportGeneration(altmodes::report::Error),
