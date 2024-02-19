@@ -30,6 +30,7 @@ pub struct ExtraMetadata {
     pub genres: Vec<String>,
     pub production: Vec<String>,
     pub cast: Vec<String>,
+    pub producers: Vec<String>,
     pub directors: Vec<String>,
     pub writers: Vec<String>,
 }
