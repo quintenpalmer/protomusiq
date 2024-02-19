@@ -116,7 +116,6 @@ fn handle_mpris_from_gui(
             }
         },
     );
-    return;
 }
 
 fn set_all_controls(player: &mpris_player::MprisPlayer, to_set: bool) {
