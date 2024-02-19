@@ -167,6 +167,11 @@ pub fn movie_page<'a>(
 
     match state.movie.extra {
         Some(ref extra) => {
+            let mut producers = Column::new().push(h2("Producers"));
+            for prod in extra.producers.iter() {
+                producers = producers.push(h3(prod.clone()));
+            }
+
             let mut production_entities = Column::new().push(h2("Production"));
             for prod in extra.production.iter() {
                 production_entities =
@@ -176,7 +181,12 @@ pub fn movie_page<'a>(
                         ))),
                     ));
             }
-            movie_info = movie_info.push(production_entities);
+
+            let production_and_producer = Row::new()
+                .spacing(10)
+                .push(producers.width(Length::FillPortion(1)))
+                .push(production_entities.width(Length::FillPortion(1)));
+            movie_info = movie_info.push(production_and_producer);
         }
         None => (),
     }
