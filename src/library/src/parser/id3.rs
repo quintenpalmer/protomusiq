@@ -120,7 +120,7 @@ impl MetadataParser for ID3MetadataParser {
                 },
             },
         }
-        .map(|x| trimmer(x))
+        .map(trimmer)
     }
 
     fn duration(&self) -> time::Duration {
