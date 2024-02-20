@@ -57,10 +57,10 @@ impl TrackSortKey {
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ArtistTrackSortKey {
-    ByName,
     ByParent,
-    ByDuration,
+    ByName,
     ByTotalPlayCount,
+    ByDuration,
     ByTotalPlayedDuration,
     Random,
 }
@@ -68,10 +68,10 @@ pub enum ArtistTrackSortKey {
 impl ArtistTrackSortKey {
     pub fn default_order(&self) -> SortOrder {
         match self {
-            ArtistTrackSortKey::ByName => SortOrder::Regular,
             ArtistTrackSortKey::ByParent => SortOrder::Regular,
-            ArtistTrackSortKey::ByDuration => SortOrder::Reversed,
+            ArtistTrackSortKey::ByName => SortOrder::Regular,
             ArtistTrackSortKey::ByTotalPlayCount => SortOrder::Reversed,
+            ArtistTrackSortKey::ByDuration => SortOrder::Reversed,
             ArtistTrackSortKey::ByTotalPlayedDuration => SortOrder::Reversed,
             ArtistTrackSortKey::Random => SortOrder::Regular,
         }
@@ -80,10 +80,10 @@ impl ArtistTrackSortKey {
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ArtistFeaturedTrackSortKey {
-    ByName,
     ByParent,
-    ByDuration,
+    ByName,
     ByTotalPlayCount,
+    ByDuration,
     ByTotalPlayedDuration,
     Random,
 }
@@ -91,10 +91,10 @@ pub enum ArtistFeaturedTrackSortKey {
 impl ArtistFeaturedTrackSortKey {
     pub fn default_order(&self) -> SortOrder {
         match self {
-            ArtistFeaturedTrackSortKey::ByName => SortOrder::Regular,
             ArtistFeaturedTrackSortKey::ByParent => SortOrder::Regular,
-            ArtistFeaturedTrackSortKey::ByDuration => SortOrder::Reversed,
+            ArtistFeaturedTrackSortKey::ByName => SortOrder::Regular,
             ArtistFeaturedTrackSortKey::ByTotalPlayCount => SortOrder::Reversed,
+            ArtistFeaturedTrackSortKey::ByDuration => SortOrder::Reversed,
             ArtistFeaturedTrackSortKey::ByTotalPlayedDuration => SortOrder::Reversed,
             ArtistFeaturedTrackSortKey::Random => SortOrder::Regular,
         }
