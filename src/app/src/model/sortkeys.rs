@@ -108,13 +108,13 @@ impl ArtistSortKey {
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum AlbumSortKey {
-    ByName,
     ByParent,
-    ByDate,
-    ByDuration,
+    ByName,
     ByLastMod,
+    ByDuration,
     ByTotalPlayCount,
     ByTotalPlayedDuration,
+    ByDate,
     Random,
 }
 
