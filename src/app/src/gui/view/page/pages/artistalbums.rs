@@ -99,15 +99,13 @@ pub fn artist_album_list<'a>(
                         album_grid_columns = album_grid_columns.push(album_grid_rows);
                         row_length = 0;
                         album_grid_rows = Row::new();
+                    } else if buttons.len() > 0 {
+                        row_length += 1;
+                        let (_, button) = buttons.remove(0);
+                        album_grid_rows = album_grid_rows.push(button);
                     } else {
-                        if buttons.len() > 0 {
-                            row_length += 1;
-                            let (_, button) = buttons.remove(0);
-                            album_grid_rows = album_grid_rows.push(button);
-                        } else {
-                            album_grid_columns = album_grid_columns.push(album_grid_rows);
-                            break;
-                        }
+                        album_grid_columns = album_grid_columns.push(album_grid_rows);
+                        break;
                     }
                 }
 

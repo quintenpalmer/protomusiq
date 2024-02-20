@@ -72,12 +72,10 @@ pub fn get_potential_current_stripe_style(
         } else {
             Box::new(ContainerStripeHighlight)
         }
+    } else if is_selected {
+        Box::new(ContainerStripeSelected)
     } else {
-        if is_selected {
-            Box::new(ContainerStripeSelected)
-        } else {
-            get_stripe_style(stripe_marker)
-        }
+        get_stripe_style(stripe_marker)
     }
 }
 
