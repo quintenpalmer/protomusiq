@@ -77,7 +77,7 @@ impl FileAllower {
     pub fn new(maybe_allow_list: &Option<Vec<PathBuf>>) -> Self {
         FileAllower {
             allowed_set: match maybe_allow_list {
-                Some(allow_list) => Some(allow_list.iter().map(|x| x.clone()).collect()),
+                Some(allow_list) => Some(allow_list.iter().cloned().collect()),
                 None => None,
             },
         }

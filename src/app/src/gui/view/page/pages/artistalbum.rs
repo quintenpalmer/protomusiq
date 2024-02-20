@@ -230,7 +230,7 @@ pub fn artist_album_view_state<'a>(
                                                         .on_press(Message::PlaybackRequest(
                                                             shared::PlaybackRequest::PlaySongs(
                                                                 disc.tracks.values()
-                                                                    .map(|track| track.clone())
+                                                                    .cloned()
                                                                     .collect(),
                                                             ),
                                                         )),
@@ -248,7 +248,7 @@ pub fn artist_album_view_state<'a>(
                                                         .on_press(Message::PlaybackRequest(
                                                             shared::PlaybackRequest::InsertSongs(
                                                                 disc.tracks.values()
-                                                                    .map(|track| track.clone())
+                                                                    .cloned()
                                                                     .collect(),
                                                                 false,
                                                             ),
@@ -261,7 +261,7 @@ pub fn artist_album_view_state<'a>(
                                                         .on_press(Message::PlaybackRequest(
                                                             shared::PlaybackRequest::AppendSongs(
                                                                 disc.tracks.values()
-                                                                    .map(|track| track.clone())
+                                                                    .cloned()
                                                                     .collect(),
                                                                 false,
                                                             ),

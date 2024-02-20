@@ -101,7 +101,7 @@ pub fn handle_nav(
                     .unwrap()
                     .albums
                     .keys()
-                    .map(|k| *k)
+                    .cloned()
                     .collect(),
             });
             Command::none()
