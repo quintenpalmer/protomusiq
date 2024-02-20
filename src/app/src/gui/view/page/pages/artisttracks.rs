@@ -158,7 +158,7 @@ pub fn artist_track_view_state<'a>(
                     ))),
                 );
 
-            for track in tracks.into_iter() {
+            for track in tracks.iter() {
                 stripe_marker = !stripe_marker;
 
                 let track_maybe_with_track_artist =

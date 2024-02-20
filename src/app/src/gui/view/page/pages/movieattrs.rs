@@ -30,7 +30,7 @@ pub fn movie_attributes(
 
                         let mut genre_row = Row::new().spacing(10);
                         let mut genre_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             genre_row = genre_row.push(dark_button(h3(result.clone())).on_press(
                                 user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Genre(result.clone()),
@@ -56,7 +56,7 @@ pub fn movie_attributes(
 
                         let mut production_row = Row::new().spacing(10);
                         let mut production_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             production_row =
                                 production_row.push(dark_button(h3(result.clone())).on_press(
                                     user_nav_message(NavMessage::MovieQuery(Some(
@@ -87,7 +87,7 @@ pub fn movie_attributes(
 
                         let mut producers_row = Row::new().spacing(10);
                         let mut producers_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             producers_row =
                                 producers_row.push(dark_button(h3(result.clone())).on_press(
                                     user_nav_message(NavMessage::MovieQuery(Some(
@@ -114,7 +114,7 @@ pub fn movie_attributes(
 
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
                                 user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Director(result.clone()),
@@ -140,7 +140,7 @@ pub fn movie_attributes(
 
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
                                 user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::Screenplay(result.clone()),
@@ -169,7 +169,7 @@ pub fn movie_attributes(
 
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
-                        for (index, result) in attribute_results.into_iter().enumerate() {
+                        for (index, result) in attribute_results.iter().enumerate() {
                             result_row = result_row.push(dark_button(h3(result.clone())).on_press(
                                 user_nav_message(NavMessage::MovieQuery(Some(
                                     model::MovieQueryParams::CastMember(result.clone()),
