@@ -37,9 +37,9 @@ impl LibraryState {
                 .entry(*extra_library_artist)
                 .or_insert(musiqlibrary::KeyedArtistAlbums {
                     artist_info: musiqlibrary::ArtistInfo {
-                        artist_id: featured_tracks.get(0).unwrap().metadata.track_artist_id,
+                        artist_id: featured_tracks.first().unwrap().metadata.track_artist_id,
                         artist_name: featured_tracks
-                            .get(0)
+                            .first()
                             .unwrap()
                             .metadata
                             .track_artist
@@ -181,7 +181,7 @@ impl LibraryState {
     ) -> (musiqlibrary::ID, musiqlibrary::ID) {
         let artist = self.raw_library.artists.get(artist_id).unwrap();
         match artist.albums.values().collect::<Vec<_>>().as_mut_slice() {
-            [] => *self.extra_library.get_album_ids(artist_id).get(0).unwrap(),
+            [] => *self.extra_library.get_album_ids(artist_id).first().unwrap(),
             albums => {
                 albums
                     .sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));
@@ -328,7 +328,7 @@ impl ExtraLibraryKeys {
 
     pub fn get_artist_info(&self, artist_id: &musiqlibrary::ID) -> musiqlibrary::ArtistInfo {
         let tracks = self.featured_artists.get(artist_id).unwrap();
-        let track = tracks.get(0).unwrap();
+        let track = tracks.first().unwrap();
         track.metadata.get_artist_info()
     }
 
