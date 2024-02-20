@@ -56,7 +56,6 @@ pub fn handle_playback_request(
                     )),
                 );
             }
-            ()
         }
         None => (),
     };
