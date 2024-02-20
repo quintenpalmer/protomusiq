@@ -110,7 +110,8 @@ impl SinkPlayback {
                 self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
 
                 let file = io::BufReader::new(fs::File::open(path).unwrap());
-                self.sink.append(rodio::Decoder::new(file).unwrap());
+                let decoder = rodio::Decoder::new(file).unwrap();
+                self.sink.append(decoder);
                 self.sink.set_volume(volume);
                 self.sink.play();
                 self.time_elapsed = 0;
