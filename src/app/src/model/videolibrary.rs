@@ -57,7 +57,7 @@ impl VideoLibraryState {
             &movies
                 .movies
                 .values()
-                .map(|x| x.clone())
+                .cloned()
                 .collect::<Vec<video::MovieMetadata>>(),
         );
 
@@ -104,16 +104,11 @@ impl MovieArt {
         movie_key: MovieRelPath,
     ) -> Option<Vec<u8>> {
         match album_size {
-            model::MovieSize::Large => self.large_movie_covers.get(&movie_key).map(|x| x.clone()),
-            model::MovieSize::SemiLarge => self
-                .semilarge_movie_covers
-                .get(&movie_key)
-                .map(|x| x.clone()),
-            model::MovieSize::Small => self.small_movie_covers.get(&movie_key).map(|x| x.clone()),
-            model::MovieSize::Regular => {
-                self.regular_movie_covers.get(&movie_key).map(|x| x.clone())
-            }
-            model::MovieSize::Micro => self.micro_movie_covers.get(&movie_key).map(|x| x.clone()),
+            model::MovieSize::Large => self.large_movie_covers.get(&movie_key).cloned(),
+            model::MovieSize::SemiLarge => self.semilarge_movie_covers.get(&movie_key).cloned(),
+            model::MovieSize::Small => self.small_movie_covers.get(&movie_key).cloned(),
+            model::MovieSize::Regular => self.regular_movie_covers.get(&movie_key).cloned(),
+            model::MovieSize::Micro => self.micro_movie_covers.get(&movie_key).cloned(),
         }
     }
 }

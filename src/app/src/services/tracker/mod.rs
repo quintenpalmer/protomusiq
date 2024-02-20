@@ -37,8 +37,7 @@ impl datastore::traits::LiveHistoryWriteDS for ForkWriter {
         track: &musiqlibrary::FullTrackMetadata,
         date_time: DateTime<Local>,
     ) {
-        self.json
-            .increment_track_with_date(track, date_time.clone());
+        self.json.increment_track_with_date(track, date_time);
         self.sqlite.increment_track_with_date(track, date_time);
     }
 

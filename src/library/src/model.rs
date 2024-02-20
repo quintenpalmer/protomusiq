@@ -63,7 +63,7 @@ pub struct FullTrackMetadata {
 
 impl FullTrackMetadata {
     pub fn to_unique_id(&self) -> TrackUniqueIdentifier {
-        TrackUniqueIdentifier::from_track(&self)
+        TrackUniqueIdentifier::from_track(self)
     }
 
     pub fn get_maybe_track_artist(&self) -> Option<String> {
@@ -111,8 +111,7 @@ impl<T> Library<T> {
     }
 
     pub fn get_track(&self, key: &TrackUniqueIdentifier) -> &T {
-        &self
-            .artists
+        self.artists
             .get(&key.artist_id)
             .unwrap()
             .albums
@@ -275,8 +274,8 @@ pub struct AlbumUniqueIdentifier {
 impl AlbumUniqueIdentifier {
     pub fn new(artist_id: ID, album_id: ID) -> Self {
         AlbumUniqueIdentifier {
-            artist_id: artist_id,
-            album_id: album_id,
+            artist_id,
+            album_id,
         }
     }
 }
@@ -293,17 +292,17 @@ pub struct TrackUniqueIdentifier {
 impl TrackUniqueIdentifier {
     pub fn new(artist_id: ID, album_id: ID, disc_no: u64, track_no: u64) -> Self {
         TrackUniqueIdentifier {
-            artist_id: artist_id,
-            album_id: album_id,
-            disc_no: disc_no,
-            track_no: track_no,
+            artist_id,
+            album_id,
+            disc_no,
+            track_no,
         }
     }
 
     pub fn from_track(track: &FullTrackMetadata) -> Self {
         TrackUniqueIdentifier {
-            artist_id: track.album_artist_id.clone(),
-            album_id: track.album_id.clone(),
+            artist_id: track.album_artist_id,
+            album_id: track.album_id,
             disc_no: track.disc,
             track_no: track.track,
         }

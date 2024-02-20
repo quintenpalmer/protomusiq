@@ -40,7 +40,7 @@ impl Reporter {
         }
 
         Reporter {
-            historical_play_count_records: historical_play_count_records,
+            historical_play_count_records,
         }
     }
 

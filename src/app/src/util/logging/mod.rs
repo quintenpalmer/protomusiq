@@ -22,7 +22,7 @@ pub struct Logger {
 impl Logger {
     pub fn new(type_: LogType, pre_text: &'static str) -> Self {
         Logger {
-            type_: type_,
+            type_,
             additional_pre_text: pre_text.to_string(),
             last_log: time::Instant::now(),
         }

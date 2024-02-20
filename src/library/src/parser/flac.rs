@@ -4,8 +4,6 @@ use std::path::{Path, PathBuf};
 use std::time;
 use std::time::SystemTime;
 
-use claxon;
-
 use super::generic::{trimmer, MetadataParser};
 
 pub struct FlacMetadataParser {
@@ -44,9 +42,9 @@ impl FlacMetadataParser {
             .collect::<BTreeMap<String, String>>();
 
         Ok(FlacMetadataParser {
-            tag_map: tag_map,
-            stream_info: stream_info,
-            last_mod: last_mod,
+            tag_map,
+            stream_info,
+            last_mod,
             path: path.as_ref().to_path_buf(),
         })
     }
@@ -71,7 +69,7 @@ impl MetadataParser for FlacMetadataParser {
         self.tag_map
             .get("discnumber")
             .map(|x| get_pair(x))
-            .and_then(|x| get_first(x))
+            .and_then(get_first)
     }
 
     fn disc_total(&self) -> Option<u64> {
@@ -81,7 +79,7 @@ impl MetadataParser for FlacMetadataParser {
                 .tag_map
                 .get("discnumber")
                 .map(|x| get_pair(x))
-                .and_then(|x| get_second(x)),
+                .and_then(get_second),
         }
     }
 
@@ -89,7 +87,7 @@ impl MetadataParser for FlacMetadataParser {
         self.tag_map
             .get("tracknumber")
             .map(|x| get_pair(x))
-            .and_then(|x| get_first(x))
+            .and_then(get_first)
     }
 
     fn title(&self) -> String {
@@ -112,9 +110,7 @@ impl MetadataParser for FlacMetadataParser {
         let num_samples = self.stream_info.samples.unwrap();
         let sample_rate = self.stream_info.sample_rate;
 
-        let total_duration =
-            time::Duration::from_secs_f32((num_samples as f32) / (sample_rate as f32));
-        total_duration
+        time::Duration::from_secs_f32((num_samples as f32) / (sample_rate as f32))
     }
 
     fn path(&self) -> PathBuf {
@@ -122,7 +118,7 @@ impl MetadataParser for FlacMetadataParser {
     }
 
     fn last_mod(&self) -> SystemTime {
-        self.last_mod.clone()
+        self.last_mod
     }
 
     fn ext(&self) -> String {

@@ -3,7 +3,6 @@ use std::path::{Path, PathBuf};
 use std::time;
 
 use id3::{self, TagLike};
-use mp3_duration;
 
 use super::generic::{trimmer, MetadataParser};
 
@@ -39,9 +38,9 @@ impl ID3MetadataParser {
         */
 
         Ok(ID3MetadataParser {
-            tag: tag,
-            duration: duration,
-            last_mod: last_mod,
+            tag,
+            duration,
+            last_mod,
             path: path.as_ref().to_path_buf(),
         })
     }
@@ -134,7 +133,7 @@ impl MetadataParser for ID3MetadataParser {
     }
 
     fn last_mod(&self) -> time::SystemTime {
-        self.last_mod.clone()
+        self.last_mod
     }
 
     fn ext(&self) -> String {

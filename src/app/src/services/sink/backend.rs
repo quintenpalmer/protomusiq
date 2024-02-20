@@ -36,7 +36,7 @@ impl SinkPlayback {
         SinkPlayback {
             _stream: stream,
             sink: rodio::Sink::try_new(&stream_handle).unwrap(),
-            stream_handle: stream_handle,
+            stream_handle,
             manual_sink_status: None,
             time_elapsed: 0,
         }

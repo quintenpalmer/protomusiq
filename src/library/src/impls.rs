@@ -16,13 +16,13 @@ impl RawLibrary {
         tracks: Vec<FullTrackMetadata>,
     ) -> Result<Self, Error> {
         let (tree, conflicts) = organizer::organize_tracks(tracks);
-        if conflicts.len() > 0 {
-            return Err(Error::Conflicts(conflicts));
+        if !conflicts.is_empty() {
+            Err(Error::Conflicts(conflicts))
         } else {
-            return Ok(RawLibrary {
+            Ok(RawLibrary {
                 scan_prefix: scan_prefix.map(|x| x.as_ref().to_path_buf()),
                 artists: tree,
-            });
+            })
         }
     }
 }

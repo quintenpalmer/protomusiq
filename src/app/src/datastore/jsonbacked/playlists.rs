@@ -30,8 +30,8 @@ impl PlaylistData {
         let inner = maybe_raw.map(|raw| InnerPlaylistData::from_raw(raw));
 
         PlaylistData {
-            json_db_path: json_db_path,
-            inner: inner,
+            json_db_path,
+            inner,
         }
     }
 
@@ -183,7 +183,7 @@ impl InnerPlaylistData {
     fn add(&mut self, name: String) {
         let new_entry = model::playlist::PlaylistEntry {
             id: self.current_id + 1,
-            name: name,
+            name,
             tracks: Vec::new(),
         };
 

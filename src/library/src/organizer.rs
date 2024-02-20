@@ -39,7 +39,7 @@ pub fn organize_tracks(
                         total_duration: time::Duration::ZERO,
                         start_date: track.date_number,
                         end_date: track.date_number,
-                        last_modified: track.last_modified.clone(),
+                        last_modified: track.last_modified,
                         path: album_path,
                         relative_path: relative_album_path,
                     },
@@ -56,11 +56,11 @@ pub fn organize_tracks(
             album.album_info.total_duration = album
                 .album_info
                 .total_duration
-                .checked_add(track.duration.clone())
+                .checked_add(track.duration)
                 .unwrap();
 
             if track.last_modified > album.album_info.last_modified {
-                album.album_info.last_modified = track.last_modified.clone();
+                album.album_info.last_modified = track.last_modified;
             }
 
             album.album_info.genres.insert(track.genre.clone());

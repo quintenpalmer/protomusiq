@@ -187,7 +187,7 @@ impl LibraryState {
         match artist.albums.values().collect::<Vec<_>>().as_mut_slice() {
             [] => self
                 .extra_library
-                .get_album_ids(&artist_id)
+                .get_album_ids(artist_id)
                 .get(0)
                 .unwrap()
                 .clone(),
@@ -195,7 +195,7 @@ impl LibraryState {
                 albums
                     .sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));
                 let album = albums[0].album_info.clone();
-                (artist_id.clone(), album.album_id)
+                (*artist_id, album.album_id)
             }
         }
     }
@@ -235,7 +235,7 @@ impl LibraryState {
                 .contains(&query.to_lowercase())
             {
                 artists.push(musiqlibrary::ArtistInfo {
-                    artist_id: artist.artist_info.artist_id.clone(),
+                    artist_id: artist.artist_info.artist_id,
                     artist_name: artist.artist_info.artist_name.clone(),
                 });
             }

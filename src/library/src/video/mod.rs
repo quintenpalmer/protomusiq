@@ -79,7 +79,8 @@ pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
         "unexpected file type: {}",
         current_path.into_os_string().to_string_lossy()
     );
-    return Vec::new();
+
+    Vec::new()
 }
 
 /// Extract the movie metadata from a given movie file path
@@ -139,7 +140,7 @@ fn find_mp4_metadata(
     let extra = find_extra_metadata(movie_path);
 
     Ok(MovieMetadata {
-        title: title,
+        title,
         path: movie_path.clone(),
         relative_path: movie_path
             .to_path_buf()
@@ -186,7 +187,7 @@ mod slash_date {
     use chrono::NaiveDate;
     use serde::{self, Deserialize, Deserializer};
 
-    const FORMAT: &'static str = "%Y/%m/%d";
+    const FORMAT: &str = "%Y/%m/%d";
 
     pub fn deserialize<'de, D>(deserializer: D) -> Result<NaiveDate, D::Error>
     where

@@ -7,7 +7,7 @@ pub struct Client<T> {
 
 impl<T> Client<T> {
     pub fn new(sender: mpsc::Sender<T>) -> Self {
-        Client { sender: sender }
+        Client { sender }
     }
 
     pub fn send(&self, message: T) -> Result<(), mpsc::SendError<T>> {
@@ -21,7 +21,7 @@ pub struct Callback<T> {
 
 impl<T> Callback<T> {
     pub fn new(receiver: mpsc::Receiver<T>) -> Self {
-        Callback { receiver: receiver }
+        Callback { receiver }
     }
 
     pub fn recv(&self) -> Result<T, mpsc::RecvError> {

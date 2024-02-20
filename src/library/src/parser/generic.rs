@@ -34,11 +34,11 @@ pub fn resolve_metadata_from_parser<P: AsRef<Path>>(
     let date = parser.date().unwrap();
 
     FullTrackMetadata {
-        album: album,
+        album,
         raw_album: parser.album(),
-        album_id: album_id,
-        album_artist: album_artist,
-        album_artist_id: album_artist_id,
+        album_id,
+        album_artist,
+        album_artist_id,
         track_artist: parser.artist(),
         track_artist_id: ID::new(&parser.artist()),
         disc: parser.disc().unwrap_or(1),
@@ -68,5 +68,6 @@ fn year_number_from_date_string(s: String) -> u32 {
     let hundreds = chars.next().unwrap().to_digit(10).unwrap();
     let tens = chars.next().unwrap().to_digit(10).unwrap();
     let ones = chars.next().unwrap().to_digit(10).unwrap();
-    return thousands * 1000 + hundreds * 100 + tens * 10 + ones;
+
+    thousands * 1000 + hundreds * 100 + tens * 10 + ones
 }

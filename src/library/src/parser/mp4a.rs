@@ -2,8 +2,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time;
 
-use mp4ameta;
-
 use super::generic::MetadataParser;
 
 pub struct MP4AMetadataParser {
@@ -27,8 +25,8 @@ impl MP4AMetadataParser {
             .as_str(),
         );
         Ok(MP4AMetadataParser {
-            tag: tag,
-            last_mod: last_mod,
+            tag,
+            last_mod,
             path: path.as_ref().to_path_buf(),
         })
     }
@@ -80,7 +78,7 @@ impl MetadataParser for MP4AMetadataParser {
     }
 
     fn last_mod(&self) -> time::SystemTime {
-        self.last_mod.clone()
+        self.last_mod
     }
 
     fn ext(&self) -> String {
