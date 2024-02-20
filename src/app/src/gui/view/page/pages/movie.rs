@@ -22,7 +22,7 @@ pub fn movie_page<'a>(
             user_nav_message(NavMessage::MovieList(
                 0,
                 model::MovieSortKey::ByTitle,
-                model::SortOrder::Regular,
+                model::MovieSortKey::ByTitle.default_order(),
             )),
         ),
     ];

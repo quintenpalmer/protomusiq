@@ -106,31 +106,31 @@ pub fn movie_list<'a>(
                     .push(sort_button(
                         "Title",
                         model::MovieSortKey::ByTitle,
-                        model::SortOrder::Regular,
+                        model::MovieSortKey::ByTitle.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
                         "Added",
                         model::MovieSortKey::LastModified,
-                        model::SortOrder::Reversed,
+                        model::MovieSortKey::LastModified.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
                         "Length",
                         model::MovieSortKey::ByDuration,
-                        model::SortOrder::Reversed,
+                        model::MovieSortKey::ByDuration.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
                         "Release",
                         model::MovieSortKey::ByRelease,
-                        model::SortOrder::Reversed,
+                        model::MovieSortKey::ByRelease.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
                         "Random",
                         model::MovieSortKey::Random,
-                        model::SortOrder::Regular,
+                        model::MovieSortKey::Random.default_order(),
                         sort_key,
                     )),
             );

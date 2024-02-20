@@ -16,7 +16,7 @@ pub fn movie_home<'a>() -> (Vec<(String, Message)>, Container<'a, Message>) {
             dark_button(h1("Movie List")).on_press(user_nav_message(NavMessage::MovieList(
                 0,
                 model::MovieSortKey::ByTitle,
-                model::SortOrder::Regular,
+                model::MovieSortKey::ByTitle.default_order(),
             ))),
         )
         .push(

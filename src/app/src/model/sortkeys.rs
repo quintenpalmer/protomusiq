@@ -181,3 +181,15 @@ pub enum MovieSortKey {
     ByRelease,
     Random,
 }
+
+impl MovieSortKey {
+    pub fn default_order(&self) -> SortOrder {
+        match self {
+            MovieSortKey::ByTitle => SortOrder::Regular,
+            MovieSortKey::LastModified => SortOrder::Reversed,
+            MovieSortKey::ByDuration => SortOrder::Reversed,
+            MovieSortKey::ByRelease => SortOrder::Reversed,
+            MovieSortKey::Random => SortOrder::Regular,
+        }
+    }
+}

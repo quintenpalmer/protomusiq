@@ -116,7 +116,7 @@ pub fn home_page<'a>(
             .on_press(user_nav_message(NavMessage::MovieList(
                 0,
                 model::MovieSortKey::ByTitle,
-                model::SortOrder::Regular,
+                model::MovieSortKey::ByTitle.default_order(),
             )));
 
             let page = Container::new(Scrollable::new(
