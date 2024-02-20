@@ -18,8 +18,8 @@ impl SortOrder {
 pub enum TrackSortKey {
     ByName,
     ByPlayCount,
-    ByDuration,
     ByPlayedAmount,
+    ByDuration,
     Random,
 }
 
@@ -28,8 +28,8 @@ impl TrackSortKey {
         match self {
             TrackSortKey::ByName => SortOrder::Regular,
             TrackSortKey::ByPlayCount => SortOrder::Reversed,
-            TrackSortKey::ByDuration => SortOrder::Reversed,
             TrackSortKey::ByPlayedAmount => SortOrder::Reversed,
+            TrackSortKey::ByDuration => SortOrder::Reversed,
             TrackSortKey::Random => SortOrder::Regular,
         }
     }
