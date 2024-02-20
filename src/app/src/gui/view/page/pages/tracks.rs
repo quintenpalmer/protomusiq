@@ -107,15 +107,6 @@ pub fn track_list<'a>(
 
                 let scrollable = Scrollable::new(grid).height(Length::Fill);
 
-                let mut total_tracks = 0;
-                for (_, artist) in library.get_artist_map().iter() {
-                    for (_, album) in artist.albums.iter() {
-                        for (_, disc) in album.discs.iter() {
-                            total_tracks += disc.tracks.len();
-                        }
-                    }
-                }
-
                 Container::new(
                     Column::new()
                         .spacing(6)
