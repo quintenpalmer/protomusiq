@@ -204,8 +204,7 @@ impl AlbumArt {
     ) -> Vec<u8> {
         match album_size {
             AlbumSize::Large => fs::read(
-                &self
-                    .large_album_covers
+                self.large_album_covers
                     .get(&musiqlibrary::AlbumUniqueIdentifier::new(
                         artist_id, album_id,
                     ))

@@ -310,7 +310,7 @@ impl InnerPlaylistData {
 
     fn write_json(&self, json_db_path: &PathBuf) {
         serde_json::to_writer(
-            io::BufWriter::new(fs::File::create(&json_db_path).unwrap()),
+            io::BufWriter::new(fs::File::create(json_db_path).unwrap()),
             &self.to_raw(),
         )
         .unwrap()
