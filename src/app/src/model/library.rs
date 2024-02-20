@@ -253,15 +253,14 @@ impl LibraryState {
                         {
                             tracks.push(track.clone());
                         }
-                        if track.metadata.track_artist != track.metadata.album_artist {
-                            if track
+                        if track.metadata.track_artist != track.metadata.album_artist
+                            && track
                                 .metadata
                                 .track_artist
                                 .to_lowercase()
                                 .contains(&query.to_lowercase())
-                            {
-                                track_artists.push(track.clone());
-                            }
+                        {
+                            track_artists.push(track.clone());
                         }
                     }
                 }

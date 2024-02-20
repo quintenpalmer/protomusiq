@@ -32,10 +32,8 @@ pub fn tracks_after_including(
     let mut ret = Vec::new();
     let mut found = false;
     for iter_track in tracks.iter() {
-        if !found {
-            if iter_track == current_track {
-                found = true;
-            }
+        if !found && iter_track == current_track {
+            found = true;
         }
         if found {
             ret.push(iter_track.clone());
