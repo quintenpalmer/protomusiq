@@ -124,49 +124,49 @@ pub fn album_list<'a>(
                                     .push(sort_button(
                                         "Artist Name",
                                         model::AlbumSortKey::ByParent,
-                                        model::SortOrder::Regular,
+                                        model::AlbumSortKey::ByParent.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Name",
                                         model::AlbumSortKey::ByName,
-                                        model::SortOrder::Regular,
+                                        model::AlbumSortKey::ByName.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Added",
                                         model::AlbumSortKey::ByLastMod,
-                                        model::SortOrder::Reversed,
+                                        model::AlbumSortKey::ByLastMod.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Length",
                                         model::AlbumSortKey::ByDuration,
-                                        model::SortOrder::Reversed,
+                                        model::AlbumSortKey::ByDuration.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Total Play Count",
                                         model::AlbumSortKey::ByTotalPlayCount,
-                                        model::SortOrder::Reversed,
+                                        model::AlbumSortKey::ByTotalPlayCount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Total Played Duration",
                                         model::AlbumSortKey::ByTotalPlayedDuration,
-                                        model::SortOrder::Reversed,
+                                        model::AlbumSortKey::ByTotalPlayedDuration.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Date",
                                         model::AlbumSortKey::ByDate,
-                                        model::SortOrder::Reversed,
+                                        model::AlbumSortKey::ByDate.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::AlbumSortKey::Random,
-                                        model::SortOrder::Regular,
+                                        model::AlbumSortKey::Random.default_order(),
                                         sort_key,
                                     )),
                             ),
