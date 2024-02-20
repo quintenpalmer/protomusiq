@@ -13,9 +13,7 @@ impl bridge::SixtyFourLibrary {
         let discs = query::discs::select_discs(&conn.shared_db);
         let tracks = query::tracks::select_tracks(&conn.shared_db);
 
-        let bridge = bridge::SixtyFourLibrary::from_db_rows(artists, albums, discs, tracks);
-
-        bridge
+        bridge::SixtyFourLibrary::from_db_rows(artists, albums, discs, tracks)
     }
 }
 
