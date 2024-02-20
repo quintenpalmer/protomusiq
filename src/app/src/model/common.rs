@@ -23,6 +23,16 @@ pub enum SortOrder {
     Reversed,
 }
 
+impl SortOrder {
+    pub fn display_text(&self) -> String {
+        match self {
+            SortOrder::Regular => "Regular",
+            SortOrder::Reversed => "Reversed",
+        }
+        .to_string()
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum TrackSortKey {
     ByName,
@@ -73,6 +83,22 @@ pub enum AlbumSortKey {
     ByTotalPlayCount,
     ByTotalPlayedDuration,
     Random,
+}
+
+impl AlbumSortKey {
+    pub fn display_text(&self) -> String {
+        match self {
+            AlbumSortKey::ByName => "Name",
+            AlbumSortKey::ByParent => "Artist",
+            AlbumSortKey::ByDate => "Release Date",
+            AlbumSortKey::ByDuration => "Length",
+            AlbumSortKey::ByLastMod => "Added",
+            AlbumSortKey::ByTotalPlayCount => "Play Count",
+            AlbumSortKey::ByTotalPlayedDuration => "Played Duration",
+            AlbumSortKey::Random => "Random",
+        }
+        .to_string()
+    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]

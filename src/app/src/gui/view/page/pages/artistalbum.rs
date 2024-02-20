@@ -76,8 +76,7 @@ pub fn artist_album_view_state<'a>(
                 ),
             ];
 
-            let body = Container::new(
-                Column::new()
+            let mut body_column = Column::new()
                     .push(
                         Row::new()
                             .push({
@@ -425,15 +424,33 @@ pub fn artist_album_view_state<'a>(
                         }
 
                         Container::new(
-                            Container::new(Scrollable::new(column))
+                            Container::new(Scrollable::new(column).height(Length::Fill)).height(Length::Fill)
                                 .padding(10)
                                 .style(iced::theme::Container::Custom(
                                     Box::new(style::ContainerDarkInset{})
                                 ))
                         )
-                        .padding(10)
-                    }),
-            );
+                        .padding(10).height(Length::Fill)
+                    });
+
+            match maybe_current_sort_order {
+                Some(current_sort_order) => {
+                    let sort_nav_row = line_row()
+                        .spacing(8)
+                        .push(h3("<"))
+                        .push(h3(format!("{}", current_sort_order.index)))
+                        .push(h3(">"))
+                        .push(h3(current_sort_order.sort_key.display_text()))
+                        .push(h3(format!(
+                            "({})",
+                            current_sort_order.sort_order.display_text()
+                        )));
+                    body_column = body_column.push(sort_nav_row);
+                }
+                None => (),
+            }
+
+            let body = Container::new(body_column);
 
             (breadcrumbs, body)
         }
