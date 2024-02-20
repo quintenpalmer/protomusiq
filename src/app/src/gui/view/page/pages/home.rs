@@ -47,7 +47,7 @@ pub fn home_page<'a>(
             .on_press(user_nav_message(NavMessage::ArtistList(
                 0,
                 model::ArtistSortKey::ByName,
-                model::SortOrder::Regular,
+                model::ArtistSortKey::ByName.default_order(),
             )));
             let track_list = dark_button(Container::new(bottom_label(
                 album_image(

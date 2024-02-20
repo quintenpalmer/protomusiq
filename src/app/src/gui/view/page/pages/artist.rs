@@ -104,43 +104,43 @@ pub fn artist_list<'a>(
                                     .push(sort_button(
                                         "Name",
                                         model::ArtistSortKey::ByName,
-                                        model::SortOrder::Regular,
+                                        model::ArtistSortKey::ByName.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Play Count",
                                         model::ArtistSortKey::ByPlayCount,
-                                        model::SortOrder::Reversed,
+                                        model::ArtistSortKey::ByPlayCount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Album Count",
                                         model::ArtistSortKey::ByAlbumCount,
-                                        model::SortOrder::Reversed,
+                                        model::ArtistSortKey::ByAlbumCount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Track Count",
                                         model::ArtistSortKey::ByTrackCount,
-                                        model::SortOrder::Reversed,
+                                        model::ArtistSortKey::ByTrackCount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Track Length",
                                         model::ArtistSortKey::ByTrackDuration,
-                                        model::SortOrder::Reversed,
+                                        model::ArtistSortKey::ByTrackDuration.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Duration Played",
                                         model::ArtistSortKey::ByPlayedDuration,
-                                        model::SortOrder::Reversed,
+                                        model::ArtistSortKey::ByPlayedDuration.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::ArtistSortKey::Random,
-                                        model::SortOrder::Regular,
+                                        model::ArtistSortKey::Random.default_order(),
                                         sort_key,
                                     )),
                             ),

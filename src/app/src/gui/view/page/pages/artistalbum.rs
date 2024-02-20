@@ -57,7 +57,7 @@ pub fn artist_album_view_state<'a>(
                     user_nav_message(NavMessage::ArtistList(
                         0,
                         model::ArtistSortKey::ByName,
-                        model::SortOrder::Regular,
+                        model::ArtistSortKey::ByName.default_order(),
                     )),
                 ),
                 (
