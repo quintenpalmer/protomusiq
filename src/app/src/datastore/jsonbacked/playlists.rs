@@ -317,10 +317,7 @@ impl InnerPlaylistData {
     }
 
     fn to_vec(&self) -> Vec<model::playlist::PlaylistEntry> {
-        self.playlists
-            .iter()
-            .map(|(_key, value)| value.clone())
-            .collect()
+        self.playlists.values().cloned().collect()
     }
 
     fn to_raw(&self) -> RawPlaylistData {
