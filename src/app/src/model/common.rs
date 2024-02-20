@@ -175,10 +175,7 @@ impl<T: Clone> ListAndReversed<T> {
         let mut reversed = regular.clone();
         reversed.reverse();
 
-        ListAndReversed {
-            regular: regular,
-            reversed: reversed,
-        }
+        ListAndReversed { regular, reversed }
     }
 
     pub fn sort_ordered(&self, sort_order: &SortOrder) -> &Vec<T> {

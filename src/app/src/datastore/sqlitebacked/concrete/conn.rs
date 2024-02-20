@@ -187,7 +187,7 @@ impl Connections {
             let artist_id = musiqlibrary::ID::new(&artist.name);
             let mut artist_entry = musiqlibrary::KeyedArtistAlbums {
                 artist_info: musiqlibrary::ArtistInfo {
-                    artist_id: artist_id,
+                    artist_id,
                     artist_name: artist.name.clone(),
                 },
                 albums: BTreeMap::new(),
@@ -209,7 +209,7 @@ impl Connections {
                     for track in tracks_by_disc.get(&disc.id).unwrap() {
                         known_album_info = known_album_info.map_or(
                             Some(musiqlibrary::AlbumInfo {
-                                album_id: album_id,
+                                album_id,
                                 album_name: album.name.clone(),
                                 genres: BTreeSet::new(),
                                 total_duration: track.duration,

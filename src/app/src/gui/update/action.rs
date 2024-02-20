@@ -127,9 +127,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
         message::Action::Notify(notification_message) => match notification_message {
             message::NotificationMessage::OnScreen(notification_type) => {
                 println!("Got this message: {:?}", notification_type);
-                app.messages.push(state::MessageInfo {
-                    notification_type: notification_type,
-                });
+                app.messages.push(state::MessageInfo { notification_type });
                 Command::none()
             }
             message::NotificationMessage::PopOnScreen => {

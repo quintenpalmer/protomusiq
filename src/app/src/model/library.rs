@@ -51,15 +51,15 @@ impl LibraryState {
 
         LibraryState {
             raw_library: augmented_library,
-            extra_library: extra_library,
+            extra_library,
 
             user_playlists: playlists,
 
-            artist_sorts: artist_sorts,
-            album_sorts: album_sorts,
-            track_sorts: track_sorts,
+            artist_sorts,
+            album_sorts,
+            track_sorts,
 
-            grid_info: grid_info,
+            grid_info,
 
             album_art: loaded_images,
         }
@@ -285,10 +285,10 @@ impl LibraryState {
         });
 
         common::SimpleSearchResults {
-            artists: artists,
+            artists,
             albums: artist_albums,
-            tracks: tracks,
-            track_artists: track_artists,
+            tracks,
+            track_artists,
         }
     }
 }
@@ -356,7 +356,7 @@ impl GridInfo {
         GridInfo {
             layout_width: width,
             layout_height: height,
-            track_multiplier: track_multiplier,
+            track_multiplier,
         }
     }
 

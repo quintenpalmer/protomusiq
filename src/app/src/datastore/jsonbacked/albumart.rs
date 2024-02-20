@@ -67,12 +67,9 @@ impl FilesystemCachedAlbumArt {
                 let cache_album_dir = album_cache_path.join(local_dir);
                 localfs::confirm_dir(&cache_album_dir).unwrap();
 
-                cache.album_art.insert(
-                    key,
-                    FilesystemAlbumArt {
-                        cache_album_dir: cache_album_dir,
-                    },
-                );
+                cache
+                    .album_art
+                    .insert(key, FilesystemAlbumArt { cache_album_dir });
             }
         }
 

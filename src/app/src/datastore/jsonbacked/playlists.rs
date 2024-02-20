@@ -169,7 +169,7 @@ impl InnerPlaylistData {
                 1,
                 model::playlist::PlaylistEntry {
                     id: 1,
-                    name: name,
+                    name,
                     tracks: Vec::new(),
                 },
             )]

@@ -15,11 +15,7 @@ pub struct MessageCommandSender<T> {
 
 impl<T: std::fmt::Debug> MessageCommandSender<T> {
     fn new(name: String, tx: shared::Client<T>, message: T) -> Self {
-        MessageCommandSender {
-            name: name,
-            tx: tx,
-            message: message,
-        }
+        MessageCommandSender { name, tx, message }
     }
 
     pub async fn send_message(self) -> Result<(), String> {

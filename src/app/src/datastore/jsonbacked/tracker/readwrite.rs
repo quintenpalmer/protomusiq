@@ -33,7 +33,7 @@ impl JSONTracker {
         JSONTracker {
             tracker_db_json_path: final_path,
             local_tracks: raw_tracker.to_btree_map(),
-            all_tracks: all_tracks,
+            all_tracks,
         }
     }
 }

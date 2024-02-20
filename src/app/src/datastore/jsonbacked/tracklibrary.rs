@@ -280,18 +280,18 @@ fn arbitrary_serialize_sort(raw_library: &musiqlibrary::RawLibrary) -> CacheMeta
                                 for track in disc.tracks.values() {
                                     tracks.push(track.clone());
                                 }
-                                discs.push(musiqlibrary::SortedDiscTracks { tracks: tracks });
+                                discs.push(musiqlibrary::SortedDiscTracks { tracks });
                             }
                             musiqlibrary::SortedAlbumDiscs {
                                 album_info: album.album_info.clone(),
                                 path: album.album_info.path.clone(),
-                                discs: discs,
+                                discs,
                             }
                         })
                         .collect();
                 musiqlibrary::SortedArtistAlbums {
                     artist_info: artist.artist_info.clone(),
-                    albums: albums,
+                    albums,
                 }
             })
             .collect();

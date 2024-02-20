@@ -119,7 +119,7 @@ impl CurrentPlayback {
         match shared_repr {
             shared::PlayQueueEntry::Track(t) => CurrentPlayback::Track(CurrentTrackPlayback {
                 track: t.track,
-                current_second: current_second,
+                current_second,
             }),
             shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
                 CurrentPlayback::PauseBreak

@@ -26,15 +26,11 @@ pub fn handle_nav(
             Command::none()
         }
         NavMessage::PlaylistView(playlist_id) => {
-            app.current_page = Page::PlaylistView(state::PlaylistViewState {
-                playlist_id: playlist_id,
-            });
+            app.current_page = Page::PlaylistView(state::PlaylistViewState { playlist_id });
             Command::none()
         }
         NavMessage::PlaylistList(new_playlist_name) => {
-            app.current_page = Page::PlaylistList(state::PlaylistListState {
-                new_playlist_name: new_playlist_name,
-            });
+            app.current_page = Page::PlaylistList(state::PlaylistListState { new_playlist_name });
             Command::none()
         }
         NavMessage::SearchPage(query, domain, perform_search) => {
@@ -66,38 +62,38 @@ pub fn handle_nav(
             };
 
             app.current_page = Page::Search(state::SearchPageState {
-                query: query,
+                query,
                 domain_results: computed_results,
             });
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }
         NavMessage::TrackList(page, sort, sort_order) => {
             app.current_page = Page::TrackList(state::TrackListState {
-                page: page,
+                page,
                 sort_key: sort,
-                sort_order: sort_order,
+                sort_order,
             });
             Command::none()
         }
         NavMessage::AlbumList(page, sort, sort_order) => {
             app.current_page = Page::AlbumList(state::AlbumListState {
-                page: page,
+                page,
                 sort_key: sort,
-                sort_order: sort_order,
+                sort_order,
             });
             Command::none()
         }
         NavMessage::ArtistList(page, sort, sort_order) => {
             app.current_page = Page::ArtistList(state::ArtistListState {
-                page: page,
+                page,
                 sort_key: sort,
-                sort_order: sort_order,
+                sort_order,
             });
             Command::none()
         }
         NavMessage::ArtistAlbumsView(artist_id) => {
             app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
-                artist_id: artist_id,
+                artist_id,
                 albums: app
                     .library
                     .get_artist_map()
@@ -112,28 +108,28 @@ pub fn handle_nav(
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
             app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
-                artist_id: artist_id,
+                artist_id,
 
-                sort_key: sort_key,
-                sort_order: sort_order,
+                sort_key,
+                sort_order,
             });
             Command::none()
         }
         NavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
             app.current_page = Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
-                artist_id: artist_id,
+                artist_id,
 
-                sort_key: sort_key,
-                sort_order: sort_order,
+                sort_key,
+                sort_order,
             });
             Command::none()
         }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
-                artist_id: artist_id,
-                album_id: album_id,
-                album_size: album_size,
-                maybe_selected_track: maybe_selected_track,
+                artist_id,
+                album_id,
+                album_size,
+                maybe_selected_track,
             });
             Command::none()
         }
@@ -143,9 +139,9 @@ pub fn handle_nav(
         }
         NavMessage::MovieList(page, sort, sort_order) => {
             app.current_page = Page::MovieList(state::MovieListState {
-                page: page,
+                page,
                 sort_key: sort,
-                sort_order: sort_order,
+                sort_order,
             });
             Command::none()
         }

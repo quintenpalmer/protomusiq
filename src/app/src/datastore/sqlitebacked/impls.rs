@@ -29,10 +29,7 @@ impl CachingConn {
     pub fn new(conn: conn::Connections) -> Self {
         let bridge = bridge::SixtyFourLibrary::new(&conn);
 
-        CachingConn {
-            conn: conn,
-            bridge: bridge,
-        }
+        CachingConn { conn, bridge }
     }
 }
 
@@ -59,8 +56,8 @@ impl SqlitePreHistoryReporter {
         let prehistorical_track_id_to_count = conn.get_all_historical_track_counts();
 
         SqlitePreHistoryReporter {
-            bridge: bridge,
-            prehistorical_track_id_to_count: prehistorical_track_id_to_count,
+            bridge,
+            prehistorical_track_id_to_count,
         }
     }
 }
@@ -87,8 +84,8 @@ impl SqliteLiveHistoryReporter {
         let livehistory_track_id_to_count = conn.get_all_live_track_counts();
 
         SqliteLiveHistoryReporter {
-            bridge: bridge,
-            livehistory_track_id_to_count: livehistory_track_id_to_count,
+            bridge,
+            livehistory_track_id_to_count,
         }
     }
 }
@@ -113,10 +110,7 @@ impl SqliteLiveHistoryRecorder {
     pub fn new(conn: conn::Connections) -> Self {
         let bridge = bridge::SixtyFourLibrary::new(&conn);
 
-        SqliteLiveHistoryRecorder {
-            conn: conn,
-            bridge: bridge,
-        }
+        SqliteLiveHistoryRecorder { conn, bridge }
     }
 }
 
