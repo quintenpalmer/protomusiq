@@ -55,7 +55,7 @@ pub fn artist_track_view_state<'a>(
                     NavMessage::ArtistFeaturedTrackView(
                         *artist_id,
                         model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                        model::SortOrder::Reversed,
+                        model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                     ),
                 )));
 

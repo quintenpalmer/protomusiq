@@ -339,7 +339,7 @@ pub fn artist_album_view_state<'a>(
                                                                 user_nav_message(NavMessage::ArtistFeaturedTrackView(
                                                                     musiqlibrary::ID::new(&track_artist),
                                                                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                                                                    model::SortOrder::Reversed,
+                                                                    model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                                                                 )),
                                                             ).into();
                                                             ret

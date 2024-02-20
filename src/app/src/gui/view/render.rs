@@ -539,7 +539,8 @@ fn controls_with_maybe_track_info<'a>(
                                             user_nav_message(NavMessage::ArtistFeaturedTrackView(
                                                 musiqlibrary::ID::new(&track_artist),
                                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                                                model::SortOrder::Reversed,
+                                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount
+                                                    .default_order(),
                                             )),
                                         ),
                                     )

@@ -68,6 +68,19 @@ pub enum ArtistFeaturedTrackSortKey {
     Random,
 }
 
+impl ArtistFeaturedTrackSortKey {
+    pub fn default_order(&self) -> SortOrder {
+        match self {
+            ArtistFeaturedTrackSortKey::ByName => SortOrder::Regular,
+            ArtistFeaturedTrackSortKey::ByParent => SortOrder::Regular,
+            ArtistFeaturedTrackSortKey::ByDuration => SortOrder::Reversed,
+            ArtistFeaturedTrackSortKey::ByTotalPlayCount => SortOrder::Reversed,
+            ArtistFeaturedTrackSortKey::ByTotalPlayedDuration => SortOrder::Reversed,
+            ArtistFeaturedTrackSortKey::Random => SortOrder::Regular,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ArtistSortKey {
     ByName,

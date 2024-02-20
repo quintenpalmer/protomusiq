@@ -128,7 +128,7 @@ pub fn artist_album_list<'a>(
                         NavMessage::ArtistFeaturedTrackView(
                             *artist_id,
                             model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                            model::SortOrder::Reversed,
+                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                         ),
                     )));
 

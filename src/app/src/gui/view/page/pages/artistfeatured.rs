@@ -57,7 +57,7 @@ pub fn artist_featured_track_view_state<'a>(
                     NavMessage::ArtistFeaturedTrackView(
                         *artist_id,
                         model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                        model::SortOrder::Reversed,
+                        model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                     ),
                 )));
 
@@ -88,42 +88,42 @@ pub fn artist_featured_track_view_state<'a>(
                     &artist.artist_id,
                     "Album",
                     model::ArtistFeaturedTrackSortKey::ByParent,
-                    model::SortOrder::Regular,
+                    model::ArtistFeaturedTrackSortKey::ByParent.default_order(),
                     sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Name",
                     model::ArtistFeaturedTrackSortKey::ByName,
-                    model::SortOrder::Regular,
+                    model::ArtistFeaturedTrackSortKey::ByName.default_order(),
                     sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Play Count",
                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                    model::SortOrder::Reversed,
+                    model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                     sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Length",
                     model::ArtistFeaturedTrackSortKey::ByDuration,
-                    model::SortOrder::Reversed,
+                    model::ArtistFeaturedTrackSortKey::ByDuration.default_order(),
                     sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Played Duration",
                     model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration,
-                    model::SortOrder::Reversed,
+                    model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration.default_order(),
                     sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Random",
                     model::ArtistFeaturedTrackSortKey::Random,
-                    model::SortOrder::Regular,
+                    model::ArtistFeaturedTrackSortKey::Random.default_order(),
                     sort_key,
                 ));
 
