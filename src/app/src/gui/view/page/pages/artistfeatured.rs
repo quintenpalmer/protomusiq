@@ -50,7 +50,7 @@ pub fn artist_featured_track_view_state<'a>(
                     NavMessage::ArtistTrackView(
                         *artist_id,
                         model::ArtistTrackSortKey::ByTotalPlayCount,
-                        model::SortOrder::Reversed,
+                        model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
                     ),
                 )))
                 .push(dark_button(h2("Featured")).on_press(user_nav_message(

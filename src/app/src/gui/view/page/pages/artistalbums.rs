@@ -121,7 +121,7 @@ pub fn artist_album_list<'a>(
                         NavMessage::ArtistTrackView(
                             *artist_id,
                             model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::SortOrder::Reversed,
+                            model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
                         ),
                     )))
                     .push(dark_button(dark(h2("Featured"))).on_press(user_nav_message(
