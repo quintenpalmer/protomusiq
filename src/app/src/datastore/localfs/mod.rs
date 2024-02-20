@@ -47,8 +47,5 @@ pub fn confirm_dir(path: &PathBuf) -> Result<(), String> {
 }
 
 pub fn check_exists(path: &PathBuf) -> bool {
-    match fs::metadata(path) {
-        Ok(_) => true,
-        Err(_) => false,
-    }
+    fs::metadata(path).is_ok()
 }
