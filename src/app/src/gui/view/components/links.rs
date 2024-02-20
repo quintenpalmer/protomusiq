@@ -9,6 +9,6 @@ pub fn track_link(track: &musiqlibrary::FullTrackMetadata) -> message::Message {
         track.album_artist_id.clone(),
         track.album_id.clone(),
         model::AlbumSize::Regular,
-        Some(musiqlibrary::TrackUniqueIdentifier::from_track(&track)),
+        Some(musiqlibrary::TrackUniqueIdentifier::from_track(track)),
     ))
 }

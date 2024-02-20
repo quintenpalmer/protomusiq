@@ -26,7 +26,7 @@ impl JSONTracker {
         allowed_tracker_files: &Option<Vec<PathBuf>>,
     ) -> Self {
         let (raw_tracker, final_path): (RawTrackedPayload, PathBuf) = common::bootstrap_raw_data(
-            &app_data_path,
+            app_data_path,
             vec!["data", "tracker", format!("{}.json", hostname).as_str()],
         );
 
@@ -114,7 +114,7 @@ pub fn list_all_tracker_records(
 
     let mut all_tracks = BTreeMap::new();
 
-    let tracker_files_dir = localfs::build_tree_for_dirs(&app_data_path, vec!["data", "tracker"]);
+    let tracker_files_dir = localfs::build_tree_for_dirs(app_data_path, vec!["data", "tracker"]);
 
     for tracker_file in fs::read_dir(tracker_files_dir).unwrap() {
         let tracker_file = tracker_file.unwrap().path();

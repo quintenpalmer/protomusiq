@@ -88,7 +88,7 @@ pub fn repopulate_and_soft_delete(
                     ) {
                         Ok(id) => id,
                         Err(rusqlite::Error::QueryReturnedNoRows) => {
-                            query::tracks::insert_track(&tx, disc_id, &track)
+                            query::tracks::insert_track(&tx, disc_id, track)
                         }
                         e => e.unwrap(),
                     };

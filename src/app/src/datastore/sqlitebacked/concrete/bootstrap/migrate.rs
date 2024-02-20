@@ -21,13 +21,13 @@ pub fn create_all_tables(config_state: model::app::AppConfigState, main_db: &rus
     for file in files.into_iter() {
         let migration_number = get_leading_number_of_migration_filename(&file);
 
-        let has_migration = check_has_migration_number(&main_db, migration_number);
+        let has_migration = check_has_migration_number(main_db, migration_number);
 
         if !has_migration {
             let migration_sql = fs::read_to_string(file.path()).unwrap();
 
             main_db.execute_batch(&migration_sql).unwrap();
-            mark_migration_number(&main_db, migration_number);
+            mark_migration_number(main_db, migration_number);
 
             println!(
                 "just applied migration {} ({:?})",
@@ -43,7 +43,7 @@ pub fn create_all_tables(config_state: model::app::AppConfigState, main_db: &rus
         }
     }
 
-    insert_all_sources(&main_db);
+    insert_all_sources(main_db);
 }
 
 fn check_has_migration_number(main_db: &rusqlite::Connection, number: u32) -> bool {
@@ -92,8 +92,8 @@ fn insert_all_sources(main_db: &rusqlite::Connection) {
 }
 
 fn leading_number_sort(first: &fs::DirEntry, second: &fs::DirEntry) -> cmp::Ordering {
-    let first_number = get_leading_number_of_migration_filename(&first);
-    let second_number = get_leading_number_of_migration_filename(&second);
+    let first_number = get_leading_number_of_migration_filename(first);
+    let second_number = get_leading_number_of_migration_filename(second);
 
     first_number.cmp(&second_number)
 }

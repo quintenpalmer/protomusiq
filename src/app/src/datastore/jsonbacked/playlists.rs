@@ -22,7 +22,7 @@ pub struct PlaylistData {
 impl PlaylistData {
     pub fn new(app_data_path: &PathBuf) -> Self {
         let json_db_path = localfs::build_tree_for_file(
-            &app_data_path,
+            app_data_path,
             vec!["data", "playlists", "playlists.json"],
         );
 

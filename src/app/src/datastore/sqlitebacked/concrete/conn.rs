@@ -52,7 +52,7 @@ impl Connections {
         logger.print_elapsed("opened sqlite connection");
 
         if !conn.check_has_migration(constants::Migration::TracksAndFriends) {
-            seed::seed_tracks(&tracks, &mut conn.shared_db);
+            seed::seed_tracks(tracks, &mut conn.shared_db);
 
             logger.print_elapsed("seeded tracks");
         } else {
@@ -78,7 +78,7 @@ impl Connections {
 
             logger.print_elapsed("built id bridge");
 
-            seed::seed_prehistory(&mut self.shared_db, &bridge_library, &prehistory_records);
+            seed::seed_prehistory(&mut self.shared_db, &bridge_library, prehistory_records);
 
             logger.print_elapsed("seeded prehistory");
         } else {
@@ -106,7 +106,7 @@ impl Connections {
 
             logger.print_elapsed("built id bridge");
 
-            seed::seed_livehistory(&mut self.shared_db, &bridge_library, &livehistory_records);
+            seed::seed_livehistory(&mut self.shared_db, &bridge_library, livehistory_records);
 
             logger.print_elapsed("seeded livehistory");
         } else {
@@ -116,8 +116,7 @@ impl Connections {
     }
 
     pub fn repopulate_tracks(&mut self, library: &musiqlibrary::RawLibrary) {
-        let _timestamp =
-            query::undeleted::repopulate_and_soft_delete(&mut self.shared_db, &library);
+        let _timestamp = query::undeleted::repopulate_and_soft_delete(&mut self.shared_db, library);
     }
 
     pub fn _bootstrap_album_art(&mut self, _all_album_art: ()) {}
@@ -279,7 +278,7 @@ impl Connections {
         id: &musiqlibrary::TrackUniqueIdentifier,
         bridge: &bridge::SixtyFourLibrary,
     ) -> usize {
-        let track = bridge.track_from_unique_key(&id);
+        let track = bridge.track_from_unique_key(id);
 
         query::prehistory::get_historical_track_count(&self.shared_db, track.id)
     }
@@ -293,7 +292,7 @@ impl Connections {
         id: &musiqlibrary::TrackUniqueIdentifier,
         bridge: &bridge::SixtyFourLibrary,
     ) -> usize {
-        let track = bridge.track_from_unique_key(&id);
+        let track = bridge.track_from_unique_key(id);
 
         query::tracking::get_live_track_count(&self.shared_db, track.id)
     }
@@ -308,7 +307,7 @@ impl Connections {
         track: &musiqlibrary::FullTrackMetadata,
         date_time: DateTime<Local>,
     ) {
-        self.increment_tracks_with_dates(&bridge, vec![(track.clone(), date_time)])
+        self.increment_tracks_with_dates(bridge, vec![(track.clone(), date_time)])
     }
 
     pub fn increment_tracks_with_dates(

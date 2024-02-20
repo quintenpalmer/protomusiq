@@ -94,7 +94,7 @@ fn seed(_config_state: &model::app::AppConfigState) {
 
 fn check_tracked(config_state: &model::app::AppConfigState) {
     let library = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
-        &config_state,
+        config_state,
         &loader::Loader::NoCache,
     );
     let prehistory_records = tracker::list_all_tracker_records(

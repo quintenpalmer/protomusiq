@@ -106,7 +106,7 @@ impl LibraryState {
         &self,
         artist_id: &musiqlibrary::ID,
     ) -> Vec<&augmented::AugmentedTrack> {
-        match self.raw_library.artists.get(&artist_id) {
+        match self.raw_library.artists.get(artist_id) {
             Some(raw_library_artist) => raw_library_artist.get_all_tracks(),
             None => Vec::new(),
         }
@@ -133,8 +133,7 @@ impl LibraryState {
         artist_id: musiqlibrary::ID,
         album_id: musiqlibrary::ID,
     ) -> &musiqlibrary::KeyedAlbumTracks<augmented::AugmentedTrack> {
-        &self
-            .raw_library
+        self.raw_library
             .artists
             .get(&artist_id)
             .unwrap()
@@ -154,8 +153,7 @@ impl LibraryState {
         &self,
         track_identifier: &musiqlibrary::TrackUniqueIdentifier,
     ) -> &augmented::AugmentedTrack {
-        &self
-            .raw_library
+        self.raw_library
             .artists
             .get(&track_identifier.artist_id)
             .unwrap()
@@ -183,7 +181,7 @@ impl LibraryState {
         &self,
         artist_id: &musiqlibrary::ID,
     ) -> (musiqlibrary::ID, musiqlibrary::ID) {
-        let artist = self.raw_library.artists.get(&artist_id).unwrap();
+        let artist = self.raw_library.artists.get(artist_id).unwrap();
         match artist.albums.values().collect::<Vec<_>>().as_mut_slice() {
             [] => self
                 .extra_library

@@ -24,7 +24,7 @@ impl ReadOnlyTracker {
     }
 
     pub fn get_track_count(&self, track_identifier: &musiqlibrary::TrackUniqueIdentifier) -> usize {
-        self.inner.get_track_count(&track_identifier)
+        self.inner.get_track_count(track_identifier)
     }
 
     pub fn get_track_history(

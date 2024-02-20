@@ -64,7 +64,7 @@ pub fn increment_tracks_with_dates(
     let tx = main_db.transaction().unwrap();
 
     for (track, datetime) in tracks_with_dates.into_iter() {
-        insert_track_with_date(&tx, &bridge, track, datetime);
+        insert_track_with_date(&tx, bridge, track, datetime);
     }
 
     tx.commit().unwrap();

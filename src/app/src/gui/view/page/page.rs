@@ -21,51 +21,46 @@ pub fn render_page<'a>(
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     match current_page {
-        Page::Home(ref state) => pages::home::home_page(&app_images, state),
+        Page::Home(ref state) => pages::home::home_page(app_images, state),
         Page::Config(state::ConfigState {}) => pages::config::config_page(),
         Page::PlayQueue(state::PlayQueueState {}) => (
             Vec::new(),
             Container::new(bright_paragraph("The Play Queue")),
         ),
         Page::PlaylistView(ref state) => {
-            pages::playlist::playlist_view(&library, &action_state, &player_info, state)
+            pages::playlist::playlist_view(library, action_state, player_info, state)
         }
-        Page::PlaylistList(ref state) => pages::playlists::playlist_list_view(&library, state),
+        Page::PlaylistList(ref state) => pages::playlists::playlist_list_view(library, state),
         Page::Search(ref state) => {
-            pages::search::search_page(&library, &movie_library, &app_images, state)
+            pages::search::search_page(library, movie_library, app_images, state)
         }
-        Page::TrackList(ref state) => pages::tracks::track_list(&library, state),
-        Page::AlbumList(ref state) => pages::albums::album_list(&library, &play_queue_info, state),
-        Page::ArtistList(ref state) => {
-            pages::artist::artist_list(&library, &play_queue_info, state)
-        }
+        Page::TrackList(ref state) => pages::tracks::track_list(library, state),
+        Page::AlbumList(ref state) => pages::albums::album_list(library, play_queue_info, state),
+        Page::ArtistList(ref state) => pages::artist::artist_list(library, play_queue_info, state),
         Page::ArtistAlbumsView(ref state) => {
-            pages::artistalbums::artist_album_list(&library, &play_queue_info, state)
+            pages::artistalbums::artist_album_list(library, play_queue_info, state)
         }
-        Page::ArtistAlbumView(ref state) => pages::artistalbum::artist_album_view_state(
-            &library,
-            &action_state,
-            &player_info,
-            state,
-        ),
+        Page::ArtistAlbumView(ref state) => {
+            pages::artistalbum::artist_album_view_state(library, action_state, player_info, state)
+        }
         Page::ArtistTrackView(ref state) => {
-            pages::artisttracks::artist_track_view_state(&library, &player_info, state)
+            pages::artisttracks::artist_track_view_state(library, player_info, state)
         }
         Page::ArtistFeaturedTrackView(ref state) => {
-            pages::artistfeatured::artist_featured_track_view_state(&library, &player_info, state)
+            pages::artistfeatured::artist_featured_track_view_state(library, player_info, state)
         }
         Page::MovieHome => pages::moviehome::movie_home(),
         Page::MovieList(ref state) => pages::movielist::movie_list(
-            &movie_library,
+            movie_library,
             state,
-            &play_queue_info,
+            play_queue_info,
             &library.grid_info,
-            &app_images,
+            app_images,
         ),
         Page::MovieAttributes(ref state) => pages::movieattrs::movie_attributes(state),
         Page::MovieQuery(ref state) => {
-            pages::moviequery::movie_query(&movie_library, state, &app_images)
+            pages::moviequery::movie_query(movie_library, state, app_images)
         }
-        Page::MovieView(ref state) => pages::movie::movie_page(&movie_library, state, &app_images),
+        Page::MovieView(ref state) => pages::movie::movie_page(movie_library, state, app_images),
     }
 }

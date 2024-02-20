@@ -24,7 +24,7 @@ pub fn artist_featured_track_view_state<'a>(
         } => {
             let artist = library.get_artist_info(*artist_id);
 
-            let featured_tracks = library.get_featured_tracks_for_artist(&artist_id);
+            let featured_tracks = library.get_featured_tracks_for_artist(artist_id);
 
             let breadcrumbs = vec![
                 (
@@ -62,7 +62,7 @@ pub fn artist_featured_track_view_state<'a>(
 
             let track_sorts = model::AlbumFeaturedTrackSorts::new(featured_tracks);
 
-            let tracks = track_sorts.from_sort_key(&sort_key, &sort_order);
+            let tracks = track_sorts.from_sort_key(sort_key, sort_order);
 
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
@@ -88,42 +88,42 @@ pub fn artist_featured_track_view_state<'a>(
                     "Album",
                     model::ArtistFeaturedTrackSortKey::ByParent,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Name",
                     model::ArtistFeaturedTrackSortKey::ByName,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Play Count",
                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Length",
                     model::ArtistFeaturedTrackSortKey::ByDuration,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Played Duration",
                     model::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     &artist.artist_id,
                     "Random",
                     model::ArtistFeaturedTrackSortKey::Random,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ));
 
             let sort_order_bar = line_row()
@@ -211,7 +211,7 @@ pub fn artist_featured_track_view_state<'a>(
                 .style(iced::theme::Container::Custom(
                     style::get_potential_current_stripe_style(
                         stripe_marker,
-                        &track,
+                        track,
                         &current_track,
                         &None,
                     ),

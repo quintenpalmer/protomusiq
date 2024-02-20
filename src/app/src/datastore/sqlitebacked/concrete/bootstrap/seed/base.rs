@@ -29,7 +29,7 @@ pub fn seed_tracks(
             for disc in album.discs.values() {
                 let disc_id = discs::insert_disc(&tx, album_id, disc.disc_no as u32);
                 for track in disc.tracks.values() {
-                    tracks::insert_track(&tx, disc_id, &track);
+                    tracks::insert_track(&tx, disc_id, track);
                 }
             }
         }
@@ -37,7 +37,7 @@ pub fn seed_tracks(
 
     for track in tracks.iter() {
         println!("about to insert {}", track.title);
-        rawtracks::insert_raw_track(&tx, &track);
+        rawtracks::insert_raw_track(&tx, track);
         logger.print_elapsed(format!("inserting track {}", track.title));
     }
 

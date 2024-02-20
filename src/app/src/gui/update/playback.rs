@@ -47,7 +47,7 @@ pub fn handle_playback_request(
     };
 
     match maybe_tracks {
-        Some(ref tracks) => {
+        Some(tracks) => {
             for track in tracks.iter() {
                 let _follow_up_empty_action = action::handle_action(
                     app,

@@ -34,7 +34,7 @@ impl Application for state::App {
 
     fn subscription(&self) -> iced::Subscription<Self::Message> {
         iced::Subscription::batch(vec![
-            subscription::backend_callback(&self),
+            subscription::backend_callback(self),
             keyboard::on_key_press(subscription::keybinding_subscription_fn),
             event::listen_with(|event, _| match event {
                 event::Event::Mouse(mouse_event) => subscription::on_mouse_event(mouse_event),

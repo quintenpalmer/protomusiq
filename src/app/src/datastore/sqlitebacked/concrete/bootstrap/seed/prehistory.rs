@@ -15,7 +15,7 @@ pub fn seed_prehistory(
 
     for prehistory_record in historical_data.iter() {
         println!("about to insert {:?}", prehistory_record);
-        insert_prehistory_record(&tx, &library, &prehistory_record);
+        insert_prehistory_record(&tx, library, prehistory_record);
         logger.print_elapsed(format!("inserting track {:?}", prehistory_record));
     }
 

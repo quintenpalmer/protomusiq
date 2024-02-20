@@ -94,8 +94,7 @@ fn prompt_for_confirmation_and_commit(
             "{:?}:\t{} ({})",
             date_time,
             track.title,
-            serde_json::to_string(&musiqlibrary::TrackUniqueIdentifier::from_track(&track))
-                .unwrap()
+            serde_json::to_string(&musiqlibrary::TrackUniqueIdentifier::from_track(track)).unwrap()
         );
     }
 
@@ -171,19 +170,19 @@ fn prompt_for_tracks(
     }
 
     let mut current_collection = match input.as_str() {
-        "album" => prompt_for_album(&raw_library),
-        "track" => prompt_for_track(&raw_library).map(|x| vec![x]),
-        "disc" => prompt_for_disc(&raw_library),
+        "album" => prompt_for_album(raw_library),
+        "track" => prompt_for_track(raw_library).map(|x| vec![x]),
+        "disc" => prompt_for_disc(raw_library),
         "playlist" => {
             let playlist_data =
                 userplaylists::PlaylistData::new(&config_state.app_data_path.to_path_buf());
 
-            prompt_for_playlist(&raw_library, &playlist_data)
+            prompt_for_playlist(raw_library, &playlist_data)
         }
-        _ => prompt_for_tracks(&config_state, &raw_library),
+        _ => prompt_for_tracks(config_state, raw_library),
     }?;
 
-    let mut more = prompt_for_tracks(&config_state, &raw_library)?;
+    let mut more = prompt_for_tracks(config_state, raw_library)?;
 
     current_collection.append(&mut more);
 
@@ -193,7 +192,7 @@ fn prompt_for_tracks(
 fn prompt_for_album(
     raw_library: &musiqlibrary::RawLibrary,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
-    let only_albums = prompt_for_only_albums(&raw_library)?;
+    let only_albums = prompt_for_only_albums(raw_library)?;
 
     select_album(only_albums)
 }
@@ -241,11 +240,11 @@ fn prompt_for_only_albums(
             return Ok(exact);
         }
         println!("try a more narrow search query");
-        return prompt_for_only_albums(&raw_library);
+        return prompt_for_only_albums(raw_library);
     }
     if albums.len() == 0 {
         println!("couldn't find anything with that search query; try again");
-        return prompt_for_only_albums(&raw_library);
+        return prompt_for_only_albums(raw_library);
     }
 
     Ok(albums)
@@ -300,7 +299,7 @@ fn select_album(
 fn prompt_for_disc(
     raw_library: &musiqlibrary::RawLibrary,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
-    let only_albums = prompt_for_only_albums(&raw_library)?;
+    let only_albums = prompt_for_only_albums(raw_library)?;
 
     select_disc(only_albums)
 }
@@ -422,11 +421,11 @@ fn prompt_for_track(
             return select_track(exact);
         }
         println!("try a more narrow search query");
-        return prompt_for_track(&raw_library);
+        return prompt_for_track(raw_library);
     }
     if tracks.len() == 0 {
         println!("couldn't find anything with that search query; try again");
-        return prompt_for_track(&raw_library);
+        return prompt_for_track(raw_library);
     }
 
     select_track(tracks)
@@ -498,17 +497,17 @@ fn prompt_for_playlist(
     if playlists.len() > 9 {
         if exact.len() > 0 {
             println!("found a lot, here are the exact matches");
-            return select_playlist(&raw_library, exact);
+            return select_playlist(raw_library, exact);
         }
         println!("try a more narrow search query");
-        return prompt_for_playlist(&raw_library, &playlist_data);
+        return prompt_for_playlist(raw_library, playlist_data);
     }
     if playlists.len() == 0 {
         println!("couldn't find anything with that search query; try again");
-        return prompt_for_playlist(&raw_library, &playlist_data);
+        return prompt_for_playlist(raw_library, playlist_data);
     }
 
-    select_playlist(&raw_library, playlists)
+    select_playlist(raw_library, playlists)
 }
 
 fn select_playlist(
@@ -533,15 +532,15 @@ fn select_playlist(
     match input.parse::<usize>() {
         Ok(i) => {
             if i < playlists.len() {
-                Ok(playlist_full_track_metadata(&raw_library, &playlists[i]))
+                Ok(playlist_full_track_metadata(raw_library, &playlists[i]))
             } else {
                 println!("number must be within range of playlists found");
-                select_playlist(&raw_library, playlists)
+                select_playlist(raw_library, playlists)
             }
         }
         Err(_) => {
             println!("must input a number");
-            select_playlist(&raw_library, playlists)
+            select_playlist(raw_library, playlists)
         }
     }
 }
@@ -553,6 +552,6 @@ fn playlist_full_track_metadata(
     playlist
         .tracks
         .iter()
-        .map(|key| raw_library.get_track(&key).clone())
+        .map(|key| raw_library.get_track(key).clone())
         .collect()
 }

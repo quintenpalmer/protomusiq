@@ -67,7 +67,7 @@ impl SqlitePreHistoryReporter {
 
 impl datastore::traits::HistoricalTrackCountReporter for SqlitePreHistoryReporter {
     fn get_historical_track_count(&self, id: &musiqlibrary::TrackUniqueIdentifier) -> usize {
-        let db_track = self.bridge.track_from_unique_key(&id);
+        let db_track = self.bridge.track_from_unique_key(id);
         let count = self
             .prehistorical_track_id_to_count
             .get(&db_track.id)
@@ -95,7 +95,7 @@ impl SqliteLiveHistoryReporter {
 
 impl datastore::traits::LiveReadOnlyTrackCountReporter for SqliteLiveHistoryReporter {
     fn get_live_track_count(&self, id: &musiqlibrary::TrackUniqueIdentifier) -> usize {
-        let db_track = self.bridge.track_from_unique_key(&id);
+        let db_track = self.bridge.track_from_unique_key(id);
         let count = self
             .livehistory_track_id_to_count
             .get(&db_track.id)

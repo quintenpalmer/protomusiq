@@ -33,7 +33,7 @@ pub fn track_list<'a>(
                 let greatest_play_count = library.get_track_max_play_count();
 
                 let indices = common::get_page(
-                    library.track_sorts.from_sort_key(&sort_key, &sort_order),
+                    library.track_sorts.from_sort_key(sort_key, sort_order),
                     page,
                     library.grid_info.get_track_page_size_usize(),
                 );
@@ -128,31 +128,31 @@ pub fn track_list<'a>(
                                         "Name",
                                         model::TrackSortKey::ByName,
                                         model::SortOrder::Regular,
-                                        &sort_key,
+                                        sort_key,
                                     ))
                                     .push(sort_button(
                                         "Play Count",
                                         model::TrackSortKey::ByPlayCount,
                                         model::SortOrder::Reversed,
-                                        &sort_key,
+                                        sort_key,
                                     ))
                                     .push(sort_button(
                                         "Played Duration",
                                         model::TrackSortKey::ByPlayedAmount,
                                         model::SortOrder::Reversed,
-                                        &sort_key,
+                                        sort_key,
                                     ))
                                     .push(sort_button(
                                         "Length",
                                         model::TrackSortKey::ByDuration,
                                         model::SortOrder::Reversed,
-                                        &sort_key,
+                                        sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::TrackSortKey::ByRandom,
                                         model::SortOrder::Regular,
-                                        &sort_key,
+                                        sort_key,
                                     )),
                             ),
                         )

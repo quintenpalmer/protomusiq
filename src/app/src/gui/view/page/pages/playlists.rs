@@ -48,7 +48,7 @@ pub fn playlist_list_view<'a>(
                         dark_button(
                             Row::new()
                                 .push(components::compute_playlist_thumbnail(
-                                    &library,
+                                    library,
                                     &user_playlist.tracks,
                                     components::PlaylistIconSize::Small,
                                 ))

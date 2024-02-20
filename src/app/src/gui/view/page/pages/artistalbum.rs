@@ -28,8 +28,8 @@ pub fn artist_album_view_state<'a>(
             album_size,
             maybe_selected_track,
         } => {
-            let artist = library.get_artist_map().get(&artist_id).unwrap();
-            let album = artist.albums.get(&album_id).unwrap();
+            let artist = library.get_artist_map().get(artist_id).unwrap();
+            let album = artist.albums.get(album_id).unwrap();
             let discs = album.discs.values();
             let tracks = album.discs.values().fold(Vec::new(), |mut total, current| {
                 for track in current.tracks.values() {
@@ -316,7 +316,7 @@ pub fn artist_album_view_state<'a>(
                                                 dark_button(bright_paragraph(">..."))
                                                     .on_press(Message::PlaybackRequest(
                                                         shared::PlaybackRequest::PlaySongs(
-                                                            model::functions::tracks_after_including(&tracks, &track),
+                                                            model::functions::tracks_after_including(&tracks, track),
                                                         ),
                                                     )),
                                             )
@@ -413,9 +413,9 @@ pub fn artist_album_view_state<'a>(
                                         iced::theme::Container::Custom(
                                             style::get_potential_current_stripe_style(
                                                 stripe_marker,
-                                                &track,
+                                                track,
                                                 &current_track,
-                                                &maybe_selected_track,
+                                                maybe_selected_track,
                                             ),
                                         ),
                                    )

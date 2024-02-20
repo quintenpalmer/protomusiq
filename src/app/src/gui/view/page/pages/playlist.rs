@@ -48,7 +48,7 @@ pub fn playlist_view<'a>(
                 Container::new(
                     line_row()
                         .push(components::compute_playlist_thumbnail(
-                            &library,
+                            library,
                             &playlist.tracks,
                             components::PlaylistIconSize::Large,
                         ))
@@ -134,7 +134,7 @@ pub fn playlist_view<'a>(
             let tracks: Vec<_> = playlist
                 .tracks
                 .iter()
-                .map(|track_id| library.get_track(&track_id).clone())
+                .map(|track_id| library.get_track(track_id).clone())
                 .collect();
 
             for track in tracks.clone().into_iter() {

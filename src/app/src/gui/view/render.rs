@@ -39,21 +39,21 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
-        &library,
-        &movie_library,
-        &app_images,
-        &action_state,
-        &play_queue_info,
-        &player_info,
+        library,
+        movie_library,
+        app_images,
+        action_state,
+        play_queue_info,
+        player_info,
     );
 
     let header = render_header(additional_breadcrumbs, messages);
 
-    let (play_queue_view, play_queue_expanded) = render_play_queue(&library, &play_queue_info);
+    let (play_queue_view, play_queue_expanded) = render_play_queue(library, play_queue_info);
 
     let playthrough = render_playthrough(&player_info.current_playback);
 
-    let player_controls = render_player_controls(player_info, &library);
+    let player_controls = render_player_controls(player_info, library);
 
     render_entire_page(
         config,

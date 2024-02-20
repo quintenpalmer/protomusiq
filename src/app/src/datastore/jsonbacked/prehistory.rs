@@ -26,7 +26,7 @@ impl Reporter {
         allowed_prehistory_files: &Option<Vec<path::PathBuf>>,
     ) -> Self {
         let historical_play_count_vec =
-            compute_historical_map(&app_data_path, allowed_prehistory_files);
+            compute_historical_map(app_data_path, allowed_prehistory_files);
 
         let mut historical_play_count_records = BTreeMap::new();
 

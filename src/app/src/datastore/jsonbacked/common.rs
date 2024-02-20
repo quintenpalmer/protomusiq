@@ -13,7 +13,7 @@ pub fn _create_new_raw_data<T: Serialize, S: Into<String>>(
     child_list: Vec<S>,
     raw: T,
 ) -> (T, PathBuf) {
-    let final_path = localfs::build_tree_for_file(&app_data_path, child_list);
+    let final_path = localfs::build_tree_for_file(app_data_path, child_list);
 
     serde_json::to_writer(
         io::BufWriter::new(fs::File::create(final_path.clone()).unwrap()),
@@ -49,7 +49,7 @@ pub fn bootstrap_raw_data<T: Default + DeserializeOwned + Serialize, S: Into<Str
     app_data_path: &PathBuf,
     child_list: Vec<S>,
 ) -> (T, PathBuf) {
-    let json_db_path = localfs::build_tree_for_file(&app_data_path, child_list);
+    let json_db_path = localfs::build_tree_for_file(app_data_path, child_list);
 
     let maybe_raw = maybe_get_existing_raw_data(&json_db_path);
 

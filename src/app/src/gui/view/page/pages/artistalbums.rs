@@ -40,10 +40,10 @@ pub fn artist_album_list<'a>(
                 for album_id in albums.iter() {
                     let album = library
                         .get_artist_map()
-                        .get(&artist_id)
+                        .get(artist_id)
                         .unwrap()
                         .albums
-                        .get(&album_id)
+                        .get(album_id)
                         .unwrap();
                     buttons.push((
                         album.album_info.clone(),

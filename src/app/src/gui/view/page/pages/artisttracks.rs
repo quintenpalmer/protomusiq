@@ -58,11 +58,11 @@ pub fn artist_track_view_state<'a>(
                     ),
                 )));
 
-            let artist_tracks = library.get_artist_tracks(&artist_id);
+            let artist_tracks = library.get_artist_tracks(artist_id);
 
             let track_sorts = model::AlbumTrackSorts::new(artist_tracks);
 
-            let tracks = track_sorts.from_sort_key(&sort_key, &sort_order);
+            let tracks = track_sorts.from_sort_key(sort_key, sort_order);
 
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
@@ -88,42 +88,42 @@ pub fn artist_track_view_state<'a>(
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::ByParent,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     "Name",
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::ByName,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     "Play Count",
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::ByTotalPlayCount,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     "Length",
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::ByDuration,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     "Played Duration",
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::ByTotalPlayedDuration,
                     model::SortOrder::Reversed,
-                    &sort_key,
+                    sort_key,
                 ))
                 .push(sort_button(
                     "Random",
                     artist.artist_id.clone(),
                     model::ArtistTrackSortKey::Random,
                     model::SortOrder::Regular,
-                    &sort_key,
+                    sort_key,
                 ));
 
             let sort_order_bar = line_row()
@@ -221,7 +221,7 @@ pub fn artist_track_view_state<'a>(
                 .style(iced::theme::Container::Custom(
                     style::get_potential_current_stripe_style(
                         stripe_marker,
-                        &track,
+                        track,
                         &current_track,
                         &None,
                     ),

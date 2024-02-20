@@ -100,7 +100,7 @@ impl Callback {
         match self {
             Callback::JSON(metadata_json_file) => {
                 let new_metadata_payload: CacheMetadataPayload =
-                    arbitrary_serialize_sort(&organized);
+                    arbitrary_serialize_sort(organized);
 
                 serde_json::to_writer(
                     io::BufWriter::new(fs::File::create(metadata_json_file).unwrap()),
@@ -108,7 +108,7 @@ impl Callback {
                 )
                 .unwrap();
             }
-            Callback::Sqlite(conn) => conn.repopulate_tracks(&organized),
+            Callback::Sqlite(conn) => conn.repopulate_tracks(organized),
             Callback::NoCache => (),
         };
     }
@@ -170,7 +170,7 @@ pub fn load_library_from_cache_and_scan(
                 }
                 CacheMode::Specified(specified_cache_mode) => {
                     println!("loading with specified");
-                    resolve_specified_cache_mode(&config_state, specified_cache_mode)
+                    resolve_specified_cache_mode(config_state, specified_cache_mode)
                 }
             };
 

@@ -20,7 +20,7 @@ pub fn seed_livehistory(
         for date_time in date_times.iter() {
             println!("{:?}\n{:?}", track_id, date_time);
             let livehistory_record = dbmodel::LivehistoryRecord {
-                track_id: library.track_from_unique_key(&track_id).id,
+                track_id: library.track_from_unique_key(track_id).id,
                 listened_date: date_time.clone(),
             };
             println!("{:?}", livehistory_record.track_id);

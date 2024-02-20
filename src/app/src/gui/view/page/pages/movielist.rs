@@ -41,7 +41,7 @@ pub fn movie_list<'a>(
             let indices = common::get_page(
                 movie_library
                     .movie_sorts
-                    .from_sort_key(&sort_key, &sort_order),
+                    .from_sort_key(sort_key, sort_order),
                 page,
                 grid_info.get_page_size_usize(),
             );
@@ -57,7 +57,7 @@ pub fn movie_list<'a>(
 
                 let movie_image_element = match movie_library.art.get_movie_cover(
                     model::MovieSize::Small,
-                    model::MovieRelPath::from_metadata(&movie),
+                    model::MovieRelPath::from_metadata(movie),
                 ) {
                     Some(movie_image_bytes) => {
                         movie_image(movie_image_bytes, model::MovieSize::Small, true)
@@ -107,31 +107,31 @@ pub fn movie_list<'a>(
                         "Title",
                         model::MovieSortKey::ByTitle,
                         model::SortOrder::Regular,
-                        &sort_key,
+                        sort_key,
                     ))
                     .push(sort_button(
                         "Added",
                         model::MovieSortKey::LastModified,
                         model::SortOrder::Reversed,
-                        &sort_key,
+                        sort_key,
                     ))
                     .push(sort_button(
                         "Length",
                         model::MovieSortKey::ByDuration,
                         model::SortOrder::Reversed,
-                        &sort_key,
+                        sort_key,
                     ))
                     .push(sort_button(
                         "Release",
                         model::MovieSortKey::ByRelease,
                         model::SortOrder::Reversed,
-                        &sort_key,
+                        sort_key,
                     ))
                     .push(sort_button(
                         "Random",
                         model::MovieSortKey::Random,
                         model::SortOrder::Regular,
-                        &sort_key,
+                        sort_key,
                     )),
             );
 

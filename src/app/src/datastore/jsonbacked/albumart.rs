@@ -103,7 +103,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
         key: &musiqlibrary::AlbumUniqueIdentifier,
         album_size: model::AlbumSizeWithOrig,
     ) -> bool {
-        match self.get_cache_album_path(&key, album_size) {
+        match self.get_cache_album_path(key, album_size) {
             Some(full_album_size_path) => localfs::check_exists(&full_album_size_path),
             None => panic!("why didn't i know about this {:?}", key),
         }
@@ -114,7 +114,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
         key: &musiqlibrary::AlbumUniqueIdentifier,
         album_size: model::AlbumSizeWithOrig,
     ) -> Vec<u8> {
-        match self.get_cache_album_path(&key, album_size) {
+        match self.get_cache_album_path(key, album_size) {
             Some(full_album_size_path) => fs::read(full_album_size_path.clone()).unwrap(),
             None => panic!("why didn't i know about this {:?}", key),
         }
@@ -125,7 +125,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
         key: &musiqlibrary::AlbumUniqueIdentifier,
         album_size: model::AlbumSizeWithOrig,
     ) -> path::PathBuf {
-        match self.get_cache_album_path(&key, album_size) {
+        match self.get_cache_album_path(key, album_size) {
             Some(full_album_size_path) => full_album_size_path.clone(),
             None => panic!("why didn't i know about this {:?}", key),
         }
@@ -137,7 +137,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
         album_size: model::AlbumSizeWithOrig,
         bytes: Vec<u8>,
     ) {
-        match self.get_cache_album_path(&key, album_size) {
+        match self.get_cache_album_path(key, album_size) {
             Some(full_album_size_path) => {
                 fs::write(full_album_size_path.clone(), bytes).unwrap();
             }
