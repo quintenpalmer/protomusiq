@@ -85,6 +85,13 @@ pub enum MovieSortKey {
 }
 
 #[derive(Debug, Clone)]
+pub struct AlbumSortPlacement {
+    pub index: usize,
+    pub sort_key: AlbumSortKey,
+    pub sort_order: SortOrder,
+}
+
+#[derive(Debug, Clone)]
 pub enum Direction {
     Up,
     Down,

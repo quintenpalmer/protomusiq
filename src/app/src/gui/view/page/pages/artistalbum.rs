@@ -25,6 +25,7 @@ pub fn artist_album_view_state<'a>(
             album_id,
             album_size,
             maybe_selected_track,
+            maybe_current_sort_order,
         } => {
             let artist = library.get_artist_map().get(artist_id).unwrap();
             let album = artist.albums.get(album_id).unwrap();
@@ -70,6 +71,7 @@ pub fn artist_album_view_state<'a>(
                         *album_id,
                         model::AlbumSize::Regular,
                         None,
+                        maybe_current_sort_order.clone(),
                     )),
                 ),
             ];
@@ -98,6 +100,7 @@ pub fn artist_album_view_state<'a>(
                                     *album_id,
                                     toggle_to,
                                     maybe_selected_track.clone(),
+                                    maybe_current_sort_order.clone(),
                                 )))
                             })
                             .push(

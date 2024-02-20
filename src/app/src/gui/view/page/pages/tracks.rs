@@ -90,6 +90,7 @@ pub fn track_list<'a>(
                                 Some(musiqlibrary::TrackUniqueIdentifier::from_track(
                                     &info.metadata,
                                 )),
+                                None,
                             ),
                         )),
                     );

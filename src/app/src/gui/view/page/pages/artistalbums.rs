@@ -72,6 +72,7 @@ pub fn artist_album_list<'a>(
                                 album.album_info.album_id,
                                 model::AlbumSize::Regular,
                                 None,
+                                None,
                             ),
                         )),
                     ))

@@ -101,6 +101,7 @@ pub fn search_page<'a>(
                                                     result.album.album_id,
                                                     model::AlbumSize::Regular,
                                                     None,
+                                                    None,
                                                 )),
                                             ),
                                         )

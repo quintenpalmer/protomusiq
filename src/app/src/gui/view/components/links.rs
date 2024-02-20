@@ -8,5 +8,6 @@ pub fn track_link(track: &musiqlibrary::FullTrackMetadata) -> message::Message {
         track.album_id,
         model::AlbumSize::Regular,
         Some(musiqlibrary::TrackUniqueIdentifier::from_track(track)),
+        None,
     ))
 }

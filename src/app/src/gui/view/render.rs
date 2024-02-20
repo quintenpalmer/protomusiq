@@ -572,6 +572,7 @@ fn controls_with_maybe_track_info<'a>(
                                         current_playback.track.metadata.album_id,
                                         model::AlbumSize::Regular,
                                         None,
+                                        None,
                                     ))),
                                 ),
                         ),

@@ -124,12 +124,19 @@ pub fn handle_nav(
             });
             Command::none()
         }
-        NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
+        NavMessage::ArtistAlbumView(
+            artist_id,
+            album_id,
+            album_size,
+            maybe_selected_track,
+            maybe_current_sort_order,
+        ) => {
             app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                 artist_id,
                 album_id,
                 album_size,
                 maybe_selected_track,
+                maybe_current_sort_order,
             });
             Command::none()
         }

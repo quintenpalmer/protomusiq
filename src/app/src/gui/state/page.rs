@@ -136,6 +136,7 @@ pub struct ArtistAlbumViewState {
     pub artist_id: musiqlibrary::ID,
     pub album_id: musiqlibrary::ID,
     pub maybe_selected_track: Option<musiqlibrary::TrackUniqueIdentifier>,
+    pub maybe_current_sort_order: Option<model::AlbumSortPlacement>,
 }
 
 #[derive(Debug)]

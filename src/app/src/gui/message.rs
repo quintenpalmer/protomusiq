@@ -94,6 +94,7 @@ pub enum NavMessage {
         musiqlibrary::ID,
         model::AlbumSize,
         Option<musiqlibrary::TrackUniqueIdentifier>,
+        Option<model::AlbumSortPlacement>,
     ),
     MovieHome,
     MovieList(usize, model::MovieSortKey, model::SortOrder),

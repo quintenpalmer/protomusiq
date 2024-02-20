@@ -207,6 +207,7 @@ pub fn artist_featured_track_view_state<'a>(
                         Some(musiqlibrary::TrackUniqueIdentifier::from_track(
                             &track.metadata,
                         )),
+                        None,
                     ))),
                 )
                 .style(iced::theme::Container::Custom(

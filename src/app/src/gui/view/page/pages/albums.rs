@@ -33,6 +33,8 @@ pub fn album_list<'a>(
             let body = {
                 let page: usize = *page;
 
+                let base_album_total_index = page * library.grid_info.get_page_size_usize();
+
                 let indices = common::get_page(
                     library.album_sorts.from_sort_key(sort_key, sort_order),
                     page,
@@ -46,7 +48,7 @@ pub fn album_list<'a>(
 
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
-                for info in paged_albums.into_iter() {
+                for (album_index_offset, info) in paged_albums.into_iter().enumerate() {
                     buttons.push(
                         dark_button(bottom_label(
                             album_image(
@@ -75,6 +77,11 @@ pub fn album_list<'a>(
                                 info.album.album_id,
                                 model::AlbumSize::Regular,
                                 None,
+                                Some(model::AlbumSortPlacement {
+                                    index: base_album_total_index + album_index_offset,
+                                    sort_key: sort_key.clone(),
+                                    sort_order: sort_order.clone(),
+                                }),
                             ),
                         )),
                     );
