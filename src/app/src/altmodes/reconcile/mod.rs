@@ -17,7 +17,7 @@ pub fn entry_point() -> Result<(), Error> {
     let args: Vec<String> = env::args().collect();
 
     match args.as_slice() {
-        &[ref _bin_name, ref _reconcile_flag, ref first_history_file, ref second_history_file] => {
+        [_bin_name, _reconcile_flag, first_history_file, second_history_file] => {
             merge_two_files(first_history_file, second_history_file)
         }
         _ => {
