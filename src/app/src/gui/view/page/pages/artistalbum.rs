@@ -449,10 +449,10 @@ pub fn artist_album_view_state<'a>(
                                     message::PagifiedMovementMsg::Forwards,
                                 )),
                             ))
-                            .push(h3(current_sort_order.sort_key.display_text()))
                             .push(h3(format!(
-                                "({})",
-                                current_sort_order.sort_order.display_text()
+                                "{} ({})",
+                                current_sort_order.sort_key.display_text(),
+                                current_sort_order.sort_order.display_text(),
                             )));
                     body_column = body_column.push(sort_nav_row);
                 }
