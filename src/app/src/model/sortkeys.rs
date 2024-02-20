@@ -24,6 +24,26 @@ pub enum TrackSortKey {
 }
 
 impl TrackSortKey {
+    pub fn prev(&self) -> Self {
+        match self {
+            TrackSortKey::ByName => TrackSortKey::ByName,
+            TrackSortKey::ByPlayCount => TrackSortKey::ByName,
+            TrackSortKey::ByPlayedAmount => TrackSortKey::ByPlayCount,
+            TrackSortKey::ByDuration => TrackSortKey::ByPlayedAmount,
+            TrackSortKey::Random => TrackSortKey::ByDuration,
+        }
+    }
+
+    pub fn next(&self) -> Self {
+        match self {
+            TrackSortKey::ByName => TrackSortKey::ByPlayCount,
+            TrackSortKey::ByPlayCount => TrackSortKey::ByPlayedAmount,
+            TrackSortKey::ByPlayedAmount => TrackSortKey::ByDuration,
+            TrackSortKey::ByDuration => TrackSortKey::Random,
+            TrackSortKey::Random => TrackSortKey::Random,
+        }
+    }
+
     pub fn default_order(&self) -> SortOrder {
         match self {
             TrackSortKey::ByName => SortOrder::Regular,

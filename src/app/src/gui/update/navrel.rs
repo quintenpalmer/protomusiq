@@ -46,6 +46,24 @@ fn handle_switch_sort_by_msg(
                 new_sort_order,
             )))
         }
+        Page::TrackList(state::TrackListState {
+            ref sort_key,
+            sort_order: ref _sort_order,
+            ref page,
+        }) => {
+            let new_sort_key = match move_direction {
+                message::MoveDirectionMsg::Left => sort_key.prev(),
+                message::MoveDirectionMsg::Right => sort_key.next(),
+            };
+
+            let new_sort_order = new_sort_key.default_order();
+
+            Some(message::Message::Nav(message::NavMessage::TrackList(
+                page.clone(),
+                new_sort_key,
+                new_sort_order,
+            )))
+        }
         _ => None,
     }
 }
