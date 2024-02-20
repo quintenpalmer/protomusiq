@@ -2,7 +2,7 @@ use rand::seq::SliceRandom;
 
 use musiqlibrary::video;
 
-use super::{augmented, common};
+use super::{augmented, common, sortkeys};
 
 pub struct ArtistSorts {
     pub by_name: common::ListAndReversed<musiqlibrary::ID>,
@@ -118,17 +118,17 @@ impl ArtistSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::ArtistSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::ArtistSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<musiqlibrary::ID> {
         match sort_key {
-            common::ArtistSortKey::ByName => &self.by_name,
-            common::ArtistSortKey::ByPlayCount => &self.by_play_count,
-            common::ArtistSortKey::ByAlbumCount => &self.by_album_count,
-            common::ArtistSortKey::ByTrackCount => &self.by_track_count,
-            common::ArtistSortKey::ByTrackDuration => &self.by_track_duration,
-            common::ArtistSortKey::ByPlayedDuration => &self.by_duration_played,
-            common::ArtistSortKey::Random => &self.random,
+            sortkeys::ArtistSortKey::ByName => &self.by_name,
+            sortkeys::ArtistSortKey::ByPlayCount => &self.by_play_count,
+            sortkeys::ArtistSortKey::ByAlbumCount => &self.by_album_count,
+            sortkeys::ArtistSortKey::ByTrackCount => &self.by_track_count,
+            sortkeys::ArtistSortKey::ByTrackDuration => &self.by_track_duration,
+            sortkeys::ArtistSortKey::ByPlayedDuration => &self.by_duration_played,
+            sortkeys::ArtistSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
@@ -361,18 +361,18 @@ impl AlbumSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::AlbumSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::AlbumSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<(musiqlibrary::ID, musiqlibrary::ID)> {
         match sort_key {
-            common::AlbumSortKey::ByName => &self.by_name,
-            common::AlbumSortKey::ByParent => &self.by_artist,
-            common::AlbumSortKey::ByDate => &self.by_date,
-            common::AlbumSortKey::ByDuration => &self.by_duration,
-            common::AlbumSortKey::ByLastMod => &self.by_last_modified,
-            common::AlbumSortKey::ByTotalPlayCount => &self.by_total_play_count,
-            common::AlbumSortKey::ByTotalPlayedDuration => &self.by_total_played_duration,
-            common::AlbumSortKey::Random => &self.random,
+            sortkeys::AlbumSortKey::ByName => &self.by_name,
+            sortkeys::AlbumSortKey::ByParent => &self.by_artist,
+            sortkeys::AlbumSortKey::ByDate => &self.by_date,
+            sortkeys::AlbumSortKey::ByDuration => &self.by_duration,
+            sortkeys::AlbumSortKey::ByLastMod => &self.by_last_modified,
+            sortkeys::AlbumSortKey::ByTotalPlayCount => &self.by_total_play_count,
+            sortkeys::AlbumSortKey::ByTotalPlayedDuration => &self.by_total_played_duration,
+            sortkeys::AlbumSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
@@ -454,16 +454,16 @@ impl AlbumTrackSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::ArtistTrackSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::ArtistTrackSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<augmented::AugmentedTrack> {
         match sort_key {
-            common::ArtistTrackSortKey::ByName => &self.by_name,
-            common::ArtistTrackSortKey::ByParent => &self.by_album,
-            common::ArtistTrackSortKey::ByDuration => &self.by_duration,
-            common::ArtistTrackSortKey::ByTotalPlayCount => &self.by_total_play_count,
-            common::ArtistTrackSortKey::ByTotalPlayedDuration => &self.by_total_played_duration,
-            common::ArtistTrackSortKey::Random => &self.random,
+            sortkeys::ArtistTrackSortKey::ByName => &self.by_name,
+            sortkeys::ArtistTrackSortKey::ByParent => &self.by_album,
+            sortkeys::ArtistTrackSortKey::ByDuration => &self.by_duration,
+            sortkeys::ArtistTrackSortKey::ByTotalPlayCount => &self.by_total_play_count,
+            sortkeys::ArtistTrackSortKey::ByTotalPlayedDuration => &self.by_total_played_duration,
+            sortkeys::ArtistTrackSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
@@ -545,18 +545,18 @@ impl AlbumFeaturedTrackSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::ArtistFeaturedTrackSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::ArtistFeaturedTrackSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<augmented::AugmentedTrack> {
         match sort_key {
-            common::ArtistFeaturedTrackSortKey::ByName => &self.by_name,
-            common::ArtistFeaturedTrackSortKey::ByParent => &self.by_album,
-            common::ArtistFeaturedTrackSortKey::ByDuration => &self.by_duration,
-            common::ArtistFeaturedTrackSortKey::ByTotalPlayCount => &self.by_total_play_count,
-            common::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration => {
+            sortkeys::ArtistFeaturedTrackSortKey::ByName => &self.by_name,
+            sortkeys::ArtistFeaturedTrackSortKey::ByParent => &self.by_album,
+            sortkeys::ArtistFeaturedTrackSortKey::ByDuration => &self.by_duration,
+            sortkeys::ArtistFeaturedTrackSortKey::ByTotalPlayCount => &self.by_total_play_count,
+            sortkeys::ArtistFeaturedTrackSortKey::ByTotalPlayedDuration => {
                 &self.by_total_played_duration
             }
-            common::ArtistFeaturedTrackSortKey::Random => &self.random,
+            sortkeys::ArtistFeaturedTrackSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
@@ -694,15 +694,15 @@ impl TrackSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::TrackSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::TrackSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<musiqlibrary::TrackUniqueIdentifier> {
         match sort_key {
-            common::TrackSortKey::ByName => &self.by_name,
-            common::TrackSortKey::ByPlayCount => &self.by_play_count,
-            common::TrackSortKey::ByDuration => &self.by_duration,
-            common::TrackSortKey::ByPlayedAmount => &self.by_played_amount,
-            common::TrackSortKey::ByRandom => &self.random,
+            sortkeys::TrackSortKey::ByName => &self.by_name,
+            sortkeys::TrackSortKey::ByPlayCount => &self.by_play_count,
+            sortkeys::TrackSortKey::ByDuration => &self.by_duration,
+            sortkeys::TrackSortKey::ByPlayedAmount => &self.by_played_amount,
+            sortkeys::TrackSortKey::ByRandom => &self.random,
         }
         .sort_ordered(sort_order)
     }
@@ -770,15 +770,15 @@ impl MovieSorts {
 
     pub fn from_sort_key(
         &self,
-        sort_key: &common::MovieSortKey,
-        sort_order: &common::SortOrder,
+        sort_key: &sortkeys::MovieSortKey,
+        sort_order: &sortkeys::SortOrder,
     ) -> &Vec<video::MovieMetadata> {
         match sort_key {
-            common::MovieSortKey::ByTitle => &self.by_title,
-            common::MovieSortKey::LastModified => &self.by_last_modified,
-            common::MovieSortKey::ByDuration => &self.by_duration,
-            common::MovieSortKey::ByRelease => &self.by_release,
-            common::MovieSortKey::Random => &self.random,
+            sortkeys::MovieSortKey::ByTitle => &self.by_title,
+            sortkeys::MovieSortKey::LastModified => &self.by_last_modified,
+            sortkeys::MovieSortKey::ByDuration => &self.by_duration,
+            sortkeys::MovieSortKey::ByRelease => &self.by_release,
+            sortkeys::MovieSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
