@@ -8,9 +8,9 @@ use crate::state;
 
 use super::super::super::elements::*;
 
-pub fn movie_attributes<'a>(
-    state: &'a state::MovieAttributeState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+pub fn movie_attributes(
+    state: &state::MovieAttributeState,
+) -> (Vec<(String, Message)>, Container<Message>) {
     match state {
         state::MovieAttributeState {
             attribute_results: maybe_attribute_results,

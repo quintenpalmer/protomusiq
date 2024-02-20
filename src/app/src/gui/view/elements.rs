@@ -12,7 +12,7 @@ pub fn line_row<'a>() -> Row<'a, Message> {
     Row::new().align_items(Alignment::Center)
 }
 
-pub fn dark<'a>(t: Text<'a>) -> Text<'a> {
+pub fn dark(t: Text) -> Text {
     t.style(iced::Color::from_rgb8(0x70, 0x70, 0x70))
 }
 

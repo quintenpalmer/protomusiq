@@ -32,7 +32,7 @@ pub fn abr_str(mut s: String, mut new_len: usize) -> String {
     );
 }
 
-pub fn get_page<'a, A>(list: &'a Vec<A>, page_number: usize, page_size: usize) -> &'a [A] {
+pub fn get_page<A>(list: &Vec<A>, page_number: usize, page_size: usize) -> &[A] {
     let mut chunks = list.chunks(page_size);
     if page_number < chunks.len() {
         chunks.nth(page_number).unwrap()
