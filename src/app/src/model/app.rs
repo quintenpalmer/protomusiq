@@ -33,7 +33,7 @@ impl AppConfigState {
     pub fn get_safe_load_mode(&self) -> LoadMode {
         match self.load_mode {
             Some(ref v) => v.clone(),
-            None => LoadMode::JSON,
+            None => LoadMode::Json,
         }
     }
 

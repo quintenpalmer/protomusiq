@@ -55,7 +55,7 @@ pub fn initialize_everything() -> state::App {
 
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
-        loader::Loader::NoCache | loader::Loader::JSON => {
+        loader::Loader::NoCache | loader::Loader::Json => {
             let json_track_reporter = jsonbacked::tracker::ReadOnlyTracker::new(
                 &config_state.app_data_path.to_path_buf(),
                 config_state.hostname.clone(),
@@ -91,7 +91,7 @@ pub fn initialize_everything() -> state::App {
 
     let historical_reporter: Box<dyn datastore::traits::HistoricalTrackCountReporter> = match loader
     {
-        loader::Loader::NoCache | loader::Loader::JSON => {
+        loader::Loader::NoCache | loader::Loader::Json => {
             let historical_play_count_reporter = jsonbacked::prehistory::Reporter::new(
                 &config_state.app_data_path.to_path_buf(),
                 &config_state.allowed_prehistory_files,

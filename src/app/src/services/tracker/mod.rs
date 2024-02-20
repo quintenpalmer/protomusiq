@@ -58,7 +58,7 @@ pub fn run_forever(
     loader: loader::Loader,
 ) {
     let mut tracker: Box<dyn datastore::traits::LiveHistoryWriteDS> = match loader {
-        loader::Loader::NoCache | loader::Loader::JSON => {
+        loader::Loader::NoCache | loader::Loader::Json => {
             let json_tracker = tracker::JSONTracker::new(
                 &config_state.app_data_path.to_path_buf(),
                 config_state.hostname.clone(),

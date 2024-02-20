@@ -64,8 +64,8 @@ impl loader::Loader {
             loader::Loader::Latest(conn) => {
                 InnerLoadMode::Cached(CacheMode::Latest(conn.spawn_connection()))
             }
-            loader::Loader::JSON => {
-                InnerLoadMode::Cached(CacheMode::Specified(SpecifiedCacheMode::JSON))
+            loader::Loader::Json => {
+                InnerLoadMode::Cached(CacheMode::Specified(SpecifiedCacheMode::Json))
             }
             loader::Loader::Sqlite(conn) => InnerLoadMode::Cached(CacheMode::Specified(
                 SpecifiedCacheMode::Sqlite(conn.spawn_connection()),
@@ -85,12 +85,12 @@ enum CacheMode {
 }
 
 enum SpecifiedCacheMode {
-    JSON,
+    Json,
     Sqlite(sqlitebacked::Connections),
 }
 
 enum Callback {
-    JSON(PathBuf),
+    Json(PathBuf),
     Sqlite(sqlitebacked::Connections),
     NoCache,
 }
@@ -98,7 +98,7 @@ enum Callback {
 impl Callback {
     fn done(&mut self, organized: &musiqlibrary::RawLibrary) {
         match self {
-            Callback::JSON(metadata_json_file) => {
+            Callback::Json(metadata_json_file) => {
                 let new_metadata_payload: CacheMetadataPayload =
                     arbitrary_serialize_sort(organized);
 
@@ -247,14 +247,14 @@ fn resolve_specified_cache_mode(
     specified_cache_mode: SpecifiedCacheMode,
 ) -> (CacheMetadataPayload, Callback) {
     match specified_cache_mode {
-        SpecifiedCacheMode::JSON => {
+        SpecifiedCacheMode::Json => {
             println!("loading with JSON");
             let (inner_metadata_payload, metadata_json_file): (CacheMetadataPayload, PathBuf) =
                 common::bootstrap_raw_data(
                     &config_state.app_data_path,
                     vec!["cache", "metadata", "tracks.json"],
                 );
-            (inner_metadata_payload, Callback::JSON(metadata_json_file))
+            (inner_metadata_payload, Callback::Json(metadata_json_file))
         }
         SpecifiedCacheMode::Sqlite(conn) => {
             println!("loading with sqlite");

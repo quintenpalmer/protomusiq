@@ -4,7 +4,7 @@ use super::sqlitebacked;
 
 pub enum Loader {
     NoCache,
-    JSON,
+    Json,
     Sqlite(sqlitebacked::Connections),
     Latest(sqlitebacked::Connections),
 }
@@ -16,7 +16,7 @@ impl Loader {
     ) -> Self {
         match load_mode {
             model::LoadMode::NoCache => Loader::NoCache,
-            model::LoadMode::JSON => Loader::JSON,
+            model::LoadMode::Json => Loader::Json,
             model::LoadMode::Sqlite => Loader::Sqlite(sqlitebacked::Connections::first_bootup(
                 config_state.clone(),
             )),
@@ -29,7 +29,7 @@ impl Loader {
     pub fn spawn_copy(&self) -> Self {
         match self {
             Loader::NoCache => Loader::NoCache,
-            Loader::JSON => Loader::JSON,
+            Loader::Json => Loader::Json,
             Loader::Sqlite(conn) => Loader::Sqlite(conn.spawn_connection()),
             Loader::Latest(conn) => Loader::Latest(conn.spawn_connection()),
         }

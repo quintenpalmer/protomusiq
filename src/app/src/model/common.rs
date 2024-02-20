@@ -13,7 +13,7 @@ use super::constants;
 pub enum LoadMode {
     NoCache,
     Latest,
-    JSON,
+    Json,
     Sqlite,
 }
 
