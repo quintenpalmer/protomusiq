@@ -105,9 +105,7 @@ impl AlbumSortKey {
             AlbumSortKey::Random => SortOrder::Regular,
         }
     }
-}
 
-impl AlbumSortKey {
     pub fn display_text(&self) -> String {
         match self {
             AlbumSortKey::ByName => "Name",
