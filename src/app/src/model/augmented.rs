@@ -37,9 +37,9 @@ impl AugmentedTrack {
     }
 }
 
-impl Into<musiqlibrary::FullTrackMetadata> for AugmentedTrack {
-    fn into(self) -> musiqlibrary::FullTrackMetadata {
-        self.metadata
+impl From<AugmentedTrack> for musiqlibrary::FullTrackMetadata {
+    fn from(val: AugmentedTrack) -> Self {
+        val.metadata
     }
 }
 
