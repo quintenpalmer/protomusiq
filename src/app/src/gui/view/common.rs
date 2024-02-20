@@ -26,7 +26,7 @@ pub fn abr_str(mut s: String, mut new_len: usize) -> String {
             s.truncate(new_len);
             return format!("{}…", s);
         }
-        new_len = new_len - 1;
+        new_len -= 1;
     }
     panic!(
         "couldn't find char boundary within 16 chars of {} for {}",

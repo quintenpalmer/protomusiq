@@ -111,7 +111,7 @@ pub fn track_list<'a>(
                 for (_, artist) in library.get_artist_map().iter() {
                     for (_, album) in artist.albums.iter() {
                         for (_, disc) in album.discs.iter() {
-                            total_tracks = total_tracks + disc.tracks.len();
+                            total_tracks += disc.tracks.len();
                         }
                     }
                 }
