@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum SortOrder {
     Regular,
     Reversed,
@@ -14,7 +14,7 @@ impl SortOrder {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TrackSortKey {
     ByName,
     ByPlayCount,
@@ -35,7 +35,7 @@ impl TrackSortKey {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ArtistTrackSortKey {
     ByName,
     ByParent,
@@ -58,7 +58,7 @@ impl ArtistTrackSortKey {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ArtistFeaturedTrackSortKey {
     ByName,
     ByParent,
@@ -81,7 +81,7 @@ impl ArtistFeaturedTrackSortKey {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ArtistSortKey {
     ByName,
     ByPlayCount,
@@ -106,7 +106,7 @@ impl ArtistSortKey {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum AlbumSortKey {
     ByParent,
     ByName,
@@ -173,7 +173,7 @@ impl AlbumSortKey {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum MovieSortKey {
     ByTitle,
     LastModified,
