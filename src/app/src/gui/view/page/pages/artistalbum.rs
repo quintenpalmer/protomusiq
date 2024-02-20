@@ -449,11 +449,21 @@ pub fn artist_album_view_state<'a>(
                                     message::PagifiedMovementMsg::Forwards,
                                 )),
                             ))
-                            .push(h3(format!(
-                                "{} ({})",
-                                current_sort_order.sort_key.display_text(),
-                                current_sort_order.sort_order.display_text(),
-                            )));
+                            .push(
+                                dark_button(h3(format!(
+                                    "{} ({})",
+                                    current_sort_order.sort_key.display_text(),
+                                    current_sort_order.sort_order.display_text(),
+                                )))
+                                .on_press(user_nav_message(
+                                    NavMessage::AlbumList(
+                                        current_sort_order.index
+                                            / library.grid_info.get_page_size_usize(),
+                                        current_sort_order.sort_key.clone(),
+                                        current_sort_order.sort_order.clone(),
+                                    ),
+                                )),
+                            );
                     body_column = body_column.push(sort_nav_row);
                 }
                 None => (),
