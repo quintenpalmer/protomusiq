@@ -145,8 +145,8 @@ pub fn playlist_view<'a>(
                         .push(album_image(
                             library.get_album_cover(
                                 model::AlbumSize::Micro,
-                                track.metadata.album_artist_id.clone(),
-                                track.metadata.album_id.clone(),
+                                track.metadata.album_artist_id,
+                                track.metadata.album_id,
                             ),
                             model::AlbumSize::Micro,
                         ))
@@ -254,7 +254,7 @@ pub fn playlist_view<'a>(
                     ),
                     (
                         playlist.name.clone(),
-                        user_nav_message(NavMessage::PlaylistView(playlist_id.clone())),
+                        user_nav_message(NavMessage::PlaylistView(*playlist_id)),
                     ),
                 ],
                 Container::new(column),

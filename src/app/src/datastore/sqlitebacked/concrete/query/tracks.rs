@@ -60,7 +60,6 @@ pub fn select_tracks(main_db: &rusqlite::Connection) -> Vec<dbmodel::Track> {
     let tracks = statement
         .query_map([], map_track)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 

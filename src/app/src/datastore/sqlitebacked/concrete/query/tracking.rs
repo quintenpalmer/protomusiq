@@ -14,7 +14,6 @@ pub fn get_all_live_track_counts(main_db: &rusqlite::Connection) -> BTreeMap<u32
     let results = statement
         .query_map([], map_track_id_and_count)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 
@@ -36,7 +35,6 @@ pub fn get_live_track_count(main_db: &rusqlite::Connection, track_id: u32) -> us
     let results = statement
         .query_map(rusqlite::params![track_id], map_track_count)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 

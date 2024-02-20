@@ -97,7 +97,7 @@ pub fn handle_nav(
         }
         NavMessage::ArtistAlbumsView(artist_id) => {
             app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
-                artist_id: artist_id.clone(),
+                artist_id: artist_id,
                 albums: app
                     .library
                     .get_artist_map()
@@ -105,14 +105,14 @@ pub fn handle_nav(
                     .unwrap()
                     .albums
                     .keys()
-                    .map(|k| k.clone())
+                    .map(|k| *k)
                     .collect(),
             });
             Command::none()
         }
         NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
             app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
-                artist_id: artist_id.clone(),
+                artist_id: artist_id,
 
                 sort_key: sort_key,
                 sort_order: sort_order,
@@ -121,7 +121,7 @@ pub fn handle_nav(
         }
         NavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
             app.current_page = Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
-                artist_id: artist_id.clone(),
+                artist_id: artist_id,
 
                 sort_key: sort_key,
                 sort_order: sort_order,
@@ -130,8 +130,8 @@ pub fn handle_nav(
         }
         NavMessage::ArtistAlbumView(artist_id, album_id, album_size, maybe_selected_track) => {
             app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
-                artist_id: artist_id.clone(),
-                album_id: album_id.clone(),
+                artist_id: artist_id,
+                album_id: album_id,
                 album_size: album_size,
                 maybe_selected_track: maybe_selected_track,
             });

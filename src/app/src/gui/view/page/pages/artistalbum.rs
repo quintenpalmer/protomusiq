@@ -63,13 +63,13 @@ pub fn artist_album_view_state<'a>(
                 ),
                 (
                     artist.artist_info.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
+                    user_nav_message(NavMessage::ArtistAlbumsView(*artist_id)),
                 ),
                 (
                     common::abr_str(album.album_info.album_name.clone(), consts::NAV_STR_LENGTH),
                     user_nav_message(NavMessage::ArtistAlbumView(
-                        artist_id.clone(),
-                        album_id.clone(),
+                        *artist_id,
+                        *album_id,
                         model::AlbumSize::Regular,
                         None,
                     )),
@@ -91,13 +91,13 @@ pub fn artist_album_view_state<'a>(
                                 dark_button(album_image(
                                     library.get_album_cover(
                                         current.clone(),
-                                        artist.artist_info.artist_id.clone(),
-                                        album.album_info.album_id.clone(),
+                                        artist.artist_info.artist_id,
+                                        album.album_info.album_id,
                                     ),
                                     current,
                                 )).on_press(user_nav_message(NavMessage::ArtistAlbumView(
-                                    artist_id.clone(),
-                                    album_id.clone(),
+                                    *artist_id,
+                                    *album_id,
                                     toggle_to,
                                     maybe_selected_track.clone(),
                                 )))

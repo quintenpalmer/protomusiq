@@ -60,8 +60,8 @@ impl FilesystemCachedAlbumArt {
         for artist in library.artists.values() {
             for album in artist.albums.values() {
                 let key = musiqlibrary::AlbumUniqueIdentifier::new(
-                    artist.artist_info.artist_id.clone(),
-                    album.album_info.album_id.clone(),
+                    artist.artist_info.artist_id,
+                    album.album_info.album_id,
                 );
 
                 let local_path = album.album_info.relative_path.clone().join("cover.jpg");
@@ -178,8 +178,8 @@ pub fn process_cache_and_get_album_art(
     for artist in library.artists.values() {
         for album in artist.albums.values() {
             let key = musiqlibrary::AlbumUniqueIdentifier::new(
-                artist.artist_info.artist_id.clone(),
-                album.album_info.album_id.clone(),
+                artist.artist_info.artist_id,
+                album.album_info.album_id,
             );
 
             let has_micro =
@@ -406,8 +406,8 @@ pub fn old_process_cache_and_get_album_art(
     for artist in library.artists.values() {
         for album in artist.albums.values() {
             let key = musiqlibrary::AlbumUniqueIdentifier::new(
-                artist.artist_info.artist_id.clone(),
-                album.album_info.album_id.clone(),
+                artist.artist_info.artist_id,
+                album.album_info.album_id,
             );
 
             let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");

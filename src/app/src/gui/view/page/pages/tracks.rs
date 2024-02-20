@@ -28,7 +28,7 @@ pub fn track_list<'a>(
                 )),
             )];
             let body = {
-                let page: usize = page.clone();
+                let page: usize = *page;
 
                 let greatest_play_count = library.get_track_max_play_count();
 
@@ -53,8 +53,8 @@ pub fn track_list<'a>(
                                 .push(album_image(
                                     library.get_album_cover(
                                         model::AlbumSize::Micro,
-                                        info.metadata.album_artist_id.clone(),
-                                        info.metadata.album_id.clone(),
+                                        info.metadata.album_artist_id,
+                                        info.metadata.album_id,
                                     ),
                                     model::AlbumSize::Micro,
                                 ))
@@ -84,8 +84,8 @@ pub fn track_list<'a>(
                         )
                         .on_press(user_nav_message(
                             NavMessage::ArtistAlbumView(
-                                info.metadata.album_artist_id.clone(),
-                                info.metadata.album_id.clone(),
+                                info.metadata.album_artist_id,
+                                info.metadata.album_id,
                                 model::AlbumSize::Regular,
                                 Some(musiqlibrary::TrackUniqueIdentifier::from_track(
                                     &info.metadata,

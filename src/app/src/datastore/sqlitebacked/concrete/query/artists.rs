@@ -28,7 +28,6 @@ pub fn select_artists(main_db: &rusqlite::Connection) -> Vec<dbmodel::Artist> {
     let artists = statement
         .query_map([], map_artist)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 

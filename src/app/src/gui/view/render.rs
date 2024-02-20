@@ -280,8 +280,8 @@ pub fn render_play_queue<'a>(
                             .push(album_image(
                                 library.get_album_cover(
                                     model::AlbumSize::Micro,
-                                    play_queue_track.track.metadata.album_artist_id.clone(),
-                                    play_queue_track.track.metadata.album_id.clone(),
+                                    play_queue_track.track.metadata.album_artist_id,
+                                    play_queue_track.track.metadata.album_id,
                                 ),
                                 model::AlbumSize::Micro,
                             ))
@@ -332,8 +332,8 @@ pub fn render_play_queue<'a>(
                                     .push(album_image(
                                         library.get_album_cover(
                                             model::AlbumSize::Micro,
-                                            current_playback.track.metadata.album_artist_id.clone(),
-                                            current_playback.track.metadata.album_id.clone(),
+                                            current_playback.track.metadata.album_artist_id,
+                                            current_playback.track.metadata.album_id,
                                         ),
                                         model::AlbumSize::Micro,
                                     ))
@@ -379,8 +379,8 @@ pub fn render_play_queue<'a>(
                             .push(album_image(
                                 library.get_album_cover(
                                     model::AlbumSize::Micro,
-                                    play_queue_track.track.metadata.album_artist_id.clone(),
-                                    play_queue_track.track.metadata.album_id.clone(),
+                                    play_queue_track.track.metadata.album_artist_id,
+                                    play_queue_track.track.metadata.album_id,
                                 ),
                                 model::AlbumSize::Micro,
                             ))
@@ -512,8 +512,8 @@ fn controls_with_maybe_track_info<'a>(
                 .push(album_image(
                     library.get_album_cover(
                         model::AlbumSize::Mini,
-                        current_playback.track.metadata.album_artist_id.clone(),
-                        current_playback.track.metadata.album_id.clone(),
+                        current_playback.track.metadata.album_artist_id,
+                        current_playback.track.metadata.album_id,
                     ),
                     model::AlbumSize::Mini,
                 ))
@@ -557,7 +557,7 @@ fn controls_with_maybe_track_info<'a>(
                                         .album_artist
                                         .clone()))
                                     .on_press(user_nav_message(NavMessage::ArtistAlbumsView(
-                                        current_playback.track.metadata.album_artist_id.clone(),
+                                        current_playback.track.metadata.album_artist_id,
                                     ))),
                                 )
                                 .push(h3("-"))
@@ -568,8 +568,8 @@ fn controls_with_maybe_track_info<'a>(
                                         .album
                                         .clone()))
                                     .on_press(user_nav_message(NavMessage::ArtistAlbumView(
-                                        current_playback.track.metadata.album_artist_id.clone(),
-                                        current_playback.track.metadata.album_id.clone(),
+                                        current_playback.track.metadata.album_artist_id,
+                                        current_playback.track.metadata.album_id,
                                         model::AlbumSize::Regular,
                                         None,
                                     ))),

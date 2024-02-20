@@ -36,7 +36,7 @@ pub fn movie_list<'a>(
                 ),
             ];
 
-            let page: usize = page.clone();
+            let page: usize = *page;
 
             let indices = common::get_page(
                 movie_library

@@ -30,7 +30,6 @@ pub fn select_discs(main_db: &rusqlite::Connection) -> Vec<dbmodel::Disc> {
     let discs = statement
         .query_map([], map_disc)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 

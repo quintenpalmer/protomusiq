@@ -31,10 +31,7 @@ impl Reporter {
         let mut historical_play_count_records = BTreeMap::new();
 
         for record in historical_play_count_vec.into_iter() {
-            let existing_value = historical_play_count_records
-                .get(&record.key)
-                .unwrap_or(&0)
-                .clone();
+            let existing_value = *historical_play_count_records.get(&record.key).unwrap_or(&0);
 
             historical_play_count_records.insert(record.key, existing_value + record.count);
         }

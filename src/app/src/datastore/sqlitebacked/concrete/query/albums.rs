@@ -50,7 +50,6 @@ pub fn select_albums(main_db: &rusqlite::Connection) -> Vec<dbmodel::Album> {
     let albums = statement
         .query_map([], map_album)
         .unwrap()
-        .into_iter()
         .collect::<rusqlite::Result<Vec<_>>>()
         .unwrap();
 

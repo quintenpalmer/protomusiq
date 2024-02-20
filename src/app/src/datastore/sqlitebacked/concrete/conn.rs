@@ -187,7 +187,7 @@ impl Connections {
             let artist_id = musiqlibrary::ID::new(&artist.name);
             let mut artist_entry = musiqlibrary::KeyedArtistAlbums {
                 artist_info: musiqlibrary::ArtistInfo {
-                    artist_id: artist_id.clone(),
+                    artist_id: artist_id,
                     artist_name: artist.name.clone(),
                 },
                 albums: BTreeMap::new(),
@@ -209,10 +209,10 @@ impl Connections {
                     for track in tracks_by_disc.get(&disc.id).unwrap() {
                         known_album_info = known_album_info.map_or(
                             Some(musiqlibrary::AlbumInfo {
-                                album_id: album_id.clone(),
+                                album_id: album_id,
                                 album_name: album.name.clone(),
                                 genres: BTreeSet::new(),
-                                total_duration: track.duration.clone(),
+                                total_duration: track.duration,
                                 start_date: album.date_number,
                                 end_date: album.date_number,
                                 last_modified: track.last_modified,
@@ -223,7 +223,7 @@ impl Connections {
                                 found.total_duration = found.total_duration.add(track.duration);
 
                                 if track.last_modified > found.last_modified {
-                                    found.last_modified = track.last_modified.clone();
+                                    found.last_modified = track.last_modified;
                                 }
 
                                 Some(found)
@@ -247,10 +247,10 @@ impl Connections {
                             genre: "replaceme".to_string(),
                             date_number: album.date_number,
                             raw_date: "replaceme".to_string(),
-                            duration: track.duration.clone(),
+                            duration: track.duration,
                             path: track.full_path.clone(),
                             relative_path: track.relative_path.clone(),
-                            last_modified: track.last_modified.clone(),
+                            last_modified: track.last_modified,
                             ext: track.ext.clone(),
                         };
                         disc_entry.tracks.insert(track.track_no as u64, full_track);

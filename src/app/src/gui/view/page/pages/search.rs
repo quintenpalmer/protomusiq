@@ -83,8 +83,8 @@ pub fn search_page<'a>(
                                                     .push(album_image(
                                                         library.get_album_cover(
                                                             model::AlbumSize::Micro,
-                                                            result.artist.artist_id.clone(),
-                                                            result.album.album_id.clone(),
+                                                            result.artist.artist_id,
+                                                            result.album.album_id,
                                                         ),
                                                         model::AlbumSize::Micro,
                                                     ))
@@ -97,8 +97,8 @@ pub fn search_page<'a>(
                                             )
                                             .on_press(
                                                 user_nav_message(NavMessage::ArtistAlbumView(
-                                                    result.artist.artist_id.clone(),
-                                                    result.album.album_id.clone(),
+                                                    result.artist.artist_id,
+                                                    result.album.album_id,
                                                     model::AlbumSize::Regular,
                                                     None,
                                                 )),
@@ -106,35 +106,34 @@ pub fn search_page<'a>(
                                         )
                                     },
                                 ));
-                                let artist_results = Scrollable::new(results.artists.iter().fold(
-                                    Column::new(),
-                                    |column, result| {
-                                        column.push(
-                                            dark_button(
-                                                line_row()
-                                                    .spacing(5)
-                                                    .push(album_image(
-                                                        library.get_artists_first_album_cover(
+                                let artist_results =
+                                    Scrollable::new(results.artists.iter().fold(
+                                        Column::new(),
+                                        |column, result| {
+                                            column.push(
+                                                dark_button(
+                                                    line_row()
+                                                        .spacing(5)
+                                                        .push(album_image(
+                                                            library.get_artists_first_album_cover(
+                                                                model::AlbumSize::Micro,
+                                                                result.artist_id,
+                                                            ),
                                                             model::AlbumSize::Micro,
-                                                            result.artist_id.clone(),
+                                                        ))
+                                                        .push(
+                                                            bright_paragraph(
+                                                                result.artist_name.clone(),
+                                                            )
+                                                            .width(Length::Fill),
                                                         ),
-                                                        model::AlbumSize::Micro,
-                                                    ))
-                                                    .push(
-                                                        bright_paragraph(
-                                                            result.artist_name.clone(),
-                                                        )
-                                                        .width(Length::Fill),
-                                                    ),
-                                            )
-                                            .on_press(
-                                                user_nav_message(NavMessage::ArtistAlbumsView(
-                                                    result.artist_id.clone(),
+                                                )
+                                                .on_press(user_nav_message(
+                                                    NavMessage::ArtistAlbumsView(result.artist_id),
                                                 )),
-                                            ),
-                                        )
-                                    },
-                                ));
+                                            )
+                                        },
+                                    ));
                                 let track_results = Scrollable::new(results.tracks.iter().fold(
                                     Column::new(),
                                     |column, result| {
@@ -145,8 +144,8 @@ pub fn search_page<'a>(
                                                     .push(album_image(
                                                         library.get_album_cover(
                                                             model::AlbumSize::Micro,
-                                                            result.metadata.album_artist_id.clone(),
-                                                            result.metadata.album_id.clone(),
+                                                            result.metadata.album_artist_id,
+                                                            result.metadata.album_id,
                                                         ),
                                                         model::AlbumSize::Micro,
                                                     ))
@@ -172,11 +171,8 @@ pub fn search_page<'a>(
                                                         .push(album_image(
                                                             library.get_album_cover(
                                                                 model::AlbumSize::Micro,
-                                                                result
-                                                                    .metadata
-                                                                    .album_artist_id
-                                                                    .clone(),
-                                                                result.metadata.album_id.clone(),
+                                                                result.metadata.album_artist_id,
+                                                                result.metadata.album_id,
                                                             ),
                                                             model::AlbumSize::Micro,
                                                         ))

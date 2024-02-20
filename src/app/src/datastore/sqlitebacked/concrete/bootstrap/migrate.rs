@@ -13,7 +13,6 @@ pub fn create_all_tables(config_state: model::app::AppConfigState, main_db: &rus
 
     let mut files: Vec<_> = fs::read_dir(migrations_to_process_path)
         .unwrap()
-        .into_iter()
         .map(|x| x.unwrap())
         .collect();
     files.sort_by(leading_number_sort);

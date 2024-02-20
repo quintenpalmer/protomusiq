@@ -85,8 +85,8 @@ impl LibraryState {
             for (album_id, album) in artist.albums.iter() {
                 ret.insert(
                     musiqlibrary::AlbumUniqueIdentifier {
-                        artist_id: artist_id.clone(),
-                        album_id: album_id.clone(),
+                        artist_id: *artist_id,
+                        album_id: *album_id,
                     },
                     album,
                 );
@@ -183,12 +183,7 @@ impl LibraryState {
     ) -> (musiqlibrary::ID, musiqlibrary::ID) {
         let artist = self.raw_library.artists.get(artist_id).unwrap();
         match artist.albums.values().collect::<Vec<_>>().as_mut_slice() {
-            [] => self
-                .extra_library
-                .get_album_ids(artist_id)
-                .get(0)
-                .unwrap()
-                .clone(),
+            [] => *self.extra_library.get_album_ids(artist_id).get(0).unwrap(),
             albums => {
                 albums
                     .sort_unstable_by(|a, b| b.album_info.start_date.cmp(&a.album_info.start_date));

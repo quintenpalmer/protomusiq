@@ -33,7 +33,7 @@ impl CacheMetadataPayload {
                         file_path_info.push(musiqlibrary::TrackPathInfo {
                             path: track.path.clone(),
                             relative_path: track.relative_path.clone(),
-                            last_modified: track.last_modified.clone(),
+                            last_modified: track.last_modified,
                         });
                     }
                 }

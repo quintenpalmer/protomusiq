@@ -32,7 +32,7 @@ pub fn artist_album_list<'a>(
                 ),
                 (
                     artist.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistAlbumsView(artist_id.clone())),
+                    user_nav_message(NavMessage::ArtistAlbumsView(*artist_id)),
                 ),
             ];
             let body = {
@@ -51,8 +51,8 @@ pub fn artist_album_list<'a>(
                             album_image(
                                 library.get_album_cover(
                                     model::AlbumSize::Small,
-                                    artist.artist_id.clone(),
-                                    album.album_info.album_id.clone(),
+                                    artist.artist_id,
+                                    album.album_info.album_id,
                                 ),
                                 model::AlbumSize::Small,
                             )
@@ -70,8 +70,8 @@ pub fn artist_album_list<'a>(
                         ))
                         .on_press(user_nav_message(
                             NavMessage::ArtistAlbumView(
-                                artist.artist_id.clone(),
-                                album.album_info.album_id.clone(),
+                                artist.artist_id,
+                                album.album_info.album_id,
                                 model::AlbumSize::Regular,
                                 None,
                             ),
@@ -116,19 +116,20 @@ pub fn artist_album_list<'a>(
                 let scrollable = Scrollable::new(album_grid_columns.width(Length::Fill));
 
                 let artist_view_button_row = line_row()
-                    .push(dark_button(h2("Albums")).on_press(user_nav_message(
-                        NavMessage::ArtistAlbumsView(artist_id.clone()),
-                    )))
+                    .push(
+                        dark_button(h2("Albums"))
+                            .on_press(user_nav_message(NavMessage::ArtistAlbumsView(*artist_id))),
+                    )
                     .push(dark_button(dark(h2("Tracks"))).on_press(user_nav_message(
                         NavMessage::ArtistTrackView(
-                            artist_id.clone(),
+                            *artist_id,
                             model::ArtistTrackSortKey::ByTotalPlayCount,
                             model::SortOrder::Reversed,
                         ),
                     )))
                     .push(dark_button(dark(h2("Featured"))).on_press(user_nav_message(
                         NavMessage::ArtistFeaturedTrackView(
-                            artist_id.clone(),
+                            *artist_id,
                             model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                             model::SortOrder::Reversed,
                         ),

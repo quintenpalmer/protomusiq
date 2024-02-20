@@ -19,7 +19,7 @@ pub fn handle_nav_relative(
                 let entity_length = app.library.get_album_map().keys().len();
 
                 let new_page = get_rel_page(
-                    page.clone(),
+                    *page,
                     &nav_message,
                     app.library.grid_info.get_page_size_usize(),
                     entity_length,
@@ -45,7 +45,7 @@ pub fn handle_nav_relative(
                 }
 
                 let new_page = get_rel_page(
-                    page.clone(),
+                    *page,
                     &nav_message,
                     app.library.grid_info.get_track_page_size_usize(),
                     total_tracks,
@@ -65,7 +65,7 @@ pub fn handle_nav_relative(
                 let entity_length = app.library.get_artist_map().keys().len();
 
                 let new_page = get_rel_page(
-                    page.clone(),
+                    *page,
                     &nav_message,
                     app.library.grid_info.get_page_size_usize(),
                     entity_length,
@@ -85,7 +85,7 @@ pub fn handle_nav_relative(
                 let entity_length = app.video_library.movies.movies.len();
 
                 let new_page = get_rel_page(
-                    page.clone(),
+                    *page,
                     &nav_message,
                     app.library.grid_info.get_page_size_usize(),
                     entity_length,

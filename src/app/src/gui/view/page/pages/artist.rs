@@ -30,7 +30,7 @@ pub fn artist_list<'a>(
                 )),
             )],
             {
-                let page: usize = page.clone();
+                let page: usize = *page;
 
                 let indices = common::get_page(
                     library.artist_sorts.from_sort_key(sort_key, sort_order),
@@ -40,7 +40,7 @@ pub fn artist_list<'a>(
 
                 let mut paged_artists: Vec<musiqlibrary::ArtistInfo> = Vec::new();
                 for index in indices.iter() {
-                    paged_artists.push(library.get_artist_info(index.clone()));
+                    paged_artists.push(library.get_artist_info(*index));
                 }
 
                 let mut buttons: Vec<Button<Message>> = Vec::new();
@@ -51,7 +51,7 @@ pub fn artist_list<'a>(
                             album_image(
                                 library.get_artists_first_album_cover(
                                     model::AlbumSize::Small,
-                                    artist.artist_id.clone(),
+                                    artist.artist_id,
                                 ),
                                 model::AlbumSize::Small,
                             )
@@ -62,7 +62,7 @@ pub fn artist_list<'a>(
                             )),
                         ))
                         .on_press(user_nav_message(
-                            NavMessage::ArtistAlbumsView(artist.artist_id.clone()),
+                            NavMessage::ArtistAlbumsView(artist.artist_id),
                         )),
                     );
                 }

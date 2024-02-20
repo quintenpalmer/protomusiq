@@ -30,8 +30,8 @@ pub fn compute_playlist_thumbnail<'a>(
         for track in tracks.iter() {
             *album_counts
                 .entry(musiqlibrary::AlbumUniqueIdentifier::new(
-                    track.artist_id.clone(),
-                    track.album_id.clone(),
+                    track.artist_id,
+                    track.album_id,
                 ))
                 .or_insert(0) += 1;
         }
@@ -75,8 +75,8 @@ pub fn compute_playlist_thumbnail<'a>(
                 row = row.push(album_image(
                     library.get_album_cover(
                         large_album_size.clone(),
-                        first_key.artist_id.clone(),
-                        first_key.album_id.clone(),
+                        first_key.artist_id,
+                        first_key.album_id,
                     ),
                     large_album_size.clone(),
                 ));
@@ -88,8 +88,8 @@ pub fn compute_playlist_thumbnail<'a>(
                 row = row.push(album_image(
                     library.get_album_cover(
                         small_album_size.clone(),
-                        first_key.artist_id.clone(),
-                        first_key.album_id.clone(),
+                        first_key.artist_id,
+                        first_key.album_id,
                     ),
                     small_album_size.clone(),
                 ));
@@ -101,8 +101,8 @@ pub fn compute_playlist_thumbnail<'a>(
                 second_row = second_row.push(album_image(
                     library.get_album_cover(
                         small_album_size.clone(),
-                        second_key.artist_id.clone(),
-                        second_key.album_id.clone(),
+                        second_key.artist_id,
+                        second_key.album_id,
                     ),
                     small_album_size.clone(),
                 ));
@@ -116,8 +116,8 @@ pub fn compute_playlist_thumbnail<'a>(
                 row = row.push(album_image(
                     library.get_album_cover(
                         small_album_size.clone(),
-                        first_key.artist_id.clone(),
-                        first_key.album_id.clone(),
+                        first_key.artist_id,
+                        first_key.album_id,
                     ),
                     small_album_size.clone(),
                 ));
@@ -126,8 +126,8 @@ pub fn compute_playlist_thumbnail<'a>(
                         row = row.push(album_image(
                             library.get_album_cover(
                                 small_album_size.clone(),
-                                second_key.artist_id.clone(),
-                                second_key.album_id.clone(),
+                                second_key.artist_id,
+                                second_key.album_id,
                             ),
                             small_album_size.clone(),
                         ));
@@ -140,8 +140,8 @@ pub fn compute_playlist_thumbnail<'a>(
                                 second_row = second_row.push(album_image(
                                     library.get_album_cover(
                                         small_album_size.clone(),
-                                        third_key.artist_id.clone(),
-                                        third_key.album_id.clone(),
+                                        third_key.artist_id,
+                                        third_key.album_id,
                                     ),
                                     small_album_size.clone(),
                                 ));
@@ -151,8 +151,8 @@ pub fn compute_playlist_thumbnail<'a>(
                                         second_row = second_row.push(album_image(
                                             library.get_album_cover(
                                                 small_album_size.clone(),
-                                                fourth_key.artist_id.clone(),
-                                                fourth_key.album_id.clone(),
+                                                fourth_key.artist_id,
+                                                fourth_key.album_id,
                                             ),
                                             small_album_size.clone(),
                                         ));
