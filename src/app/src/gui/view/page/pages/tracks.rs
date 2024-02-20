@@ -119,31 +119,31 @@ pub fn track_list<'a>(
                                     .push(sort_button(
                                         "Name",
                                         model::TrackSortKey::ByName,
-                                        model::SortOrder::Regular,
+                                        model::TrackSortKey::ByName.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Play Count",
                                         model::TrackSortKey::ByPlayCount,
-                                        model::SortOrder::Reversed,
+                                        model::TrackSortKey::ByPlayCount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Played Duration",
                                         model::TrackSortKey::ByPlayedAmount,
-                                        model::SortOrder::Reversed,
+                                        model::TrackSortKey::ByPlayedAmount.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Length",
                                         model::TrackSortKey::ByDuration,
-                                        model::SortOrder::Reversed,
+                                        model::TrackSortKey::ByDuration.default_order(),
                                         sort_key,
                                     ))
                                     .push(sort_button(
                                         "Random",
                                         model::TrackSortKey::ByRandom,
-                                        model::SortOrder::Regular,
+                                        model::TrackSortKey::ByRandom.default_order(),
                                         sort_key,
                                     )),
                             ),

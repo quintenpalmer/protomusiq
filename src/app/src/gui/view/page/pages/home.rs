@@ -63,7 +63,7 @@ pub fn home_page<'a>(
             .on_press(user_nav_message(NavMessage::TrackList(
                 0,
                 model::TrackSortKey::ByName,
-                model::SortOrder::Regular,
+                model::TrackSortKey::ByName.default_order(),
             )));
             let playlist = dark_button(Container::new(bottom_label(
                 album_image(
