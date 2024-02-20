@@ -25,7 +25,7 @@ impl PlaylistData {
         );
 
         let maybe_raw = common::maybe_get_existing_raw_data(&json_db_path);
-        let inner = maybe_raw.map(|raw| InnerPlaylistData::from_raw(raw));
+        let inner = maybe_raw.map(InnerPlaylistData::from_raw);
 
         PlaylistData {
             json_db_path,
