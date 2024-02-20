@@ -20,7 +20,7 @@ pub enum TrackSortKey {
     ByPlayCount,
     ByDuration,
     ByPlayedAmount,
-    ByRandom,
+    Random,
 }
 
 impl TrackSortKey {
@@ -30,7 +30,7 @@ impl TrackSortKey {
             TrackSortKey::ByPlayCount => SortOrder::Reversed,
             TrackSortKey::ByDuration => SortOrder::Reversed,
             TrackSortKey::ByPlayedAmount => SortOrder::Reversed,
-            TrackSortKey::ByRandom => SortOrder::Regular,
+            TrackSortKey::Random => SortOrder::Regular,
         }
     }
 }

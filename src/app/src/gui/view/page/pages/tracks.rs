@@ -142,8 +142,8 @@ pub fn track_list<'a>(
                                     ))
                                     .push(sort_button(
                                         "Random",
-                                        model::TrackSortKey::ByRandom,
-                                        model::TrackSortKey::ByRandom.default_order(),
+                                        model::TrackSortKey::Random,
+                                        model::TrackSortKey::Random.default_order(),
                                         sort_key,
                                     )),
                             ),

@@ -702,7 +702,7 @@ impl TrackSorts {
             sortkeys::TrackSortKey::ByPlayCount => &self.by_play_count,
             sortkeys::TrackSortKey::ByDuration => &self.by_duration,
             sortkeys::TrackSortKey::ByPlayedAmount => &self.by_played_amount,
-            sortkeys::TrackSortKey::ByRandom => &self.random,
+            sortkeys::TrackSortKey::Random => &self.random,
         }
         .sort_ordered(sort_order)
     }
