@@ -435,16 +435,25 @@ pub fn artist_album_view_state<'a>(
 
             match maybe_current_sort_order {
                 Some(current_sort_order) => {
-                    let sort_nav_row = line_row()
-                        .spacing(8)
-                        .push(h3("<"))
-                        .push(h3(format!("{}", current_sort_order.index)))
-                        .push(h3(">"))
-                        .push(h3(current_sort_order.sort_key.display_text()))
-                        .push(h3(format!(
-                            "({})",
-                            current_sort_order.sort_order.display_text()
-                        )));
+                    let sort_nav_row =
+                        line_row()
+                            .spacing(8)
+                            .push(dark_button(bright_paragraph("<")).on_press(
+                                Message::NavRelative(message::NavRelMsg::PagifiedMovement(
+                                    message::PagifiedMovementMsg::Backwards,
+                                )),
+                            ))
+                            .push(h3(format!("{}", current_sort_order.index)))
+                            .push(dark_button(bright_paragraph(">")).on_press(
+                                Message::NavRelative(message::NavRelMsg::PagifiedMovement(
+                                    message::PagifiedMovementMsg::Forwards,
+                                )),
+                            ))
+                            .push(h3(current_sort_order.sort_key.display_text()))
+                            .push(h3(format!(
+                                "({})",
+                                current_sort_order.sort_order.display_text()
+                            )));
                     body_column = body_column.push(sort_nav_row);
                 }
                 None => (),

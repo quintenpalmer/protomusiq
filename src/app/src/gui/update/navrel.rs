@@ -2,6 +2,7 @@ use iced::Command;
 
 use crate::gui::message::{self};
 use crate::gui::state::{self, AppState, Page};
+use crate::model;
 
 use super::loaded;
 
@@ -30,6 +31,61 @@ pub fn handle_nav_relative(
                     sort_order.clone(),
                 )))
             }
+            Page::ArtistAlbumView(state::ArtistAlbumViewState {
+                artist_id: ref _artist_id,
+                album_id: ref _album_id,
+                album_size: ref _album_size,
+                maybe_selected_track: ref _maybe_selected_track,
+                ref maybe_current_sort_order,
+            }) => match maybe_current_sort_order {
+                Some(model::AlbumSortPlacement {
+                    index,
+                    sort_key,
+                    sort_order,
+                }) => {
+                    let albums_sorted_by_key =
+                        app.library.album_sorts.from_sort_key(sort_key, sort_order);
+
+                    let last_index = albums_sorted_by_key.len() - 1;
+
+                    let new_index = match nav_message {
+                        message::PagifiedMovementMsg::First => 0,
+                        message::PagifiedMovementMsg::Backwards => {
+                            if *index == 0 {
+                                0
+                            } else {
+                                index - 1
+                            }
+                        }
+                        message::PagifiedMovementMsg::Forwards => {
+                            if *index == last_index {
+                                last_index
+                            } else {
+                                index + 1
+                            }
+                        }
+                        message::PagifiedMovementMsg::Last => last_index,
+                    };
+
+                    let (new_artist_id, new_album_id) =
+                        albums_sorted_by_key.get(new_index).unwrap();
+
+                    Some(message::user_nav_message(
+                        message::NavMessage::ArtistAlbumView(
+                            *new_artist_id,
+                            *new_album_id,
+                            model::AlbumSize::Regular,
+                            None,
+                            Some(model::AlbumSortPlacement {
+                                index: new_index,
+                                sort_key: sort_key.clone(),
+                                sort_order: sort_order.clone(),
+                            }),
+                        ),
+                    ))
+                }
+                None => None,
+            },
             Page::TrackList(state::TrackListState {
                 ref sort_key,
                 ref sort_order,
