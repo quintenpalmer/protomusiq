@@ -238,7 +238,7 @@ impl InnerPlaylistData {
     ) -> Result<(), String> {
         match self.playlists.get_mut(&playlist_id) {
             Some(ref mut playlist) => {
-                playlist.tracks.retain(|track| !(*track == track_id));
+                playlist.tracks.retain(|track| *track != track_id);
                 Ok(())
             }
             None => Err(format!("playlist with id: {} does not exist", playlist_id)),
