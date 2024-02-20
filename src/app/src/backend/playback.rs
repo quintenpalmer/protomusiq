@@ -12,7 +12,7 @@ pub fn handle_playback_request(
         shared::PlaybackRequest::LoadCurrentSong => match play_queue.current_playback {
             Some(ref outer_current_playback) => match outer_current_playback {
                 shared::PlayQueueEntry::Track(ref current_playback) => {
-                    let _ = sink_client
+                    sink_client
                         .send(shared::SinkMessage::LoadSong(
                             current_playback.track.metadata.path.clone(),
                             play_queue.current_volume,
