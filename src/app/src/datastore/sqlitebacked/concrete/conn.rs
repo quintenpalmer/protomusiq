@@ -156,15 +156,15 @@ impl Connections {
     }
 
     pub fn needs_tracks_seeded(&self) -> bool {
-        return !self.check_has_migration(constants::Migration::TracksAndFriends);
+        !self.check_has_migration(constants::Migration::TracksAndFriends)
     }
 
     pub fn needs_prehistory_seeded(&self) -> bool {
-        return !self.check_has_migration(constants::Migration::Prehistory);
+        !self.check_has_migration(constants::Migration::Prehistory)
     }
 
     pub fn needs_livehistory_seeded(&self) -> bool {
-        return !self.check_has_migration(constants::Migration::Livehistory);
+        !self.check_has_migration(constants::Migration::Livehistory)
     }
 
     pub fn get_library(&self) -> musiqlibrary::RawLibrary {

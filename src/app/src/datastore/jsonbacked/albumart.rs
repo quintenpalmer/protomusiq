@@ -85,7 +85,7 @@ impl FilesystemCachedAlbumArt {
             Some(v) => {
                 let name = album_size.get_filename();
                 let full_album_size_path = v.cache_album_dir.join(name);
-                return Some(full_album_size_path);
+                Some(full_album_size_path)
             }
             None => None,
         }

@@ -192,10 +192,10 @@ impl InnerPlaylistData {
 
     fn delete_playlist(&mut self, playlist_id: u32) -> Result<(), String> {
         if self.is_default_playlist(playlist_id) {
-            return Err(format!(
+            Err(format!(
                 "playlist with id {} is the active playlist",
                 playlist_id
-            ));
+            ))
         } else {
             match self.playlists.remove(&playlist_id) {
                 Some(_v) => {

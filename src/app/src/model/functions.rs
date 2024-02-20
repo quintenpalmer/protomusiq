@@ -11,7 +11,7 @@ pub fn get_default_config_path() -> path::PathBuf {
         .join("musiqapp")
         .join("config.json");
 
-    return config_path;
+    config_path
 }
 
 pub fn get_default_data_path() -> path::PathBuf {
@@ -22,7 +22,7 @@ pub fn get_default_data_path() -> path::PathBuf {
         .join("musiq")
         .join("v1");
 
-    return data_path;
+    data_path
 }
 
 pub fn tracks_after_including(
