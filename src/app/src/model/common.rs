@@ -86,6 +86,47 @@ pub enum AlbumSortKey {
 }
 
 impl AlbumSortKey {
+    pub fn prev(&self) -> Self {
+        match self {
+            AlbumSortKey::ByParent => AlbumSortKey::ByParent,
+            AlbumSortKey::ByName => AlbumSortKey::ByParent,
+            AlbumSortKey::ByLastMod => AlbumSortKey::ByName,
+            AlbumSortKey::ByDuration => AlbumSortKey::ByLastMod,
+            AlbumSortKey::ByTotalPlayCount => AlbumSortKey::ByDuration,
+            AlbumSortKey::ByTotalPlayedDuration => AlbumSortKey::ByTotalPlayCount,
+            AlbumSortKey::ByDate => AlbumSortKey::ByTotalPlayedDuration,
+            AlbumSortKey::Random => AlbumSortKey::ByDate,
+        }
+    }
+
+    pub fn next(&self) -> Self {
+        match self {
+            AlbumSortKey::ByParent => AlbumSortKey::ByName,
+            AlbumSortKey::ByName => AlbumSortKey::ByLastMod,
+            AlbumSortKey::ByLastMod => AlbumSortKey::ByDuration,
+            AlbumSortKey::ByDuration => AlbumSortKey::ByTotalPlayCount,
+            AlbumSortKey::ByTotalPlayCount => AlbumSortKey::ByTotalPlayedDuration,
+            AlbumSortKey::ByTotalPlayedDuration => AlbumSortKey::ByDate,
+            AlbumSortKey::ByDate => AlbumSortKey::Random,
+            AlbumSortKey::Random => AlbumSortKey::Random,
+        }
+    }
+
+    pub fn default_order(&self) -> SortOrder {
+        match self {
+            AlbumSortKey::ByName => SortOrder::Regular,
+            AlbumSortKey::ByParent => SortOrder::Regular,
+            AlbumSortKey::ByDate => SortOrder::Reversed,
+            AlbumSortKey::ByDuration => SortOrder::Reversed,
+            AlbumSortKey::ByLastMod => SortOrder::Reversed,
+            AlbumSortKey::ByTotalPlayCount => SortOrder::Reversed,
+            AlbumSortKey::ByTotalPlayedDuration => SortOrder::Reversed,
+            AlbumSortKey::Random => SortOrder::Regular,
+        }
+    }
+}
+
+impl AlbumSortKey {
     pub fn display_text(&self) -> String {
         match self {
             AlbumSortKey::ByName => "Name",

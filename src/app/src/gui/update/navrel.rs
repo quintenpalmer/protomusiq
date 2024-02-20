@@ -12,11 +12,41 @@ pub fn handle_nav_relative(
 ) -> Command<message::Message> {
     let maybe_new_nav_msg = match parent_nav_message {
         message::NavRelMsg::PagifiedMovement(nav_message) => handle_nav_rel_msg(app, nav_message),
+        message::NavRelMsg::SwitchSortBy(move_direction) => {
+            handle_switch_sort_by_msg(app, move_direction)
+        }
     };
 
     match maybe_new_nav_msg {
         Some(new_nav_msg) => loaded::update_state(app, new_nav_msg),
         None => Command::none(),
+    }
+}
+
+fn handle_switch_sort_by_msg(
+    app: &mut AppState,
+    move_direction: message::MoveDirectionMsg,
+) -> Option<message::Message> {
+    match app.current_page {
+        Page::AlbumList(state::AlbumListState {
+            ref page,
+            ref sort_key,
+            sort_order: ref _sort_order,
+        }) => {
+            let new_sort_key = match move_direction {
+                message::MoveDirectionMsg::Left => sort_key.prev(),
+                message::MoveDirectionMsg::Right => sort_key.next(),
+            };
+
+            let new_sort_order = new_sort_key.default_order();
+
+            Some(message::Message::Nav(message::NavMessage::AlbumList(
+                page.clone(),
+                new_sort_key,
+                new_sort_order,
+            )))
+        }
+        _ => None,
     }
 }
 

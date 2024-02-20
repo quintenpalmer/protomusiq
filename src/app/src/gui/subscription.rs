@@ -53,6 +53,13 @@ pub fn keybinding_subscription_fn(
             Some(message::Message::HistoryNav)
         }
 
+        (keyboard::Key::Character("["), Mods::None) => Some(message::Message::NavRelative(
+            message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Left),
+        )),
+        (keyboard::Key::Character("]"), Mods::None) => Some(message::Message::NavRelative(
+            message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Right),
+        )),
+
         (keyboard::Key::Character("H"), Mods::Shift) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::First),
         )),

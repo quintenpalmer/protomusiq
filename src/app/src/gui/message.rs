@@ -106,6 +106,7 @@ pub enum NavMessage {
 #[derive(Debug, Clone)]
 pub enum NavRelMsg {
     PagifiedMovement(PagifiedMovementMsg),
+    SwitchSortBy(MoveDirectionMsg),
 }
 
 #[derive(Debug, Clone)]
@@ -114,6 +115,12 @@ pub enum PagifiedMovementMsg {
     Backwards,
     Forwards,
     Last,
+}
+
+#[derive(Debug, Clone)]
+pub enum MoveDirectionMsg {
+    Left,
+    Right,
 }
 
 #[derive(Debug, Clone)]
