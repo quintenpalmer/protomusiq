@@ -1,7 +1,5 @@
 use rusqlite;
 
-use musiqlibrary;
-
 use super::super::dbmodel;
 
 pub fn insert_artist(main_db: &rusqlite::Connection, artist: &musiqlibrary::ArtistInfo) -> u32 {

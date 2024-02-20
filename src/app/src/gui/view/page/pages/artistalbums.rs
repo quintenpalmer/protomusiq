@@ -1,8 +1,6 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable};
 use iced::Length;
 
-use musiqlibrary;
-
 use crate::model;
 
 use crate::gui::message::{user_nav_message, Message, NavMessage};

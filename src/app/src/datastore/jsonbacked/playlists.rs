@@ -5,8 +5,6 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use musiqlibrary;
-
 use crate::model;
 
 use super::super::localfs;

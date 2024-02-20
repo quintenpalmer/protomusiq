@@ -2,8 +2,6 @@ use std::collections::BTreeMap;
 
 use chrono::{DateTime, Local};
 
-use musiqlibrary;
-
 use crate::model;
 
 pub trait HistoricalTrackCountReporter {

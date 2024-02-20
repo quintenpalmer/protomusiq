@@ -1,6 +1,6 @@
 use iced::widget::image;
 use iced::widget::{Button, Column, Container, Image, Row, Text};
-use iced::{self, Alignment, Element, Length};
+use iced::{Alignment, Element, Length};
 
 use crate::model;
 

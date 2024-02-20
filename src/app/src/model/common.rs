@@ -4,7 +4,7 @@ use std::path;
 
 use serde::{Deserialize, Serialize};
 
-use musiqlibrary::{self, video};
+use musiqlibrary::video;
 
 use super::augmented;
 use super::constants;

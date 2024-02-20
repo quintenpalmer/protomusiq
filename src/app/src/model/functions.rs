@@ -2,8 +2,6 @@ use std::env;
 use std::path;
 use std::time;
 
-use musiqlibrary;
-
 use super::augmented;
 
 pub fn get_default_config_path() -> path::PathBuf {

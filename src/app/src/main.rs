@@ -9,7 +9,7 @@ mod util;
 
 use std::env;
 
-use iced::{self, Application};
+use iced::Application;
 
 use crate::gui::state;
 

@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 
-use iced;
 use iced::widget::{Column, Container, Row, Space};
 
 use crate::model;

@@ -6,8 +6,6 @@ use std::path::PathBuf;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
-use musiqlibrary;
-
 use crate::datastore;
 use crate::datastore::localfs;
 

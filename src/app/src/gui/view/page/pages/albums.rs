@@ -1,5 +1,5 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
-use iced::{self, Length};
+use iced::Length;
 
 use crate::model;
 

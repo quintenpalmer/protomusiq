@@ -2,12 +2,8 @@ use std::{path, pin};
 
 use musiqlibrary::video;
 
-use iced;
-
 use iced::futures::task::{Context, Poll};
 use iced::futures::Future;
-
-use musiqlibrary;
 
 use crate::shared;
 

@@ -1,7 +1,5 @@
 use std::cell::RefCell;
 
-use iced;
-
 use super::update;
 
 use crate::backend;

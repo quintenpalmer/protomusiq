@@ -1,8 +1,6 @@
 use iced::widget::{Checkbox, Column, Container, ProgressBar, Row, Scrollable, Space};
 use iced::{Element, Length};
 
-use musiqlibrary;
-
 use crate::model;
 use crate::shared;
 

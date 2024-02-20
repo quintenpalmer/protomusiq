@@ -5,8 +5,6 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use musiqlibrary;
-
 use crate::datastore::loader;
 use crate::datastore::sqlitebacked;
 use crate::model;

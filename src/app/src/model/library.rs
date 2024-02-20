@@ -1,7 +1,5 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use musiqlibrary;
-
 use crate::datastore::jsonbacked::playlists;
 
 use super::{augmented, common, sorts};

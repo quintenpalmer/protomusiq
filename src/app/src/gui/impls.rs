@@ -1,4 +1,4 @@
-use iced::{self, event, executor, keyboard, Application, Command, Element};
+use iced::{event, executor, keyboard, Application, Command, Element};
 
 use super::init;
 use super::message;

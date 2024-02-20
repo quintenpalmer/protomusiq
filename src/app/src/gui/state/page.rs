@@ -1,4 +1,4 @@
-use musiqlibrary::{self, video};
+use musiqlibrary::video;
 
 use crate::model;
 

@@ -4,8 +4,6 @@ use std::io;
 use chrono::{DateTime, Duration, Local, NaiveDateTime, TimeZone};
 use serde_json;
 
-use musiqlibrary;
-
 use crate::datastore::jsonbacked::{self, playlists as userplaylists, tracker};
 use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;

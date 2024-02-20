@@ -1,7 +1,5 @@
 use std::io;
 
-use musiqlibrary;
-
 use crate::model;
 use crate::util::{config, logging};
 

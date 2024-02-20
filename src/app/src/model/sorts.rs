@@ -1,6 +1,6 @@
 use rand::seq::SliceRandom;
 
-use musiqlibrary::{self, video};
+use musiqlibrary::video;
 
 use super::{augmented, common};
 

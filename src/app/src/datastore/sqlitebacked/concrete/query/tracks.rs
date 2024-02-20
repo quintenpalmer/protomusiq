@@ -3,8 +3,6 @@ use std::time;
 
 use rusqlite;
 
-use musiqlibrary;
-
 use super::super::dbmodel;
 
 pub fn insert_track(

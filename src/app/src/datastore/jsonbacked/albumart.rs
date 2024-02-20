@@ -7,8 +7,6 @@ use std::path::PathBuf;
 use image;
 use image::io::Reader as ImageReader;
 
-use musiqlibrary;
-
 use crate::model;
 
 use super::super::localfs;

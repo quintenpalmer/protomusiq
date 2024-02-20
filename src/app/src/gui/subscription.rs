@@ -1,4 +1,3 @@
-use iced;
 use iced::keyboard;
 use iced::keyboard::key;
 use iced::mouse;
