@@ -17,13 +17,12 @@ impl MP4AMetadataParser {
             .modified()
             .map_err(|e| format!("{:?}", e))?;
 
-        let tag = mp4ameta::Tag::read_from_path(path.as_ref()).expect(
-            format!(
+        let tag = mp4ameta::Tag::read_from_path(path.as_ref()).unwrap_or_else(|_| {
+            panic!(
                 "could not load m4a file: {}",
                 path.as_ref().to_str().unwrap()
             )
-            .as_str(),
-        );
+        });
         Ok(MP4AMetadataParser {
             tag,
             last_mod,

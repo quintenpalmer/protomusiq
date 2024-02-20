@@ -20,13 +20,12 @@ impl ID3MetadataParser {
             .modified()
             .map_err(|e| format!("{:?}", e))?;
 
-        let tag = id3::Tag::read_from_path(path.as_ref()).expect(
-            format!(
+        let tag = id3::Tag::read_from_path(path.as_ref()).unwrap_or_else(|_| {
+            panic!(
                 "could not load mp3 file: {}",
                 path.as_ref().to_str().unwrap()
             )
-            .as_str(),
-        );
+        });
 
         let duration = mp3_duration::from_path(path.as_ref()).unwrap();
 
