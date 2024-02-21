@@ -251,6 +251,26 @@ pub enum MovieSortKey {
 }
 
 impl MovieSortKey {
+    pub fn prev(&self) -> Self {
+        match self {
+            MovieSortKey::ByTitle => MovieSortKey::ByTitle,
+            MovieSortKey::LastModified => MovieSortKey::ByTitle,
+            MovieSortKey::ByDuration => MovieSortKey::LastModified,
+            MovieSortKey::ByRelease => MovieSortKey::ByDuration,
+            MovieSortKey::Random => MovieSortKey::ByRelease,
+        }
+    }
+
+    pub fn next(&self) -> Self {
+        match self {
+            MovieSortKey::ByTitle => MovieSortKey::LastModified,
+            MovieSortKey::LastModified => MovieSortKey::ByDuration,
+            MovieSortKey::ByDuration => MovieSortKey::ByRelease,
+            MovieSortKey::ByRelease => MovieSortKey::Random,
+            MovieSortKey::Random => MovieSortKey::Random,
+        }
+    }
+
     pub fn default_order(&self) -> SortOrder {
         match self {
             MovieSortKey::ByTitle => SortOrder::Regular,
