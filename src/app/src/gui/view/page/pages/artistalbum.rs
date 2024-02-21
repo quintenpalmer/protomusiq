@@ -214,7 +214,6 @@ pub fn artist_album_view_state<'a>(
                                     ),
                             ),
                     )
-                    .push(Space::new(Length::Fill, Length::Fixed(20.0)))
                     .push({
                         let mut column = Column::new().padding(15);
                         let mut stripe_marker = false;
