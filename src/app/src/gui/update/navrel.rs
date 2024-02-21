@@ -64,6 +64,26 @@ fn handle_switch_sort_by_msg(
                 new_sort_order,
             )))
         }
+        Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+            ref artist_id,
+            ref sort_key,
+            sort_order: ref _sort_order,
+        }) => {
+            let new_sort_key = match move_direction {
+                message::MoveDirectionMsg::Left => sort_key.prev(),
+                message::MoveDirectionMsg::Right => sort_key.next(),
+            };
+
+            let new_sort_order = new_sort_key.default_order();
+
+            Some(message::Message::Nav(
+                message::NavMessage::ArtistFeaturedTrackView(
+                    artist_id.clone(),
+                    new_sort_key,
+                    new_sort_order,
+                ),
+            ))
+        }
         Page::TrackList(state::TrackListState {
             ref sort_key,
             sort_order: ref _sort_order,
