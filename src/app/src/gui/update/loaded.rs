@@ -33,6 +33,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
         Message::Nav(nav_message) => {
             app.page_back_history.push(app.page_current_history.clone());
             app.page_current_history = nav_message.clone();
+            app.page_forward_history = Vec::new();
             nav::handle_nav(app, nav_message)
         }
         Message::NavRelative(nav_message) => navrel::handle_nav_relative(app, nav_message),
@@ -46,6 +47,17 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
                 }
                 None => Command::none(),
             },
+            message::HistoryDirection::Forwards => {
+                if app.page_forward_history.is_empty() {
+                    Command::none()
+                } else {
+                    let history_message = app.page_forward_history.remove(0);
+                    let old_current = app.page_current_history.clone();
+                    app.page_current_history = history_message.clone();
+                    app.page_back_history.push(old_current);
+                    nav::handle_nav(app, history_message)
+                }
+            }
         },
         Message::ErrorResponse(resp) => {
             match resp {

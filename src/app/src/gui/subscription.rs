@@ -55,6 +55,13 @@ pub fn keybinding_subscription_fn(
             message::Message::HistoryNav(message::HistoryDirection::Backwards),
         ),
 
+        (keyboard::Key::Named(key::Named::BrowserForward), Mods::None) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Forwards),
+        ),
+        (keyboard::Key::Named(key::Named::ArrowRight), Mods::Alt) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Forwards),
+        ),
+
         (keyboard::Key::Character("["), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Left),
         )),

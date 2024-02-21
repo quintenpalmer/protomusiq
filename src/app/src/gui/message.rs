@@ -28,6 +28,7 @@ pub enum Message {
 #[derive(Debug, Clone)]
 pub enum HistoryDirection {
     Backwards,
+    Forwards,
 }
 
 #[derive(Debug, Clone)]
