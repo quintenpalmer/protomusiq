@@ -132,8 +132,10 @@ pub fn render_header<'a>(
             .collect::<Vec<Element<Message>>>(),
     );
 
-    let back_forward_buttons =
-        Row::new().push(dark_button(bright_paragraph("<")).on_press(Message::HistoryNav));
+    let back_forward_buttons = Row::new().push(
+        dark_button(bright_paragraph("<"))
+            .on_press(Message::HistoryNav(message::HistoryDirection::Backwards)),
+    );
 
     let header = Row::new().push(
         line_row()

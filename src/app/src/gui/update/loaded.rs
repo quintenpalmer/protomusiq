@@ -2,7 +2,7 @@ use iced::Command;
 
 use crate::shared;
 
-use super::super::message::Message;
+use super::super::message::{self, Message};
 use super::super::state::AppState;
 
 use super::action;
@@ -36,14 +36,16 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             nav::handle_nav(app, nav_message)
         }
         Message::NavRelative(nav_message) => navrel::handle_nav_relative(app, nav_message),
-        Message::HistoryNav => match app.page_back_history.pop() {
-            Some(history_message) => {
-                let old_current = app.page_current_history.clone();
-                app.page_current_history = history_message.clone();
-                app.page_forward_history.insert(0, old_current);
-                nav::handle_nav(app, history_message)
-            }
-            None => Command::none(),
+        Message::HistoryNav(direction) => match direction {
+            message::HistoryDirection::Backwards => match app.page_back_history.pop() {
+                Some(history_message) => {
+                    let old_current = app.page_current_history.clone();
+                    app.page_current_history = history_message.clone();
+                    app.page_forward_history.insert(0, old_current);
+                    nav::handle_nav(app, history_message)
+                }
+                None => Command::none(),
+            },
         },
         Message::ErrorResponse(resp) => {
             match resp {

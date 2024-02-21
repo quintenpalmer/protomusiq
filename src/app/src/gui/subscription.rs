@@ -24,7 +24,9 @@ pub fn backend_callback(app: &state::App) -> iced::Subscription<message::Message
 
 pub fn on_mouse_event(mouse_event: mouse::Event) -> Option<message::Message> {
     match mouse_event {
-        mouse::Event::ButtonPressed(mouse::Button::Back) => Some(message::Message::HistoryNav),
+        mouse::Event::ButtonPressed(mouse::Button::Back) => Some(message::Message::HistoryNav(
+            message::HistoryDirection::Backwards,
+        )),
         _ => None,
     }
 }
@@ -40,18 +42,18 @@ pub fn keybinding_subscription_fn(
             message::Action::TogglePlayQueueVisible,
         )),
 
-        (keyboard::Key::Named(key::Named::Backspace), Mods::None) => {
-            Some(message::Message::HistoryNav)
-        }
-        (keyboard::Key::Named(key::Named::BrowserBack), Mods::None) => {
-            Some(message::Message::HistoryNav)
-        }
-        (keyboard::Key::Named(key::Named::GoBack), Mods::None) => {
-            Some(message::Message::HistoryNav)
-        }
-        (keyboard::Key::Named(key::Named::ArrowLeft), Mods::Alt) => {
-            Some(message::Message::HistoryNav)
-        }
+        (keyboard::Key::Named(key::Named::Backspace), Mods::None) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Backwards),
+        ),
+        (keyboard::Key::Named(key::Named::BrowserBack), Mods::None) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Backwards),
+        ),
+        (keyboard::Key::Named(key::Named::GoBack), Mods::None) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Backwards),
+        ),
+        (keyboard::Key::Named(key::Named::ArrowLeft), Mods::Alt) => Some(
+            message::Message::HistoryNav(message::HistoryDirection::Backwards),
+        ),
 
         (keyboard::Key::Character("["), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Left),

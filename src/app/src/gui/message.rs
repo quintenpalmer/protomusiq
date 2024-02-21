@@ -18,11 +18,16 @@ pub enum Message {
     Action(Action),
     Nav(NavMessage),
     NavRelative(NavRelMsg),
-    HistoryNav,
+    HistoryNav(HistoryDirection),
     PlaybackRequest(shared::PlaybackRequest),
     ErrorResponse(Result<(), String>),
     BackendCallback(shared::BackendToGUIMessage),
     ExternalSpawn(ExternalSpawn),
+}
+
+#[derive(Debug, Clone)]
+pub enum HistoryDirection {
+    Backwards,
 }
 
 #[derive(Debug, Clone)]
