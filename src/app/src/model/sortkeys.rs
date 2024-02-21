@@ -66,6 +66,28 @@ pub enum ArtistTrackSortKey {
 }
 
 impl ArtistTrackSortKey {
+    pub fn prev(&self) -> Self {
+        match self {
+            ArtistTrackSortKey::ByParent => ArtistTrackSortKey::ByParent,
+            ArtistTrackSortKey::ByName => ArtistTrackSortKey::ByParent,
+            ArtistTrackSortKey::ByTotalPlayCount => ArtistTrackSortKey::ByName,
+            ArtistTrackSortKey::ByDuration => ArtistTrackSortKey::ByTotalPlayCount,
+            ArtistTrackSortKey::ByTotalPlayedDuration => ArtistTrackSortKey::ByDuration,
+            ArtistTrackSortKey::Random => ArtistTrackSortKey::ByTotalPlayedDuration,
+        }
+    }
+
+    pub fn next(&self) -> Self {
+        match self {
+            ArtistTrackSortKey::ByParent => ArtistTrackSortKey::ByName,
+            ArtistTrackSortKey::ByName => ArtistTrackSortKey::ByTotalPlayCount,
+            ArtistTrackSortKey::ByTotalPlayCount => ArtistTrackSortKey::ByDuration,
+            ArtistTrackSortKey::ByDuration => ArtistTrackSortKey::ByTotalPlayedDuration,
+            ArtistTrackSortKey::ByTotalPlayedDuration => ArtistTrackSortKey::Random,
+            ArtistTrackSortKey::Random => ArtistTrackSortKey::Random,
+        }
+    }
+
     pub fn default_order(&self) -> SortOrder {
         match self {
             ArtistTrackSortKey::ByParent => SortOrder::Regular,
