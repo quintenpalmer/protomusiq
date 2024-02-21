@@ -37,6 +37,9 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let player_info = &app.player_info;
     let play_queue_info = &app.play_queue_info;
 
+    let play_history = &app.page_back_history;
+    let play_forwards = &app.page_forward_history;
+
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
         library,
@@ -47,7 +50,12 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         player_info,
     );
 
-    let header = render_header(additional_breadcrumbs, messages);
+    let header = render_header(
+        play_history,
+        play_forwards,
+        additional_breadcrumbs,
+        messages,
+    );
 
     let (play_queue_view, play_queue_expanded) = render_play_queue(library, play_queue_info);
 
@@ -114,6 +122,8 @@ pub fn render_entire_page<'a>(
 }
 
 pub fn render_header<'a>(
+    play_history: &Vec<message::NavMessage>,
+    play_forwards: &Vec<message::NavMessage>,
     additional_breadcrumbs: Vec<(String, Message)>,
     messages: &Vec<state::MessageInfo>,
 ) -> Container<'a, Message> {
@@ -133,14 +143,22 @@ pub fn render_header<'a>(
     );
 
     let back_forward_buttons = line_row()
-        .push(
-            dark_button(h2("<"))
-                .on_press(Message::HistoryNav(message::HistoryDirection::Backwards)),
-        )
-        .push(
-            dark_button(bright_paragraph(">"))
-                .on_press(Message::HistoryNav(message::HistoryDirection::Forwards)),
-        );
+        .push(if play_history.is_empty() {
+            Container::new(dark_button(h2("<")))
+        } else {
+            Container::new(
+                dark_button(h2("<"))
+                    .on_press(Message::HistoryNav(message::HistoryDirection::Backwards)),
+            )
+        })
+        .push(if play_forwards.is_empty() {
+            Container::new(dark_button(dark_paragraph(">")))
+        } else {
+            Container::new(
+                dark_button(bright_paragraph(">"))
+                    .on_press(Message::HistoryNav(message::HistoryDirection::Forwards)),
+            )
+        });
 
     let header = Row::new().push(
         line_row()
