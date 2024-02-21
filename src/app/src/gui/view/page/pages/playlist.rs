@@ -245,7 +245,7 @@ pub fn playlist_view<'a>(
                 tracks_column = tracks_column.push(row);
             }
 
-            column = column.push(Scrollable::new(tracks_column));
+            column = column.push(Scrollable::new(tracks_column).height(Length::Fill));
             (
                 vec![
                     (
