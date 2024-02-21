@@ -1,4 +1,5 @@
 use iced::widget::{Column, Container, Scrollable};
+use iced::Length;
 
 use crate::model;
 
@@ -27,7 +28,7 @@ pub fn movie_home<'a>() -> (Vec<(String, Message)>, Container<'a, Message>) {
                 .on_press(user_nav_message(NavMessage::MovieAttributes(None))),
         );
 
-    let body = Container::new(Scrollable::new(body_column));
+    let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
 
     (breadcrumbs, body)
 }

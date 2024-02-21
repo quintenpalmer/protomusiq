@@ -119,13 +119,16 @@ pub fn home_page<'a>(
                 model::MovieSortKey::ByTitle.default_order(),
             )));
 
-            let page = Container::new(Scrollable::new(
-                Column::new()
-                    .width(Length::Fill)
-                    .push(Row::new().push(album_list).push(artist_list).push(search))
-                    .push(Row::new().push(track_list).push(dvd).push(playlist))
-                    .push(Row::new().push(settings)),
-            ));
+            let page = Container::new(
+                Scrollable::new(
+                    Column::new()
+                        .width(Length::Fill)
+                        .push(Row::new().push(album_list).push(artist_list).push(search))
+                        .push(Row::new().push(track_list).push(dvd).push(playlist))
+                        .push(Row::new().push(settings)),
+                )
+                .height(Length::Fill),
+            );
 
             (Vec::new(), page)
         }

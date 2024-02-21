@@ -159,7 +159,7 @@ pub fn movie_query<'a>(
             let movies = Column::new()
                 .spacing(10)
                 .push(h1("Found Movies:"))
-                .push(Scrollable::new(movie_list));
+                .push(Scrollable::new(movie_list).height(Length::Fill));
 
             movies
         }

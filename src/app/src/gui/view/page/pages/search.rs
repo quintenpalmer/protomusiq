@@ -106,7 +106,8 @@ pub fn search_page<'a>(
                                             ),
                                         )
                                     },
-                                ));
+                                ))
+                                .height(Length::Fill);
                                 let artist_results =
                                     Scrollable::new(results.artists.iter().fold(
                                         Column::new(),
@@ -134,7 +135,8 @@ pub fn search_page<'a>(
                                                 )),
                                             )
                                         },
-                                    ));
+                                    ))
+                                    .height(Length::Fill);
                                 let track_results = Scrollable::new(results.tracks.iter().fold(
                                     Column::new(),
                                     |column, result| {
@@ -160,7 +162,8 @@ pub fn search_page<'a>(
                                             .on_press(components::track_link(&result.metadata)),
                                         )
                                     },
-                                ));
+                                ))
+                                .height(Length::Fill);
                                 let featured_artist_results =
                                     Scrollable::new(results.track_artists.iter().fold(
                                         Column::new(),
@@ -192,7 +195,8 @@ pub fn search_page<'a>(
                                                 .on_press(components::track_link(&result.metadata)),
                                             )
                                         },
-                                    ));
+                                    ))
+                                    .height(Length::Fill);
                                 (
                                     album_results,
                                     artist_results,
@@ -201,10 +205,14 @@ pub fn search_page<'a>(
                                 )
                             }
                             None => (
-                                Scrollable::new(Space::with_width(Length::Fill)),
-                                Scrollable::new(Space::with_width(Length::Fill)),
-                                Scrollable::new(Space::with_width(Length::Fill)),
-                                Scrollable::new(Space::with_width(Length::Fill)),
+                                Scrollable::new(Space::with_width(Length::Fill))
+                                    .height(Length::Fill),
+                                Scrollable::new(Space::with_width(Length::Fill))
+                                    .height(Length::Fill),
+                                Scrollable::new(Space::with_width(Length::Fill))
+                                    .height(Length::Fill),
+                                Scrollable::new(Space::with_width(Length::Fill))
+                                    .height(Length::Fill),
                             ),
                         };
 

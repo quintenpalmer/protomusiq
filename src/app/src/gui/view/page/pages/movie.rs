@@ -213,7 +213,7 @@ pub fn movie_page<'a>(
                     ))),
                 )));
             }
-            let cast_scrollable = Scrollable::new(cast.width(Length::Fill));
+            let cast_scrollable = Scrollable::new(cast.width(Length::Fill)).height(Length::Fill);
             cast_main_container = cast_main_container.push(cast_scrollable);
         }
         None => (),

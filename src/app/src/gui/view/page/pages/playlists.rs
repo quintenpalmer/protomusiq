@@ -93,7 +93,7 @@ pub fn playlist_list_view<'a>(
 
                     playlists = playlists.push(striped_container);
                 }
-                page = page.push(Scrollable::new(playlists));
+                page = page.push(Scrollable::new(playlists).height(Length::Fill));
 
                 Container::new(page)
             },

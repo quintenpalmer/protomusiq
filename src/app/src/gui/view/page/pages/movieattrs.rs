@@ -49,7 +49,10 @@ pub fn movie_attributes(
                             table = table.push(genre_row);
                         }
 
-                        (h2("Genres:"), Scrollable::new(table.width(Length::Fill)))
+                        (
+                            h2("Genres:"),
+                            Scrollable::new(table.width(Length::Fill)).height(Length::Fill),
+                        )
                     }
                     model::AttributesList::Production(attribute_results) => {
                         let mut table = Column::new().spacing(10);

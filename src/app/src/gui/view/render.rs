@@ -445,7 +445,8 @@ pub fn render_play_queue<'a>(
                     )),
                 );
             }
-            play_queue_view = play_queue_view.push(Scrollable::new(play_queue_column));
+            play_queue_view =
+                play_queue_view.push(Scrollable::new(play_queue_column).height(Length::Fill));
             (
                 Container::new(Container::new(play_queue_view).height(Length::Fill).style(
                     iced::theme::Container::Custom(Box::new(style::ContainerPopMidForward {})),

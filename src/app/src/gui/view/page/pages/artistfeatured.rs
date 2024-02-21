@@ -222,7 +222,7 @@ pub fn artist_featured_track_view_state<'a>(
                 tracks_table = tracks_table.push(row);
             }
 
-            let scrollable = Scrollable::new(tracks_table);
+            let scrollable = Scrollable::new(tracks_table).height(Length::Fill);
 
             let body = Container::new(
                 Column::new()

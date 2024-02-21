@@ -110,7 +110,8 @@ pub fn artist_album_list<'a>(
                     }
                 }
 
-                let scrollable = Scrollable::new(album_grid_columns.width(Length::Fill));
+                let scrollable =
+                    Scrollable::new(album_grid_columns.width(Length::Fill)).height(Length::Fill);
 
                 let artist_view_button_row = line_row()
                     .push(
