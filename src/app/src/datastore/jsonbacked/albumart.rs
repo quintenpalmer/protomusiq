@@ -146,6 +146,7 @@ impl model::AlbumSizeWithOrig {
         match self {
             model::AlbumSizeWithOrig::Micro => "micro.png",
             model::AlbumSizeWithOrig::Mini => "mini.png",
+            model::AlbumSizeWithOrig::Centi => "centi.png",
             model::AlbumSizeWithOrig::Small => "small.png",
             model::AlbumSizeWithOrig::Regular => "regular.png",
             model::AlbumSizeWithOrig::Large => "large.png",
@@ -162,6 +163,7 @@ pub fn process_cache_and_get_album_art(
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
+    let mut centi = BTreeMap::new();
     let mut mini = BTreeMap::new();
     let mut micro = BTreeMap::new();
 
@@ -181,6 +183,8 @@ pub fn process_cache_and_get_album_art(
                 cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
             let has_mini =
                 cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
+            let has_centi =
+                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
             let has_small =
                 cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Small);
             let has_regular =
@@ -193,7 +197,14 @@ pub fn process_cache_and_get_album_art(
             let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");
             let local_path = album.album_info.relative_path.clone().join("cover.jpg");
 
-            if has_micro && has_mini && has_small && has_regular && has_large && has_orig {
+            if has_micro
+                && has_mini
+                && has_centi
+                && has_small
+                && has_regular
+                && has_large
+                && has_orig
+            {
                 found_cache_entries += 1;
             } else {
                 println!(
@@ -300,6 +311,30 @@ pub fn process_cache_and_get_album_art(
                     );
                 }
 
+                if !has_centi {
+                    println!(
+                        "translating centi size album art to cache dir for {:?}",
+                        local_path
+                    );
+                    let centi_album_art = image::imageops::resize(
+                        &orig_album_art,
+                        model::CENTI_ICON_WIDTH as u32,
+                        model::CENTI_ICON_HEIGHT as u32,
+                        image::imageops::FilterType::Lanczos3,
+                    );
+
+                    let mut buf = io::Cursor::new(Vec::new());
+                    centi_album_art
+                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .unwrap();
+
+                    cached_album_art_checker.write_art_for_size(
+                        &key,
+                        model::AlbumSizeWithOrig::Centi,
+                        buf.into_inner(),
+                    );
+                }
+
                 if !has_mini {
                     println!(
                         "translating mini size album art to cache dir for {:?}",
@@ -361,6 +396,10 @@ pub fn process_cache_and_get_album_art(
                 cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Small);
             small.insert(key.clone(), small_bytes);
 
+            let centi_bytes =
+                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
+            centi.insert(key.clone(), centi_bytes);
+
             let mini_bytes =
                 cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
             mini.insert(key.clone(), mini_bytes);
@@ -377,6 +416,7 @@ pub fn process_cache_and_get_album_art(
         large_album_covers: large,
         album_covers: regular,
         small_album_covers: small,
+        centi_album_covers: centi,
         mini_album_covers: mini,
         micro_album_covers: micro,
     }
@@ -390,6 +430,7 @@ pub fn old_process_cache_and_get_album_art(
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
+    let mut centi = BTreeMap::new();
     let mut mini = BTreeMap::new();
     let mut micro = BTreeMap::new();
 
@@ -414,6 +455,7 @@ pub fn old_process_cache_and_get_album_art(
             let cached_large_album_art_path = cache_album_dir.join("large.png");
             let cached_regular_album_art_path = cache_album_dir.join("regular.png");
             let cached_small_album_art_path = cache_album_dir.join("small.png");
+            let cached_centi_album_art_path = cache_album_dir.join("centi.png");
             let cached_mini_album_art_path = cache_album_dir.join("mini.png");
             let cached_micro_album_art_path = cache_album_dir.join("micro.png");
             let cached_orig_album_art_path = cache_album_dir.join("orig.jpg");
@@ -421,6 +463,7 @@ pub fn old_process_cache_and_get_album_art(
             if localfs::check_exists(&cached_large_album_art_path)
                 && localfs::check_exists(&cached_regular_album_art_path)
                 && localfs::check_exists(&cached_small_album_art_path)
+                && localfs::check_exists(&cached_centi_album_art_path)
                 && localfs::check_exists(&cached_mini_album_art_path)
                 && localfs::check_exists(&cached_micro_album_art_path)
                 && localfs::check_exists(&cached_orig_album_art_path)
@@ -505,6 +548,22 @@ pub fn old_process_cache_and_get_album_art(
                         .unwrap();
                 }
 
+                if !localfs::check_exists(&cached_centi_album_art_path) {
+                    println!(
+                        "translating centi size album art to cache dir for {:?}",
+                        local_path
+                    );
+                    let centi_album_art = image::imageops::resize(
+                        &orig_album_art,
+                        model::CENTI_ICON_WIDTH as u32,
+                        model::CENTI_ICON_HEIGHT as u32,
+                        image::imageops::FilterType::Lanczos3,
+                    );
+                    centi_album_art
+                        .save(cached_centi_album_art_path.clone())
+                        .unwrap();
+                }
+
                 if !localfs::check_exists(&cached_mini_album_art_path) {
                     println!(
                         "translating mini size album art to cache dir for {:?}",
@@ -546,6 +605,9 @@ pub fn old_process_cache_and_get_album_art(
             let small_bytes = fs::read(cached_small_album_art_path).unwrap();
             small.insert(key.clone(), small_bytes);
 
+            let centi_bytes = fs::read(cached_centi_album_art_path).unwrap();
+            centi.insert(key.clone(), centi_bytes);
+
             let mini_bytes = fs::read(cached_mini_album_art_path).unwrap();
             mini.insert(key.clone(), mini_bytes);
 
@@ -560,6 +622,7 @@ pub fn old_process_cache_and_get_album_art(
         large_album_covers: large,
         album_covers: regular,
         small_album_covers: small,
+        centi_album_covers: centi,
         mini_album_covers: mini,
         micro_album_covers: micro,
     }

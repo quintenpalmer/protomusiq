@@ -7,6 +7,9 @@ pub const REGULAR_ICON_HEIGHT: u16 = 225;
 pub const SMALL_ICON_WIDTH: u16 = 170;
 pub const SMALL_ICON_HEIGHT: u16 = 170;
 
+pub const CENTI_ICON_WIDTH: u16 = 125;
+pub const CENTI_ICON_HEIGHT: u16 = 125;
+
 pub const MINI_ICON_WIDTH: u16 = 75;
 pub const MINI_ICON_HEIGHT: u16 = 75;
 

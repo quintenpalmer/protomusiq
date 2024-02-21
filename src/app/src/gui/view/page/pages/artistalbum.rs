@@ -82,7 +82,8 @@ pub fn artist_album_view_state<'a>(
                             .push({
                                 let (current, toggle_to) = match album_size {
                                     model::AlbumSize::Micro => (model::AlbumSize::Micro, model::AlbumSize::Mini),
-                                    model::AlbumSize::Mini => (model::AlbumSize::Mini, model::AlbumSize::Small),
+                                    model::AlbumSize::Mini => (model::AlbumSize::Mini, model::AlbumSize::Centi),
+                                    model::AlbumSize::Centi => (model::AlbumSize::Centi, model::AlbumSize::Small),
                                     model::AlbumSize::Small => (model::AlbumSize::Small, model::AlbumSize::Regular),
                                     model::AlbumSize::Regular => (model::AlbumSize::Regular, model::AlbumSize::Large),
                                     model::AlbumSize::Large => (model::AlbumSize::Large, model::AlbumSize::Micro),

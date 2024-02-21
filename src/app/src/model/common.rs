@@ -69,6 +69,7 @@ impl MovieSize {
 pub enum AlbumSize {
     Micro,
     Mini,
+    Centi,
     Small,
     Regular,
     Large,
@@ -79,6 +80,7 @@ impl AlbumSize {
         match self {
             AlbumSize::Micro => constants::MICRO_ICON_WIDTH,
             AlbumSize::Mini => constants::MINI_ICON_WIDTH,
+            AlbumSize::Centi => constants::CENTI_ICON_WIDTH,
             AlbumSize::Small => constants::SMALL_ICON_WIDTH,
             AlbumSize::Regular => constants::REGULAR_ICON_WIDTH,
             AlbumSize::Large => constants::LARGE_ICON_WIDTH,
@@ -89,6 +91,7 @@ impl AlbumSize {
         match self {
             AlbumSize::Micro => constants::MICRO_ICON_HEIGHT,
             AlbumSize::Mini => constants::MINI_ICON_HEIGHT,
+            AlbumSize::Centi => constants::CENTI_ICON_HEIGHT,
             AlbumSize::Small => constants::SMALL_ICON_HEIGHT,
             AlbumSize::Regular => constants::REGULAR_ICON_HEIGHT,
             AlbumSize::Large => constants::LARGE_ICON_HEIGHT,
@@ -101,6 +104,7 @@ pub enum AlbumSizeWithOrig {
     Micro,
     Mini,
     Small,
+    Centi,
     Regular,
     Large,
     Original,
@@ -132,6 +136,7 @@ pub struct AlbumArt {
     pub large_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, path::PathBuf>,
     pub album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
     pub small_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
+    pub centi_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
     pub mini_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
     pub micro_album_covers: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, Vec<u8>>,
 }
@@ -161,6 +166,13 @@ impl AlbumArt {
                 .clone(),
             AlbumSize::Small => self
                 .small_album_covers
+                .get(&musiqlibrary::AlbumUniqueIdentifier::new(
+                    artist_id, album_id,
+                ))
+                .unwrap()
+                .clone(),
+            AlbumSize::Centi => self
+                .centi_album_covers
                 .get(&musiqlibrary::AlbumUniqueIdentifier::new(
                     artist_id, album_id,
                 ))
