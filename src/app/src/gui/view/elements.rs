@@ -95,8 +95,8 @@ pub fn bottom_label<'a, E: Into<Element<'a, Message>>>(
     label: E,
 ) -> Column<'a, Message> {
     Column::new()
-        .padding(8)
-        .spacing(8)
+        .padding(2)
+        .spacing(2)
         .align_items(Alignment::Center)
         .push(top)
         .push(label)
