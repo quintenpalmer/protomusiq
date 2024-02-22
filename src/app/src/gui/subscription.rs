@@ -2,6 +2,8 @@ use iced::keyboard;
 use iced::keyboard::key;
 use iced::mouse;
 
+use crate::shared;
+
 use super::message;
 use super::state;
 
@@ -41,6 +43,10 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("p"), Mods::None) => Some(message::Message::Action(
             message::Action::TogglePlayQueueVisible,
         )),
+
+        (keyboard::Key::Named(key::Named::Space), Mods::None) => Some(
+            message::Message::PlaybackRequest(shared::PlaybackRequest::PlayPauseToggle),
+        ),
 
         (keyboard::Key::Named(key::Named::Backspace), Mods::None) => Some(
             message::Message::HistoryNav(message::HistoryDirection::Backwards),

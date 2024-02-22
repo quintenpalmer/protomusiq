@@ -11,6 +11,7 @@ pub enum GUIToBackendMessage {
 
 #[derive(Debug, Clone)]
 pub enum PlaybackRequest {
+    PlayPauseToggle,
     Play,
     Pause,
     Prev,

@@ -162,6 +162,17 @@ pub fn handle_playback_request(
             let _ = sink_client.send(shared::SinkMessage::PauseButton);
             let _ = mpris_client.send(shared::MprisMessage::SetPaused);
         }
+        shared::PlaybackRequest::PlayPauseToggle => {
+            if play_queue.playing {
+                play_queue.playing = false;
+                let _ = sink_client.send(shared::SinkMessage::PauseButton);
+                let _ = mpris_client.send(shared::MprisMessage::SetPaused);
+            } else {
+                play_queue.playing = true;
+                let _ = sink_client.send(shared::SinkMessage::PlayButton);
+                let _ = mpris_client.send(shared::MprisMessage::SetPlaying);
+            }
+        }
         shared::PlaybackRequest::InsertPause => {
             let mut new_songs_to_queue = vec![shared::PlayQueueEntry::Action(
                 shared::PlayQueueAction::Pause,
