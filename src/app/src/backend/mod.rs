@@ -107,11 +107,7 @@ pub fn run_forever(
             Ok(mpris_message) => {
                 let playback_msg = match mpris_message {
                     shared::MprisCallbackMessage::PlayPause => {
-                        if play_queue.playing {
-                            shared::PlaybackRequest::Pause
-                        } else {
-                            shared::PlaybackRequest::Play
-                        }
+                        shared::PlaybackRequest::PlayPauseToggle
                     }
                     shared::MprisCallbackMessage::Play => shared::PlaybackRequest::Play,
                     shared::MprisCallbackMessage::Pause => shared::PlaybackRequest::Pause,
