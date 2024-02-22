@@ -46,6 +46,25 @@ fn handle_switch_sort_by_msg(
                 new_sort_order,
             )))
         }
+
+        Page::ArtistList(state::ArtistListState {
+            ref sort_key,
+            sort_order: ref _sort_order,
+            ref page,
+        }) => {
+            let new_sort_key = match move_direction {
+                message::MoveDirectionMsg::Left => sort_key.prev(),
+                message::MoveDirectionMsg::Right => sort_key.next(),
+            };
+
+            let new_sort_order = new_sort_key.default_order();
+
+            Some(message::Message::Nav(message::NavMessage::ArtistList(
+                page.clone(),
+                new_sort_key,
+                new_sort_order,
+            )))
+        }
         Page::ArtistTrackView(state::ArtistTrackViewState {
             ref artist_id,
             ref sort_key,

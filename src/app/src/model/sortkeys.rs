@@ -161,6 +161,30 @@ pub enum ArtistSortKey {
 }
 
 impl ArtistSortKey {
+    pub fn prev(&self) -> Self {
+        match self {
+            ArtistSortKey::ByName => ArtistSortKey::ByName,
+            ArtistSortKey::ByPlayCount => ArtistSortKey::ByName,
+            ArtistSortKey::ByAlbumCount => ArtistSortKey::ByPlayCount,
+            ArtistSortKey::ByTrackCount => ArtistSortKey::ByAlbumCount,
+            ArtistSortKey::ByTrackDuration => ArtistSortKey::ByTrackCount,
+            ArtistSortKey::ByPlayedDuration => ArtistSortKey::ByTrackDuration,
+            ArtistSortKey::Random => ArtistSortKey::ByPlayedDuration,
+        }
+    }
+
+    pub fn next(&self) -> Self {
+        match self {
+            ArtistSortKey::ByName => ArtistSortKey::ByPlayCount,
+            ArtistSortKey::ByPlayCount => ArtistSortKey::ByAlbumCount,
+            ArtistSortKey::ByAlbumCount => ArtistSortKey::ByTrackCount,
+            ArtistSortKey::ByTrackCount => ArtistSortKey::ByTrackDuration,
+            ArtistSortKey::ByTrackDuration => ArtistSortKey::ByPlayedDuration,
+            ArtistSortKey::ByPlayedDuration => ArtistSortKey::Random,
+            ArtistSortKey::Random => ArtistSortKey::Random,
+        }
+    }
+
     pub fn default_order(&self) -> SortOrder {
         match self {
             ArtistSortKey::ByName => SortOrder::Regular,
