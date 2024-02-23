@@ -188,7 +188,7 @@ impl ArtistSortKey {
     pub fn default_order(&self) -> SortOrder {
         match self {
             ArtistSortKey::ByName => SortOrder::Regular,
-            ArtistSortKey::ByPlayCount => SortOrder::Regular,
+            ArtistSortKey::ByPlayCount => SortOrder::Reversed,
             ArtistSortKey::ByAlbumCount => SortOrder::Reversed,
             ArtistSortKey::ByTrackCount => SortOrder::Reversed,
             ArtistSortKey::ByTrackDuration => SortOrder::Reversed,
