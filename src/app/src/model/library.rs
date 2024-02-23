@@ -110,6 +110,18 @@ impl LibraryState {
         }
     }
 
+    pub fn get_artist_album_keyed_tracks(
+        &self,
+        artist_id: musiqlibrary::ID,
+        album_id: musiqlibrary::ID,
+    ) -> &musiqlibrary::KeyedAlbumTracks<augmented::AugmentedTrack> {
+        let artist = self.raw_library.artists.get(&artist_id).unwrap();
+
+        let album = artist.albums.get(&album_id).unwrap();
+
+        &album
+    }
+
     pub fn get_artist_album_info(
         &self,
         artist_id: musiqlibrary::ID,
