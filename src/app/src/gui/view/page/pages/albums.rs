@@ -49,7 +49,12 @@ pub fn album_list<'a>(
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
                 for (album_index_offset, info) in paged_albums.into_iter().enumerate() {
-                    let relevant_sub_header = get_sub_header_from_sort(&info, &sort_key);
+                    let full_album_info = library
+                        .get_artist_album_keyed_tracks(info.artist.artist_id, info.album.album_id);
+
+                    let relevant_sub_header =
+                        get_sub_header_from_sort(&info, &full_album_info, &sort_key);
+
                     buttons.push(
                         dark_button(bottom_label(
                             album_image(
@@ -243,9 +248,34 @@ pub fn album_list<'a>(
 
 fn get_sub_header_from_sort(
     info: &musiqlibrary::ArtistAlbumInfo,
-    _sort_key: &model::AlbumSortKey,
+    full_album_info: &musiqlibrary::KeyedAlbumTracks<model::AugmentedTrack>,
+    sort_key: &model::AlbumSortKey,
 ) -> String {
-    info.artist.artist_name.clone()
+    match sort_key {
+        model::AlbumSortKey::ByParent => info.artist.artist_name.clone(),
+        model::AlbumSortKey::ByName => info.artist.artist_name.clone(),
+        model::AlbumSortKey::ByLastMod => {
+            format!(
+                "{}",
+                chrono::DateTime::<chrono::Local>::from(info.album.last_modified)
+                    .format("%Y/%m/%d")
+            )
+        }
+        model::AlbumSortKey::ByDuration => {
+            common::format_duration(info.album.total_duration.as_secs())
+        }
+        model::AlbumSortKey::ByDate => {
+            common::format_date_range(info.album.start_date, info.album.end_date)
+        }
+        model::AlbumSortKey::ByTotalPlayCount => format!(
+            "{} listens",
+            model::album_total_play_count(&full_album_info)
+        ),
+        model::AlbumSortKey::ByTotalPlayedDuration => {
+            common::format_duration(model::album_total_played_duration(&full_album_info))
+        }
+        model::AlbumSortKey::Random => info.artist.artist_name.clone(),
+    }
 }
 
 fn sort_button<'a>(
