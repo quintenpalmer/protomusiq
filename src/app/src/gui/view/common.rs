@@ -1,7 +1,7 @@
 pub fn format_duration(seconds: u64) -> String {
     let to_display_seconds = seconds % 60;
     let to_display_minutes = (seconds / 60) % 60;
-    let to_display_hours = (seconds / 3600) % 60;
+    let to_display_hours = (seconds / 3600) % 24;
     if to_display_hours > 0 {
         format!(
             "{}:{:02}:{:02}",
