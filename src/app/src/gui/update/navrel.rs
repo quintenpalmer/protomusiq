@@ -29,7 +29,7 @@ fn handle_switch_sort_by_msg(
 ) -> Option<message::Message> {
     match app.current_page {
         Page::AlbumList(state::AlbumListState {
-            ref page,
+            page: ref _page,
             ref sort_key,
             sort_order: ref _sort_order,
         }) => {
@@ -41,7 +41,7 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(message::Message::Nav(message::NavMessage::AlbumList(
-                page.clone(),
+                0,
                 new_sort_key,
                 new_sort_order,
             )))
@@ -50,7 +50,7 @@ fn handle_switch_sort_by_msg(
         Page::ArtistList(state::ArtistListState {
             ref sort_key,
             sort_order: ref _sort_order,
-            ref page,
+            page: ref _page,
         }) => {
             let new_sort_key = match move_direction {
                 message::MoveDirectionMsg::Left => sort_key.prev(),
@@ -60,7 +60,7 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(message::Message::Nav(message::NavMessage::ArtistList(
-                page.clone(),
+                0,
                 new_sort_key,
                 new_sort_order,
             )))
@@ -106,7 +106,7 @@ fn handle_switch_sort_by_msg(
         Page::TrackList(state::TrackListState {
             ref sort_key,
             sort_order: ref _sort_order,
-            ref page,
+            page: ref _page,
         }) => {
             let new_sort_key = match move_direction {
                 message::MoveDirectionMsg::Left => sort_key.prev(),
@@ -116,7 +116,7 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(message::Message::Nav(message::NavMessage::TrackList(
-                page.clone(),
+                0,
                 new_sort_key,
                 new_sort_order,
             )))
@@ -124,7 +124,7 @@ fn handle_switch_sort_by_msg(
         Page::MovieList(state::MovieListState {
             ref sort_key,
             sort_order: ref _sort_order,
-            ref page,
+            page: ref _page,
         }) => {
             let new_sort_key = match move_direction {
                 message::MoveDirectionMsg::Left => sort_key.prev(),
@@ -134,7 +134,7 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(message::Message::Nav(message::NavMessage::MovieList(
-                page.clone(),
+                0,
                 new_sort_key,
                 new_sort_order,
             )))
