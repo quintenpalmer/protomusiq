@@ -49,7 +49,7 @@ pub fn album_list<'a>(
                 let mut buttons: Vec<Button<Message>> = Vec::new();
 
                 for (album_index_offset, info) in paged_albums.into_iter().enumerate() {
-                    let relevant_sub_header = info.artist.artist_name.clone();
+                    let relevant_sub_header = get_sub_header_from_sort(&info, &sort_key);
                     buttons.push(
                         dark_button(bottom_label(
                             album_image(
@@ -239,6 +239,13 @@ pub fn album_list<'a>(
             (breadcrumbs, body)
         }
     }
+}
+
+fn get_sub_header_from_sort(
+    info: &musiqlibrary::ArtistAlbumInfo,
+    _sort_key: &model::AlbumSortKey,
+) -> String {
+    info.artist.artist_name.clone()
 }
 
 fn sort_button<'a>(
