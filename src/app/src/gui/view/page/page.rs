@@ -21,19 +21,8 @@ pub fn render_page<'a>(
     play_queue_info: &PlayQueueInfo,
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let message_sourced_breadcrumbs = match page_current_history {
-        message::NavMessage::Home => Some(vec![]),
-        message::NavMessage::Config => Some(vec![(
-            "Settings".to_string(),
-            message::NavMessage::Config.into_message(),
-        )]),
-        message::NavMessage::PlayQueueFocus => Some(vec![(
-            "Play Queue".to_string(),
-            message::NavMessage::PlayQueueFocus.into_message(),
-        )]),
-        // TODO remove this catch all and force new page messages to be handled here
-        _ => None,
-    };
+    let message_sourced_breadcrumbs = compute_breadcrumb(page_current_history);
+
     let (ret_breadcrumbs, ret_page) = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
         Page::Config(state::ConfigState {}) => pages::config::config_page(),
@@ -81,5 +70,23 @@ pub fn render_page<'a>(
     match message_sourced_breadcrumbs {
         Some(breadcrumbs) => (breadcrumbs, ret_page),
         None => (ret_breadcrumbs, ret_page),
+    }
+}
+
+fn compute_breadcrumb(
+    page_current_history: &message::NavMessage,
+) -> Option<Vec<(String, Message)>> {
+    match page_current_history {
+        message::NavMessage::Home => Some(vec![]),
+        message::NavMessage::Config => Some(vec![(
+            "Settings".to_string(),
+            message::NavMessage::Config.into_message(),
+        )]),
+        message::NavMessage::PlayQueueFocus => Some(vec![(
+            "Play Queue".to_string(),
+            message::NavMessage::PlayQueueFocus.into_message(),
+        )]),
+        // TODO remove this catch all and force new page messages to be handled here
+        _ => None,
     }
 }
