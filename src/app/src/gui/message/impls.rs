@@ -6,6 +6,12 @@ impl nav::NavMessage {
     }
 }
 
+impl nav::NavRelMsg {
+    pub fn into_message(self) -> top::Message {
+        top::Message::NavRelative(self)
+    }
+}
+
 impl nav::PlaylistNavMessage {
     pub fn into_message(self) -> top::Message {
         top::Message::Nav(nav::NavMessage::Playlist(self))
