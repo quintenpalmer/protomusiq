@@ -102,6 +102,7 @@ fn compute_breadcrumb(
             }
             Some(ret)
         }
+        message::NavMessage::Movie(movie_message) => Some(movie_breadcrumbs(movie_message)),
         message::NavMessage::Playlist(playlist_message) => {
             Some(playlist_breadcrumbs(library, playlist_message))
         }
@@ -133,5 +134,39 @@ fn playlist_breadcrumbs(
             ));
         }
     };
+    ret
+}
+
+fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message)> {
+    let mut ret = vec![(
+        "Movie".to_string(),
+        message::MovieNavMessage::MovieHome.into_message(),
+    )];
+
+    match message {
+        message::MovieNavMessage::MovieHome => (),
+        message::MovieNavMessage::MovieList(_, _, _) => ret.push((
+            "Movies".to_string(),
+            message::MovieNavMessage::MovieList(
+                0,
+                model::MovieSortKey::ByTitle,
+                model::MovieSortKey::ByTitle.default_order(),
+            )
+            .into_message(),
+        )),
+        message::MovieNavMessage::MovieAttributes(_) => ret.push((
+            "Attributes".to_string(),
+            message::MovieNavMessage::MovieAttributes(None).into_message(),
+        )),
+        message::MovieNavMessage::MovieQuery(_) => ret.push((
+            "Query".to_string(),
+            message::MovieNavMessage::MovieQuery(None).into_message(),
+        )),
+        message::MovieNavMessage::MovieView(movie, _) => ret.push((
+            movie.title.clone(),
+            message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
+        )),
+    }
+
     ret
 }
