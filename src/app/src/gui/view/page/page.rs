@@ -102,6 +102,15 @@ fn compute_breadcrumb(
             }
             Some(ret)
         }
+        message::NavMessage::TrackList(_, _, _) => Some(vec![(
+            "Tracks".to_string(),
+            message::NavMessage::TrackList(
+                0,
+                model::TrackSortKey::ByName,
+                model::TrackSortKey::ByName.default_order(),
+            )
+            .into_message(),
+        )]),
         message::NavMessage::Movie(movie_message) => Some(movie_breadcrumbs(movie_message)),
         message::NavMessage::Playlist(playlist_message) => {
             Some(playlist_breadcrumbs(library, playlist_message))
