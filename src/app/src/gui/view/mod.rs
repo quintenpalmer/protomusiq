@@ -1,6 +1,6 @@
-mod common;
+pub mod common;
 mod components;
-mod consts;
+pub mod consts;
 mod elements;
 mod page;
 mod render;
