@@ -86,6 +86,20 @@ fn compute_breadcrumb(
             "Play Queue".to_string(),
             message::NavMessage::PlayQueueFocus.into_message(),
         )]),
+        message::NavMessage::SearchPage(query, domain, perform_search) => {
+            let mut ret = vec![
+                 ("Search".to_string(), message::NavMessage::SearchPage("".to_string(), model::SearchDomain::Music, false).into_message()),
+            ];
+            if *perform_search {
+                ret.push(
+                    (
+                        format!("\"{}\"", query),
+                        message::NavMessage::SearchPage(query.clone(), domain.clone(), *perform_search).into_message(),
+                    )
+                );
+            }
+            Some(ret)
+        }
         // TODO remove this catch all and force new page messages to be handled here
         _ => None,
     }
