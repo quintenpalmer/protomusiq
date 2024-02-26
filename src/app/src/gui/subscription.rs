@@ -44,6 +44,34 @@ pub fn keybinding_subscription_fn(
             message::Action::TogglePlayQueueVisible,
         )),
 
+        (keyboard::Key::Character("1"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(0).into_message())
+        }
+        (keyboard::Key::Character("2"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(1).into_message())
+        }
+        (keyboard::Key::Character("3"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(2).into_message())
+        }
+        (keyboard::Key::Character("4"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(3).into_message())
+        }
+        (keyboard::Key::Character("5"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(4).into_message())
+        }
+        (keyboard::Key::Character("6"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(5).into_message())
+        }
+        (keyboard::Key::Character("7"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(6).into_message())
+        }
+        (keyboard::Key::Character("8"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(7).into_message())
+        }
+        (keyboard::Key::Character("9"), Mods::None) => {
+            Some(message::NavRelMsg::BreadcrumbSelection(8).into_message())
+        }
+
         (keyboard::Key::Named(key::Named::Space), Mods::None) => Some(
             message::Message::PlaybackRequest(shared::PlaybackRequest::PlayPauseToggle),
         ),
