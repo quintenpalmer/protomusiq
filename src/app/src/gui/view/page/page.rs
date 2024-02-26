@@ -167,10 +167,19 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
                 None => (),
             }
         }
-        message::MovieNavMessage::MovieQuery(_) => ret.push((
-            "Query".to_string(),
-            message::MovieNavMessage::MovieQuery(None).into_message(),
-        )),
+        message::MovieNavMessage::MovieQuery(maybe_query) => {
+            ret.push((
+                "Query".to_string(),
+                message::MovieNavMessage::MovieQuery(None).into_message(),
+            ));
+            match maybe_query {
+                Some(q) => ret.push((
+                    "...".to_string(),
+                    message::MovieNavMessage::MovieQuery(Some(q.clone())).into_message(),
+                )),
+                None => (),
+            }
+        }
         message::MovieNavMessage::MovieView(movie, _) => ret.push((
             movie.title.clone(),
             message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
