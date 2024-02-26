@@ -267,10 +267,21 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
                 None => (),
             }
         }
-        message::MovieNavMessage::MovieView(movie, _) => ret.push((
-            common::abr_str(movie.title.clone(), consts::NAV_STR_LENGTH),
-            message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
-        )),
+        message::MovieNavMessage::MovieView(movie, _) => {
+            ret.push((
+                "Movies".to_string(),
+                message::MovieNavMessage::MovieList(
+                    0,
+                    model::MovieSortKey::ByTitle,
+                    model::MovieSortKey::ByTitle.default_order(),
+                )
+                .into_message(),
+            ));
+            ret.push((
+                common::abr_str(movie.title.clone(), consts::NAV_STR_LENGTH),
+                message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
+            ))
+        }
     }
 
     ret
