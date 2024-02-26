@@ -28,11 +28,14 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(user_nav_message(NavMessage::AlbumList(
-                0,
-                model::AlbumSortKey::ByParent,
-                model::AlbumSortKey::ByParent.default_order(),
-            )));
+            .on_press(
+                NavMessage::AlbumList(
+                    0,
+                    model::AlbumSortKey::ByParent,
+                    model::AlbumSortKey::ByParent.default_order(),
+                )
+                .into_message(),
+            );
             let artist_list = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_artists_image().clone(),
