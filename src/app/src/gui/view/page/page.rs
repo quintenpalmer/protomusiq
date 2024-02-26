@@ -120,12 +120,13 @@ fn compute_breadcrumb(
             )
             .into_message(),
         )]),
+        message::NavMessage::Artist(artist_message) => {
+            Some(artist_breadcrumbs(library, artist_message))
+        }
         message::NavMessage::Movie(movie_message) => Some(movie_breadcrumbs(movie_message)),
         message::NavMessage::Playlist(playlist_message) => {
             Some(playlist_breadcrumbs(library, playlist_message))
         }
-        // TODO remove this catch all and force new page messages to be handled here
-        _ => None,
     }
 }
 
@@ -152,6 +153,78 @@ fn playlist_breadcrumbs(
             ));
         }
     };
+    ret
+}
+
+fn artist_breadcrumbs(
+    library: &model::LibraryState,
+    message: &message::ArtistNavMessage,
+) -> Vec<(String, Message)> {
+    let mut ret = vec![(
+        "Artists".to_string(),
+        message::ArtistNavMessage::ArtistList(
+            0,
+            model::ArtistSortKey::ByName,
+            model::ArtistSortKey::ByName.default_order(),
+        )
+        .into_message(),
+    )];
+
+    match message {
+        message::ArtistNavMessage::ArtistList(_, _, _) => (),
+        message::ArtistNavMessage::ArtistAlbumsView(artist_id) => {
+            let artist_name = library.get_artist_info(*artist_id).artist_name;
+
+            ret.push((
+                artist_name.clone(),
+                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+            ));
+        }
+        message::ArtistNavMessage::ArtistTrackView(artist_id, _sort_key, _sort_irder) => {
+            let artist_name = library.get_artist_info(*artist_id).artist_name;
+
+            ret.push((
+                artist_name.clone(),
+                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+            ));
+        }
+        message::ArtistNavMessage::ArtistFeaturedTrackView(artist_id, _sort_key, _sort_irder) => {
+            let artist_name = library.get_artist_info(*artist_id).artist_name;
+
+            ret.push((
+                artist_name.clone(),
+                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+            ));
+        }
+        message::ArtistNavMessage::ArtistAlbumView(
+            artist_id,
+            album_id,
+            _size,
+            _selected_track,
+            _sort_order_placement,
+        ) => {
+            let artist_album_info = library.get_artist_album_info(*artist_id, *album_id);
+            let artist_name = artist_album_info.artist.artist_name.clone();
+            let album_name = artist_album_info.album.album_name.clone();
+
+            ret.push((
+                artist_name,
+                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+            ));
+            ret.push((
+                album_name,
+                message::ArtistNavMessage::ArtistAlbumView(
+                    *artist_id,
+                    *album_id,
+                    model::AlbumSize::Regular,
+                    None,
+                    None,
+                )
+                .into_message(),
+            ));
+        }
+    }
+
     ret
 }
 
