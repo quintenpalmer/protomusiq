@@ -25,11 +25,11 @@ pub fn handle_nav(
             app.current_page = Page::PlayQueue(state::PlayQueueState {});
             Command::none()
         }
-        NavMessage::PlaylistView(playlist_id) => {
+        NavMessage::Playlist(message::PlaylistNavMessage::PlaylistView(playlist_id)) => {
             app.current_page = Page::PlaylistView(state::PlaylistViewState { playlist_id });
             Command::none()
         }
-        NavMessage::PlaylistList(new_playlist_name) => {
+        NavMessage::Playlist(message::PlaylistNavMessage::PlaylistList(new_playlist_name)) => {
             app.current_page = Page::PlaylistList(state::PlaylistListState { new_playlist_name });
             Command::none()
         }

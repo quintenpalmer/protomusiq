@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, user_nav_message, Message, NavMessage};
 use crate::state;
 
 use super::super::super::common;
@@ -79,7 +79,7 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(user_nav_message(NavMessage::PlaylistList("".to_string())));
+            .on_press(message::PlaylistNavMessage::PlaylistList("".to_string()).into_message());
             let search = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_search_image().clone(),

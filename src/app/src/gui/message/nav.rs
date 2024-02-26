@@ -8,8 +8,7 @@ pub enum NavMessage {
     Config,
     PlayQueueFocus,
     SearchPage(String, model::SearchDomain, bool),
-    PlaylistList(String),
-    PlaylistView(u32),
+    Playlist(PlaylistNavMessage),
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     ArtistList(usize, model::ArtistSortKey, model::SortOrder),
@@ -36,6 +35,12 @@ pub enum NavMessage {
     MovieAttributes(Option<model::MovieAttribute>),
     MovieQuery(Option<model::MovieQueryParams>),
     MovieView(video::MovieMetadata, Option<model::MovieSize>),
+}
+
+#[derive(Debug, Clone)]
+pub enum PlaylistNavMessage {
+    PlaylistList(String),
+    PlaylistView(u32),
 }
 
 #[derive(Debug, Clone)]

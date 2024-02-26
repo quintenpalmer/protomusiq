@@ -22,7 +22,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             app.library.user_playlists.add_playlist(playlist_name);
             loaded::update_state(
                 app,
-                message::user_nav_message(message::NavMessage::PlaylistList("".to_string())),
+                message::PlaylistNavMessage::PlaylistList("".to_string()).into_message(),
             )
         }
         message::Action::MakePlaylistDefault(playlist_id) => {

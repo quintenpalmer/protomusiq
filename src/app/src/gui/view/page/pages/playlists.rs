@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{self, user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state;
 
 use crate::gui::view::components;
@@ -19,7 +19,7 @@ pub fn playlist_list_view<'a>(
         state::PlaylistListState { new_playlist_name } => (
             vec![(
                 "Playlists".to_string(),
-                user_nav_message(NavMessage::PlaylistList("".to_string())),
+                message::PlaylistNavMessage::PlaylistList("".to_string()).into_message(),
             )],
             {
                 let mut page = Column::new().push(h1("Playlists"));
@@ -60,9 +60,10 @@ pub fn playlist_list_view<'a>(
                                 ))
                                 .align_items(iced::Alignment::Center),
                         )
-                        .on_press(user_nav_message(message::NavMessage::PlaylistView(
-                            user_playlist.id,
-                        )))
+                        .on_press(
+                            message::PlaylistNavMessage::PlaylistView(user_playlist.id)
+                                .into_message(),
+                        )
                         .padding(8)
                         .width(Length::Fill),
                     );

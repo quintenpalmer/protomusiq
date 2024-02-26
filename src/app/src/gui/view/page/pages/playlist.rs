@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 use crate::shared;
 
-use crate::gui::message::{self, user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
@@ -250,11 +250,11 @@ pub fn playlist_view<'a>(
                 vec![
                     (
                         "Playlists".to_string(),
-                        user_nav_message(NavMessage::PlaylistList("".to_string())),
+                        message::PlaylistNavMessage::PlaylistList("".to_string()).into_message(),
                     ),
                     (
                         playlist.name.clone(),
-                        user_nav_message(NavMessage::PlaylistView(*playlist_id)),
+                        message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
                     ),
                 ],
                 Container::new(column),
