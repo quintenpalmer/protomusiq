@@ -23,7 +23,7 @@ pub fn render_page<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let message_sourced_breadcrumbs = compute_breadcrumb(library, page_current_history);
 
-    let (ret_breadcrumbs, ret_page) = match current_page {
+    let (_removeme_breadcrumbs, ret_page) = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
         Page::Config(state::ConfigState {}) => pages::config::config_page(),
         Page::PlayQueue(state::PlayQueueState {}) => (
@@ -67,26 +67,23 @@ pub fn render_page<'a>(
         Page::MovieView(ref state) => pages::movie::movie_page(movie_library, state, app_images),
     };
 
-    match message_sourced_breadcrumbs {
-        Some(breadcrumbs) => (breadcrumbs, ret_page),
-        None => (ret_breadcrumbs, ret_page),
-    }
+    (message_sourced_breadcrumbs, ret_page)
 }
 
 fn compute_breadcrumb(
     library: &model::LibraryState,
     page_current_history: &message::NavMessage,
-) -> Option<Vec<(String, Message)>> {
+) -> Vec<(String, Message)> {
     match page_current_history {
-        message::NavMessage::Home => Some(vec![]),
-        message::NavMessage::Config => Some(vec![(
+        message::NavMessage::Home => vec![],
+        message::NavMessage::Config => vec![(
             "Settings".to_string(),
             message::NavMessage::Config.into_message(),
-        )]),
-        message::NavMessage::PlayQueueFocus => Some(vec![(
+        )],
+        message::NavMessage::PlayQueueFocus => vec![(
             "Play Queue".to_string(),
             message::NavMessage::PlayQueueFocus.into_message(),
-        )]),
+        )],
         message::NavMessage::SearchPage(query, domain, perform_search) => {
             let mut ret = vec![(
                 "Search".to_string(),
@@ -100,9 +97,9 @@ fn compute_breadcrumb(
                         .into_message(),
                 ));
             }
-            Some(ret)
+            ret
         }
-        message::NavMessage::TrackList(_, _, _) => Some(vec![(
+        message::NavMessage::TrackList(_, _, _) => vec![(
             "Tracks".to_string(),
             message::NavMessage::TrackList(
                 0,
@@ -110,8 +107,8 @@ fn compute_breadcrumb(
                 model::TrackSortKey::ByName.default_order(),
             )
             .into_message(),
-        )]),
-        message::NavMessage::AlbumList(_, _, _) => Some(vec![(
+        )],
+        message::NavMessage::AlbumList(_, _, _) => vec![(
             "Albums".to_string(),
             message::NavMessage::AlbumList(
                 0,
@@ -119,13 +116,11 @@ fn compute_breadcrumb(
                 model::AlbumSortKey::ByParent.default_order(),
             )
             .into_message(),
-        )]),
-        message::NavMessage::Artist(artist_message) => {
-            Some(artist_breadcrumbs(library, artist_message))
-        }
-        message::NavMessage::Movie(movie_message) => Some(movie_breadcrumbs(movie_message)),
+        )],
+        message::NavMessage::Artist(artist_message) => artist_breadcrumbs(library, artist_message),
+        message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
         message::NavMessage::Playlist(playlist_message) => {
-            Some(playlist_breadcrumbs(library, playlist_message))
+            playlist_breadcrumbs(library, playlist_message)
         }
     }
 }
