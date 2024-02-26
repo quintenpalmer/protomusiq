@@ -216,6 +216,20 @@ pub enum MovieAttribute {
     CastMembers,
 }
 
+impl MovieAttribute {
+    pub fn display_text(&self) -> String {
+        match self {
+            MovieAttribute::Genres => "Genres",
+            MovieAttribute::Production => "Production Companies",
+            MovieAttribute::Producers => "Producers",
+            MovieAttribute::Directors => "Directors",
+            MovieAttribute::Screenplay => "Screenplay Writers",
+            MovieAttribute::CastMembers => "Cast Members",
+        }
+        .to_string()
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum AttributesList {
     Genre(Vec<String>),

@@ -154,10 +154,19 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
             )
             .into_message(),
         )),
-        message::MovieNavMessage::MovieAttributes(_) => ret.push((
-            "Attributes".to_string(),
-            message::MovieNavMessage::MovieAttributes(None).into_message(),
-        )),
+        message::MovieNavMessage::MovieAttributes(maybe_attr) => {
+            ret.push((
+                "Attributes".to_string(),
+                message::MovieNavMessage::MovieAttributes(None).into_message(),
+            ));
+            match maybe_attr {
+                Some(a) => ret.push((
+                    a.display_text(),
+                    message::MovieNavMessage::MovieAttributes(Some(a.clone())).into_message(),
+                )),
+                None => (),
+            }
+        }
         message::MovieNavMessage::MovieQuery(_) => ret.push((
             "Query".to_string(),
             message::MovieNavMessage::MovieQuery(None).into_message(),
