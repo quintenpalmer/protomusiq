@@ -27,6 +27,10 @@ pub fn render_page<'a>(
             "Settings".to_string(),
             message::NavMessage::Config.into_message(),
         )]),
+        message::NavMessage::PlayQueueFocus => Some(vec![(
+            "Play Queue".to_string(),
+            message::NavMessage::PlayQueueFocus.into_message(),
+        )]),
         // TODO remove this catch all and force new page messages to be handled here
         _ => None,
     };
