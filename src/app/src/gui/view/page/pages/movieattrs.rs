@@ -221,7 +221,7 @@ pub fn movie_attributes(
                         .spacing(10)
                         .padding(10)
                         .push(
-                            dark_button(h2("Genres")).on_press(
+                            dark_button(h2(model::MovieAttribute::Genres.display_text())).on_press(
                                 message::MovieNavMessage::MovieAttributes(Some(
                                     model::MovieAttribute::Genres,
                                 ))
@@ -229,44 +229,49 @@ pub fn movie_attributes(
                             ),
                         )
                         .push(
-                            dark_button(h2("Production Companies")).on_press(
-                                message::MovieNavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::Production,
-                                ))
-                                .into_message(),
-                            ),
+                            dark_button(h2(model::MovieAttribute::Production.display_text()))
+                                .on_press(
+                                    message::MovieNavMessage::MovieAttributes(Some(
+                                        model::MovieAttribute::Production,
+                                    ))
+                                    .into_message(),
+                                ),
                         )
                         .push(
-                            dark_button(h2("Producers")).on_press(
-                                message::MovieNavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::Producers,
-                                ))
-                                .into_message(),
-                            ),
+                            dark_button(h2(model::MovieAttribute::Producers.display_text()))
+                                .on_press(
+                                    message::MovieNavMessage::MovieAttributes(Some(
+                                        model::MovieAttribute::Producers,
+                                    ))
+                                    .into_message(),
+                                ),
                         )
                         .push(
-                            dark_button(h2("Directors")).on_press(
-                                message::MovieNavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::Directors,
-                                ))
-                                .into_message(),
-                            ),
+                            dark_button(h2(model::MovieAttribute::Directors.display_text()))
+                                .on_press(
+                                    message::MovieNavMessage::MovieAttributes(Some(
+                                        model::MovieAttribute::Directors,
+                                    ))
+                                    .into_message(),
+                                ),
                         )
                         .push(
-                            dark_button(h2("Screenplay Writers")).on_press(
-                                message::MovieNavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::Screenplay,
-                                ))
-                                .into_message(),
-                            ),
+                            dark_button(h2(model::MovieAttribute::Screenplay.display_text()))
+                                .on_press(
+                                    message::MovieNavMessage::MovieAttributes(Some(
+                                        model::MovieAttribute::Screenplay,
+                                    ))
+                                    .into_message(),
+                                ),
                         )
                         .push(
-                            dark_button(h2("Cast Members")).on_press(
-                                message::MovieNavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::CastMembers,
-                                ))
-                                .into_message(),
-                            ),
+                            dark_button(h2(model::MovieAttribute::CastMembers.display_text()))
+                                .on_press(
+                                    message::MovieNavMessage::MovieAttributes(Some(
+                                        model::MovieAttribute::CastMembers,
+                                    ))
+                                    .into_message(),
+                                ),
                         );
                     (h2("Select Attribute"), Scrollable::new(attribute_list))
                 }
