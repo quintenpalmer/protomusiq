@@ -33,6 +33,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let messages = &app.messages;
     let app_images = &app.app_images;
     let current_page = &app.current_page;
+    let current_page_message = &app.page_current_history;
     let action_state = &app.action_state;
     let player_info = &app.player_info;
     let play_queue_info = &app.play_queue_info;
@@ -42,6 +43,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,
+        current_page_message,
         library,
         movie_library,
         app_images,

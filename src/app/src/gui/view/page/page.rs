@@ -2,7 +2,7 @@ use iced::widget::Container;
 
 use crate::model;
 
-use crate::gui::message::Message;
+use crate::gui::message::{self, Message};
 use crate::state::{self, ActionState, Page, PlayQueueInfo, PlayerInfo};
 
 use crate::datastore::staticassets::embedded;
@@ -13,6 +13,7 @@ use super::pages;
 
 pub fn render_page<'a>(
     current_page: &'a Page,
+    page_current_history: &'a message::NavMessage,
     library: &'a model::LibraryState,
     movie_library: &'a model::VideoLibraryState,
     app_images: &embedded::AppImages,
@@ -20,7 +21,16 @@ pub fn render_page<'a>(
     play_queue_info: &PlayQueueInfo,
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    match current_page {
+    let message_sourced_breadcrumbs = match page_current_history {
+        message::NavMessage::Home => Some(vec![]),
+        message::NavMessage::Config => Some(vec![(
+            "Settings".to_string(),
+            message::NavMessage::Config.into_message(),
+        )]),
+        // TODO remove this catch all and force new page messages to be handled here
+        _ => None,
+    };
+    let (ret_breadcrumbs, ret_page) = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
         Page::Config(state::ConfigState {}) => pages::config::config_page(),
         Page::PlayQueue(state::PlayQueueState {}) => (
@@ -62,5 +72,10 @@ pub fn render_page<'a>(
             pages::moviequery::movie_query(movie_library, state, app_images)
         }
         Page::MovieView(ref state) => pages::movie::movie_page(movie_library, state, app_images),
+    };
+
+    match message_sourced_breadcrumbs {
+        Some(breadcrumbs) => (breadcrumbs, ret_page),
+        None => (ret_breadcrumbs, ret_page),
     }
 }
