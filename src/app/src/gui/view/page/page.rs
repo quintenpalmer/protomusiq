@@ -3,6 +3,8 @@ use iced::widget::Container;
 use crate::model;
 
 use crate::gui::message::{self, Message};
+use crate::gui::view::common;
+use crate::gui::view::consts;
 use crate::state::{self, ActionState, Page, PlayQueueInfo, PlayerInfo};
 
 use crate::datastore::staticassets::embedded;
@@ -91,7 +93,7 @@ fn compute_breadcrumb(
             )];
             if *perform_search {
                 ret.push((
-                    format!("\"{}\"", query),
+                    common::abr_str(format!("\"{}\"", query), consts::NAV_STR_LENGTH),
                     message::NavMessage::SearchPage(query.clone(), domain.clone(), *perform_search)
                         .into_message(),
                 ));
@@ -142,7 +144,7 @@ fn playlist_breadcrumbs(
                 .name
                 .clone();
             ret.push((
-                playlist_name,
+                common::abr_str(playlist_name, consts::NAV_STR_LENGTH),
                 message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
             ));
         }
@@ -170,7 +172,7 @@ fn artist_breadcrumbs(
             let artist_name = library.get_artist_info(*artist_id).artist_name;
 
             ret.push((
-                artist_name.clone(),
+                common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
                 message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
             ));
         }
@@ -178,7 +180,7 @@ fn artist_breadcrumbs(
             let artist_name = library.get_artist_info(*artist_id).artist_name;
 
             ret.push((
-                artist_name.clone(),
+                common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
                 message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
             ));
         }
@@ -186,7 +188,7 @@ fn artist_breadcrumbs(
             let artist_name = library.get_artist_info(*artist_id).artist_name;
 
             ret.push((
-                artist_name.clone(),
+                common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
                 message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
             ));
         }
@@ -202,11 +204,11 @@ fn artist_breadcrumbs(
             let album_name = artist_album_info.album.album_name.clone();
 
             ret.push((
-                artist_name,
+                common::abr_str(artist_name, consts::NAV_STR_LENGTH),
                 message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
             ));
             ret.push((
-                album_name,
+                common::abr_str(album_name, consts::NAV_STR_LENGTH),
                 message::ArtistNavMessage::ArtistAlbumView(
                     *artist_id,
                     *album_id,
@@ -246,7 +248,7 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
             ));
             match maybe_attr {
                 Some(a) => ret.push((
-                    a.display_text(),
+                    common::abr_str(a.display_text(), consts::NAV_STR_LENGTH),
                     message::MovieNavMessage::MovieAttributes(Some(a.clone())).into_message(),
                 )),
                 None => (),
@@ -266,7 +268,7 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
             }
         }
         message::MovieNavMessage::MovieView(movie, _) => ret.push((
-            movie.title.clone(),
+            common::abr_str(movie.title.clone(), consts::NAV_STR_LENGTH),
             message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
         )),
     }
