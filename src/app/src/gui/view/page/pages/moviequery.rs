@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state;
 
 use super::super::super::elements::*;
@@ -15,10 +15,13 @@ pub fn movie_query<'a>(
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let breadcrumbs = vec![
-        ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+        (
+            "Movie".to_string(),
+            message::MovieNavMessage::MovieHome.into_message(),
+        ),
         (
             "Query Movies".to_string(),
-            user_nav_message(NavMessage::MovieQuery(None)),
+            message::MovieNavMessage::MovieQuery(None).into_message(),
         ),
     ];
 
@@ -28,15 +31,23 @@ pub fn movie_query<'a>(
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()
                         .spacing(5)
-                        .push(dark_button(h3("Genre")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Genres)),
-                        )))
+                        .push(
+                            dark_button(h3("Genre")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Genres,
+                                ))
+                                .into_message(),
+                            ),
+                        )
                         .push(h3(":"))
-                        .push(dark_button(h3(genre.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Genre(
-                                genre.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(genre.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::Genre(genre.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
             model::MovieQueryParams::Production(ref prod) => {
@@ -44,78 +55,114 @@ pub fn movie_query<'a>(
                     line_row()
                         .spacing(5)
                         .push(
-                            dark_button(h3("Production Company")).on_press(user_nav_message(
-                                NavMessage::MovieAttributes(Some(
+                            dark_button(h3("Production Company")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
                                     model::MovieAttribute::Production,
-                                )),
-                            )),
+                                ))
+                                .into_message(),
+                            ),
                         )
                         .push(h3(":"))
-                        .push(dark_button(h3(prod.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Production(
-                                prod.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(prod.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::Production(prod.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
             model::MovieQueryParams::Producers(ref prod) => {
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()
                         .spacing(5)
-                        .push(dark_button(h3("Producers")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Producers)),
-                        )))
+                        .push(
+                            dark_button(h3("Producers")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Producers,
+                                ))
+                                .into_message(),
+                            ),
+                        )
                         .push(h3(":"))
-                        .push(dark_button(h3(prod.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Producers(
-                                prod.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(prod.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::Producers(prod.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
             model::MovieQueryParams::Director(ref director) => {
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()
                         .spacing(5)
-                        .push(dark_button(h3("Director")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Directors)),
-                        )))
+                        .push(
+                            dark_button(h3("Director")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Directors,
+                                ))
+                                .into_message(),
+                            ),
+                        )
                         .push(h3(":"))
-                        .push(dark_button(h3(director.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Director(
-                                director.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(director.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::Director(director.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
             model::MovieQueryParams::Screenplay(ref writer) => {
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()
                         .spacing(5)
-                        .push(dark_button(h3("Screenplay")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Screenplay)),
-                        )))
+                        .push(
+                            dark_button(h3("Screenplay")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Screenplay,
+                                ))
+                                .into_message(),
+                            ),
+                        )
                         .push(h3(":"))
-                        .push(dark_button(h3(writer.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::Screenplay(
-                                writer.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(writer.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::Screenplay(writer.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
             model::MovieQueryParams::CastMember(ref actor) => {
                 Column::new().spacing(10).push(h2("Params:")).push(
                     line_row()
                         .spacing(5)
-                        .push(dark_button(h3("Cast Member")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::CastMembers)),
-                        )))
+                        .push(
+                            dark_button(h3("Cast Member")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::CastMembers,
+                                ))
+                                .into_message(),
+                            ),
+                        )
                         .push(h3(":"))
-                        .push(dark_button(h3(actor.clone())).on_press(user_nav_message(
-                            NavMessage::MovieQuery(Some(model::MovieQueryParams::CastMember(
-                                actor.clone(),
-                            ))),
-                        ))),
+                        .push(
+                            dark_button(h3(actor.clone())).on_press(
+                                message::MovieNavMessage::MovieQuery(Some(
+                                    model::MovieQueryParams::CastMember(actor.clone()),
+                                ))
+                                .into_message(),
+                            ),
+                        ),
                 )
             }
         },
@@ -130,7 +177,8 @@ pub fn movie_query<'a>(
 
                 let movie_info = h1(movie.title.clone());
 
-                let movie_link = user_nav_message(NavMessage::MovieView(movie.clone(), None));
+                let movie_link =
+                    message::MovieNavMessage::MovieView(movie.clone(), None).into_message();
 
                 let movie_image_element = match movie_library.art.get_movie_cover(
                     model::MovieSize::Small,

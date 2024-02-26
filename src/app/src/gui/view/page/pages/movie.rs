@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, ExternalSpawn, Message, NavMessage};
+use crate::gui::message::{self, ExternalSpawn, Message};
 use crate::state;
 
 use super::super::super::common;
@@ -16,14 +16,18 @@ pub fn movie_page<'a>(
     app_images: &embedded::AppImages,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let breadcrumbs = vec![
-        ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+        (
+            "Movie".to_string(),
+            message::MovieNavMessage::MovieHome.into_message(),
+        ),
         (
             "Movies".to_string(),
-            user_nav_message(NavMessage::MovieList(
+            message::MovieNavMessage::MovieList(
                 0,
                 model::MovieSortKey::ByTitle,
                 model::MovieSortKey::ByTitle.default_order(),
-            )),
+            )
+            .into_message(),
         ),
     ];
 
@@ -55,9 +59,10 @@ pub fn movie_page<'a>(
 
             let movie_image = movie_image(movie_image_bytes, current, false);
 
-            let movie_button = dark_button(movie_image).on_press(user_nav_message(
-                NavMessage::MovieView(state.movie.clone(), Some(toggle_to)),
-            ));
+            let movie_button = dark_button(movie_image).on_press(
+                message::MovieNavMessage::MovieView(state.movie.clone(), Some(toggle_to))
+                    .into_message(),
+            );
 
             Container::new(movie_button)
         }
@@ -109,10 +114,14 @@ pub fn movie_page<'a>(
             let mut genre_row = Row::new().spacing(10);
             let mut genre_row_count = 0;
             for (index, genre) in extra.genres.iter().enumerate() {
-                genre_row =
-                    genre_row.push(dark_button(h3(genre.clone())).on_press(user_nav_message(
-                        NavMessage::MovieQuery(Some(model::MovieQueryParams::Genre(genre.clone()))),
-                    )));
+                genre_row = genre_row.push(
+                    dark_button(h3(genre.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(model::MovieQueryParams::Genre(
+                            genre.clone(),
+                        )))
+                        .into_message(),
+                    ),
+                );
                 genre_row_count += 1;
 
                 if index % 3 == 2 {
@@ -140,20 +149,26 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut directors = Column::new().push(h2("Director(s)"));
             for director in extra.directors.iter() {
-                directors = directors.push(dark_button(h3(director.clone())).on_press(
-                    user_nav_message(NavMessage::MovieQuery(Some(
-                        model::MovieQueryParams::Director(director.clone()),
-                    ))),
-                ));
+                directors = directors.push(
+                    dark_button(h3(director.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(
+                            model::MovieQueryParams::Director(director.clone()),
+                        ))
+                        .into_message(),
+                    ),
+                );
             }
 
             let mut writers = Column::new().push(h2("Screenplay Writer(s)"));
             for writer in extra.writers.iter() {
-                writers = writers.push(dark_button(h3(writer.clone())).on_press(user_nav_message(
-                    NavMessage::MovieQuery(Some(model::MovieQueryParams::Screenplay(
-                        writer.clone(),
-                    ))),
-                )));
+                writers = writers.push(
+                    dark_button(h3(writer.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(
+                            model::MovieQueryParams::Screenplay(writer.clone()),
+                        ))
+                        .into_message(),
+                    ),
+                );
             }
 
             let director_writer = Row::new()
@@ -169,21 +184,26 @@ pub fn movie_page<'a>(
         Some(ref extra) => {
             let mut producers = Column::new().push(h2("Producers"));
             for prod in extra.producers.iter() {
-                producers = producers.push(dark_button(h3(prod.clone())).on_press(
-                    user_nav_message(NavMessage::MovieQuery(Some(
-                        model::MovieQueryParams::Producers(prod.clone()),
-                    ))),
-                ));
+                producers = producers.push(
+                    dark_button(h3(prod.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(
+                            model::MovieQueryParams::Producers(prod.clone()),
+                        ))
+                        .into_message(),
+                    ),
+                );
             }
 
             let mut production_entities = Column::new().push(h2("Production"));
             for prod in extra.production.iter() {
-                production_entities =
-                    production_entities.push(dark_button(h3(prod.clone())).on_press(
-                        user_nav_message(NavMessage::MovieQuery(Some(
+                production_entities = production_entities.push(
+                    dark_button(h3(prod.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(
                             model::MovieQueryParams::Production(prod.clone()),
-                        ))),
-                    ));
+                        ))
+                        .into_message(),
+                    ),
+                );
             }
 
             let production_and_producer = Row::new()
@@ -207,11 +227,14 @@ pub fn movie_page<'a>(
             cast_main_container = cast_main_container.push(h1("Cast:"));
             let mut cast = Column::new();
             for actor in extra.cast.iter() {
-                cast = cast.push(dark_button(h2(actor.clone())).on_press(user_nav_message(
-                    NavMessage::MovieQuery(Some(model::MovieQueryParams::CastMember(
-                        actor.clone(),
-                    ))),
-                )));
+                cast = cast.push(
+                    dark_button(h2(actor.clone())).on_press(
+                        message::MovieNavMessage::MovieQuery(Some(
+                            model::MovieQueryParams::CastMember(actor.clone()),
+                        ))
+                        .into_message(),
+                    ),
+                );
             }
             let cast_scrollable = Scrollable::new(cast.width(Length::Fill)).height(Length::Fill);
             cast_main_container = cast_main_container.push(cast_scrollable);

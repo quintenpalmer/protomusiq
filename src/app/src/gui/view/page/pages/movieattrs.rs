@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state;
 
 use super::super::super::elements::*;
@@ -16,10 +16,13 @@ pub fn movie_attributes(
             attribute_results: maybe_attribute_results,
         } => {
             let breadcrumbs = vec![
-                ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+                (
+                    "Movie".to_string(),
+                    message::MovieNavMessage::MovieHome.into_message(),
+                ),
                 (
                     "Movie Attributes".to_string(),
-                    user_nav_message(NavMessage::MovieAttributes(None)),
+                    message::MovieNavMessage::MovieAttributes(None).into_message(),
                 ),
             ];
 
@@ -31,11 +34,14 @@ pub fn movie_attributes(
                         let mut genre_row = Row::new().spacing(10);
                         let mut genre_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            genre_row = genre_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(Some(
-                                    model::MovieQueryParams::Genre(result.clone()),
-                                ))),
-                            ));
+                            genre_row = genre_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
+                                        model::MovieQueryParams::Genre(result.clone()),
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             genre_row_count += 1;
 
                             if index % 5 == 4 {
@@ -60,12 +66,14 @@ pub fn movie_attributes(
                         let mut production_row = Row::new().spacing(10);
                         let mut production_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            production_row =
-                                production_row.push(dark_button(h3(result.clone())).on_press(
-                                    user_nav_message(NavMessage::MovieQuery(Some(
+                            production_row = production_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
                                         model::MovieQueryParams::Production(result.clone()),
-                                    ))),
-                                ));
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             production_row_count += 1;
 
                             if index % 2 == 1 {
@@ -91,12 +99,14 @@ pub fn movie_attributes(
                         let mut producers_row = Row::new().spacing(10);
                         let mut producers_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            producers_row =
-                                producers_row.push(dark_button(h3(result.clone())).on_press(
-                                    user_nav_message(NavMessage::MovieQuery(Some(
+                            producers_row = producers_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
                                         model::MovieQueryParams::Producers(result.clone()),
-                                    ))),
-                                ));
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             producers_row_count += 1;
 
                             if index % 2 == 1 {
@@ -118,11 +128,14 @@ pub fn movie_attributes(
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(Some(
-                                    model::MovieQueryParams::Director(result.clone()),
-                                ))),
-                            ));
+                            result_row = result_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
+                                        model::MovieQueryParams::Director(result.clone()),
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             result_row_count += 1;
 
                             if index % 3 == 2 {
@@ -144,11 +157,14 @@ pub fn movie_attributes(
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(Some(
-                                    model::MovieQueryParams::Screenplay(result.clone()),
-                                ))),
-                            ));
+                            result_row = result_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
+                                        model::MovieQueryParams::Screenplay(result.clone()),
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             result_row_count += 1;
 
                             if index % 3 == 2 {
@@ -173,11 +189,14 @@ pub fn movie_attributes(
                         let mut result_row = Row::new().spacing(10);
                         let mut result_row_count = 0;
                         for (index, result) in attribute_results.iter().enumerate() {
-                            result_row = result_row.push(dark_button(h3(result.clone())).on_press(
-                                user_nav_message(NavMessage::MovieQuery(Some(
-                                    model::MovieQueryParams::CastMember(result.clone()),
-                                ))),
-                            ));
+                            result_row = result_row.push(
+                                dark_button(h3(result.clone())).on_press(
+                                    message::MovieNavMessage::MovieQuery(Some(
+                                        model::MovieQueryParams::CastMember(result.clone()),
+                                    ))
+                                    .into_message(),
+                                ),
+                            );
                             result_row_count += 1;
 
                             if index % 3 == 2 {
@@ -201,32 +220,54 @@ pub fn movie_attributes(
                     let attribute_list = Column::new()
                         .spacing(10)
                         .padding(10)
-                        .push(dark_button(h2("Genres")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Genres)),
-                        )))
                         .push(
-                            dark_button(h2("Production Companies")).on_press(user_nav_message(
-                                NavMessage::MovieAttributes(Some(
+                            dark_button(h2("Genres")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Genres,
+                                ))
+                                .into_message(),
+                            ),
+                        )
+                        .push(
+                            dark_button(h2("Production Companies")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
                                     model::MovieAttribute::Production,
-                                )),
-                            )),
+                                ))
+                                .into_message(),
+                            ),
                         )
-                        .push(dark_button(h2("Producers")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Producers)),
-                        )))
-                        .push(dark_button(h2("Directors")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::Directors)),
-                        )))
                         .push(
-                            dark_button(h2("Screenplay Writers")).on_press(user_nav_message(
-                                NavMessage::MovieAttributes(Some(
-                                    model::MovieAttribute::Screenplay,
-                                )),
-                            )),
+                            dark_button(h2("Producers")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Producers,
+                                ))
+                                .into_message(),
+                            ),
                         )
-                        .push(dark_button(h2("Cast Members")).on_press(user_nav_message(
-                            NavMessage::MovieAttributes(Some(model::MovieAttribute::CastMembers)),
-                        )));
+                        .push(
+                            dark_button(h2("Directors")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Directors,
+                                ))
+                                .into_message(),
+                            ),
+                        )
+                        .push(
+                            dark_button(h2("Screenplay Writers")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::Screenplay,
+                                ))
+                                .into_message(),
+                            ),
+                        )
+                        .push(
+                            dark_button(h2("Cast Members")).on_press(
+                                message::MovieNavMessage::MovieAttributes(Some(
+                                    model::MovieAttribute::CastMembers,
+                                ))
+                                .into_message(),
+                            ),
+                        );
                     (h2("Select Attribute"), Scrollable::new(attribute_list))
                 }
             };

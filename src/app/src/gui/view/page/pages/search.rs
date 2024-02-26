@@ -278,10 +278,11 @@ pub fn search_page<'a>(
                                                 ),
                                         )
                                         .on_press(
-                                            user_nav_message(NavMessage::MovieView(
+                                            message::MovieNavMessage::MovieView(
                                                 result.clone(),
                                                 None,
-                                            )),
+                                            )
+                                            .into_message(),
                                         ),
                                     )
                                 },

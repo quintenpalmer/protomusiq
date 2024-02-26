@@ -133,11 +133,9 @@ fn handle_switch_sort_by_msg(
 
             let new_sort_order = new_sort_key.default_order();
 
-            Some(message::Message::Nav(message::NavMessage::MovieList(
-                0,
-                new_sort_key,
-                new_sort_order,
-            )))
+            Some(
+                message::MovieNavMessage::MovieList(0, new_sort_key, new_sort_order).into_message(),
+            )
         }
         _ => None,
     }
@@ -282,11 +280,10 @@ fn handle_nav_rel_msg(
                 entity_length,
             );
 
-            Some(message::Message::Nav(message::NavMessage::MovieList(
-                new_page,
-                sort_key.clone(),
-                sort_order.clone(),
-            )))
+            Some(
+                message::MovieNavMessage::MovieList(new_page, sort_key.clone(), sort_order.clone())
+                    .into_message(),
+            )
         }
         _ => None,
     }

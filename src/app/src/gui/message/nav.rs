@@ -30,17 +30,22 @@ pub enum NavMessage {
         Option<musiqlibrary::TrackUniqueIdentifier>,
         Option<model::AlbumSortPlacement>,
     ),
-    MovieHome,
-    MovieList(usize, model::MovieSortKey, model::SortOrder),
-    MovieAttributes(Option<model::MovieAttribute>),
-    MovieQuery(Option<model::MovieQueryParams>),
-    MovieView(video::MovieMetadata, Option<model::MovieSize>),
+    Movie(MovieNavMessage),
 }
 
 #[derive(Debug, Clone)]
 pub enum PlaylistNavMessage {
     PlaylistList(String),
     PlaylistView(u32),
+}
+
+#[derive(Debug, Clone)]
+pub enum MovieNavMessage {
+    MovieHome,
+    MovieList(usize, model::MovieSortKey, model::SortOrder),
+    MovieAttributes(Option<model::MovieAttribute>),
+    MovieQuery(Option<model::MovieQueryParams>),
+    MovieView(video::MovieMetadata, Option<model::MovieSize>),
 }
 
 #[derive(Debug, Clone)]

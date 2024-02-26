@@ -116,11 +116,14 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(user_nav_message(NavMessage::MovieList(
-                0,
-                model::MovieSortKey::ByTitle,
-                model::MovieSortKey::ByTitle.default_order(),
-            )));
+            .on_press(
+                message::MovieNavMessage::MovieList(
+                    0,
+                    model::MovieSortKey::ByTitle,
+                    model::MovieSortKey::ByTitle.default_order(),
+                )
+                .into_message(),
+            );
 
             let page = Container::new(
                 Scrollable::new(

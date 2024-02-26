@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
+use crate::gui::message::{self, Message, NavRelMsg, PagifiedMovementMsg};
 use crate::state;
 
 use super::super::super::common;
@@ -25,14 +25,14 @@ pub fn movie_list<'a>(
             sort_order,
         } => {
             let breadcrumbs = vec![
-                ("Movie".to_string(), user_nav_message(NavMessage::MovieHome)),
+                (
+                    "Movie".to_string(),
+                    message::MovieNavMessage::MovieHome.into_message(),
+                ),
                 (
                     "Movies".to_string(),
-                    user_nav_message(NavMessage::MovieList(
-                        0,
-                        sort_key.clone(),
-                        sort_order.clone(),
-                    )),
+                    message::MovieNavMessage::MovieList(0, sort_key.clone(), sort_order.clone())
+                        .into_message(),
                 ),
             ];
 
@@ -70,8 +70,9 @@ pub fn movie_list<'a>(
                 };
 
                 buttons.push(
-                    dark_button(bottom_label(movie_image_element.into(), movie_info))
-                        .on_press(user_nav_message(NavMessage::MovieView(movie.clone(), None))),
+                    dark_button(bottom_label(movie_image_element.into(), movie_info)).on_press(
+                        message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
+                    ),
                 );
             }
 
@@ -172,13 +173,14 @@ pub fn movie_list<'a>(
                                     dark_paragraph("^")
                                 }
                             })
-                            .on_press(user_nav_message(
-                                NavMessage::MovieList(
+                            .on_press(
+                                message::MovieNavMessage::MovieList(
                                     0,
                                     sort_key.clone(),
                                     model::SortOrder::Reversed,
-                                ),
-                            )),
+                                )
+                                .into_message(),
+                            ),
                         )
                         .push(
                             dark_button({
@@ -188,13 +190,14 @@ pub fn movie_list<'a>(
                                     dark_paragraph("v")
                                 }
                             })
-                            .on_press(user_nav_message(
-                                NavMessage::MovieList(
+                            .on_press(
+                                message::MovieNavMessage::MovieList(
                                     0,
                                     sort_key.clone(),
                                     model::SortOrder::Regular,
-                                ),
-                            )),
+                                )
+                                .into_message(),
+                            ),
                         ),
                 );
 
@@ -223,5 +226,6 @@ fn sort_button<'a>(
     } else {
         dark_paragraph(display_text)
     };
-    dark_button(text_element).on_press(user_nav_message(NavMessage::MovieList(0, sort_key, order)))
+    dark_button(text_element)
+        .on_press(message::MovieNavMessage::MovieList(0, sort_key, order).into_message())
 }
