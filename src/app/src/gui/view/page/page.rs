@@ -111,6 +111,15 @@ fn compute_breadcrumb(
             )
             .into_message(),
         )]),
+        message::NavMessage::AlbumList(_, _, _) => Some(vec![(
+            "Albums".to_string(),
+            message::NavMessage::AlbumList(
+                0,
+                model::AlbumSortKey::ByParent,
+                model::AlbumSortKey::ByParent.default_order(),
+            )
+            .into_message(),
+        )]),
         message::NavMessage::Movie(movie_message) => Some(movie_breadcrumbs(movie_message)),
         message::NavMessage::Playlist(playlist_message) => {
             Some(playlist_breadcrumbs(library, playlist_message))
