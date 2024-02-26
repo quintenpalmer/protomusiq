@@ -21,7 +21,7 @@ pub fn render_page<'a>(
     play_queue_info: &PlayQueueInfo,
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let message_sourced_breadcrumbs = compute_breadcrumb(page_current_history);
+    let message_sourced_breadcrumbs = compute_breadcrumb(library, page_current_history);
 
     let (ret_breadcrumbs, ret_page) = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
@@ -74,6 +74,7 @@ pub fn render_page<'a>(
 }
 
 fn compute_breadcrumb(
+    library: &model::LibraryState,
     page_current_history: &message::NavMessage,
 ) -> Option<Vec<(String, Message)>> {
     match page_current_history {
@@ -100,7 +101,33 @@ fn compute_breadcrumb(
             }
             Some(ret)
         }
+        message::NavMessage::Playlist(playlist_message) => Some(playlist_breadcrumbs(library, playlist_message)),
         // TODO remove this catch all and force new page messages to be handled here
         _ => None,
     }
+}
+
+fn playlist_breadcrumbs(
+    library: &model::LibraryState,
+    message: &message::PlaylistNavMessage,
+) -> Vec<(String, Message)> {
+    let mut ret = vec![
+        (
+            "Playlists".to_string(),
+            message::PlaylistNavMessage::PlaylistList("".to_string()).into_message()
+        )
+    ];
+    match message {
+        message::PlaylistNavMessage::PlaylistList(_new_name_part) => (),
+        message::PlaylistNavMessage::PlaylistView(playlist_id) => {
+            let playlist_name = library.user_playlists.get_playlist(*playlist_id).unwrap().name.clone();
+            ret.push(
+                (
+                    playlist_name,
+                    message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
+                )
+            );
+        },
+    };
+    ret
 }
