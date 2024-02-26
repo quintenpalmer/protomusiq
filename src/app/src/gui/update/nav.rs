@@ -83,63 +83,66 @@ pub fn handle_nav(
             });
             Command::none()
         }
-        NavMessage::ArtistList(page, sort, sort_order) => {
-            app.current_page = Page::ArtistList(state::ArtistListState {
-                page,
-                sort_key: sort,
-                sort_order,
-            });
-            Command::none()
-        }
-        NavMessage::ArtistAlbumsView(artist_id) => {
-            app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
-                artist_id,
-                albums: app
-                    .library
-                    .get_artist_map()
-                    .get(&artist_id)
-                    .unwrap()
-                    .albums
-                    .keys()
-                    .cloned()
-                    .collect(),
-            });
-            Command::none()
-        }
-        NavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-            app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
-                artist_id,
+        NavMessage::Artist(artist_message) => match artist_message {
+            message::ArtistNavMessage::ArtistList(page, sort, sort_order) => {
+                app.current_page = Page::ArtistList(state::ArtistListState {
+                    page,
+                    sort_key: sort,
+                    sort_order,
+                });
+                Command::none()
+            }
+            message::ArtistNavMessage::ArtistAlbumsView(artist_id) => {
+                app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
+                    artist_id,
+                    albums: app
+                        .library
+                        .get_artist_map()
+                        .get(&artist_id)
+                        .unwrap()
+                        .albums
+                        .keys()
+                        .cloned()
+                        .collect(),
+                });
+                Command::none()
+            }
+            message::ArtistNavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
+                app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
+                    artist_id,
 
-                sort_key,
-                sort_order,
-            });
-            Command::none()
-        }
-        NavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
-            app.current_page = Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
-                artist_id,
+                    sort_key,
+                    sort_order,
+                });
+                Command::none()
+            }
+            message::ArtistNavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
+                app.current_page =
+                    Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+                        artist_id,
 
-                sort_key,
-                sort_order,
-            });
-            Command::none()
-        }
-        NavMessage::ArtistAlbumView(
-            artist_id,
-            album_id,
-            album_size,
-            maybe_selected_track,
-            maybe_current_sort_order,
-        ) => {
-            app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
+                        sort_key,
+                        sort_order,
+                    });
+                Command::none()
+            }
+            message::ArtistNavMessage::ArtistAlbumView(
                 artist_id,
                 album_id,
                 album_size,
                 maybe_selected_track,
                 maybe_current_sort_order,
-            });
-            Command::none()
-        }
+            ) => {
+                app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
+                    artist_id,
+                    album_id,
+                    album_size,
+                    maybe_selected_track,
+                    maybe_current_sort_order,
+                });
+                Command::none()
+            }
+        },
         NavMessage::Movie(movie_message) => match movie_message {
             message::MovieNavMessage::MovieHome => {
                 app.current_page = Page::MovieHome;

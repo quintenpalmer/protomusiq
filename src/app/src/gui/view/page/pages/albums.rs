@@ -3,7 +3,9 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
+use crate::gui::message::{
+    self, user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg,
+};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
@@ -77,8 +79,8 @@ pub fn album_list<'a>(
                                     consts::ICON_STR_LENGTH,
                                 ))),
                         ))
-                        .on_press(user_nav_message(
-                            NavMessage::ArtistAlbumView(
+                        .on_press(
+                            message::ArtistNavMessage::ArtistAlbumView(
                                 info.artist.artist_id,
                                 info.album.album_id,
                                 model::AlbumSize::Regular,
@@ -88,8 +90,9 @@ pub fn album_list<'a>(
                                     sort_key: sort_key.clone(),
                                     sort_order: sort_order.clone(),
                                 }),
-                            ),
-                        )),
+                            )
+                            .into_message(),
+                        ),
                     );
                 }
 

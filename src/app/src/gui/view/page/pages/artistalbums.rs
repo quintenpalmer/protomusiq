@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
@@ -22,15 +22,16 @@ pub fn artist_album_list<'a>(
             let breadcrumbs = vec![
                 (
                     "Artists".to_string(),
-                    user_nav_message(NavMessage::ArtistList(
+                    message::ArtistNavMessage::ArtistList(
                         0,
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
-                    )),
+                    )
+                    .into_message(),
                 ),
                 (
                     artist.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistAlbumsView(*artist_id)),
+                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
                 ),
             ];
             let body = {
@@ -66,15 +67,16 @@ pub fn artist_album_list<'a>(
                                     album.album_info.end_date,
                                 ))),
                         ))
-                        .on_press(user_nav_message(
-                            NavMessage::ArtistAlbumView(
+                        .on_press(
+                            message::ArtistNavMessage::ArtistAlbumView(
                                 artist.artist_id,
                                 album.album_info.album_id,
                                 model::AlbumSize::Regular,
                                 None,
                                 None,
-                            ),
-                        )),
+                            )
+                            .into_message(),
+                        ),
                     ))
                 }
 
@@ -114,24 +116,29 @@ pub fn artist_album_list<'a>(
                     Scrollable::new(album_grid_columns.width(Length::Fill)).height(Length::Fill);
 
                 let artist_view_button_row = line_row()
+                    .push(dark_button(h2("Albums")).on_press(
+                        message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+                    ))
                     .push(
-                        dark_button(h2("Albums"))
-                            .on_press(user_nav_message(NavMessage::ArtistAlbumsView(*artist_id))),
+                        dark_button(dark(h2("Tracks"))).on_press(
+                            message::ArtistNavMessage::ArtistTrackView(
+                                *artist_id,
+                                model::ArtistTrackSortKey::ByTotalPlayCount,
+                                model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(),
+                        ),
                     )
-                    .push(dark_button(dark(h2("Tracks"))).on_press(user_nav_message(
-                        NavMessage::ArtistTrackView(
-                            *artist_id,
-                            model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                    .push(
+                        dark_button(dark(h2("Featured"))).on_press(
+                            message::ArtistNavMessage::ArtistFeaturedTrackView(
+                                *artist_id,
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(),
                         ),
-                    )))
-                    .push(dark_button(dark(h2("Featured"))).on_press(user_nav_message(
-                        NavMessage::ArtistFeaturedTrackView(
-                            *artist_id,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                        ),
-                    )));
+                    );
 
                 Container::new(
                     Column::new()

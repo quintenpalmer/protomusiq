@@ -564,12 +564,13 @@ fn controls_with_maybe_track_info<'a>(
                                             track_artist
                                         ))))
                                         .on_press(
-                                            user_nav_message(NavMessage::ArtistFeaturedTrackView(
+                                            message::ArtistNavMessage::ArtistFeaturedTrackView(
                                                 musiqlibrary::ID::new(&track_artist),
                                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount
                                                     .default_order(),
-                                            )),
+                                            )
+                                            .into_message(),
                                         ),
                                     )
                                 }
@@ -585,9 +586,12 @@ fn controls_with_maybe_track_info<'a>(
                                         .metadata
                                         .album_artist
                                         .clone()))
-                                    .on_press(user_nav_message(NavMessage::ArtistAlbumsView(
-                                        current_playback.track.metadata.album_artist_id,
-                                    ))),
+                                    .on_press(
+                                        message::ArtistNavMessage::ArtistAlbumsView(
+                                            current_playback.track.metadata.album_artist_id,
+                                        )
+                                        .into_message(),
+                                    ),
                                 )
                                 .push(h3("-"))
                                 .push(
@@ -596,13 +600,16 @@ fn controls_with_maybe_track_info<'a>(
                                         .metadata
                                         .album
                                         .clone()))
-                                    .on_press(user_nav_message(NavMessage::ArtistAlbumView(
-                                        current_playback.track.metadata.album_artist_id,
-                                        current_playback.track.metadata.album_id,
-                                        model::AlbumSize::Regular,
-                                        None,
-                                        None,
-                                    ))),
+                                    .on_press(
+                                        message::ArtistNavMessage::ArtistAlbumView(
+                                            current_playback.track.metadata.album_artist_id,
+                                            current_playback.track.metadata.album_id,
+                                            model::AlbumSize::Regular,
+                                            None,
+                                            None,
+                                        )
+                                        .into_message(),
+                                    ),
                                 ),
                         ),
                 );

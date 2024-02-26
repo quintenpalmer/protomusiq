@@ -54,25 +54,27 @@ pub fn artist_album_view_state<'a>(
             let breadcrumbs = vec![
                 (
                     "Artists".to_string(),
-                    user_nav_message(NavMessage::ArtistList(
+                    message::ArtistNavMessage::ArtistList(
                         0,
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
-                    )),
+                    )
+                    .into_message(),
                 ),
                 (
                     artist.artist_info.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistAlbumsView(*artist_id)),
+                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
                 ),
                 (
                     common::abr_str(album.album_info.album_name.clone(), consts::NAV_STR_LENGTH),
-                    user_nav_message(NavMessage::ArtistAlbumView(
+                    message::ArtistNavMessage::ArtistAlbumView(
                         *artist_id,
                         *album_id,
                         model::AlbumSize::Regular,
                         None,
                         maybe_current_sort_order.clone(),
-                    )),
+                    )
+                    .into_message(),
                 ),
             ];
 
@@ -95,13 +97,13 @@ pub fn artist_album_view_state<'a>(
                                         album.album_info.album_id,
                                     ),
                                     current,
-                                )).on_press(user_nav_message(NavMessage::ArtistAlbumView(
+                                )).on_press(message::ArtistNavMessage::ArtistAlbumView(
                                     *artist_id,
                                     *album_id,
                                     toggle_to,
                                     maybe_selected_track.clone(),
                                     maybe_current_sort_order.clone(),
-                                )))
+                                ).into_message())
                             })
                             .push(
                                 Column::new()
@@ -336,11 +338,11 @@ pub fn artist_album_view_state<'a>(
                                                                 track_artist
                                                             )))
                                                             .on_press(
-                                                                user_nav_message(NavMessage::ArtistFeaturedTrackView(
+                                                                message::ArtistNavMessage::ArtistFeaturedTrackView(
                                                                     musiqlibrary::ID::new(&track_artist),
                                                                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                                                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                                                                )),
+                                                                ).into_message(),
                                                             ).into();
                                                             ret
                                                         }

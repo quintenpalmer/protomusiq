@@ -47,11 +47,14 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(user_nav_message(NavMessage::ArtistList(
-                0,
-                model::ArtistSortKey::ByName,
-                model::ArtistSortKey::ByName.default_order(),
-            )));
+            .on_press(
+                message::ArtistNavMessage::ArtistList(
+                    0,
+                    model::ArtistSortKey::ByName,
+                    model::ArtistSortKey::ByName.default_order(),
+                )
+                .into_message(),
+            );
             let track_list = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_tracks_image().clone(),

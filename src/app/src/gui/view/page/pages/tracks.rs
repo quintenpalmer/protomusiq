@@ -3,7 +3,9 @@ use iced::{Element, Length};
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
+use crate::gui::message::{
+    self, user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg,
+};
 use crate::state;
 
 use super::super::super::common;
@@ -82,8 +84,8 @@ pub fn track_list<'a>(
                                 )
                                 .push(Space::with_width(Length::Fixed(5.0))),
                         )
-                        .on_press(user_nav_message(
-                            NavMessage::ArtistAlbumView(
+                        .on_press(
+                            message::ArtistNavMessage::ArtistAlbumView(
                                 info.metadata.album_artist_id,
                                 info.metadata.album_id,
                                 model::AlbumSize::Regular,
@@ -91,8 +93,9 @@ pub fn track_list<'a>(
                                     &info.metadata,
                                 )),
                                 None,
-                            ),
-                        )),
+                            )
+                            .into_message(),
+                        ),
                     );
                 }
 

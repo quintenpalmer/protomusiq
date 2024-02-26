@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg};
+use crate::gui::message::{self, Message, NavRelMsg, PagifiedMovementMsg};
 use crate::state::{self, PlayQueueInfo};
 
 use super::super::super::common;
@@ -23,11 +23,8 @@ pub fn artist_list<'a>(
         } => (
             vec![(
                 "Artists".to_string(),
-                user_nav_message(NavMessage::ArtistList(
-                    0,
-                    sort_key.clone(),
-                    sort_order.clone(),
-                )),
+                message::ArtistNavMessage::ArtistList(0, sort_key.clone(), sort_order.clone())
+                    .into_message(),
             )],
             {
                 let page: usize = *page;
@@ -61,9 +58,10 @@ pub fn artist_list<'a>(
                                 consts::ICON_STR_LENGTH,
                             )),
                         ))
-                        .on_press(user_nav_message(
-                            NavMessage::ArtistAlbumsView(artist.artist_id),
-                        )),
+                        .on_press(
+                            message::ArtistNavMessage::ArtistAlbumsView(artist.artist_id)
+                                .into_message(),
+                        ),
                     );
                 }
 
@@ -183,11 +181,14 @@ pub fn artist_list<'a>(
                                                     dark_paragraph("^")
                                                 }
                                             })
-                                            .on_press(user_nav_message(NavMessage::ArtistList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Reversed,
-                                            ))),
+                                            .on_press(
+                                                message::ArtistNavMessage::ArtistList(
+                                                    0,
+                                                    sort_key.clone(),
+                                                    model::SortOrder::Reversed,
+                                                )
+                                                .into_message(),
+                                            ),
                                         )
                                         .push(
                                             dark_button({
@@ -197,11 +198,14 @@ pub fn artist_list<'a>(
                                                     dark_paragraph("v")
                                                 }
                                             })
-                                            .on_press(user_nav_message(NavMessage::ArtistList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Regular,
-                                            ))),
+                                            .on_press(
+                                                message::ArtistNavMessage::ArtistList(
+                                                    0,
+                                                    sort_key.clone(),
+                                                    model::SortOrder::Regular,
+                                                )
+                                                .into_message(),
+                                            ),
                                         ),
                                 ),
                         )
@@ -223,5 +227,6 @@ fn sort_button<'a>(
     } else {
         dark_paragraph(display_text)
     };
-    dark_button(text_element).on_press(user_nav_message(NavMessage::ArtistList(0, sort_key, order)))
+    dark_button(text_element)
+        .on_press(message::ArtistNavMessage::ArtistList(0, sort_key, order).into_message())
 }

@@ -12,6 +12,12 @@ impl nav::PlaylistNavMessage {
     }
 }
 
+impl nav::ArtistNavMessage {
+    pub fn into_message(self) -> top::Message {
+        top::Message::Nav(nav::NavMessage::Artist(self))
+    }
+}
+
 impl nav::MovieNavMessage {
     pub fn into_message(self) -> top::Message {
         top::Message::Nav(nav::NavMessage::Movie(self))

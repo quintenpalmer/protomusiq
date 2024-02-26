@@ -3,7 +3,7 @@ use iced::Length;
 
 use crate::model;
 
-use crate::gui::message::{user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state::{self, PlayerInfo};
 
 use super::super::super::common;
@@ -27,37 +27,43 @@ pub fn artist_track_view_state<'a>(
             let breadcrumbs = vec![
                 (
                     "Artists".to_string(),
-                    user_nav_message(NavMessage::ArtistList(
+                    message::ArtistNavMessage::ArtistList(
                         0,
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
-                    )),
+                    )
+                    .into_message(),
                 ),
                 (
                     artist.artist_name.clone(),
-                    user_nav_message(NavMessage::ArtistAlbumsView(*artist_id)),
+                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
                 ),
             ];
 
             let artist_view_button_row = line_row()
+                .push(dark_button(dark(h2("Albums"))).on_press(
+                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+                ))
                 .push(
-                    dark_button(dark(h2("Albums")))
-                        .on_press(user_nav_message(NavMessage::ArtistAlbumsView(*artist_id))),
+                    dark_button(h2("Tracks")).on_press(
+                        message::ArtistNavMessage::ArtistTrackView(
+                            *artist_id,
+                            model::ArtistTrackSortKey::ByTotalPlayCount,
+                            model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                        )
+                        .into_message(),
+                    ),
                 )
-                .push(dark_button(h2("Tracks")).on_press(user_nav_message(
-                    NavMessage::ArtistTrackView(
-                        *artist_id,
-                        model::ArtistTrackSortKey::ByTotalPlayCount,
-                        model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                .push(
+                    dark_button(dark(h2("Featured"))).on_press(
+                        message::ArtistNavMessage::ArtistFeaturedTrackView(
+                            *artist_id,
+                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
+                        )
+                        .into_message(),
                     ),
-                )))
-                .push(dark_button(dark(h2("Featured"))).on_press(user_nav_message(
-                    NavMessage::ArtistFeaturedTrackView(
-                        *artist_id,
-                        model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                        model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                    ),
-                )));
+                );
 
             let artist_tracks = library.get_artist_tracks(artist_id);
 
@@ -137,11 +143,14 @@ pub fn artist_track_view_state<'a>(
                             dark_paragraph("^")
                         }
                     })
-                    .on_press(user_nav_message(NavMessage::ArtistTrackView(
-                        artist.artist_id,
-                        sort_key.clone(),
-                        model::SortOrder::Reversed,
-                    ))),
+                    .on_press(
+                        message::ArtistNavMessage::ArtistTrackView(
+                            artist.artist_id,
+                            sort_key.clone(),
+                            model::SortOrder::Reversed,
+                        )
+                        .into_message(),
+                    ),
                 )
                 .push(
                     dark_button({
@@ -151,11 +160,14 @@ pub fn artist_track_view_state<'a>(
                             dark_paragraph("v")
                         }
                     })
-                    .on_press(user_nav_message(NavMessage::ArtistTrackView(
-                        artist.artist_id,
-                        sort_key.clone(),
-                        model::SortOrder::Regular,
-                    ))),
+                    .on_press(
+                        message::ArtistNavMessage::ArtistTrackView(
+                            artist.artist_id,
+                            sort_key.clone(),
+                            model::SortOrder::Regular,
+                        )
+                        .into_message(),
+                    ),
                 );
 
             for track in tracks.iter() {
@@ -210,15 +222,18 @@ pub fn artist_track_view_state<'a>(
                             })
                             .push(Space::with_width(Length::Fixed(5.0))),
                     )
-                    .on_press(user_nav_message(NavMessage::ArtistAlbumView(
-                        track.metadata.album_artist_id,
-                        track.metadata.album_id,
-                        model::AlbumSize::Regular,
-                        Some(musiqlibrary::TrackUniqueIdentifier::from_track(
-                            &track.metadata,
-                        )),
-                        None,
-                    ))),
+                    .on_press(
+                        message::ArtistNavMessage::ArtistAlbumView(
+                            track.metadata.album_artist_id,
+                            track.metadata.album_id,
+                            model::AlbumSize::Regular,
+                            Some(musiqlibrary::TrackUniqueIdentifier::from_track(
+                                &track.metadata,
+                            )),
+                            None,
+                        )
+                        .into_message(),
+                    ),
                 )
                 .style(iced::theme::Container::Custom(
                     style::get_potential_current_stripe_style(
@@ -260,7 +275,7 @@ fn sort_button<'a>(
     } else {
         dark_paragraph(display_text)
     };
-    dark_button(text_element).on_press(user_nav_message(NavMessage::ArtistTrackView(
-        artist_id, sort_key, order,
-    )))
+    dark_button(text_element).on_press(
+        message::ArtistNavMessage::ArtistTrackView(artist_id, sort_key, order).into_message(),
+    )
 }

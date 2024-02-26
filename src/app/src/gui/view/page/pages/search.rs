@@ -96,47 +96,50 @@ pub fn search_page<'a>(
                                                     ),
                                             )
                                             .on_press(
-                                                user_nav_message(NavMessage::ArtistAlbumView(
+                                                message::ArtistNavMessage::ArtistAlbumView(
                                                     result.artist.artist_id,
                                                     result.album.album_id,
                                                     model::AlbumSize::Regular,
                                                     None,
                                                     None,
-                                                )),
+                                                )
+                                                .into_message(),
                                             ),
                                         )
                                     },
                                 ))
                                 .height(Length::Fill);
-                                let artist_results =
-                                    Scrollable::new(results.artists.iter().fold(
-                                        Column::new(),
-                                        |column, result| {
-                                            column.push(
-                                                dark_button(
-                                                    line_row()
-                                                        .spacing(5)
-                                                        .push(album_image(
-                                                            library.get_artists_first_album_cover(
-                                                                model::AlbumSize::Micro,
-                                                                result.artist_id,
-                                                            ),
+                                let artist_results = Scrollable::new(results.artists.iter().fold(
+                                    Column::new(),
+                                    |column, result| {
+                                        column.push(
+                                            dark_button(
+                                                line_row()
+                                                    .spacing(5)
+                                                    .push(album_image(
+                                                        library.get_artists_first_album_cover(
                                                             model::AlbumSize::Micro,
-                                                        ))
-                                                        .push(
-                                                            bright_paragraph(
-                                                                result.artist_name.clone(),
-                                                            )
-                                                            .width(Length::Fill),
+                                                            result.artist_id,
                                                         ),
-                                                )
-                                                .on_press(user_nav_message(
-                                                    NavMessage::ArtistAlbumsView(result.artist_id),
-                                                )),
+                                                        model::AlbumSize::Micro,
+                                                    ))
+                                                    .push(
+                                                        bright_paragraph(
+                                                            result.artist_name.clone(),
+                                                        )
+                                                        .width(Length::Fill),
+                                                    ),
                                             )
-                                        },
-                                    ))
-                                    .height(Length::Fill);
+                                            .on_press(
+                                                message::ArtistNavMessage::ArtistAlbumsView(
+                                                    result.artist_id,
+                                                )
+                                                .into_message(),
+                                            ),
+                                        )
+                                    },
+                                ))
+                                .height(Length::Fill);
                                 let track_results = Scrollable::new(results.tracks.iter().fold(
                                     Column::new(),
                                     |column, result| {

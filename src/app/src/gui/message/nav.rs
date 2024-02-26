@@ -11,6 +11,18 @@ pub enum NavMessage {
     Playlist(PlaylistNavMessage),
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
+    Artist(ArtistNavMessage),
+    Movie(MovieNavMessage),
+}
+
+#[derive(Debug, Clone)]
+pub enum PlaylistNavMessage {
+    PlaylistList(String),
+    PlaylistView(u32),
+}
+
+#[derive(Debug, Clone)]
+pub enum ArtistNavMessage {
     ArtistList(usize, model::ArtistSortKey, model::SortOrder),
     ArtistAlbumsView(musiqlibrary::ID),
     ArtistTrackView(
@@ -30,13 +42,6 @@ pub enum NavMessage {
         Option<musiqlibrary::TrackUniqueIdentifier>,
         Option<model::AlbumSortPlacement>,
     ),
-    Movie(MovieNavMessage),
-}
-
-#[derive(Debug, Clone)]
-pub enum PlaylistNavMessage {
-    PlaylistList(String),
-    PlaylistView(u32),
 }
 
 #[derive(Debug, Clone)]
