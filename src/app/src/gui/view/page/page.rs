@@ -88,20 +88,23 @@ fn compute_breadcrumb(
             message::NavMessage::PlayQueueFocus.into_message(),
         )]),
         message::NavMessage::SearchPage(query, domain, perform_search) => {
-            let mut ret = vec![
-                 ("Search".to_string(), message::NavMessage::SearchPage("".to_string(), model::SearchDomain::Music, false).into_message()),
-            ];
+            let mut ret = vec![(
+                "Search".to_string(),
+                message::NavMessage::SearchPage("".to_string(), model::SearchDomain::Music, false)
+                    .into_message(),
+            )];
             if *perform_search {
-                ret.push(
-                    (
-                        format!("\"{}\"", query),
-                        message::NavMessage::SearchPage(query.clone(), domain.clone(), *perform_search).into_message(),
-                    )
-                );
+                ret.push((
+                    format!("\"{}\"", query),
+                    message::NavMessage::SearchPage(query.clone(), domain.clone(), *perform_search)
+                        .into_message(),
+                ));
             }
             Some(ret)
         }
-        message::NavMessage::Playlist(playlist_message) => Some(playlist_breadcrumbs(library, playlist_message)),
+        message::NavMessage::Playlist(playlist_message) => {
+            Some(playlist_breadcrumbs(library, playlist_message))
+        }
         // TODO remove this catch all and force new page messages to be handled here
         _ => None,
     }
@@ -111,23 +114,24 @@ fn playlist_breadcrumbs(
     library: &model::LibraryState,
     message: &message::PlaylistNavMessage,
 ) -> Vec<(String, Message)> {
-    let mut ret = vec![
-        (
-            "Playlists".to_string(),
-            message::PlaylistNavMessage::PlaylistList("".to_string()).into_message()
-        )
-    ];
+    let mut ret = vec![(
+        "Playlists".to_string(),
+        message::PlaylistNavMessage::PlaylistList("".to_string()).into_message(),
+    )];
     match message {
         message::PlaylistNavMessage::PlaylistList(_new_name_part) => (),
         message::PlaylistNavMessage::PlaylistView(playlist_id) => {
-            let playlist_name = library.user_playlists.get_playlist(*playlist_id).unwrap().name.clone();
-            ret.push(
-                (
-                    playlist_name,
-                    message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
-                )
-            );
-        },
+            let playlist_name = library
+                .user_playlists
+                .get_playlist(*playlist_id)
+                .unwrap()
+                .name
+                .clone();
+            ret.push((
+                playlist_name,
+                message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
+            ));
+        }
     };
     ret
 }
