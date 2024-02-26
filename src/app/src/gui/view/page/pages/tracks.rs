@@ -14,21 +14,13 @@ use super::super::super::elements::*;
 pub fn track_list<'a>(
     library: &'a model::LibraryState,
     state: &'a state::TrackListState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::TrackListState {
             page,
             sort_key,
             sort_order,
         } => {
-            let breadcrumbs = vec![(
-                "Tracks".to_string(),
-                user_nav_message(NavMessage::TrackList(
-                    0,
-                    sort_key.clone(),
-                    sort_order.clone(),
-                )),
-            )];
             let body = {
                 let page: usize = *page;
 
@@ -215,7 +207,7 @@ pub fn track_list<'a>(
                         .push(scrollable),
                 )
             };
-            (breadcrumbs, body)
+            body
         }
     }
 }

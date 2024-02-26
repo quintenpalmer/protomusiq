@@ -7,12 +7,7 @@ use crate::gui::message::{self, Message};
 
 use super::super::super::elements::*;
 
-pub fn movie_home<'a>() -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let breadcrumbs = vec![(
-        "Movie".to_string(),
-        message::MovieNavMessage::MovieHome.into_message(),
-    )];
-
+pub fn movie_home<'a>() -> Container<'a, Message> {
     let body_column = Column::new()
         .spacing(10)
         .padding(10)
@@ -37,5 +32,5 @@ pub fn movie_home<'a>() -> (Vec<(String, Message)>, Container<'a, Message>) {
 
     let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
 
-    (breadcrumbs, body)
+    body
 }

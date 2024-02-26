@@ -8,24 +8,11 @@ use crate::state;
 
 use super::super::super::elements::*;
 
-pub fn movie_attributes(
-    state: &state::MovieAttributeState,
-) -> (Vec<(String, Message)>, Container<Message>) {
+pub fn movie_attributes(state: &state::MovieAttributeState) -> Container<Message> {
     match state {
         state::MovieAttributeState {
             attribute_results: maybe_attribute_results,
         } => {
-            let breadcrumbs = vec![
-                (
-                    "Movie".to_string(),
-                    message::MovieNavMessage::MovieHome.into_message(),
-                ),
-                (
-                    "Movie Attributes".to_string(),
-                    message::MovieNavMessage::MovieAttributes(None).into_message(),
-                ),
-            ];
-
             let (attribute_name, attribute_table) = match maybe_attribute_results {
                 Some(attribute_results) => match attribute_results {
                     model::AttributesList::Genre(attribute_results) => {
@@ -287,7 +274,7 @@ pub fn movie_attributes(
                 ),
             );
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

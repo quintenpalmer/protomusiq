@@ -14,23 +14,7 @@ pub fn movie_page<'a>(
     movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieViewState,
     app_images: &embedded::AppImages,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let breadcrumbs = vec![
-        (
-            "Movie".to_string(),
-            message::MovieNavMessage::MovieHome.into_message(),
-        ),
-        (
-            "Movies".to_string(),
-            message::MovieNavMessage::MovieList(
-                0,
-                model::MovieSortKey::ByTitle,
-                model::MovieSortKey::ByTitle.default_order(),
-            )
-            .into_message(),
-        ),
-    ];
-
+) -> Container<'a, Message> {
     let maybe_cover_size = state.movie_size.clone();
 
     let cover_size = match maybe_cover_size {
@@ -264,5 +248,5 @@ pub fn movie_page<'a>(
 
     let body = Container::new(contents);
 
-    (breadcrumbs, body)
+    body
 }

@@ -14,7 +14,7 @@ use super::super::super::elements::*;
 pub fn home_page<'a>(
     app_images: &embedded::AppImages,
     state: &'a state::HomeState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::HomeState {} => {
             let album_list = dark_button(Container::new(bottom_label(
@@ -139,7 +139,7 @@ pub fn home_page<'a>(
                 .height(Length::Fill),
             );
 
-            (Vec::new(), page)
+            page
         }
     }
 }

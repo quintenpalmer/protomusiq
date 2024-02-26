@@ -19,7 +19,7 @@ pub fn playlist_view<'a>(
     action_state: &'a ActionState,
     player_info: &'a PlayerInfo,
     state: &'a state::PlaylistViewState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::PlaylistViewState { playlist_id } => {
             let playlist = library.user_playlists.get_playlist(*playlist_id).unwrap();
@@ -246,19 +246,8 @@ pub fn playlist_view<'a>(
             }
 
             column = column.push(Scrollable::new(tracks_column).height(Length::Fill));
-            (
-                vec![
-                    (
-                        "Playlists".to_string(),
-                        message::PlaylistNavMessage::PlaylistList("".to_string()).into_message(),
-                    ),
-                    (
-                        playlist.name.clone(),
-                        message::PlaylistNavMessage::PlaylistView(*playlist_id).into_message(),
-                    ),
-                ],
-                Container::new(column),
-            )
+
+            Container::new(column)
         }
     }
 }

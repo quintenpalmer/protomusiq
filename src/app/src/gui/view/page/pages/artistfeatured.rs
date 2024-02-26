@@ -14,7 +14,7 @@ pub fn artist_featured_track_view_state<'a>(
     library: &'a model::LibraryState,
     player_info: &'a PlayerInfo,
     state: &'a state::ArtistFeaturedTrackViewState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::ArtistFeaturedTrackViewState {
             artist_id,
@@ -25,22 +25,6 @@ pub fn artist_featured_track_view_state<'a>(
             let artist = library.get_artist_info(*artist_id);
 
             let featured_tracks = library.get_featured_tracks_for_artist(artist_id);
-
-            let breadcrumbs = vec![
-                (
-                    "Artists".to_string(),
-                    message::ArtistNavMessage::ArtistList(
-                        0,
-                        model::ArtistSortKey::ByName,
-                        model::ArtistSortKey::ByName.default_order(),
-                    )
-                    .into_message(),
-                ),
-                (
-                    artist.artist_name.clone(),
-                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-                ),
-            ];
 
             let artist_view_button_row = line_row()
                 .push(dark_button(dark(h2("Albums"))).on_press(
@@ -244,7 +228,7 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(scrollable),
             );
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

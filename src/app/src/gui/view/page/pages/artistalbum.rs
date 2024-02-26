@@ -9,7 +9,6 @@ use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
 use super::super::super::common;
-use super::super::super::consts;
 use super::super::super::elements::*;
 use super::super::super::style;
 
@@ -18,7 +17,7 @@ pub fn artist_album_view_state<'a>(
     action_state: &'a ActionState,
     player_info: &'a PlayerInfo,
     state: &'a state::ArtistAlbumViewState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::ArtistAlbumViewState {
             artist_id,
@@ -50,33 +49,6 @@ pub fn artist_album_view_state<'a>(
                 .map(|track| track.augmented.play_count)
                 .max()
                 .unwrap_or(0);
-
-            let breadcrumbs = vec![
-                (
-                    "Artists".to_string(),
-                    message::ArtistNavMessage::ArtistList(
-                        0,
-                        model::ArtistSortKey::ByName,
-                        model::ArtistSortKey::ByName.default_order(),
-                    )
-                    .into_message(),
-                ),
-                (
-                    artist.artist_info.artist_name.clone(),
-                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-                ),
-                (
-                    common::abr_str(album.album_info.album_name.clone(), consts::NAV_STR_LENGTH),
-                    message::ArtistNavMessage::ArtistAlbumView(
-                        *artist_id,
-                        *album_id,
-                        model::AlbumSize::Regular,
-                        None,
-                        maybe_current_sort_order.clone(),
-                    )
-                    .into_message(),
-                ),
-            ];
 
             let mut body_column = Column::new()
                     .push(
@@ -473,7 +445,7 @@ pub fn artist_album_view_state<'a>(
 
             let body = Container::new(body_column);
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

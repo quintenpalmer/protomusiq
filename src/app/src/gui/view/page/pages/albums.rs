@@ -16,22 +16,13 @@ pub fn album_list<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &PlayQueueInfo,
     state: &'a state::AlbumListState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::AlbumListState {
             page,
             sort_key,
             sort_order,
         } => {
-            let breadcrumbs = vec![(
-                "Albums".to_string(),
-                user_nav_message(NavMessage::AlbumList(
-                    0,
-                    sort_key.clone(),
-                    sort_order.clone(),
-                )),
-            )];
-
             let body = {
                 let page: usize = *page;
 
@@ -244,7 +235,7 @@ pub fn album_list<'a>(
                 )
             };
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

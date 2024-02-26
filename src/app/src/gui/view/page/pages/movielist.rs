@@ -17,25 +17,13 @@ pub fn movie_list<'a>(
     play_queue_info: &state::PlayQueueInfo,
     grid_info: &model::GridInfo,
     app_images: &embedded::AppImages,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::MovieListState {
             page,
             sort_key,
             sort_order,
         } => {
-            let breadcrumbs = vec![
-                (
-                    "Movie".to_string(),
-                    message::MovieNavMessage::MovieHome.into_message(),
-                ),
-                (
-                    "Movies".to_string(),
-                    message::MovieNavMessage::MovieList(0, sort_key.clone(), sort_order.clone())
-                        .into_message(),
-                ),
-            ];
-
             let page: usize = *page;
 
             let indices = common::get_page(
@@ -210,7 +198,7 @@ pub fn movie_list<'a>(
                     .push(Scrollable::new(columns.width(Length::Fill)).height(Length::Fill)),
             );
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

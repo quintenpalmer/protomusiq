@@ -23,13 +23,12 @@ pub fn render_page<'a>(
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let message_sourced_breadcrumbs = compute_breadcrumb(library, page_current_history);
 
-    let (_removeme_breadcrumbs, ret_page) = match current_page {
+    let ret_page = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
         Page::Config(state::ConfigState {}) => pages::config::config_page(),
-        Page::PlayQueue(state::PlayQueueState {}) => (
-            Vec::new(),
-            Container::new(bright_paragraph("The Play Queue")),
-        ),
+        Page::PlayQueue(state::PlayQueueState {}) => {
+            Container::new(bright_paragraph("The Play Queue"))
+        }
         Page::PlaylistView(ref state) => {
             pages::playlist::playlist_view(library, action_state, player_info, state)
         }

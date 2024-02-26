@@ -13,18 +13,7 @@ pub fn movie_query<'a>(
     movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieQueryState,
     app_images: &embedded::AppImages,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let breadcrumbs = vec![
-        (
-            "Movie".to_string(),
-            message::MovieNavMessage::MovieHome.into_message(),
-        ),
-        (
-            "Query Movies".to_string(),
-            message::MovieNavMessage::MovieQuery(None).into_message(),
-        ),
-    ];
-
+) -> Container<'a, Message> {
     let input_query_element = match state.query {
         Some(ref query) => match query {
             model::MovieQueryParams::Genre(ref genre) => {
@@ -222,5 +211,5 @@ pub fn movie_query<'a>(
             .push(movies),
     );
 
-    (breadcrumbs, body)
+    body
 }

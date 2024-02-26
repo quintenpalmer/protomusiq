@@ -14,26 +14,11 @@ pub fn artist_album_list<'a>(
     library: &'a model::LibraryState,
     play_queue_info: &PlayQueueInfo,
     state: &'a state::ArtistViewState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::ArtistViewState { artist_id, albums } => {
             let artist = library.get_artist_info(*artist_id);
 
-            let breadcrumbs = vec![
-                (
-                    "Artists".to_string(),
-                    message::ArtistNavMessage::ArtistList(
-                        0,
-                        model::ArtistSortKey::ByName,
-                        model::ArtistSortKey::ByName.default_order(),
-                    )
-                    .into_message(),
-                ),
-                (
-                    artist.artist_name.clone(),
-                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-                ),
-            ];
             let body = {
                 let mut buttons: Vec<(musiqlibrary::AlbumInfo, Button<Message>)> = Vec::new();
                 for album_id in albums.iter() {
@@ -148,7 +133,7 @@ pub fn artist_album_list<'a>(
                 )
             };
 
-            (breadcrumbs, body)
+            body
         }
     }
 }

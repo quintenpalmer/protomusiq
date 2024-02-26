@@ -15,7 +15,7 @@ pub fn search_page<'a>(
     movie_library: &'a model::VideoLibraryState,
     app_images: &embedded::AppImages,
     state: &'a state::SearchPageState,
-) -> (Vec<(String, Message)>, Container<'a, Message>) {
+) -> Container<'a, Message> {
     match state {
         state::SearchPageState {
             query,
@@ -24,48 +24,6 @@ pub fn search_page<'a>(
             let domain = match domain_results {
                 state::SearchDomainResults::Music(ref _res) => model::SearchDomain::Music,
                 state::SearchDomainResults::Movies(ref _res) => model::SearchDomain::Movies,
-            };
-
-            let mut breadcrumbs = vec![(
-                "Search".to_string(),
-                user_nav_message(NavMessage::SearchPage(
-                    "".to_string(),
-                    model::SearchDomain::Music,
-                    false,
-                )),
-            )];
-
-            match domain_results {
-                state::SearchDomainResults::Music(results) => {
-                    match results {
-                        Some(_) => {
-                            breadcrumbs.push((
-                                format!("\"{}\"", query.clone()),
-                                user_nav_message(NavMessage::SearchPage(
-                                    query.clone(),
-                                    model::SearchDomain::Music,
-                                    true,
-                                )),
-                            ));
-                        }
-                        _ => (),
-                    };
-                }
-                state::SearchDomainResults::Movies(results) => {
-                    match results {
-                        Some(_) => {
-                            breadcrumbs.push((
-                                format!("\"{}\"", query.clone()),
-                                user_nav_message(NavMessage::SearchPage(
-                                    query.clone(),
-                                    model::SearchDomain::Movies,
-                                    true,
-                                )),
-                            ));
-                        }
-                        _ => (),
-                    };
-                }
             };
 
             let domain_specific = match domain_results {
@@ -343,7 +301,7 @@ pub fn search_page<'a>(
                     .push(domain_specific),
             );
 
-            (breadcrumbs, body)
+            body
         }
     }
 }
