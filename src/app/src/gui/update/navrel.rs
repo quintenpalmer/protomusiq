@@ -1,5 +1,6 @@
 use iced::Command;
 
+use crate::gui::compute;
 use crate::gui::message::{self};
 use crate::gui::state::{self, AppState, Page};
 use crate::model;
@@ -11,6 +12,9 @@ pub fn handle_nav_relative(
     parent_nav_message: message::NavRelMsg,
 ) -> Command<message::Message> {
     let maybe_new_nav_msg = match parent_nav_message {
+        message::NavRelMsg::BreadcrumbSelection(breadcrumb_index) => {
+            handle_breadcrumb_selection(app, breadcrumb_index)
+        }
         message::NavRelMsg::PagifiedMovement(nav_message) => handle_nav_rel_msg(app, nav_message),
         message::NavRelMsg::SwitchSortBy(move_direction) => {
             handle_switch_sort_by_msg(app, move_direction)
@@ -20,6 +24,22 @@ pub fn handle_nav_relative(
     match maybe_new_nav_msg {
         Some(new_nav_msg) => loaded::update_state(app, new_nav_msg),
         None => Command::none(),
+    }
+}
+
+fn handle_breadcrumb_selection(
+    app: &mut AppState,
+    breadcrumb_index: usize,
+) -> Option<message::Message> {
+    if breadcrumb_index == 0 {
+        return Some(message::NavMessage::Home.into_message());
+    }
+
+    let breadcrumbs = compute::compute_breadcrumb(&app.library, &app.page_current_history);
+
+    match breadcrumbs.get(breadcrumb_index - 1) {
+        Some((_message, button_message)) => Some(button_message.clone()),
+        None => None,
     }
 }
 
