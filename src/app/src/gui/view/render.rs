@@ -134,14 +134,6 @@ pub fn render_entire_page<'a>(
             }
             None => (),
         };
-        match player_controls {
-            Some(controls) => {
-                ret = ret.push(Container::new(controls.height(Length::Fixed(70.0))).style(
-                    iced::theme::Container::Custom(Box::new(style::ContainerPopForward)),
-                ));
-            }
-            None => (),
-        };
 
         ret.width(Length::Fill).into()
     }
