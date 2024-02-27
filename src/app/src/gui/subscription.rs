@@ -44,6 +44,10 @@ pub fn keybinding_subscription_fn(
             message::Action::TogglePlayQueueVisible,
         )),
 
+        (keyboard::Key::Character("f"), Mods::None) => {
+            Some(message::Message::Action(message::Action::ToggleFullscreen))
+        }
+
         (keyboard::Key::Character("1"), Mods::None) => {
             Some(message::NavRelMsg::BreadcrumbSelection(0).into_message())
         }

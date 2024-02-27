@@ -15,6 +15,11 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             println!("Everything is already loaded");
             Command::none()
         }
+        message::Action::ToggleFullscreen => {
+            app.cross_page_display_info.fullscreen_display =
+                !app.cross_page_display_info.fullscreen_display;
+            Command::none()
+        }
         message::Action::SetVolume(volume_request) => {
             volume::handle_volume_request(app, volume_request)
         }

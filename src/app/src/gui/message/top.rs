@@ -35,6 +35,8 @@ pub enum HistoryDirection {
 pub enum Action {
     LoadEverything,
 
+    ToggleFullscreen,
+
     CreateNewPlaylist(String),
     MakePlaylistDefault(u32),
     AddTracksToPlaylist(u32, Vec<musiqlibrary::TrackUniqueIdentifier>),
