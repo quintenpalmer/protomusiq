@@ -126,7 +126,11 @@ pub fn render_entire_page<'a>(
 
         ret.width(Length::Fill).into()
     } else {
-        let mut ret = Column::new().push(rendered_page.width(Length::Fill));
+        let mut ret = Column::new().push(
+            Row::new()
+                .padding(10)
+                .push(rendered_page.width(Length::Fill)),
+        );
 
         match playthrough {
             Some(through) => {
