@@ -204,7 +204,7 @@ pub fn track_list<'a>(
 
                 Container::new(
                     Column::new()
-                        .spacing(6)
+                        .spacing(10)
                         .push(h1("Tracks"))
                         .push(sort_order_component)
                         .push(page_nav_component)
