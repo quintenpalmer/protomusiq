@@ -288,6 +288,10 @@ pub fn render_header<'a>(
                             .on_press(user_nav_message(message::NavMessage::Config)),
                     )
                     .push(
+                        dark_button(bright_paragraph("O"))
+                            .on_press(Message::Action(message::Action::ToggleFullscreen)),
+                    )
+                    .push(
                         dark_button(bright_paragraph("X"))
                             .on_press(Message::Action(message::Action::Close)),
                     ),
