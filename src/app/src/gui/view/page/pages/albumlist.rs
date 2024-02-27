@@ -6,7 +6,7 @@ use crate::model;
 use crate::gui::message::{
     self, user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg,
 };
-use crate::state::{self, PlayQueueInfo};
+use crate::state;
 
 use super::super::super::common;
 use super::super::super::consts;
@@ -14,7 +14,7 @@ use super::super::super::elements::*;
 
 pub fn album_list<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &PlayQueueInfo,
+    play_queue_visible: bool,
     state: &'a state::AlbumListState,
 ) -> Container<'a, Message> {
     match state {
@@ -88,7 +88,7 @@ pub fn album_list<'a>(
                 }
 
                 let mut columns: Column<Message> = Column::new();
-                if play_queue_info.play_queue_visible {
+                if play_queue_visible {
                     for _i in 0..(library.grid_info.get_layout_height() * 2) {
                         let mut rows = Row::new();
                         for _j in 0..(library.grid_info.get_layout_width() / 2) {

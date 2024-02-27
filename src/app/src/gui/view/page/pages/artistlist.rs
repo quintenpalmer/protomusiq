@@ -4,7 +4,7 @@ use iced::{Alignment, Length};
 use crate::model;
 
 use crate::gui::message::{self, Message, NavRelMsg, PagifiedMovementMsg};
-use crate::state::{self, PlayQueueInfo};
+use crate::state;
 
 use super::super::super::common;
 use super::super::super::consts;
@@ -12,7 +12,7 @@ use super::super::super::elements::*;
 
 pub fn artist_list<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &PlayQueueInfo,
+    play_queue_visible: bool,
     state: &'a state::ArtistListState,
 ) -> Container<'a, Message> {
     match state {
@@ -60,7 +60,7 @@ pub fn artist_list<'a>(
             }
 
             let mut columns: Column<Message> = Column::new();
-            if play_queue_info.play_queue_visible {
+            if play_queue_visible {
                 for _i in 0..(library.grid_info.get_layout_height() * 2) {
                     let mut rows = Row::new();
                     for _j in 0..(library.grid_info.get_layout_width() / 2) {

@@ -4,7 +4,7 @@ use crate::model;
 
 use crate::gui::compute;
 use crate::gui::message::{self, Message};
-use crate::state::{self, ActionState, Page, PlayQueueInfo, PlayerInfo};
+use crate::state::{self, ActionState, Page, PlayerInfo};
 
 use crate::datastore::staticassets::embedded;
 
@@ -19,7 +19,7 @@ pub fn render_page<'a>(
     movie_library: &'a model::VideoLibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
-    play_queue_info: &PlayQueueInfo,
+    play_queue_visible: bool,
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
     let message_sourced_breadcrumbs = compute::compute_breadcrumb(library, page_current_history);
@@ -38,12 +38,14 @@ pub fn render_page<'a>(
             pages::search::search_page(library, movie_library, app_images, state)
         }
         Page::TrackList(ref state) => pages::tracklist::track_list(library, state),
-        Page::AlbumList(ref state) => pages::albumlist::album_list(library, play_queue_info, state),
+        Page::AlbumList(ref state) => {
+            pages::albumlist::album_list(library, play_queue_visible, state)
+        }
         Page::ArtistList(ref state) => {
-            pages::artistlist::artist_list(library, play_queue_info, state)
+            pages::artistlist::artist_list(library, play_queue_visible, state)
         }
         Page::ArtistAlbumsView(ref state) => {
-            pages::artistalbums::artist_album_list(library, play_queue_info, state)
+            pages::artistalbums::artist_album_list(library, play_queue_visible, state)
         }
         Page::ArtistAlbumView(ref state) => {
             pages::artistalbum::artist_album_view_state(library, action_state, player_info, state)
@@ -58,7 +60,7 @@ pub fn render_page<'a>(
         Page::MovieList(ref state) => pages::movielist::movie_list(
             movie_library,
             state,
-            play_queue_info,
+            play_queue_visible,
             &library.grid_info,
             app_images,
         ),

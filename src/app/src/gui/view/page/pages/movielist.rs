@@ -14,7 +14,7 @@ use super::super::super::elements::*;
 pub fn movie_list<'a>(
     movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieListState,
-    play_queue_info: &state::PlayQueueInfo,
+    play_queue_visible: bool,
     grid_info: &model::GridInfo,
     app_images: &embedded::AppImages,
 ) -> Container<'a, Message> {
@@ -65,7 +65,7 @@ pub fn movie_list<'a>(
             }
 
             let mut columns: Column<Message> = Column::new();
-            if play_queue_info.play_queue_visible {
+            if play_queue_visible {
                 for _i in 0..(grid_info.get_layout_height() * 2) {
                     let mut rows = Row::new();
                     for _j in 0..(grid_info.get_layout_width() / 2) {

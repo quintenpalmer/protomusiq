@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::gui::message::{self, Message};
-use crate::state::{self, PlayQueueInfo};
+use crate::state;
 
 use super::super::super::common;
 use super::super::super::consts;
@@ -12,7 +12,7 @@ use super::super::super::elements::*;
 
 pub fn artist_album_list<'a>(
     library: &'a model::LibraryState,
-    play_queue_info: &PlayQueueInfo,
+    play_queue_visible: bool,
     state: &'a state::ArtistViewState,
 ) -> Container<'a, Message> {
     match state {
@@ -78,7 +78,7 @@ pub fn artist_album_list<'a>(
                 let mut album_grid_rows = Row::new();
                 let mut row_length = 0;
                 loop {
-                    let desired_length = if play_queue_info.play_queue_visible {
+                    let desired_length = if play_queue_visible {
                         library.grid_info.get_layout_width() / 2
                     } else {
                         library.grid_info.get_layout_width()
