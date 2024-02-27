@@ -176,67 +176,69 @@ pub fn album_list<'a>(
                                 ),
                         );
 
+                let sort_order_component = line_row().push(
+                    line_row()
+                        .push(paragraph("Sort By: "))
+                        .push(sort_button(
+                            "Artist Name",
+                            model::AlbumSortKey::ByParent,
+                            model::AlbumSortKey::ByParent.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Name",
+                            model::AlbumSortKey::ByName,
+                            model::AlbumSortKey::ByName.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Added",
+                            model::AlbumSortKey::ByLastMod,
+                            model::AlbumSortKey::ByLastMod.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Length",
+                            model::AlbumSortKey::ByDuration,
+                            model::AlbumSortKey::ByDuration.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Total Play Count",
+                            model::AlbumSortKey::ByTotalPlayCount,
+                            model::AlbumSortKey::ByTotalPlayCount.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Total Played Duration",
+                            model::AlbumSortKey::ByTotalPlayedDuration,
+                            model::AlbumSortKey::ByTotalPlayedDuration.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Date",
+                            model::AlbumSortKey::ByDate,
+                            model::AlbumSortKey::ByDate.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Random",
+                            model::AlbumSortKey::Random,
+                            model::AlbumSortKey::Random.default_order(),
+                            sort_key,
+                        )),
+                );
+
                 let scrollable = Scrollable::new(columns.width(Length::Fill)).height(Length::Fill);
 
                 Container::new(
                     Column::new()
                         .spacing(10)
                         .push(
-                            Column::new().spacing(10).push(page_nav_component).push(
-                                line_row().push(
-                                    line_row()
-                                        .push(paragraph("Sort By: "))
-                                        .push(sort_button(
-                                            "Artist Name",
-                                            model::AlbumSortKey::ByParent,
-                                            model::AlbumSortKey::ByParent.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Name",
-                                            model::AlbumSortKey::ByName,
-                                            model::AlbumSortKey::ByName.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Added",
-                                            model::AlbumSortKey::ByLastMod,
-                                            model::AlbumSortKey::ByLastMod.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Length",
-                                            model::AlbumSortKey::ByDuration,
-                                            model::AlbumSortKey::ByDuration.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Total Play Count",
-                                            model::AlbumSortKey::ByTotalPlayCount,
-                                            model::AlbumSortKey::ByTotalPlayCount.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Total Played Duration",
-                                            model::AlbumSortKey::ByTotalPlayedDuration,
-                                            model::AlbumSortKey::ByTotalPlayedDuration
-                                                .default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Date",
-                                            model::AlbumSortKey::ByDate,
-                                            model::AlbumSortKey::ByDate.default_order(),
-                                            sort_key,
-                                        ))
-                                        .push(sort_button(
-                                            "Random",
-                                            model::AlbumSortKey::Random,
-                                            model::AlbumSortKey::Random.default_order(),
-                                            sort_key,
-                                        )),
-                                ),
-                            ),
+                            Column::new()
+                                .spacing(10)
+                                .push(page_nav_component)
+                                .push(sort_order_component),
                         )
                         .push(scrollable),
                 )
