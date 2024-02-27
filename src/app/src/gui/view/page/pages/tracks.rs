@@ -101,6 +101,70 @@ pub fn track_list<'a>(
 
                 let grid: Element<Message> = columns.into();
 
+                let page_nav_component = line_row()
+                    .push(
+                        line_row()
+                            .push(paragraph("Page: "))
+                            .push(dark_button(bright_paragraph("<<")).on_press(
+                                Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                    PagifiedMovementMsg::First,
+                                )),
+                            ))
+                            .push(dark_button(bright_paragraph("<")).on_press(
+                                Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                    PagifiedMovementMsg::Backwards,
+                                )),
+                            ))
+                            .push(bright_paragraph(page.to_string()))
+                            .push(dark_button(bright_paragraph(">")).on_press(
+                                Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                    PagifiedMovementMsg::Forwards,
+                                )),
+                            ))
+                            .push(dark_button(bright_paragraph(">>")).on_press(
+                                Message::NavRelative(NavRelMsg::PagifiedMovement(
+                                    PagifiedMovementMsg::Last,
+                                )),
+                            )),
+                    )
+                    .push(Space::with_width(Length::Fill))
+                    .push(
+                        line_row()
+                            .push(paragraph("Order: "))
+                            .push(
+                                dark_button({
+                                    if sort_order == &model::SortOrder::Reversed {
+                                        bright_paragraph("^")
+                                    } else {
+                                        dark_paragraph("^")
+                                    }
+                                })
+                                .on_press(user_nav_message(
+                                    NavMessage::TrackList(
+                                        0,
+                                        sort_key.clone(),
+                                        model::SortOrder::Reversed,
+                                    ),
+                                )),
+                            )
+                            .push(
+                                dark_button({
+                                    if sort_order == &model::SortOrder::Regular {
+                                        bright_paragraph("v")
+                                    } else {
+                                        dark_paragraph("v")
+                                    }
+                                })
+                                .on_press(user_nav_message(
+                                    NavMessage::TrackList(
+                                        0,
+                                        sort_key.clone(),
+                                        model::SortOrder::Regular,
+                                    ),
+                                )),
+                            ),
+                    );
+
                 let scrollable = Scrollable::new(grid).height(Length::Fill);
 
                 Container::new(
@@ -143,67 +207,7 @@ pub fn track_list<'a>(
                                     )),
                             ),
                         )
-                        .push(
-                            line_row()
-                                .push(
-                                    line_row()
-                                        .push(paragraph("Page: "))
-                                        .push(dark_button(bright_paragraph("<<")).on_press(
-                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                                PagifiedMovementMsg::First,
-                                            )),
-                                        ))
-                                        .push(dark_button(bright_paragraph("<")).on_press(
-                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                                PagifiedMovementMsg::Backwards,
-                                            )),
-                                        ))
-                                        .push(bright_paragraph(page.to_string()))
-                                        .push(dark_button(bright_paragraph(">")).on_press(
-                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                                PagifiedMovementMsg::Forwards,
-                                            )),
-                                        ))
-                                        .push(dark_button(bright_paragraph(">>")).on_press(
-                                            Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                                PagifiedMovementMsg::Last,
-                                            )),
-                                        )),
-                                )
-                                .push(Space::with_width(Length::Fill))
-                                .push(
-                                    line_row()
-                                        .push(paragraph("Order: "))
-                                        .push(
-                                            dark_button({
-                                                if sort_order == &model::SortOrder::Reversed {
-                                                    bright_paragraph("^")
-                                                } else {
-                                                    dark_paragraph("^")
-                                                }
-                                            })
-                                            .on_press(user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Reversed,
-                                            ))),
-                                        )
-                                        .push(
-                                            dark_button({
-                                                if sort_order == &model::SortOrder::Regular {
-                                                    bright_paragraph("v")
-                                                } else {
-                                                    dark_paragraph("v")
-                                                }
-                                            })
-                                            .on_press(user_nav_message(NavMessage::TrackList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Regular,
-                                            ))),
-                                        ),
-                                ),
-                        )
+                        .push(page_nav_component)
                         .push(scrollable),
                 )
             };
