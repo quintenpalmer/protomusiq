@@ -14,4 +14,4 @@ pub mod moviequery;
 pub mod playlist;
 pub mod playlists;
 pub mod search;
-pub mod tracks;
+pub mod tracklist;
