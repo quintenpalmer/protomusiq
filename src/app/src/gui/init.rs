@@ -158,6 +158,9 @@ pub fn initialize_everything() -> state::App {
         page_current_history: message::NavMessage::Home,
         page_forward_history: Vec::new(),
         current_page: state::Page::Home(state::HomeState {}),
+        cross_page_display_info: state::CrossPageDisplayInfo {
+            fullscreen_display: false,
+        },
         should_close: false,
         messages: Vec::new(),
         error_messages: Vec::new(),

@@ -18,6 +18,7 @@ pub enum App {
 /// to provide its user experience
 pub struct AppState {
     pub current_page: page::Page,
+    pub cross_page_display_info: CrossPageDisplayInfo,
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
     pub action_state: ActionState,
@@ -34,6 +35,11 @@ pub struct AppState {
     pub app_images: embedded::AppImages,
 
     pub error_messages: Vec<String>,
+}
+
+/// Whether to show in a maximally fullscreen layout
+pub struct CrossPageDisplayInfo {
+    pub fullscreen_display: bool,
 }
 
 /// A Single Message
