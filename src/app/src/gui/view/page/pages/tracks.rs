@@ -165,48 +165,48 @@ pub fn track_list<'a>(
                             ),
                     );
 
+                let sort_order_component = line_row().push(
+                    line_row()
+                        .push(paragraph("Sort By: "))
+                        .push(sort_button(
+                            "Name",
+                            model::TrackSortKey::ByName,
+                            model::TrackSortKey::ByName.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Play Count",
+                            model::TrackSortKey::ByPlayCount,
+                            model::TrackSortKey::ByPlayCount.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Played Duration",
+                            model::TrackSortKey::ByPlayedAmount,
+                            model::TrackSortKey::ByPlayedAmount.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Length",
+                            model::TrackSortKey::ByDuration,
+                            model::TrackSortKey::ByDuration.default_order(),
+                            sort_key,
+                        ))
+                        .push(sort_button(
+                            "Random",
+                            model::TrackSortKey::Random,
+                            model::TrackSortKey::Random.default_order(),
+                            sort_key,
+                        )),
+                );
+
                 let scrollable = Scrollable::new(grid).height(Length::Fill);
 
                 Container::new(
                     Column::new()
                         .spacing(6)
                         .push(h1("Tracks"))
-                        .push(
-                            line_row().push(
-                                line_row()
-                                    .push(paragraph("Sort By: "))
-                                    .push(sort_button(
-                                        "Name",
-                                        model::TrackSortKey::ByName,
-                                        model::TrackSortKey::ByName.default_order(),
-                                        sort_key,
-                                    ))
-                                    .push(sort_button(
-                                        "Play Count",
-                                        model::TrackSortKey::ByPlayCount,
-                                        model::TrackSortKey::ByPlayCount.default_order(),
-                                        sort_key,
-                                    ))
-                                    .push(sort_button(
-                                        "Played Duration",
-                                        model::TrackSortKey::ByPlayedAmount,
-                                        model::TrackSortKey::ByPlayedAmount.default_order(),
-                                        sort_key,
-                                    ))
-                                    .push(sort_button(
-                                        "Length",
-                                        model::TrackSortKey::ByDuration,
-                                        model::TrackSortKey::ByDuration.default_order(),
-                                        sort_key,
-                                    ))
-                                    .push(sort_button(
-                                        "Random",
-                                        model::TrackSortKey::Random,
-                                        model::TrackSortKey::Random.default_order(),
-                                        sort_key,
-                                    )),
-                            ),
-                        )
+                        .push(sort_order_component)
                         .push(page_nav_component)
                         .push(scrollable),
                 )
