@@ -129,7 +129,8 @@ pub fn render_entire_page<'a>(
         let mut ret = Column::new().push(
             Row::new()
                 .padding(10)
-                .push(rendered_page.width(Length::Fill)),
+                .push(rendered_page.width(Length::Fill))
+                .push(render_fullscreen_header()),
         );
 
         match playthrough {
@@ -298,6 +299,20 @@ pub fn render_header<'a>(
             ),
     );
     Container::new(header)
+}
+
+pub fn render_fullscreen_header<'a>() -> Container<'a, Message> {
+    Container::new(
+        Column::new()
+            .push(
+                dark_button(bright_paragraph("O"))
+                    .on_press(Message::Action(message::Action::ToggleFullscreen)),
+            )
+            .push(
+                dark_button(bright_paragraph("X"))
+                    .on_press(Message::Action(message::Action::Close)),
+            ),
+    )
 }
 
 pub fn render_play_queue<'a>(
