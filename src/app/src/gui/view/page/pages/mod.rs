@@ -1,4 +1,4 @@
-pub mod albums;
+pub mod albumlist;
 pub mod artistalbum;
 pub mod artistalbums;
 pub mod artistfeatured;
