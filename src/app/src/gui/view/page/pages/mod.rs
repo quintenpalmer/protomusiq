@@ -1,8 +1,8 @@
 pub mod albums;
-pub mod artist;
 pub mod artistalbum;
 pub mod artistalbums;
 pub mod artistfeatured;
+pub mod artistlist;
 pub mod artisttracks;
 pub mod config;
 pub mod home;

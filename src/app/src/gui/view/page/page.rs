@@ -39,7 +39,9 @@ pub fn render_page<'a>(
         }
         Page::TrackList(ref state) => pages::tracks::track_list(library, state),
         Page::AlbumList(ref state) => pages::albums::album_list(library, play_queue_info, state),
-        Page::ArtistList(ref state) => pages::artist::artist_list(library, play_queue_info, state),
+        Page::ArtistList(ref state) => {
+            pages::artistlist::artist_list(library, play_queue_info, state)
+        }
         Page::ArtistAlbumsView(ref state) => {
             pages::artistalbums::artist_album_list(library, play_queue_info, state)
         }
