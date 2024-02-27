@@ -84,6 +84,71 @@ pub fn artist_list<'a>(
                 }
             }
 
+            let page_nav_component = line_row()
+                .push(
+                    line_row()
+                        .push(
+                            dark_button(bright_paragraph("<<")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::First),
+                            )),
+                        )
+                        .push(
+                            dark_button(bright_paragraph("<")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Backwards),
+                            )),
+                        )
+                        .push(bright_paragraph(page.to_string()))
+                        .push(
+                            dark_button(bright_paragraph(">")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Forwards),
+                            )),
+                        )
+                        .push(
+                            dark_button(bright_paragraph(">>")).on_press(Message::NavRelative(
+                                NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Last),
+                            )),
+                        ),
+                )
+                .push(Space::with_width(Length::Fill))
+                .push(
+                    line_row()
+                        .push(paragraph("Order: "))
+                        .push(
+                            dark_button({
+                                if sort_order == &model::SortOrder::Reversed {
+                                    bright_paragraph("^")
+                                } else {
+                                    dark_paragraph("^")
+                                }
+                            })
+                            .on_press(
+                                message::ArtistNavMessage::ArtistList(
+                                    0,
+                                    sort_key.clone(),
+                                    model::SortOrder::Reversed,
+                                )
+                                .into_message(),
+                            ),
+                        )
+                        .push(
+                            dark_button({
+                                if sort_order == &model::SortOrder::Regular {
+                                    bright_paragraph("v")
+                                } else {
+                                    dark_paragraph("v")
+                                }
+                            })
+                            .on_press(
+                                message::ArtistNavMessage::ArtistList(
+                                    0,
+                                    sort_key.clone(),
+                                    model::SortOrder::Regular,
+                                )
+                                .into_message(),
+                            ),
+                        ),
+                );
+
             let scrollable = Scrollable::new(columns.width(Length::Fill)).height(Length::Fill);
             Container::new(
                 Column::new()
@@ -137,72 +202,7 @@ pub fn artist_list<'a>(
                                 )),
                         ),
                     )
-                    .push(
-                        line_row()
-                            .push(
-                                line_row()
-                                    .push(dark_button(bright_paragraph("<<")).on_press(
-                                        Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                            PagifiedMovementMsg::First,
-                                        )),
-                                    ))
-                                    .push(dark_button(bright_paragraph("<")).on_press(
-                                        Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                            PagifiedMovementMsg::Backwards,
-                                        )),
-                                    ))
-                                    .push(bright_paragraph(page.to_string()))
-                                    .push(dark_button(bright_paragraph(">")).on_press(
-                                        Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                            PagifiedMovementMsg::Forwards,
-                                        )),
-                                    ))
-                                    .push(dark_button(bright_paragraph(">>")).on_press(
-                                        Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                            PagifiedMovementMsg::Last,
-                                        )),
-                                    )),
-                            )
-                            .push(Space::with_width(Length::Fill))
-                            .push(
-                                line_row()
-                                    .push(paragraph("Order: "))
-                                    .push(
-                                        dark_button({
-                                            if sort_order == &model::SortOrder::Reversed {
-                                                bright_paragraph("^")
-                                            } else {
-                                                dark_paragraph("^")
-                                            }
-                                        })
-                                        .on_press(
-                                            message::ArtistNavMessage::ArtistList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Reversed,
-                                            )
-                                            .into_message(),
-                                        ),
-                                    )
-                                    .push(
-                                        dark_button({
-                                            if sort_order == &model::SortOrder::Regular {
-                                                bright_paragraph("v")
-                                            } else {
-                                                dark_paragraph("v")
-                                            }
-                                        })
-                                        .on_press(
-                                            message::ArtistNavMessage::ArtistList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Regular,
-                                            )
-                                            .into_message(),
-                                        ),
-                                    ),
-                            ),
-                    )
+                    .push(page_nav_component)
                     .push(scrollable),
             )
         }
