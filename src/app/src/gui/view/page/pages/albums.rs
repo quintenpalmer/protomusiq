@@ -112,69 +112,66 @@ pub fn album_list<'a>(
                     }
                 }
 
-                let page_nav_component =
-                    Row::new()
-                        .align_items(Alignment::End)
-                        .push(h1("Albums"))
-                        .push(Space::with_width(Length::Fixed(20.0)))
-                        .push(
-                            line_row()
-                                .push(paragraph("Page: "))
-                                .push(dark_button(bright_paragraph("<<")).on_press(
-                                    Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                        PagifiedMovementMsg::First,
-                                    )),
-                                ))
-                                .push(dark_button(bright_paragraph("<")).on_press(
-                                    Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                        PagifiedMovementMsg::Backwards,
-                                    )),
-                                ))
-                                .push(bright_paragraph(page.to_string()))
-                                .push(dark_button(bright_paragraph(">")).on_press(
-                                    Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                        PagifiedMovementMsg::Forwards,
-                                    )),
-                                ))
-                                .push(dark_button(bright_paragraph(">>")).on_press(
-                                    Message::NavRelative(NavRelMsg::PagifiedMovement(
-                                        PagifiedMovementMsg::Last,
-                                    )),
-                                ))
-                                .push(Space::with_width(Length::Fill))
-                                .push(
-                                    line_row()
-                                        .push(paragraph("Order: "))
-                                        .push(
-                                            dark_button({
-                                                if sort_order == &model::SortOrder::Reversed {
-                                                    bright_paragraph("^")
-                                                } else {
-                                                    dark_paragraph("^")
-                                                }
-                                            })
-                                            .on_press(user_nav_message(NavMessage::AlbumList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Reversed,
-                                            ))),
-                                        )
-                                        .push(
-                                            dark_button({
-                                                if sort_order == &model::SortOrder::Regular {
-                                                    bright_paragraph("v")
-                                                } else {
-                                                    dark_paragraph("v")
-                                                }
-                                            })
-                                            .on_press(user_nav_message(NavMessage::AlbumList(
-                                                0,
-                                                sort_key.clone(),
-                                                model::SortOrder::Regular,
-                                            ))),
-                                        ),
-                                ),
-                        );
+                let page_nav_component = line_row()
+                    .push(paragraph("Page: "))
+                    .push(
+                        dark_button(bright_paragraph("<<")).on_press(Message::NavRelative(
+                            NavRelMsg::PagifiedMovement(PagifiedMovementMsg::First),
+                        )),
+                    )
+                    .push(
+                        dark_button(bright_paragraph("<")).on_press(Message::NavRelative(
+                            NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Backwards),
+                        )),
+                    )
+                    .push(bright_paragraph(page.to_string()))
+                    .push(
+                        dark_button(bright_paragraph(">")).on_press(Message::NavRelative(
+                            NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Forwards),
+                        )),
+                    )
+                    .push(
+                        dark_button(bright_paragraph(">>")).on_press(Message::NavRelative(
+                            NavRelMsg::PagifiedMovement(PagifiedMovementMsg::Last),
+                        )),
+                    )
+                    .push(Space::with_width(Length::Fill))
+                    .push(
+                        line_row()
+                            .push(paragraph("Order: "))
+                            .push(
+                                dark_button({
+                                    if sort_order == &model::SortOrder::Reversed {
+                                        bright_paragraph("^")
+                                    } else {
+                                        dark_paragraph("^")
+                                    }
+                                })
+                                .on_press(user_nav_message(
+                                    NavMessage::AlbumList(
+                                        0,
+                                        sort_key.clone(),
+                                        model::SortOrder::Reversed,
+                                    ),
+                                )),
+                            )
+                            .push(
+                                dark_button({
+                                    if sort_order == &model::SortOrder::Regular {
+                                        bright_paragraph("v")
+                                    } else {
+                                        dark_paragraph("v")
+                                    }
+                                })
+                                .on_press(user_nav_message(
+                                    NavMessage::AlbumList(
+                                        0,
+                                        sort_key.clone(),
+                                        model::SortOrder::Regular,
+                                    ),
+                                )),
+                            ),
+                    );
 
                 let sort_order_component = line_row().push(
                     line_row()
@@ -237,7 +234,13 @@ pub fn album_list<'a>(
                         .push(
                             Column::new()
                                 .spacing(10)
-                                .push(page_nav_component)
+                                .push(
+                                    Row::new()
+                                        .align_items(Alignment::End)
+                                        .push(h1("Albums"))
+                                        .push(Space::with_width(Length::Fixed(20.0)))
+                                        .push(page_nav_component),
+                                )
                                 .push(sort_order_component),
                         )
                         .push(scrollable),
