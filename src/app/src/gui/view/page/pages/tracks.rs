@@ -1,5 +1,5 @@
-use iced::widget::{Button, Column, Container, ProgressBar, Scrollable, Space};
-use iced::{Element, Length};
+use iced::widget::{Button, Column, Container, ProgressBar, Row, Scrollable, Space};
+use iced::{Alignment, Element, Length};
 
 use crate::model;
 
@@ -205,9 +205,18 @@ pub fn track_list<'a>(
                 Container::new(
                     Column::new()
                         .spacing(10)
-                        .push(h1("Tracks"))
-                        .push(sort_order_component)
-                        .push(page_nav_component)
+                        .push(
+                            Column::new()
+                                .spacing(10)
+                                .push(
+                                    Row::new()
+                                        .align_items(Alignment::End)
+                                        .push(h1("Tracks"))
+                                        .push(Space::with_width(Length::Fixed(20.0)))
+                                        .push(page_nav_component),
+                                )
+                                .push(sort_order_component),
+                        )
                         .push(scrollable),
                 )
             };
