@@ -49,7 +49,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         movie_library,
         app_images,
         action_state,
-        play_queue_info.play_queue_visible,
+        play_queue_info.play_queue_visible && !cross_page_display_info.fullscreen_display,
         player_info,
     );
 
