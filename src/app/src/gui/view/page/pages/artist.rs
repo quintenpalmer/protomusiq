@@ -149,59 +149,59 @@ pub fn artist_list<'a>(
                         ),
                 );
 
+            let sort_order_component = line_row().push(
+                line_row()
+                    .push(paragraph("Sort By: "))
+                    .push(sort_button(
+                        "Name",
+                        model::ArtistSortKey::ByName,
+                        model::ArtistSortKey::ByName.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Play Count",
+                        model::ArtistSortKey::ByPlayCount,
+                        model::ArtistSortKey::ByPlayCount.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Album Count",
+                        model::ArtistSortKey::ByAlbumCount,
+                        model::ArtistSortKey::ByAlbumCount.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Track Count",
+                        model::ArtistSortKey::ByTrackCount,
+                        model::ArtistSortKey::ByTrackCount.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Track Length",
+                        model::ArtistSortKey::ByTrackDuration,
+                        model::ArtistSortKey::ByTrackDuration.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Duration Played",
+                        model::ArtistSortKey::ByPlayedDuration,
+                        model::ArtistSortKey::ByPlayedDuration.default_order(),
+                        sort_key,
+                    ))
+                    .push(sort_button(
+                        "Random",
+                        model::ArtistSortKey::Random,
+                        model::ArtistSortKey::Random.default_order(),
+                        sort_key,
+                    )),
+            );
+
             let scrollable = Scrollable::new(columns.width(Length::Fill)).height(Length::Fill);
             Container::new(
                 Column::new()
                     .spacing(10)
                     .push(h1("Artists"))
-                    .push(
-                        line_row().push(
-                            line_row()
-                                .push(paragraph("Sort By: "))
-                                .push(sort_button(
-                                    "Name",
-                                    model::ArtistSortKey::ByName,
-                                    model::ArtistSortKey::ByName.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Play Count",
-                                    model::ArtistSortKey::ByPlayCount,
-                                    model::ArtistSortKey::ByPlayCount.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Album Count",
-                                    model::ArtistSortKey::ByAlbumCount,
-                                    model::ArtistSortKey::ByAlbumCount.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Track Count",
-                                    model::ArtistSortKey::ByTrackCount,
-                                    model::ArtistSortKey::ByTrackCount.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Track Length",
-                                    model::ArtistSortKey::ByTrackDuration,
-                                    model::ArtistSortKey::ByTrackDuration.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Duration Played",
-                                    model::ArtistSortKey::ByPlayedDuration,
-                                    model::ArtistSortKey::ByPlayedDuration.default_order(),
-                                    sort_key,
-                                ))
-                                .push(sort_button(
-                                    "Random",
-                                    model::ArtistSortKey::Random,
-                                    model::ArtistSortKey::Random.default_order(),
-                                    sort_key,
-                                )),
-                        ),
-                    )
+                    .push(sort_order_component)
                     .push(page_nav_component)
                     .push(scrollable),
             )
