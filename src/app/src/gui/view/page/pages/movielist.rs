@@ -1,5 +1,5 @@
 use iced::widget::{Button, Column, Container, Row, Scrollable, Space};
-use iced::Length;
+use iced::{Alignment, Length};
 
 use crate::model;
 
@@ -192,9 +192,18 @@ pub fn movie_list<'a>(
             let body = Container::new(
                 Column::new()
                     .spacing(10)
-                    .push(h1("Movies"))
-                    .push(page_buttons)
-                    .push(extra_page_buttons)
+                    .push(
+                        Column::new()
+                            .spacing(10)
+                            .push(
+                                Row::new()
+                                    .align_items(Alignment::End)
+                                    .push(h1("Movies"))
+                                    .push(Space::with_width(Length::Fixed(20.0)))
+                                    .push(extra_page_buttons),
+                            )
+                            .push(page_buttons),
+                    )
                     .push(Scrollable::new(columns.width(Length::Fill)).height(Length::Fill)),
             );
 
