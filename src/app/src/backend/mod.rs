@@ -147,7 +147,6 @@ pub fn run_forever(
                             Some(shared::CurrentPlayback::PauseBreak) => (),
                             None => (),
                         };
-                        play_queue.current_second += 1;
                     }
                     shared::SinkCallbackMessage::SongEnded => {
                         playback::handle_playback_request(

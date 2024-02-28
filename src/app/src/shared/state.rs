@@ -3,7 +3,6 @@ use crate::model;
 /// State for the Play Queue (and Current Track and Play History)
 #[derive(Debug, Clone)]
 pub struct PlayQueueInfo {
-    pub current_second: u64,
     pub playing: bool,
     pub current_volume: f32,
     pub play_history: Vec<PlayQueueEntry>,
@@ -14,7 +13,6 @@ pub struct PlayQueueInfo {
 impl PlayQueueInfo {
     pub fn new() -> Self {
         PlayQueueInfo {
-            current_second: 0,
             playing: false,
             current_volume: 1.0,
             play_history: Vec::new(),
