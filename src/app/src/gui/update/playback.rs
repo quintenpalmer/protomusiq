@@ -12,20 +12,9 @@ pub fn handle_set_play_queue(
     app: &mut AppState,
     new_play_queue: shared::PlayQueueInfo,
 ) -> Command<message::Message> {
-    app.play_queue_info.play_history = new_play_queue
-        .play_history
-        .into_iter()
-        .map(state::PlayQueueEntry::from_shared)
-        .collect();
-    app.play_queue_info.current_playback = new_play_queue
-        .current_playback
-        .clone()
-        .map(state::PlayQueueEntry::from_shared);
-    app.play_queue_info.play_queue = new_play_queue
-        .play_queue
-        .into_iter()
-        .map(state::PlayQueueEntry::from_shared)
-        .collect();
+    app.play_queue_info.play_history = new_play_queue.play_history;
+    app.play_queue_info.current_playback = new_play_queue.current_playback.clone();
+    app.play_queue_info.play_queue = new_play_queue.play_queue;
     let current_second = new_play_queue.current_second;
     app.player_info.current_playback = new_play_queue
         .current_playback

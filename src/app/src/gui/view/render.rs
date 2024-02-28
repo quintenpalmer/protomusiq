@@ -341,7 +341,7 @@ pub fn render_play_queue<'a>(
                 stripe_marker = !stripe_marker;
                 play_queue_column = play_queue_column.push(
                     Container::new(match play_queue_entry {
-                        state::PlayQueueEntry::Track(play_queue_track) => line_row()
+                        shared::PlayQueueEntry::Track(play_queue_track) => line_row()
                             .spacing(5)
                             .push(album_image(
                                 library.get_album_cover(
@@ -369,17 +369,19 @@ pub fn render_play_queue<'a>(
                             .push(dark_paragraph(common::format_duration(
                                 play_queue_track.track.metadata.duration.as_secs(),
                             ))),
-                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
-                            .spacing(5)
-                            .push(bright_paragraph("Paused").width(Length::Fill))
-                            .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::PlaybackRequest(
-                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
-                                        shared::HistoryOrQueue::History,
-                                        index,
+                        shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                            line_row()
+                                .spacing(5)
+                                .push(bright_paragraph("Paused").width(Length::Fill))
+                                .push(dark_button(bright_paragraph("-")).on_press(
+                                    message::Message::PlaybackRequest(
+                                        shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                            shared::HistoryOrQueue::History,
+                                            index,
+                                        ),
                                     ),
-                                ),
-                            )),
+                                ))
+                        }
                     })
                     .padding(2)
                     .style(iced::theme::Container::Custom(
@@ -389,7 +391,7 @@ pub fn render_play_queue<'a>(
             }
             match play_queue_info.current_playback {
                 Some(ref outer_current_playback) => match outer_current_playback {
-                    state::PlayQueueEntry::Track(ref current_playback) => {
+                    shared::PlayQueueEntry::Track(ref current_playback) => {
                         stripe_marker = !stripe_marker;
                         play_queue_column = play_queue_column.push(
                             Container::new(
@@ -419,7 +421,7 @@ pub fn render_play_queue<'a>(
                             ))),
                         );
                     }
-                    state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => {
+                    shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
                         stripe_marker = !stripe_marker;
                         play_queue_column = play_queue_column.push(
                             Container::new(
@@ -440,7 +442,7 @@ pub fn render_play_queue<'a>(
                 stripe_marker = !stripe_marker;
                 play_queue_column = play_queue_column.push(
                     Container::new(match play_queue_entry {
-                        state::PlayQueueEntry::Track(play_queue_track) => line_row()
+                        shared::PlayQueueEntry::Track(play_queue_track) => line_row()
                             .spacing(5)
                             .push(album_image(
                                 library.get_album_cover(
@@ -468,17 +470,19 @@ pub fn render_play_queue<'a>(
                             .push(dark_paragraph(common::format_duration(
                                 play_queue_track.track.metadata.duration.as_secs(),
                             ))),
-                        state::PlayQueueEntry::Action(state::PlayQueueAction::Pause) => line_row()
-                            .spacing(5)
-                            .push(bright_paragraph("Paused").width(Length::Fill))
-                            .push(dark_button(bright_paragraph("-")).on_press(
-                                message::Message::PlaybackRequest(
-                                    shared::PlaybackRequest::RemoveTrackFromPlayQueue(
-                                        shared::HistoryOrQueue::History,
-                                        index,
+                        shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                            line_row()
+                                .spacing(5)
+                                .push(bright_paragraph("Paused").width(Length::Fill))
+                                .push(dark_button(bright_paragraph("-")).on_press(
+                                    message::Message::PlaybackRequest(
+                                        shared::PlaybackRequest::RemoveTrackFromPlayQueue(
+                                            shared::HistoryOrQueue::History,
+                                            index,
+                                        ),
                                     ),
-                                ),
-                            )),
+                                ))
+                        }
                     })
                     .padding(2)
                     .style(iced::theme::Container::Custom(

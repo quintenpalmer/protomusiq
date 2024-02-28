@@ -55,38 +55,9 @@ pub struct Config {
 /// State for the Play Queue (and Current Track and Play History)
 pub struct PlayQueueInfo {
     pub play_queue_visible: bool,
-    pub play_history: Vec<PlayQueueEntry>,
-    pub current_playback: Option<PlayQueueEntry>,
-    pub play_queue: Vec<PlayQueueEntry>,
-}
-
-#[derive(Debug, Clone)]
-pub enum PlayQueueEntry {
-    Track(PlayQueueTrack),
-    Action(PlayQueueAction),
-}
-
-impl PlayQueueEntry {
-    pub fn from_shared(shared_repr: shared::PlayQueueEntry) -> Self {
-        match shared_repr {
-            shared::PlayQueueEntry::Track(t) => {
-                PlayQueueEntry::Track(PlayQueueTrack { track: t.track })
-            }
-            shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
-                PlayQueueEntry::Action(PlayQueueAction::Pause)
-            }
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct PlayQueueTrack {
-    pub track: model::AugmentedTrack,
-}
-
-#[derive(Debug, Clone)]
-pub enum PlayQueueAction {
-    Pause,
+    pub play_history: Vec<shared::PlayQueueEntry>,
+    pub current_playback: Option<shared::PlayQueueEntry>,
+    pub play_queue: Vec<shared::PlayQueueEntry>,
 }
 
 pub struct ActionState {
