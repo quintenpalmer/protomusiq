@@ -39,7 +39,7 @@ pub fn artist_album_view_state<'a>(
 
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
-                    state::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
+                    shared::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
                     _ => None,
                 },
                 None => None,

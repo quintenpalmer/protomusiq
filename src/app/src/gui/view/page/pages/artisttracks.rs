@@ -2,6 +2,7 @@ use iced::widget::{Button, Column, Container, ProgressBar, Scrollable, Space};
 use iced::Length;
 
 use crate::model;
+use crate::shared;
 
 use crate::gui::message::{self, Message};
 use crate::state::{self, PlayerInfo};
@@ -57,7 +58,7 @@ pub fn artist_track_view_state<'a>(
 
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
-                    state::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
+                    shared::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
                     _ => None,
                 },
                 None => None,

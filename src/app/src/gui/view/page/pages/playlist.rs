@@ -123,7 +123,7 @@ pub fn playlist_view<'a>(
             let mut stripe_marker = true;
             let current_track = match player_info.current_playback {
                 Some(ref o) => match o {
-                    state::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
+                    shared::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
                     _ => None,
                 },
                 None => None,

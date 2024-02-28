@@ -513,11 +513,11 @@ pub fn render_play_queue<'a>(
 }
 
 pub fn render_playthrough(
-    maybe_current_playback: &Option<state::CurrentPlayback>,
+    maybe_current_playback: &Option<shared::CurrentPlayback>,
 ) -> Option<Container<'static, Message>> {
     match maybe_current_playback {
         Some(ref outer_current_playback) => match outer_current_playback {
-            state::CurrentPlayback::Track(ref current_playback) => {
+            shared::CurrentPlayback::Track(ref current_playback) => {
                 let playback_marker_pre_fill_portion = (1 + current_playback.current_second) as u16;
                 let playback_marker_post_fill_portion =
                     (1 + current_playback.track.metadata.duration.as_secs()
@@ -545,7 +545,7 @@ pub fn render_playthrough(
                     .width(Length::Fill),
                 )
             }
-            state::CurrentPlayback::PauseBreak => None,
+            shared::CurrentPlayback::PauseBreak => None,
         },
         None => None,
     }
@@ -568,10 +568,10 @@ pub fn render_player_controls<'a>(
 fn controls_with_maybe_track_info<'a>(
     player_info: &'a state::PlayerInfo,
     library: &'a model::LibraryState,
-    outer_current_playback: &'a state::CurrentPlayback,
+    outer_current_playback: &'a shared::CurrentPlayback,
 ) -> Container<'a, Message> {
     let (duration_info, album_info) = match outer_current_playback {
-        state::CurrentPlayback::Track(ref current_playback) => {
+        shared::CurrentPlayback::Track(ref current_playback) => {
             let duration_info = bright_paragraph(format!(
                 "{} / {}",
                 common::format_duration(current_playback.current_second),
@@ -658,7 +658,7 @@ fn controls_with_maybe_track_info<'a>(
                 );
             (duration_info, album_info)
         }
-        state::CurrentPlayback::PauseBreak => {
+        shared::CurrentPlayback::PauseBreak => {
             let duration_info = bright_paragraph("");
             let album_info = Row::new().spacing(10).push(bright_paragraph("Paused"));
 

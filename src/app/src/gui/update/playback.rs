@@ -3,7 +3,7 @@ use iced::Command;
 use crate::shared;
 
 use super::super::message::{self, Message};
-use super::super::state::{self, AppState};
+use super::super::state::AppState;
 
 use super::action;
 use super::common;
@@ -18,7 +18,7 @@ pub fn handle_set_play_queue(
     let current_second = new_play_queue.current_second;
     app.player_info.current_playback = new_play_queue
         .current_playback
-        .map(|x| state::CurrentPlayback::from_shared(x, current_second));
+        .map(|x| shared::CurrentPlayback::from_shared(x, current_second));
     app.player_info.playing = new_play_queue.playing;
 
     Command::none()

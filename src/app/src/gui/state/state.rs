@@ -68,7 +68,7 @@ pub struct ActionState {
 pub struct PlayerInfo {
     pub playing: bool,
     pub current_volume: f32,
-    pub current_playback: Option<CurrentPlayback>,
+    pub current_playback: Option<shared::CurrentPlayback>,
 
     pub backend_message_sender: shared::Client<shared::GUIToBackendMessage>,
     pub backend_callback_recv: RefCell<Option<shared::Callback<shared::BackendToGUIMessage>>>,
@@ -78,34 +78,10 @@ impl PlayerInfo {
     pub fn get_maybe_current_playback_track(&self) -> Option<&model::AugmentedTrack> {
         match self.current_playback {
             Some(ref o) => match o {
-                CurrentPlayback::Track(ref v) => Some(&v.track),
+                shared::CurrentPlayback::Track(ref v) => Some(&v.track),
                 _ => None,
             },
             None => None,
         }
     }
-}
-
-pub enum CurrentPlayback {
-    Track(CurrentTrackPlayback),
-    PauseBreak,
-}
-
-impl CurrentPlayback {
-    pub fn from_shared(shared_repr: shared::PlayQueueEntry, current_second: u64) -> Self {
-        match shared_repr {
-            shared::PlayQueueEntry::Track(t) => CurrentPlayback::Track(CurrentTrackPlayback {
-                track: t.track,
-                current_second,
-            }),
-            shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
-                CurrentPlayback::PauseBreak
-            }
-        }
-    }
-}
-
-pub struct CurrentTrackPlayback {
-    pub track: model::AugmentedTrack,
-    pub current_second: u64,
 }
