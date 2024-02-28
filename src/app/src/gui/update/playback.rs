@@ -12,10 +12,9 @@ pub fn handle_set_play_queue(
     app: &mut AppState,
     new_play_queue: shared::PlayQueueInfo,
 ) -> Command<message::Message> {
-    app.play_queue_info.play_history = new_play_queue.play_history;
-    app.play_queue_info.current_playback = new_play_queue.current_playback.clone();
-    app.play_queue_info.play_queue = new_play_queue.play_queue;
-    app.player_info.current_playback = new_play_queue.current_playback;
+    app.player_info.play_queue_info.play_history = new_play_queue.play_history;
+    app.player_info.play_queue_info.current_playback = new_play_queue.current_playback;
+    app.player_info.play_queue_info.play_queue = new_play_queue.play_queue;
     app.player_info.playing = new_play_queue.playing;
 
     Command::none()

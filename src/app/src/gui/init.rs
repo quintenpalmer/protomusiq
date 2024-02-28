@@ -168,18 +168,17 @@ pub fn initialize_everything() -> state::App {
         action_state: state::ActionState {
             group_buttons_shuffle: false,
         },
-        play_queue_info: state::PlayQueueInfo {
-            play_queue_visible: true,
-            play_history: Vec::new(),
-            play_queue: Vec::new(),
-            current_playback: None,
-        },
         video_library: video_library_state,
         config: state::Config { rest: config_state },
         player_info: state::PlayerInfo {
             playing: false,
             current_volume: 1.0,
-            current_playback: None,
+            play_queue_info: state::PlayQueueInfo {
+                play_queue_visible: true,
+                play_history: Vec::new(),
+                play_queue: Vec::new(),
+                current_playback: None,
+            },
             backend_message_sender: backend_client,
             backend_callback_recv: RefCell::new(Some(backend_callback)),
         },

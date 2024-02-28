@@ -37,7 +37,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     let current_page_message = &app.page_current_history;
     let action_state = &app.action_state;
     let player_info = &app.player_info;
-    let play_queue_info = &app.play_queue_info;
+    let play_queue_info = &app.player_info.play_queue_info;
 
     let play_history = &app.page_back_history;
     let play_forwards = &app.page_forward_history;
@@ -62,7 +62,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 
     let (play_queue_view, play_queue_expanded) = render_play_queue(library, play_queue_info);
 
-    let playthrough = render_playthrough(&player_info.current_playback);
+    let playthrough = render_playthrough(&player_info.play_queue_info.current_playback);
 
     let player_controls = render_player_controls(player_info, library);
 
@@ -555,7 +555,7 @@ pub fn render_player_controls<'a>(
     player_info: &'a state::PlayerInfo,
     library: &'a model::LibraryState,
 ) -> Option<Container<'a, Message>> {
-    match player_info.current_playback {
+    match player_info.play_queue_info.current_playback {
         Some(ref outer_current_playback) => Some(controls_with_maybe_track_info(
             player_info,
             library,

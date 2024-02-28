@@ -23,7 +23,6 @@ pub struct AppState {
     pub video_library: model::VideoLibraryState,
     pub action_state: ActionState,
     pub player_info: PlayerInfo,
-    pub play_queue_info: PlayQueueInfo,
     pub messages: Vec<MessageInfo>,
     pub config: Config,
     pub should_close: bool,
@@ -68,7 +67,7 @@ pub struct ActionState {
 pub struct PlayerInfo {
     pub playing: bool,
     pub current_volume: f32,
-    pub current_playback: Option<shared::CurrentPlayback>,
+    pub play_queue_info: PlayQueueInfo,
 
     pub backend_message_sender: shared::Client<shared::GUIToBackendMessage>,
     pub backend_callback_recv: RefCell<Option<shared::Callback<shared::BackendToGUIMessage>>>,
@@ -76,7 +75,7 @@ pub struct PlayerInfo {
 
 impl PlayerInfo {
     pub fn get_maybe_current_playback_track(&self) -> Option<&model::AugmentedTrack> {
-        match self.current_playback {
+        match self.play_queue_info.current_playback {
             Some(ref o) => match o {
                 shared::CurrentPlayback::Track(ref v) => Some(&v.track),
                 _ => None,

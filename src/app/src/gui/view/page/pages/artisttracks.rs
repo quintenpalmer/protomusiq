@@ -56,7 +56,7 @@ pub fn artist_track_view_state<'a>(
 
             let tracks = track_sorts.from_sort_key(sort_key, sort_order);
 
-            let current_track = match player_info.current_playback {
+            let current_track = match player_info.play_queue_info.current_playback {
                 Some(ref o) => match o {
                     shared::CurrentPlayback::Track(ref v) => Some(v.track.clone()),
                     _ => None,

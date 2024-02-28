@@ -107,7 +107,8 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             Command::none()
         }
         message::Action::TogglePlayQueueVisible => {
-            app.play_queue_info.play_queue_visible = !app.play_queue_info.play_queue_visible;
+            app.player_info.play_queue_info.play_queue_visible =
+                !app.player_info.play_queue_info.play_queue_visible;
             Command::none()
         }
         message::Action::UpdateText(new_text) => {
