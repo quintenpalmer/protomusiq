@@ -7,7 +7,7 @@ pub struct PlayQueueInfo {
     pub playing: bool,
     pub current_volume: f32,
     pub play_history: Vec<PlayQueueEntry>,
-    pub current_playback: Option<PlayQueueEntry>,
+    pub current_playback: Option<CurrentPlayback>,
     pub play_queue: Vec<PlayQueueEntry>,
 }
 

@@ -56,7 +56,7 @@ pub struct Config {
 pub struct PlayQueueInfo {
     pub play_queue_visible: bool,
     pub play_history: Vec<shared::PlayQueueEntry>,
-    pub current_playback: Option<shared::PlayQueueEntry>,
+    pub current_playback: Option<shared::CurrentPlayback>,
     pub play_queue: Vec<shared::PlayQueueEntry>,
 }
 

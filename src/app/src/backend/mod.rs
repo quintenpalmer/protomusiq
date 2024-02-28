@@ -140,6 +140,13 @@ pub fn run_forever(
                     shared::SinkCallbackMessage::Playing => play_queue.playing = true,
                     shared::SinkCallbackMessage::Paused => play_queue.playing = false,
                     shared::SinkCallbackMessage::SecondElapsed => {
+                        match play_queue.current_playback {
+                            Some(shared::CurrentPlayback::Track(ref mut t)) => {
+                                t.current_second += 1;
+                            }
+                            Some(shared::CurrentPlayback::PauseBreak) => (),
+                            None => (),
+                        };
                         play_queue.current_second += 1;
                     }
                     shared::SinkCallbackMessage::SongEnded => {

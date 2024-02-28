@@ -391,7 +391,7 @@ pub fn render_play_queue<'a>(
             }
             match play_queue_info.current_playback {
                 Some(ref outer_current_playback) => match outer_current_playback {
-                    shared::PlayQueueEntry::Track(ref current_playback) => {
+                    shared::CurrentPlayback::Track(ref current_playback) => {
                         stripe_marker = !stripe_marker;
                         play_queue_column = play_queue_column.push(
                             Container::new(
@@ -421,7 +421,7 @@ pub fn render_play_queue<'a>(
                             ))),
                         );
                     }
-                    shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                    shared::CurrentPlayback::PauseBreak => {
                         stripe_marker = !stripe_marker;
                         play_queue_column = play_queue_column.push(
                             Container::new(

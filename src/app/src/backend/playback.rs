@@ -11,7 +11,7 @@ pub fn handle_playback_request(
     match internal {
         shared::PlaybackRequest::LoadCurrentSong => match play_queue.current_playback {
             Some(ref outer_current_playback) => match outer_current_playback {
-                shared::PlayQueueEntry::Track(ref current_playback) => {
+                shared::CurrentPlayback::Track(ref current_playback) => {
                     sink_client
                         .send(shared::SinkMessage::LoadSong(
                             current_playback.track.metadata.path.clone(),
@@ -26,7 +26,7 @@ pub fn handle_playback_request(
                         current_playback.track.clone(),
                     ));
                 }
-                shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                shared::CurrentPlayback::PauseBreak => {
                     play_queue.playing = false;
                     handle_playback_request(
                         play_queue,
@@ -92,14 +92,15 @@ pub fn handle_playback_request(
             if play_queue.play_history.len() > 0 {
                 match play_queue.current_playback {
                     Some(ref current_playback) => {
-                        let mut new_play_queue = vec![current_playback.clone()];
+                        let mut new_play_queue =
+                            vec![current_playback.clone().to_play_queue_entry()];
                         new_play_queue.append(&mut play_queue.play_queue);
                         play_queue.play_queue = new_play_queue;
                     }
                     None => (),
                 };
                 let track = play_queue.play_history.pop().unwrap();
-                play_queue.current_playback = Some(track.clone());
+                play_queue.current_playback = Some(shared::CurrentPlayback::from_shared(track, 0));
                 handle_playback_request(
                     play_queue,
                     sink_client,
@@ -114,16 +115,16 @@ pub fn handle_playback_request(
         shared::PlaybackRequest::Next => {
             if play_queue.play_queue.len() > 0 {
                 match play_queue.current_playback {
-                    Some(ref current_playback) => {
-                        play_queue.play_history.push(current_playback.clone())
-                    }
+                    Some(ref current_playback) => play_queue
+                        .play_history
+                        .push(current_playback.clone().to_play_queue_entry()),
                     None => (),
                 };
 
                 let track = play_queue.play_queue.remove(0);
                 //play_queue.current_playback = Some(state::CurrentPlayback::from_entry_zeroed(&track));
                 play_queue.current_second = 0;
-                play_queue.current_playback = Some(track.clone());
+                play_queue.current_playback = Some(shared::CurrentPlayback::from_shared(track, 0));
                 handle_playback_request(
                     play_queue,
                     sink_client,
@@ -133,9 +134,9 @@ pub fn handle_playback_request(
                 );
             } else {
                 match play_queue.current_playback {
-                    Some(ref current_playback) => {
-                        play_queue.play_history.push(current_playback.clone())
-                    }
+                    Some(ref current_playback) => play_queue
+                        .play_history
+                        .push(current_playback.clone().to_play_queue_entry()),
                     None => (),
                 };
                 play_queue.current_playback = None;
