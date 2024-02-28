@@ -40,12 +40,22 @@ pub enum PlayQueueAction {
     Pause,
 }
 
+#[derive(Debug, Clone)]
 pub enum CurrentPlayback {
     Track(CurrentTrackPlayback),
     PauseBreak,
 }
 
 impl CurrentPlayback {
+    pub fn to_play_queue_entry(self) -> PlayQueueEntry {
+        match self {
+            CurrentPlayback::Track(track) => {
+                PlayQueueEntry::Track(PlayQueueTrack { track: track.track })
+            }
+            CurrentPlayback::PauseBreak => PlayQueueEntry::Action(PlayQueueAction::Pause),
+        }
+    }
+
     pub fn from_shared(shared_repr: PlayQueueEntry, current_second: u64) -> Self {
         match shared_repr {
             PlayQueueEntry::Track(t) => CurrentPlayback::Track(CurrentTrackPlayback {
@@ -57,6 +67,7 @@ impl CurrentPlayback {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct CurrentTrackPlayback {
     pub track: model::AugmentedTrack,
     pub current_second: u64,
