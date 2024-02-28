@@ -99,16 +99,6 @@ pub fn handle_playback_request(
                     None => (),
                 };
                 let track = play_queue.play_history.pop().unwrap();
-                play_queue.current_playback = Some(match track {
-                    shared::PlayQueueEntry::Track(ref t) => {
-                        shared::PlayQueueEntry::Track(shared::PlayQueueTrack {
-                            track: t.track.clone(),
-                        })
-                    }
-                    shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
-                        shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause)
-                    }
-                });
                 play_queue.current_playback = Some(track.clone());
                 handle_playback_request(
                     play_queue,
