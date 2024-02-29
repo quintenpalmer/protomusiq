@@ -19,17 +19,20 @@ pub enum App {
 pub struct AppState {
     pub page_state: PageState,
 
+    pub action_state: ActionState,
     pub cross_page_display_info: CrossPageDisplayInfo,
+
+    pub config: Config,
 
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
-    pub action_state: ActionState,
+
     pub player_info: PlayerInfo,
-    pub messages: Vec<MessageInfo>,
-    pub config: Config,
-    pub should_close: bool,
 
     pub app_images: embedded::AppImages,
+    pub messages: Vec<MessageInfo>,
+
+    pub should_close: bool,
 }
 
 /// All Page related state information
