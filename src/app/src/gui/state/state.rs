@@ -19,6 +19,7 @@ pub enum App {
 pub struct AppState {
     pub current_page: page::Page,
     pub cross_page_display_info: CrossPageDisplayInfo,
+
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
     pub action_state: ActionState,
