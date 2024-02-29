@@ -54,7 +54,7 @@ impl CurrentPlayback {
         }
     }
 
-    pub fn from_shared(shared_repr: PlayQueueEntry, current_second: u64) -> Self {
+    pub fn from_play_queue_entry(shared_repr: PlayQueueEntry, current_second: u64) -> Self {
         match shared_repr {
             PlayQueueEntry::Track(t) => CurrentPlayback::Track(CurrentTrackPlayback {
                 track: t.track,

@@ -100,7 +100,8 @@ pub fn handle_playback_request(
                     None => (),
                 };
                 let track = play_queue.play_history.pop().unwrap();
-                play_queue.current_playback = Some(shared::CurrentPlayback::from_shared(track, 0));
+                play_queue.current_playback =
+                    Some(shared::CurrentPlayback::from_play_queue_entry(track, 0));
                 handle_playback_request(
                     play_queue,
                     sink_client,
@@ -123,7 +124,8 @@ pub fn handle_playback_request(
 
                 let track = play_queue.play_queue.remove(0);
                 //play_queue.current_playback = Some(state::CurrentPlayback::from_entry_zeroed(&track));
-                play_queue.current_playback = Some(shared::CurrentPlayback::from_shared(track, 0));
+                play_queue.current_playback =
+                    Some(shared::CurrentPlayback::from_play_queue_entry(track, 0));
                 handle_playback_request(
                     play_queue,
                     sink_client,
