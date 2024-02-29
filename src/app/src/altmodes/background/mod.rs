@@ -64,6 +64,21 @@ pub fn run_server() -> Result<(), Error> {
                         }
                         _ => Some(Response::from_string("method not allowed")),
                     },
+                    "/setnextsong" => match req.method() {
+                        Method::Post => {
+                            let mut content = String::new();
+                            req.as_reader().read_to_string(&mut content).unwrap();
+                            let lines: Vec<&str> = content.split('\n').collect();
+                            let filename = lines[0];
+
+                            sink_client
+                                .send(SinkMessage::SetNextSong(path::PathBuf::from(filename)))
+                                .unwrap();
+
+                            Some(Response::from_string("let's set the next song"))
+                        }
+                        _ => Some(Response::from_string("method not allowed")),
+                    },
                     "/volume" => match req.method() {
                         Method::Post => {
                             let mut content = String::new();

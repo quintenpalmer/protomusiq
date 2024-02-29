@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::path;
 use std::sync::mpsc;
 use std::time;
 
@@ -26,6 +27,7 @@ pub struct SinkPlayback {
     sink: rodio::Sink,
     _stream: rodio::OutputStream,
     stream_handle: rodio::OutputStreamHandle,
+    next_song: Option<path::PathBuf>,
     manual_sink_status: Option<bool>,
     time_elapsed: u64,
 }
@@ -37,6 +39,7 @@ impl SinkPlayback {
             _stream: stream,
             sink: rodio::Sink::try_new(&stream_handle).unwrap(),
             stream_handle,
+            next_song: None,
             manual_sink_status: None,
             time_elapsed: 0,
         }
@@ -116,6 +119,10 @@ impl SinkPlayback {
                 self.sink.play();
                 self.time_elapsed = 0;
                 callback.send(shared::SinkCallbackMessage::Playing).unwrap();
+                true
+            }
+            shared::SinkMessage::SetNextSong(path) => {
+                self.next_song = Some(path);
                 true
             }
             shared::SinkMessage::SetVolume(new_amount) => {

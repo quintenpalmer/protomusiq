@@ -46,6 +46,7 @@ pub enum SinkMessage {
     PlayButton,
     PauseButton,
     LoadSong(path::PathBuf, f32),
+    SetNextSong(path::PathBuf),
     SetVolume(f32),
     Close,
 }

@@ -61,6 +61,17 @@ fn relay_msg(maybe_msg: Result<shared::SinkMessage, mpsc::TryRecvError>) -> bool
                     .unwrap();
                 true
             }
+            shared::SinkMessage::SetNextSong(full_path_for_music_file) => {
+                let payload = full_path_for_music_file
+                    .into_os_string()
+                    .to_string_lossy()
+                    .to_string();
+
+                ureq::post("http://localhost:5269/setnextsong")
+                    .send_string(payload.as_str())
+                    .unwrap();
+                true
+            }
             shared::SinkMessage::SetVolume(volume_to_set) => {
                 let payload = format!("{}", volume_to_set);
 
