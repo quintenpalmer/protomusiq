@@ -123,8 +123,8 @@ impl SinkPlayback {
                 callback.send(shared::SinkCallbackMessage::Playing).unwrap();
                 true
             }
-            shared::SinkMessage::SetNextSong(path) => {
-                self.next_song = Some(shared::TrackPathOrPause::TrackPath(path));
+            shared::SinkMessage::SetNextSong(next) => {
+                self.next_song = Some(next);
                 true
             }
             shared::SinkMessage::SetVolume(new_amount) => {

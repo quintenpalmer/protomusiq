@@ -83,9 +83,13 @@ pub fn run_server() -> Result<(), Error> {
                             let lines: Vec<&str> = content.split('\n').collect();
                             let filename = lines[0];
 
-                            sink_client
-                                .send(SinkMessage::SetNextSong(path::PathBuf::from(filename)))
-                                .unwrap();
+                            let msg = if filename == "pause" {
+                                shared::TrackPathOrPause::Pause
+                            } else {
+                                shared::TrackPathOrPause::TrackPath(path::PathBuf::from(filename))
+                            };
+
+                            sink_client.send(SinkMessage::SetNextSong(msg)).unwrap();
 
                             Some(Response::from_string("let's set the next song"))
                         }
