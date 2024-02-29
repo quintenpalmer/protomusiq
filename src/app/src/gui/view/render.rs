@@ -25,22 +25,22 @@ pub fn view_loading<'a>() -> Element<'a, Message> {
 pub fn view_app(app: &state::AppState) -> Element<Message> {
     println!(
         "GUI:\tviewing: {}",
-        app.current_page.super_simple_debug_string()
+        app.page_state.current_page.super_simple_debug_string()
     );
     let library = &app.library;
     let movie_library = &app.video_library;
     let config = &app.config.rest;
     let messages = &app.messages;
     let app_images = &app.app_images;
-    let current_page = &app.current_page;
+    let current_page = &app.page_state.current_page;
     let cross_page_display_info = &app.cross_page_display_info;
-    let current_page_message = &app.page_current_history;
+    let current_page_message = &app.page_state.page_current_history;
     let action_state = &app.action_state;
     let player_info = &app.player_info;
     let play_queue_info = &app.player_info.play_queue_info;
 
-    let play_history = &app.page_back_history;
-    let play_forwards = &app.page_forward_history;
+    let play_history = &app.page_state.page_back_history;
+    let play_forwards = &app.page_state.page_forward_history;
 
     let (additional_breadcrumbs, rendered_page) = page::render_page(
         current_page,

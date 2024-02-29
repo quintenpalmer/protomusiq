@@ -154,10 +154,12 @@ pub fn initialize_everything() -> state::App {
     logger.print_elapsed("starting tracker");
 
     state::App::Loaded(state::AppState {
-        page_back_history: Vec::new(),
-        page_current_history: message::NavMessage::Home,
-        page_forward_history: Vec::new(),
-        current_page: state::Page::Home(state::HomeState {}),
+        page_state: state::PageState {
+            current_page: state::Page::Home(state::HomeState {}),
+            page_back_history: Vec::new(),
+            page_current_history: message::NavMessage::Home,
+            page_forward_history: Vec::new(),
+        },
         cross_page_display_info: state::CrossPageDisplayInfo {
             fullscreen_display: false,
         },

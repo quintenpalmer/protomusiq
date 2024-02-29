@@ -35,7 +35,8 @@ fn handle_breadcrumb_selection(
         return Some(message::NavMessage::Home.into_message());
     }
 
-    let breadcrumbs = compute::compute_breadcrumb(&app.library, &app.page_current_history);
+    let breadcrumbs =
+        compute::compute_breadcrumb(&app.library, &app.page_state.page_current_history);
 
     match breadcrumbs.get(breadcrumb_index - 1) {
         Some((_message, button_message)) => Some(button_message.clone()),
@@ -47,7 +48,7 @@ fn handle_switch_sort_by_msg(
     app: &mut AppState,
     move_direction: message::MoveDirectionMsg,
 ) -> Option<message::Message> {
-    match app.current_page {
+    match app.page_state.current_page {
         Page::AlbumList(state::AlbumListState {
             page: ref _page,
             ref sort_key,
@@ -168,7 +169,7 @@ fn handle_nav_rel_msg(
     app: &mut AppState,
     nav_message: message::PagifiedMovementMsg,
 ) -> Option<message::Message> {
-    match app.current_page {
+    match app.page_state.current_page {
         Page::AlbumList(state::AlbumListState {
             ref page,
             ref sort_key,

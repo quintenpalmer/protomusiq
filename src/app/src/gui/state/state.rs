@@ -17,7 +17,8 @@ pub enum App {
 /// State for the App, once it has finished processing all data it needs
 /// to provide its user experience
 pub struct AppState {
-    pub current_page: page::Page,
+    pub page_state: PageState,
+
     pub cross_page_display_info: CrossPageDisplayInfo,
 
     pub library: model::LibraryState,
@@ -28,13 +29,17 @@ pub struct AppState {
     pub config: Config,
     pub should_close: bool,
 
-    pub page_back_history: Vec<message::NavMessage>,
-    pub page_current_history: message::NavMessage,
-    pub page_forward_history: Vec<message::NavMessage>,
-
     pub app_images: embedded::AppImages,
 
     pub error_messages: Vec<String>,
+}
+
+/// All Page related state information
+pub struct PageState {
+    pub current_page: page::Page,
+    pub page_back_history: Vec<message::NavMessage>,
+    pub page_current_history: message::NavMessage,
+    pub page_forward_history: Vec<message::NavMessage>,
 }
 
 /// Whether to show in a maximally fullscreen layout

@@ -112,7 +112,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             Command::none()
         }
         message::Action::UpdateText(new_text) => {
-            match &mut app.current_page {
+            match &mut app.page_state.current_page {
                 state::Page::Search(search_page_state) => search_page_state.query = new_text,
                 state::Page::PlaylistList(playlist_page_state) => {
                     playlist_page_state.new_playlist_name = new_text
@@ -123,7 +123,7 @@ pub fn handle_action(app: &mut AppState, action: message::Action) -> Command<mes
             };
             Command::none()
         }
-        message::Action::PerformSearch(query, domain) => match app.current_page {
+        message::Action::PerformSearch(query, domain) => match app.page_state.current_page {
             state::Page::Search(ref _search_state) => loaded::update_state(
                 app,
                 message::user_nav_message(message::NavMessage::SearchPage(query, domain, true)),

@@ -14,23 +14,25 @@ pub fn handle_nav(
 ) -> Command<message::Message> {
     match nav_message {
         NavMessage::Home => {
-            app.current_page = Page::Home(state::HomeState {});
+            app.page_state.current_page = Page::Home(state::HomeState {});
             Command::none()
         }
         NavMessage::Config => {
-            app.current_page = Page::Config(state::ConfigState {});
+            app.page_state.current_page = Page::Config(state::ConfigState {});
             Command::none()
         }
         NavMessage::PlayQueueFocus => {
-            app.current_page = Page::PlayQueue(state::PlayQueueState {});
+            app.page_state.current_page = Page::PlayQueue(state::PlayQueueState {});
             Command::none()
         }
         NavMessage::Playlist(message::PlaylistNavMessage::PlaylistView(playlist_id)) => {
-            app.current_page = Page::PlaylistView(state::PlaylistViewState { playlist_id });
+            app.page_state.current_page =
+                Page::PlaylistView(state::PlaylistViewState { playlist_id });
             Command::none()
         }
         NavMessage::Playlist(message::PlaylistNavMessage::PlaylistList(new_playlist_name)) => {
-            app.current_page = Page::PlaylistList(state::PlaylistListState { new_playlist_name });
+            app.page_state.current_page =
+                Page::PlaylistList(state::PlaylistListState { new_playlist_name });
             Command::none()
         }
         NavMessage::SearchPage(query, domain, perform_search) => {
@@ -61,14 +63,14 @@ pub fn handle_nav(
                 }
             };
 
-            app.current_page = Page::Search(state::SearchPageState {
+            app.page_state.current_page = Page::Search(state::SearchPageState {
                 query,
                 domain_results: computed_results,
             });
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }
         NavMessage::TrackList(page, sort, sort_order) => {
-            app.current_page = Page::TrackList(state::TrackListState {
+            app.page_state.current_page = Page::TrackList(state::TrackListState {
                 page,
                 sort_key: sort,
                 sort_order,
@@ -76,7 +78,7 @@ pub fn handle_nav(
             Command::none()
         }
         NavMessage::AlbumList(page, sort, sort_order) => {
-            app.current_page = Page::AlbumList(state::AlbumListState {
+            app.page_state.current_page = Page::AlbumList(state::AlbumListState {
                 page,
                 sort_key: sort,
                 sort_order,
@@ -85,7 +87,7 @@ pub fn handle_nav(
         }
         NavMessage::Artist(artist_message) => match artist_message {
             message::ArtistNavMessage::ArtistList(page, sort, sort_order) => {
-                app.current_page = Page::ArtistList(state::ArtistListState {
+                app.page_state.current_page = Page::ArtistList(state::ArtistListState {
                     page,
                     sort_key: sort,
                     sort_order,
@@ -93,7 +95,7 @@ pub fn handle_nav(
                 Command::none()
             }
             message::ArtistNavMessage::ArtistAlbumsView(artist_id) => {
-                app.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
+                app.page_state.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
                     artist_id,
                     albums: app
                         .library
@@ -108,7 +110,7 @@ pub fn handle_nav(
                 Command::none()
             }
             message::ArtistNavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-                app.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
+                app.page_state.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
                     artist_id,
 
                     sort_key,
@@ -117,7 +119,7 @@ pub fn handle_nav(
                 Command::none()
             }
             message::ArtistNavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
-                app.current_page =
+                app.page_state.current_page =
                     Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
                         artist_id,
 
@@ -133,7 +135,7 @@ pub fn handle_nav(
                 maybe_selected_track,
                 maybe_current_sort_order,
             ) => {
-                app.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
+                app.page_state.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                     artist_id,
                     album_id,
                     album_size,
@@ -145,11 +147,11 @@ pub fn handle_nav(
         },
         NavMessage::Movie(movie_message) => match movie_message {
             message::MovieNavMessage::MovieHome => {
-                app.current_page = Page::MovieHome;
+                app.page_state.current_page = Page::MovieHome;
                 Command::none()
             }
             message::MovieNavMessage::MovieList(page, sort, sort_order) => {
-                app.current_page = Page::MovieList(state::MovieListState {
+                app.page_state.current_page = Page::MovieList(state::MovieListState {
                     page,
                     sort_key: sort,
                     sort_order,
@@ -259,7 +261,7 @@ pub fn handle_nav(
                     None => None,
                 };
 
-                app.current_page =
+                app.page_state.current_page =
                     Page::MovieAttributes(state::MovieAttributeState { attribute_results });
                 Command::none()
             }
@@ -368,14 +370,15 @@ pub fn handle_nav(
                     None => None,
                 };
 
-                app.current_page = Page::MovieQuery(state::MovieQueryState {
+                app.page_state.current_page = Page::MovieQuery(state::MovieQueryState {
                     query: maybe_query.clone(),
                     matched_keys: movie_keys,
                 });
                 Command::none()
             }
             message::MovieNavMessage::MovieView(movie, movie_size) => {
-                app.current_page = Page::MovieView(state::MovieViewState { movie, movie_size });
+                app.page_state.current_page =
+                    Page::MovieView(state::MovieViewState { movie, movie_size });
                 Command::none()
             }
         },
