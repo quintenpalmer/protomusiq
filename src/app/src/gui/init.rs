@@ -165,7 +165,6 @@ pub fn initialize_everything() -> state::App {
         },
         should_close: false,
         messages: Vec::new(),
-        error_messages: Vec::new(),
         app_images: embedded::AppImages::new(&config_state.app_data_path),
         action_state: state::ActionState {
             group_buttons_shuffle: false,

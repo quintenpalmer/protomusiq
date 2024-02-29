@@ -30,8 +30,6 @@ pub struct AppState {
     pub should_close: bool,
 
     pub app_images: embedded::AppImages,
-
-    pub error_messages: Vec<String>,
 }
 
 /// All Page related state information
