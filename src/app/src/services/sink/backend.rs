@@ -1,6 +1,5 @@
 use std::fs;
 use std::io;
-use std::path;
 use std::sync::mpsc;
 use std::time;
 
@@ -27,7 +26,7 @@ pub struct SinkPlayback {
     sink: rodio::Sink,
     _stream: rodio::OutputStream,
     stream_handle: rodio::OutputStreamHandle,
-    next_song: Option<path::PathBuf>,
+    next_song: Option<shared::TrackPathOrPause>,
     manual_sink_status: Option<bool>,
     time_elapsed: u64,
 }
@@ -107,7 +106,7 @@ impl SinkPlayback {
                 callback.send(shared::SinkCallbackMessage::Paused).unwrap();
                 true
             }
-            shared::SinkMessage::LoadSong(path, volume) => {
+            shared::SinkMessage::LoadSong(path, next_path, volume) => {
                 self.manual_sink_status = Some(true);
                 self.sink.stop();
                 self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
@@ -118,11 +117,14 @@ impl SinkPlayback {
                 self.sink.set_volume(volume);
                 self.sink.play();
                 self.time_elapsed = 0;
+
+                self.next_song = next_path;
+
                 callback.send(shared::SinkCallbackMessage::Playing).unwrap();
                 true
             }
             shared::SinkMessage::SetNextSong(path) => {
-                self.next_song = Some(path);
+                self.next_song = Some(shared::TrackPathOrPause::TrackPath(path));
                 true
             }
             shared::SinkMessage::SetVolume(new_amount) => {

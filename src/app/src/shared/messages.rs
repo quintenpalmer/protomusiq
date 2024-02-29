@@ -45,10 +45,16 @@ pub enum BackendToGUIMessage {
 pub enum SinkMessage {
     PlayButton,
     PauseButton,
-    LoadSong(path::PathBuf, f32),
+    LoadSong(path::PathBuf, Option<TrackPathOrPause>, f32),
     SetNextSong(path::PathBuf),
     SetVolume(f32),
     Close,
+}
+
+#[derive(Debug, Clone)]
+pub enum TrackPathOrPause {
+    TrackPath(path::PathBuf),
+    Pause,
 }
 
 #[derive(Debug, Clone)]

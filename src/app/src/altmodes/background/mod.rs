@@ -5,7 +5,7 @@ use std::sync::mpsc;
 use std::thread;
 use std::time;
 
-use crate::shared::{SinkCallbackMessage, SinkMessage};
+use crate::shared::{self, SinkCallbackMessage, SinkMessage};
 
 use crate::services::sink;
 
@@ -51,11 +51,23 @@ pub fn run_server() -> Result<(), Error> {
                             let lines: Vec<&str> = content.split('\n').collect();
                             println!("lines: {:?}", lines);
                             let filename = lines[0];
-                            let volume = lines[1];
+                            let raw_next_thing = lines[1];
+                            let volume = lines[2];
+
+                            let next_thing = if raw_next_thing == "none" {
+                                None
+                            } else if raw_next_thing == "pause" {
+                                Some(shared::TrackPathOrPause::Pause)
+                            } else {
+                                Some(shared::TrackPathOrPause::TrackPath(path::PathBuf::from(
+                                    filename,
+                                )))
+                            };
 
                             sink_client
                                 .send(SinkMessage::LoadSong(
                                     path::PathBuf::from(filename),
+                                    next_thing,
                                     volume.parse::<f32>().unwrap(),
                                 ))
                                 .unwrap();

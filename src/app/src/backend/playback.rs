@@ -12,9 +12,19 @@ pub fn handle_playback_request(
         shared::PlaybackRequest::LoadCurrentSong => match play_queue.current_playback {
             Some(ref outer_current_playback) => match outer_current_playback {
                 shared::CurrentPlayback::Track(ref current_playback) => {
+                    let maybe_next_track = match play_queue.play_queue.get(0) {
+                        Some(shared::PlayQueueEntry::Track(track)) => Some(
+                            shared::TrackPathOrPause::TrackPath(track.track.metadata.path.clone()),
+                        ),
+                        Some(shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause)) => {
+                            Some(shared::TrackPathOrPause::Pause)
+                        }
+                        None => None,
+                    };
                     sink_client
                         .send(shared::SinkMessage::LoadSong(
                             current_playback.track.metadata.path.clone(),
+                            maybe_next_track,
                             play_queue.current_volume,
                         ))
                         .unwrap();
