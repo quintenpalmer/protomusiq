@@ -69,6 +69,23 @@ fn relay_msg(maybe_msg: Result<shared::SinkMessage, mpsc::TryRecvError>) -> bool
                     .unwrap();
                 true
             }
+            shared::SinkMessage::LoadNextSong(next_thing, volume_to_set) => {
+                let next_thing = match next_thing {
+                    Some(shared::TrackPathOrPause::TrackPath(p)) => {
+                        p.into_os_string().to_string_lossy().to_string()
+                    }
+                    Some(shared::TrackPathOrPause::Pause) => "pause".to_string(),
+                    None => "none".to_string(),
+                };
+
+                let volume_str = format!("{}", volume_to_set);
+                let payload = [next_thing, volume_str].join("\n");
+
+                ureq::post("http://localhost:5269/loadnextsong")
+                    .send_string(payload.as_str())
+                    .unwrap();
+                true
+            }
             shared::SinkMessage::SetNextSong(full_path_for_music_file) => {
                 let payload = match full_path_for_music_file {
                     shared::TrackPathOrPause::TrackPath(t) => {

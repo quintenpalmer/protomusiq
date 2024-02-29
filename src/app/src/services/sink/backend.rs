@@ -123,6 +123,39 @@ impl SinkPlayback {
                 callback.send(shared::SinkCallbackMessage::Playing).unwrap();
                 true
             }
+            shared::SinkMessage::LoadNextSong(next_path, volume) => match self.next_song {
+                Some(shared::TrackPathOrPause::TrackPath(ref t)) => {
+                    self.manual_sink_status = Some(true);
+                    self.sink.stop();
+                    self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
+
+                    let file = io::BufReader::new(fs::File::open(t).unwrap());
+                    let decoder = rodio::Decoder::new(file).unwrap();
+                    self.sink.append(decoder);
+                    self.sink.set_volume(volume);
+                    self.sink.play();
+                    self.time_elapsed = 0;
+
+                    self.next_song = next_path;
+
+                    callback.send(shared::SinkCallbackMessage::Playing).unwrap();
+                    true
+                }
+                Some(shared::TrackPathOrPause::Pause) | None => {
+                    self.manual_sink_status = Some(false);
+                    self.sink.stop();
+                    self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
+
+                    self.sink.set_volume(volume);
+                    self.time_elapsed = 0;
+
+                    self.next_song = next_path;
+
+                    self.sink.pause();
+                    callback.send(shared::SinkCallbackMessage::Paused).unwrap();
+                    true
+                }
+            },
             shared::SinkMessage::SetNextSong(next) => {
                 self.next_song = Some(next);
                 true

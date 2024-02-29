@@ -76,6 +76,37 @@ pub fn run_server() -> Result<(), Error> {
                         }
                         _ => Some(Response::from_string("method not allowed")),
                     },
+                    "/loadnextsong" => match req.method() {
+                        Method::Post => {
+                            let mut content = String::new();
+                            req.as_reader().read_to_string(&mut content).unwrap();
+                            println!("content: {}", content);
+                            let lines: Vec<&str> = content.split('\n').collect();
+                            println!("lines: {:?}", lines);
+                            let raw_next_thing = lines[0];
+                            let volume = lines[1];
+
+                            let next_thing = if raw_next_thing == "none" {
+                                None
+                            } else if raw_next_thing == "pause" {
+                                Some(shared::TrackPathOrPause::Pause)
+                            } else {
+                                Some(shared::TrackPathOrPause::TrackPath(path::PathBuf::from(
+                                    raw_next_thing,
+                                )))
+                            };
+
+                            sink_client
+                                .send(SinkMessage::LoadNextSong(
+                                    next_thing,
+                                    volume.parse::<f32>().unwrap(),
+                                ))
+                                .unwrap();
+
+                            Some(Response::from_string("let's load the next"))
+                        }
+                        _ => Some(Response::from_string("method not allowed")),
+                    },
                     "/setnextsong" => match req.method() {
                         Method::Post => {
                             let mut content = String::new();
