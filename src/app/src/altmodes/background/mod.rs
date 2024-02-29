@@ -60,7 +60,7 @@ pub fn run_server() -> Result<(), Error> {
                                 Some(shared::TrackPathOrPause::Pause)
                             } else {
                                 Some(shared::TrackPathOrPause::TrackPath(path::PathBuf::from(
-                                    filename,
+                                    raw_next_thing,
                                 )))
                             };
 
