@@ -167,7 +167,7 @@ pub fn handle_playback_request(
                     shared::PlaybackRequest::LoadCurrentSong(shared::TrackLoadType::HardLoad),
                 );
             } else {
-                // Nothing else to run if not loading next
+                // Can't move back in the play queue history if its empty
             }
         }
         shared::PlaybackRequest::Next(track_load_mode) => {
