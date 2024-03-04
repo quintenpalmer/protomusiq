@@ -15,11 +15,11 @@ pub enum PlaybackRequest {
     Play,
     Pause,
     Prev,
-    Next,
+    Next(TrackLoadType),
 
     InsertPause,
 
-    LoadCurrentSong,
+    LoadCurrentSong(TrackLoadType),
     PlaySongs(Vec<model::AugmentedTrack>),
     InsertSongs(Vec<model::AugmentedTrack>, bool),
     AppendSongs(Vec<model::AugmentedTrack>, bool),
@@ -28,6 +28,12 @@ pub enum PlaybackRequest {
 
     SetVolume(f32),
     Close,
+}
+
+#[derive(Debug, Clone)]
+pub enum TrackLoadType {
+    HardLoad,
+    NaturalNext,
 }
 
 #[derive(Debug, Clone)]

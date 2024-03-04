@@ -687,11 +687,11 @@ fn controls_with_maybe_track_info<'a>(
                                     Message::PlaybackRequest(shared::PlaybackRequest::Play),
                                 )
                             })
-                            .push(
-                                dark_button(bright_paragraph(">>")).on_press(
-                                    Message::PlaybackRequest(shared::PlaybackRequest::Next),
-                                ),
-                            )
+                            .push(dark_button(bright_paragraph(">>")).on_press(
+                                Message::PlaybackRequest(shared::PlaybackRequest::Next(
+                                    shared::TrackLoadType::NaturalNext,
+                                )),
+                            ))
                             .push(dark_button(bright_paragraph("=|")).on_press(
                                 Message::PlaybackRequest(shared::PlaybackRequest::InsertPause),
                             )),

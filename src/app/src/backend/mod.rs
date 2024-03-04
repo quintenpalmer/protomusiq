@@ -112,7 +112,9 @@ pub fn run_forever(
                     shared::MprisCallbackMessage::Play => shared::PlaybackRequest::Play,
                     shared::MprisCallbackMessage::Pause => shared::PlaybackRequest::Pause,
                     shared::MprisCallbackMessage::Prev => shared::PlaybackRequest::Prev,
-                    shared::MprisCallbackMessage::Next => shared::PlaybackRequest::Next,
+                    shared::MprisCallbackMessage::Next => {
+                        shared::PlaybackRequest::Next(shared::TrackLoadType::NaturalNext)
+                    }
                 };
 
                 playback::handle_playback_request(
@@ -154,7 +156,7 @@ pub fn run_forever(
                             sink_client.clone(),
                             mpris_client.clone(),
                             tracker_client.clone(),
-                            shared::PlaybackRequest::Next,
+                            shared::PlaybackRequest::Next(shared::TrackLoadType::NaturalNext),
                         );
                     }
                 };

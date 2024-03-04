@@ -9,7 +9,9 @@ pub fn handle_playback_request(
 ) {
     println!("GUI:\thandling internal: {:?}", internal);
     match internal {
-        shared::PlaybackRequest::LoadCurrentSong => match play_queue.current_playback {
+        shared::PlaybackRequest::LoadCurrentSong(track_load_type) => match play_queue
+            .current_playback
+        {
             Some(ref outer_current_playback) => match outer_current_playback {
                 shared::CurrentPlayback::Track(ref current_playback) => {
                     let maybe_next_track = match play_queue.play_queue.get(0) {
@@ -21,13 +23,21 @@ pub fn handle_playback_request(
                         }
                         None => None,
                     };
-                    sink_client
-                        .send(shared::SinkMessage::LoadSong(
-                            current_playback.track.metadata.path.clone(),
-                            maybe_next_track,
-                            play_queue.current_volume,
-                        ))
-                        .unwrap();
+                    match track_load_type {
+                        shared::TrackLoadType::HardLoad => sink_client
+                            .send(shared::SinkMessage::LoadSong(
+                                current_playback.track.metadata.path.clone(),
+                                maybe_next_track,
+                                play_queue.current_volume,
+                            ))
+                            .unwrap(),
+                        shared::TrackLoadType::NaturalNext => sink_client
+                            .send(shared::SinkMessage::LoadNextSong(
+                                maybe_next_track,
+                                play_queue.current_volume,
+                            ))
+                            .unwrap(),
+                    };
                     let _ = mpris_client.send(shared::MprisMessage::SetMetadata(
                         current_playback.track.metadata.album_artist.clone(),
                         current_playback.track.metadata.title.clone(),
@@ -57,6 +67,7 @@ pub fn handle_playback_request(
             shared::PlaybackRequest::InsertSongs(tracks, true),
         ),
         shared::PlaybackRequest::AppendSongs(tracks, load_next) => {
+            let should_issue_set_next = play_queue.play_queue.is_empty();
             let mut new_songs_to_queue = Vec::new();
             for iter_track in tracks.into_iter() {
                 new_songs_to_queue.push(shared::PlayQueueEntry::Track(shared::PlayQueueTrack {
@@ -70,10 +81,29 @@ pub fn handle_playback_request(
                     sink_client,
                     mpris_client,
                     tracker_client,
-                    shared::PlaybackRequest::Next,
+                    shared::PlaybackRequest::Next(shared::TrackLoadType::HardLoad),
                 );
             } else {
-                // Nothing else to run if not loading next
+                if should_issue_set_next {
+                    match play_queue.play_queue.get(0).unwrap() {
+                        shared::PlayQueueEntry::Track(track) => {
+                            sink_client
+                                .send(shared::SinkMessage::SetNextSong(
+                                    shared::TrackPathOrPause::TrackPath(
+                                        track.track.metadata.path.clone(),
+                                    ),
+                                ))
+                                .unwrap();
+                        }
+                        shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                            sink_client
+                                .send(shared::SinkMessage::SetNextSong(
+                                    shared::TrackPathOrPause::Pause,
+                                ))
+                                .unwrap();
+                        }
+                    }
+                }
             }
         }
         shared::PlaybackRequest::InsertSongs(tracks, load_next) => {
@@ -92,10 +122,27 @@ pub fn handle_playback_request(
                     sink_client,
                     mpris_client,
                     tracker_client,
-                    shared::PlaybackRequest::Next,
+                    shared::PlaybackRequest::Next(shared::TrackLoadType::HardLoad),
                 );
             } else {
-                // Nothing else to run if not loading next
+                match play_queue.play_queue.get(0).unwrap() {
+                    shared::PlayQueueEntry::Track(track) => {
+                        sink_client
+                            .send(shared::SinkMessage::SetNextSong(
+                                shared::TrackPathOrPause::TrackPath(
+                                    track.track.metadata.path.clone(),
+                                ),
+                            ))
+                            .unwrap();
+                    }
+                    shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                        sink_client
+                            .send(shared::SinkMessage::SetNextSong(
+                                shared::TrackPathOrPause::Pause,
+                            ))
+                            .unwrap();
+                    }
+                }
             }
         }
         shared::PlaybackRequest::Prev => {
@@ -117,13 +164,13 @@ pub fn handle_playback_request(
                     sink_client,
                     mpris_client,
                     tracker_client,
-                    shared::PlaybackRequest::LoadCurrentSong,
+                    shared::PlaybackRequest::LoadCurrentSong(shared::TrackLoadType::HardLoad),
                 );
             } else {
                 // Nothing else to run if not loading next
             }
         }
-        shared::PlaybackRequest::Next => {
+        shared::PlaybackRequest::Next(track_load_mode) => {
             if play_queue.play_queue.len() > 0 {
                 match play_queue.current_playback {
                     Some(ref current_playback) => play_queue
@@ -141,7 +188,7 @@ pub fn handle_playback_request(
                     sink_client,
                     mpris_client,
                     tracker_client,
-                    shared::PlaybackRequest::LoadCurrentSong,
+                    shared::PlaybackRequest::LoadCurrentSong(track_load_mode),
                 );
             } else {
                 match play_queue.current_playback {
