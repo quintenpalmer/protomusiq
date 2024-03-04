@@ -66,7 +66,7 @@ pub fn handle_playback_request(
             tracker_client,
             shared::PlaybackRequest::InsertSongs(tracks, true),
         ),
-        shared::PlaybackRequest::AppendSongs(tracks, load_next) => {
+        shared::PlaybackRequest::AppendSongs(tracks) => {
             let should_issue_set_next = play_queue.play_queue.is_empty();
             let mut new_songs_to_queue = Vec::new();
             for iter_track in tracks.into_iter() {
@@ -75,33 +75,23 @@ pub fn handle_playback_request(
                 }));
             }
             play_queue.play_queue.append(&mut new_songs_to_queue);
-            if load_next {
-                handle_playback_request(
-                    play_queue,
-                    sink_client,
-                    mpris_client,
-                    tracker_client,
-                    shared::PlaybackRequest::Next(shared::TrackLoadType::HardLoad),
-                );
-            } else {
-                if should_issue_set_next {
-                    match play_queue.play_queue.get(0).unwrap() {
-                        shared::PlayQueueEntry::Track(track) => {
-                            sink_client
-                                .send(shared::SinkMessage::SetNextSong(
-                                    shared::TrackPathOrPause::TrackPath(
-                                        track.track.metadata.path.clone(),
-                                    ),
-                                ))
-                                .unwrap();
-                        }
-                        shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
-                            sink_client
-                                .send(shared::SinkMessage::SetNextSong(
-                                    shared::TrackPathOrPause::Pause,
-                                ))
-                                .unwrap();
-                        }
+            if should_issue_set_next {
+                match play_queue.play_queue.get(0).unwrap() {
+                    shared::PlayQueueEntry::Track(track) => {
+                        sink_client
+                            .send(shared::SinkMessage::SetNextSong(
+                                shared::TrackPathOrPause::TrackPath(
+                                    track.track.metadata.path.clone(),
+                                ),
+                            ))
+                            .unwrap();
+                    }
+                    shared::PlayQueueEntry::Action(shared::PlayQueueAction::Pause) => {
+                        sink_client
+                            .send(shared::SinkMessage::SetNextSong(
+                                shared::TrackPathOrPause::Pause,
+                            ))
+                            .unwrap();
                     }
                 }
             }

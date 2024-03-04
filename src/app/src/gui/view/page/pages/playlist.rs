@@ -100,7 +100,6 @@ pub fn playlist_view<'a>(
                                                         } else {
                                                             augmented_tracks.clone()
                                                         },
-                                                        false,
                                                     ),
                                                 )),
                                         ),
@@ -188,7 +187,6 @@ pub fn playlist_view<'a>(
                                 .push(dark_button(bright_paragraph("|>")).on_press(
                                     Message::PlaybackRequest(shared::PlaybackRequest::AppendSongs(
                                         vec![track.clone()],
-                                        false,
                                     )),
                                 )),
                         )

@@ -22,7 +22,7 @@ pub enum PlaybackRequest {
     LoadCurrentSong(TrackLoadType),
     PlaySongs(Vec<model::AugmentedTrack>),
     InsertSongs(Vec<model::AugmentedTrack>, bool),
-    AppendSongs(Vec<model::AugmentedTrack>, bool),
+    AppendSongs(Vec<model::AugmentedTrack>),
 
     RemoveTrackFromPlayQueue(HistoryOrQueue, usize),
 

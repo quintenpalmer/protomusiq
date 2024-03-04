@@ -27,7 +27,7 @@ pub fn handle_playback_request(
     let maybe_tracks = match playback_request {
         shared::PlaybackRequest::PlaySongs(ref tracks) => Some(tracks),
         shared::PlaybackRequest::InsertSongs(ref tracks, ref _play) => Some(tracks),
-        shared::PlaybackRequest::AppendSongs(ref tracks, ref _play) => Some(tracks),
+        shared::PlaybackRequest::AppendSongs(ref tracks) => Some(tracks),
         _ => None,
     };
 

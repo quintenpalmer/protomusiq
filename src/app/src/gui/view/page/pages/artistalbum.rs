@@ -142,7 +142,6 @@ pub fn artist_album_view_state<'a>(
                                                         } else {
                                                             tracks.clone()
                                                         },
-                                                        false,
                                                     ),
                                                 )),
                                             ),
@@ -239,7 +238,6 @@ pub fn artist_album_view_state<'a>(
                                                                 disc.tracks.values()
                                                                     .cloned()
                                                                     .collect(),
-                                                                false,
                                                             ),
                                                         )),
                                                     )
@@ -349,7 +347,6 @@ pub fn artist_album_view_state<'a>(
                                                     .on_press(Message::PlaybackRequest(
                                                         shared::PlaybackRequest::AppendSongs(
                                                             vec![track.clone()],
-                                                            false,
                                                         ),
                                                     )),
                                                 )
