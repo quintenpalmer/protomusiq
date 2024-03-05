@@ -183,7 +183,7 @@ impl SinkPlayback {
             match self.manual_sink_status {
                 Some(true) => {
                     let new_time_elapsed = self.time_elapsed + BLOCKING_TIMEOUT;
-                    if self.time_elapsed / 1000 != new_time_elapsed / 1000 {
+                    if self.time_elapsed / BLOCKING_TIMEOUT != new_time_elapsed / BLOCKING_TIMEOUT {
                         callback
                             .send(shared::SinkCallbackMessage::SecondElapsed)
                             .unwrap();
