@@ -230,6 +230,29 @@ pub fn handle_playback_request(
                 }
                 shared::HistoryOrQueue::Queue => {
                     play_queue.play_queue.remove(index);
+                    if index == 0 {
+                        match play_queue.play_queue.get(0) {
+                            Some(shared::PlayQueueEntry::Track(track)) => {
+                                sink_client
+                                    .send(shared::SinkMessage::SetNextSong(
+                                        shared::TrackPathOrPause::TrackPath(
+                                            track.track.metadata.path.clone(),
+                                        ),
+                                    ))
+                                    .unwrap();
+                            }
+                            Some(shared::PlayQueueEntry::Action(
+                                shared::PlayQueueAction::Pause,
+                            ))
+                            | None => {
+                                sink_client
+                                    .send(shared::SinkMessage::SetNextSong(
+                                        shared::TrackPathOrPause::Pause,
+                                    ))
+                                    .unwrap();
+                            }
+                        }
+                    }
                 }
             };
         }
