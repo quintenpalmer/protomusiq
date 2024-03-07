@@ -94,40 +94,43 @@ pub fn handle_nav(
                 });
                 Command::none()
             }
-            message::ArtistNavMessage::ArtistAlbumsView(artist_id) => {
-                app.page_state.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
-                    artist_id,
-                    albums: app
-                        .library
-                        .get_artist_map()
-                        .get(&artist_id)
-                        .unwrap()
-                        .albums
-                        .keys()
-                        .cloned()
-                        .collect(),
-                });
-                Command::none()
-            }
-            message::ArtistNavMessage::ArtistTrackView(artist_id, sort_key, sort_order) => {
-                app.page_state.current_page = Page::ArtistTrackView(state::ArtistTrackViewState {
-                    artist_id,
-
-                    sort_key,
-                    sort_order,
-                });
-                Command::none()
-            }
-            message::ArtistNavMessage::ArtistFeaturedTrackView(artist_id, sort_key, sort_order) => {
-                app.page_state.current_page =
-                    Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+            message::ArtistNavMessage::ArtistView(artist_id, type_) => match type_ {
+                message::ArtistViewType::ArtistAlbumsView => {
+                    app.page_state.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
                         artist_id,
-
-                        sort_key,
-                        sort_order,
+                        albums: app
+                            .library
+                            .get_artist_map()
+                            .get(&artist_id)
+                            .unwrap()
+                            .albums
+                            .keys()
+                            .cloned()
+                            .collect(),
                     });
-                Command::none()
-            }
+                    Command::none()
+                }
+                message::ArtistViewType::ArtistTrackView(sort_key, sort_order) => {
+                    app.page_state.current_page =
+                        Page::ArtistTrackView(state::ArtistTrackViewState {
+                            artist_id,
+
+                            sort_key,
+                            sort_order,
+                        });
+                    Command::none()
+                }
+                message::ArtistViewType::ArtistFeaturedTrackView(sort_key, sort_order) => {
+                    app.page_state.current_page =
+                        Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+                            artist_id,
+
+                            sort_key,
+                            sort_order,
+                        });
+                    Command::none()
+                }
+            },
             message::ArtistNavMessage::ArtistAlbumView(
                 artist_id,
                 album_id,

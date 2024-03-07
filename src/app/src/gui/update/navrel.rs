@@ -98,10 +98,9 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(
-                message::ArtistNavMessage::ArtistTrackView(
+                message::ArtistNavMessage::ArtistView(
                     artist_id.clone(),
-                    new_sort_key,
-                    new_sort_order,
+                    message::ArtistViewType::ArtistTrackView(new_sort_key, new_sort_order),
                 )
                 .into_message(),
             )
@@ -119,10 +118,9 @@ fn handle_switch_sort_by_msg(
             let new_sort_order = new_sort_key.default_order();
 
             Some(
-                message::ArtistNavMessage::ArtistFeaturedTrackView(
+                message::ArtistNavMessage::ArtistView(
                     artist_id.clone(),
-                    new_sort_key,
-                    new_sort_order,
+                    message::ArtistViewType::ArtistFeaturedTrackView(new_sort_key, new_sort_order),
                 )
                 .into_message(),
             )

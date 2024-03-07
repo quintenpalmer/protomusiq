@@ -25,30 +25,29 @@ pub fn artist_track_view_state<'a>(
         } => {
             let artist = library.get_artist_info(*artist_id);
 
-            let artist_view_button_row = line_row()
-                .push(dark_button(dark(h2("Albums"))).on_press(
-                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-                ))
-                .push(
-                    dark_button(h2("Tracks")).on_press(
-                        message::ArtistNavMessage::ArtistTrackView(
-                            *artist_id,
-                            model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
-                        )
-                        .into_message(),
-                    ),
-                )
-                .push(
-                    dark_button(dark(h2("Featured"))).on_press(
-                        message::ArtistNavMessage::ArtistFeaturedTrackView(
-                            *artist_id,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                        )
-                        .into_message(),
-                    ),
-                );
+            let artist_view_button_row =
+                line_row()
+                    .push(dark_button(dark(h2("Albums"))).on_press(
+                        message::ArtistViewType::ArtistAlbumsView.into_message(*artist_id),
+                    ))
+                    .push(
+                        dark_button(h2("Tracks")).on_press(
+                            message::ArtistViewType::ArtistTrackView(
+                                model::ArtistTrackSortKey::ByTotalPlayCount,
+                                model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(*artist_id),
+                        ),
+                    )
+                    .push(
+                        dark_button(dark(h2("Featured"))).on_press(
+                            message::ArtistViewType::ArtistFeaturedTrackView(
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(*artist_id),
+                        ),
+                    );
 
             let artist_tracks = library.get_artist_tracks(artist_id);
 
@@ -129,12 +128,11 @@ pub fn artist_track_view_state<'a>(
                         }
                     })
                     .on_press(
-                        message::ArtistNavMessage::ArtistTrackView(
-                            artist.artist_id,
+                        message::ArtistViewType::ArtistTrackView(
                             sort_key.clone(),
                             model::SortOrder::Reversed,
                         )
-                        .into_message(),
+                        .into_message(artist.artist_id),
                     ),
                 )
                 .push(
@@ -146,12 +144,11 @@ pub fn artist_track_view_state<'a>(
                         }
                     })
                     .on_press(
-                        message::ArtistNavMessage::ArtistTrackView(
-                            artist.artist_id,
+                        message::ArtistViewType::ArtistTrackView(
                             sort_key.clone(),
                             model::SortOrder::Regular,
                         )
-                        .into_message(),
+                        .into_message(artist.artist_id),
                     ),
                 );
 
@@ -260,7 +257,6 @@ fn sort_button<'a>(
     } else {
         dark_paragraph(display_text)
     };
-    dark_button(text_element).on_press(
-        message::ArtistNavMessage::ArtistTrackView(artist_id, sort_key, order).into_message(),
-    )
+    dark_button(text_element)
+        .on_press(message::ArtistViewType::ArtistTrackView(sort_key, order).into_message(artist_id))
 }

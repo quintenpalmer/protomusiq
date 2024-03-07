@@ -102,26 +102,24 @@ pub fn artist_album_list<'a>(
 
                 let artist_view_button_row = line_row()
                     .push(dark_button(h2("Albums")).on_press(
-                        message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+                        message::ArtistViewType::ArtistAlbumsView.into_message(*artist_id),
                     ))
                     .push(
                         dark_button(dark(h2("Tracks"))).on_press(
-                            message::ArtistNavMessage::ArtistTrackView(
-                                *artist_id,
+                            message::ArtistViewType::ArtistTrackView(
                                 model::ArtistTrackSortKey::ByTotalPlayCount,
                                 model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
                             )
-                            .into_message(),
+                            .into_message(*artist_id),
                         ),
                     )
                     .push(
                         dark_button(dark(h2("Featured"))).on_press(
-                            message::ArtistNavMessage::ArtistFeaturedTrackView(
-                                *artist_id,
+                            message::ArtistViewType::ArtistFeaturedTrackView(
                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
                             )
-                            .into_message(),
+                            .into_message(*artist_id),
                         ),
                     );
 

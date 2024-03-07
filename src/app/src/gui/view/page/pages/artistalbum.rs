@@ -308,11 +308,12 @@ pub fn artist_album_view_state<'a>(
                                                                 track_artist
                                                             )))
                                                             .on_press(
-                                                                message::ArtistNavMessage::ArtistFeaturedTrackView(
-                                                                    musiqlibrary::ID::new(&track_artist),
+                                                                message::ArtistViewType::ArtistFeaturedTrackView(
                                                                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                                                     model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                                                                ).into_message(),
+                                                                ).into_message(
+                                                                    musiqlibrary::ID::new(&track_artist),
+                                                                    ),
                                                             ).into();
                                                             ret
                                                         }

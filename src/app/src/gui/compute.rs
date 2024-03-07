@@ -101,28 +101,16 @@ fn artist_breadcrumbs(
 
     match message {
         message::ArtistNavMessage::ArtistList(_, _, _) => (),
-        message::ArtistNavMessage::ArtistAlbumsView(artist_id) => {
+        message::ArtistNavMessage::ArtistView(artist_id, _type) => {
             let artist_name = library.get_artist_info(*artist_id).artist_name;
 
             ret.push((
                 common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
-                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-            ));
-        }
-        message::ArtistNavMessage::ArtistTrackView(artist_id, _sort_key, _sort_irder) => {
-            let artist_name = library.get_artist_info(*artist_id).artist_name;
-
-            ret.push((
-                common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
-                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-            ));
-        }
-        message::ArtistNavMessage::ArtistFeaturedTrackView(artist_id, _sort_key, _sort_irder) => {
-            let artist_name = library.get_artist_info(*artist_id).artist_name;
-
-            ret.push((
-                common::abr_str(artist_name.clone(), consts::NAV_STR_LENGTH),
-                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+                message::ArtistNavMessage::ArtistView(
+                    *artist_id,
+                    message::ArtistViewType::ArtistAlbumsView,
+                )
+                .into_message(),
             ));
         }
         message::ArtistNavMessage::ArtistAlbumView(
@@ -138,7 +126,11 @@ fn artist_breadcrumbs(
 
             ret.push((
                 common::abr_str(artist_name, consts::NAV_STR_LENGTH),
-                message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
+                message::ArtistNavMessage::ArtistView(
+                    *artist_id,
+                    message::ArtistViewType::ArtistAlbumsView,
+                )
+                .into_message(),
             ));
             ret.push((
                 common::abr_str(album_name, consts::NAV_STR_LENGTH),

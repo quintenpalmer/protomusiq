@@ -53,8 +53,7 @@ pub fn artist_list<'a>(
                         )),
                     ))
                     .on_press(
-                        message::ArtistNavMessage::ArtistAlbumsView(artist.artist_id)
-                            .into_message(),
+                        message::ArtistViewType::ArtistAlbumsView.into_message(artist.artist_id),
                     ),
                 );
             }

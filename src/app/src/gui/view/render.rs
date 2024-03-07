@@ -607,13 +607,12 @@ fn controls_with_maybe_track_info<'a>(
                                             track_artist
                                         ))))
                                         .on_press(
-                                            message::ArtistNavMessage::ArtistFeaturedTrackView(
-                                                musiqlibrary::ID::new(&track_artist),
+                                            message::ArtistViewType::ArtistFeaturedTrackView(
                                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
                                                 model::ArtistFeaturedTrackSortKey::ByTotalPlayCount
                                                     .default_order(),
                                             )
-                                            .into_message(),
+                                            .into_message(musiqlibrary::ID::new(&track_artist)),
                                         ),
                                     )
                                 }
@@ -630,10 +629,9 @@ fn controls_with_maybe_track_info<'a>(
                                         .album_artist
                                         .clone()))
                                     .on_press(
-                                        message::ArtistNavMessage::ArtistAlbumsView(
+                                        message::ArtistViewType::ArtistAlbumsView.into_message(
                                             current_playback.track.metadata.album_artist_id,
-                                        )
-                                        .into_message(),
+                                        ),
                                     ),
                                 )
                                 .push(h3("-"))

@@ -27,30 +27,29 @@ pub fn artist_featured_track_view_state<'a>(
 
             let featured_tracks = library.get_featured_tracks_for_artist(artist_id);
 
-            let artist_view_button_row = line_row()
-                .push(dark_button(dark(h2("Albums"))).on_press(
-                    message::ArtistNavMessage::ArtistAlbumsView(*artist_id).into_message(),
-                ))
-                .push(
-                    dark_button(dark(h2("Tracks"))).on_press(
-                        message::ArtistNavMessage::ArtistTrackView(
-                            *artist_id,
-                            model::ArtistTrackSortKey::ByTotalPlayCount,
-                            model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
-                        )
-                        .into_message(),
-                    ),
-                )
-                .push(
-                    dark_button(h2("Featured")).on_press(
-                        message::ArtistNavMessage::ArtistFeaturedTrackView(
-                            *artist_id,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
-                            model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
-                        )
-                        .into_message(),
-                    ),
-                );
+            let artist_view_button_row =
+                line_row()
+                    .push(dark_button(dark(h2("Albums"))).on_press(
+                        message::ArtistViewType::ArtistAlbumsView.into_message(*artist_id),
+                    ))
+                    .push(
+                        dark_button(dark(h2("Tracks"))).on_press(
+                            message::ArtistViewType::ArtistTrackView(
+                                model::ArtistTrackSortKey::ByTotalPlayCount,
+                                model::ArtistTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(*artist_id),
+                        ),
+                    )
+                    .push(
+                        dark_button(h2("Featured")).on_press(
+                            message::ArtistViewType::ArtistFeaturedTrackView(
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount,
+                                model::ArtistFeaturedTrackSortKey::ByTotalPlayCount.default_order(),
+                            )
+                            .into_message(*artist_id),
+                        ),
+                    );
 
             let track_sorts = model::AlbumFeaturedTrackSorts::new(featured_tracks);
 
@@ -122,22 +121,20 @@ pub fn artist_featured_track_view_state<'a>(
                 .push(paragraph("Order: "))
                 .push(
                     dark_button(bright_paragraph("^")).on_press(
-                        message::ArtistNavMessage::ArtistFeaturedTrackView(
-                            artist.artist_id,
+                        message::ArtistViewType::ArtistFeaturedTrackView(
                             sort_key.clone(),
                             model::SortOrder::Reversed,
                         )
-                        .into_message(),
+                        .into_message(artist.artist_id),
                     ),
                 )
                 .push(
                     dark_button(bright_paragraph("v")).on_press(
-                        message::ArtistNavMessage::ArtistFeaturedTrackView(
-                            artist.artist_id,
+                        message::ArtistViewType::ArtistFeaturedTrackView(
                             sort_key.clone(),
                             model::SortOrder::Regular,
                         )
-                        .into_message(),
+                        .into_message(artist.artist_id),
                     ),
                 );
 
@@ -247,7 +244,6 @@ fn sort_button<'a>(
         dark_paragraph(display_text)
     };
     dark_button(text_element).on_press(
-        message::ArtistNavMessage::ArtistFeaturedTrackView(*artist_id, sort_key, order)
-            .into_message(),
+        message::ArtistViewType::ArtistFeaturedTrackView(sort_key, order).into_message(*artist_id),
     )
 }

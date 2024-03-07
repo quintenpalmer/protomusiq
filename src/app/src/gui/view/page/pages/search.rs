@@ -89,10 +89,8 @@ pub fn search_page<'a>(
                                                     ),
                                             )
                                             .on_press(
-                                                message::ArtistNavMessage::ArtistAlbumsView(
-                                                    result.artist_id,
-                                                )
-                                                .into_message(),
+                                                message::ArtistViewType::ArtistAlbumsView
+                                                    .into_message(result.artist_id),
                                             ),
                                         )
                                     },
