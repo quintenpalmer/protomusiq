@@ -12,6 +12,13 @@ impl SortOrder {
         }
         .to_string()
     }
+
+    pub fn toggle(&self) -> Self {
+        match self {
+            SortOrder::Regular => SortOrder::Reversed,
+            SortOrder::Reversed => SortOrder::Regular,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]

@@ -148,6 +148,10 @@ pub fn keybinding_subscription_fn(
             message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Right),
         )),
 
+        (keyboard::Key::Character("o"), Mods::None) => Some(message::Message::NavRelative(
+            message::NavRelMsg::ToggleSortOrder,
+        )),
+
         (keyboard::Key::Character("h"), Mods::Shift) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::First),
         )),

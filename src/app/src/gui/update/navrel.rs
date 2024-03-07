@@ -19,11 +19,102 @@ pub fn handle_nav_relative(
         message::NavRelMsg::SwitchSortBy(move_direction) => {
             handle_switch_sort_by_msg(app, move_direction)
         }
+        message::NavRelMsg::ToggleSortOrder => handle_sort_order_toggle(app),
     };
 
     match maybe_new_nav_msg {
         Some(new_nav_msg) => loaded::update_state(app, new_nav_msg),
         None => Command::none(),
+    }
+}
+
+fn handle_sort_order_toggle(app: &mut AppState) -> Option<message::Message> {
+    match app.page_state.current_page {
+        Page::AlbumList(state::AlbumListState {
+            ref page,
+            ref sort_key,
+            ref sort_order,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(message::Message::Nav(message::NavMessage::AlbumList(
+                *page,
+                sort_key.clone(),
+                new_sort_order,
+            )))
+        }
+
+        Page::ArtistList(state::ArtistListState {
+            ref sort_key,
+            ref sort_order,
+            ref page,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(
+                message::ArtistNavMessage::ArtistList(*page, sort_key.clone(), new_sort_order)
+                    .into_message(),
+            )
+        }
+        Page::ArtistTrackView(state::ArtistTrackViewState {
+            ref artist_id,
+            ref sort_key,
+            ref sort_order,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(
+                message::ArtistNavMessage::ArtistView(
+                    artist_id.clone(),
+                    message::ArtistViewType::ArtistTrackView(sort_key.clone(), new_sort_order),
+                )
+                .into_message(),
+            )
+        }
+        Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+            ref artist_id,
+            ref sort_key,
+            ref sort_order,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(
+                message::ArtistNavMessage::ArtistView(
+                    artist_id.clone(),
+                    message::ArtistViewType::ArtistFeaturedTrackView(
+                        sort_key.clone(),
+                        new_sort_order,
+                    ),
+                )
+                .into_message(),
+            )
+        }
+        Page::TrackList(state::TrackListState {
+            ref sort_key,
+            ref sort_order,
+            ref page,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(message::Message::Nav(message::NavMessage::TrackList(
+                *page,
+                sort_key.clone(),
+                new_sort_order,
+            )))
+        }
+        Page::MovieList(state::MovieListState {
+            ref sort_key,
+            ref sort_order,
+            ref page,
+        }) => {
+            let new_sort_order = sort_order.toggle();
+
+            Some(
+                message::MovieNavMessage::MovieList(*page, sort_key.clone(), new_sort_order)
+                    .into_message(),
+            )
+        }
+        _ => None,
     }
 }
 

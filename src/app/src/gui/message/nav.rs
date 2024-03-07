@@ -55,6 +55,7 @@ pub enum NavRelMsg {
     BreadcrumbSelection(usize),
     PagifiedMovement(PagifiedMovementMsg),
     SwitchSortBy(MoveDirectionMsg),
+    ToggleSortOrder,
 }
 
 #[derive(Debug, Clone)]
