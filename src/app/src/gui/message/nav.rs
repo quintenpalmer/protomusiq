@@ -39,6 +39,7 @@ pub enum ArtistViewType {
     ArtistAlbumsView,
     ArtistTrackView(model::ArtistTrackSortKey, model::SortOrder),
     ArtistFeaturedTrackView(model::ArtistFeaturedTrackSortKey, model::SortOrder),
+    InPlaylist,
 }
 
 #[derive(Debug, Clone)]

@@ -130,6 +130,25 @@ pub fn handle_nav(
                         });
                     Command::none()
                 }
+                message::ArtistViewType::InPlaylist => {
+                    let mut playlist_ids = BTreeSet::new();
+
+                    for playlist in app.library.user_playlists.entries_as_vec() {
+                        for track in playlist.tracks.iter() {
+                            if artist_id == track.artist_id {
+                                playlist_ids.insert(playlist.id);
+                            }
+                        }
+                    }
+
+                    app.page_state.current_page =
+                        Page::ArtistFeaturedInPlaylist(state::ArtistFeaturedInPlaylistState {
+                            artist_id,
+
+                            playlist_ids,
+                        });
+                    Command::none()
+                }
             },
             message::ArtistNavMessage::ArtistAlbumView(
                 artist_id,

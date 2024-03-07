@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use musiqlibrary::video;
 
 use crate::model;
@@ -21,6 +23,7 @@ pub enum Page {
     ArtistAlbumsView(ArtistViewState),
     ArtistTrackView(ArtistTrackViewState),
     ArtistFeaturedTrackView(ArtistFeaturedTrackViewState),
+    ArtistFeaturedInPlaylist(ArtistFeaturedInPlaylistState),
     ArtistAlbumView(ArtistAlbumViewState),
     MovieHome,
     MovieList(MovieListState),
@@ -44,6 +47,7 @@ impl Page {
             Page::ArtistAlbumsView(_) => "ArtistAlbumsView",
             Page::ArtistTrackView(_) => "ArtistTrackViewState",
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
+            Page::ArtistFeaturedInPlaylist(_) => "ArtistFeaturedInPlaylist",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
             Page::MovieHome => "MovieHome",
             Page::MovieList(_) => "MovieList",
@@ -128,6 +132,13 @@ pub struct ArtistFeaturedTrackViewState {
 
     pub sort_key: model::ArtistFeaturedTrackSortKey,
     pub sort_order: model::SortOrder,
+}
+
+#[derive(Debug)]
+pub struct ArtistFeaturedInPlaylistState {
+    pub artist_id: musiqlibrary::ID,
+
+    pub playlist_ids: BTreeSet<u32>,
 }
 
 #[derive(Debug)]
