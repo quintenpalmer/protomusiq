@@ -148,7 +148,7 @@ pub fn keybinding_subscription_fn(
             message::NavRelMsg::SwitchSortBy(message::MoveDirectionMsg::Right),
         )),
 
-        (keyboard::Key::Character("H"), Mods::Shift) => Some(message::Message::NavRelative(
+        (keyboard::Key::Character("h"), Mods::Shift) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::First),
         )),
         (keyboard::Key::Character("h"), Mods::None) => Some(message::Message::NavRelative(
@@ -157,7 +157,7 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("l"), Mods::None) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Forwards),
         )),
-        (keyboard::Key::Character("L"), Mods::Shift) => Some(message::Message::NavRelative(
+        (keyboard::Key::Character("l"), Mods::Shift) => Some(message::Message::NavRelative(
             message::NavRelMsg::PagifiedMovement(message::PagifiedMovementMsg::Last),
         )),
 
