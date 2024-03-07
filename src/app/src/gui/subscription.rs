@@ -2,6 +2,7 @@ use iced::keyboard;
 use iced::keyboard::key;
 use iced::mouse;
 
+use crate::model;
 use crate::shared;
 
 use super::message;
@@ -43,6 +44,46 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("p"), Mods::None) => Some(message::Message::Action(
             message::Action::TogglePlayQueueVisible,
         )),
+
+        (keyboard::Key::Character("r"), Mods::Shift) => Some(
+            message::ArtistNavMessage::ArtistList(
+                0,
+                model::ArtistSortKey::ByName,
+                model::ArtistSortKey::ByName.default_order(),
+            )
+            .into_message(),
+        ),
+        (keyboard::Key::Character("a"), Mods::Shift) => Some(
+            message::NavMessage::AlbumList(
+                0,
+                model::AlbumSortKey::ByParent,
+                model::AlbumSortKey::ByParent.default_order(),
+            )
+            .into_message(),
+        ),
+        (keyboard::Key::Character("t"), Mods::Shift) => Some(
+            message::NavMessage::TrackList(
+                0,
+                model::TrackSortKey::ByName,
+                model::TrackSortKey::ByName.default_order(),
+            )
+            .into_message(),
+        ),
+        (keyboard::Key::Character("m"), Mods::Shift) => Some(
+            message::MovieNavMessage::MovieList(
+                0,
+                model::MovieSortKey::ByTitle,
+                model::MovieSortKey::ByTitle.default_order(),
+            )
+            .into_message(),
+        ),
+        (keyboard::Key::Character("p"), Mods::Shift) => {
+            Some(message::PlaylistNavMessage::PlaylistList("".to_string()).into_message())
+        }
+        (keyboard::Key::Character("s"), Mods::Shift) => Some(
+            message::NavMessage::SearchPage("".to_string(), model::SearchDomain::Music, false)
+                .into_message(),
+        ),
 
         (keyboard::Key::Character("f"), Mods::None) => {
             Some(message::Message::Action(message::Action::ToggleFullscreen))
