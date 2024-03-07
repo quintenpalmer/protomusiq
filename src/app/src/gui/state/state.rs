@@ -22,7 +22,7 @@ pub struct AppState {
     pub action_state: ActionState,
     pub cross_page_display_info: CrossPageDisplayInfo,
 
-    pub config: Config,
+    pub config: model::app::AppConfigState,
 
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
@@ -51,11 +51,6 @@ pub struct CrossPageDisplayInfo {
 /// A Single Message
 pub struct MessageInfo {
     pub notification_type: message::NotificationAction,
-}
-
-/// State for the Configuratino of the App
-pub struct Config {
-    pub rest: model::app::AppConfigState,
 }
 
 /// State for the Play Queue (and Current Track and Play History)

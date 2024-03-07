@@ -60,7 +60,7 @@ impl Application for state::App {
 
     fn scale_factor(&self) -> f64 {
         match self {
-            state::App::Loaded(loaded) => loaded.config.rest.scale_factor,
+            state::App::Loaded(loaded) => loaded.config.scale_factor,
             state::App::Loading => 1.0,
         }
     }

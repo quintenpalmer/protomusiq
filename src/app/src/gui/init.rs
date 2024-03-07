@@ -170,7 +170,7 @@ pub fn initialize_everything() -> state::App {
             group_buttons_shuffle: false,
         },
         video_library: video_library_state,
-        config: state::Config { rest: config_state },
+        config: config_state,
         player_info: state::PlayerInfo {
             playing: false,
             current_volume: 1.0,

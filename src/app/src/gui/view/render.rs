@@ -29,7 +29,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     );
     let library = &app.library;
     let movie_library = &app.video_library;
-    let config = &app.config.rest;
+    let config = &app.config;
     let messages = &app.messages;
     let app_images = &app.app_images;
     let current_page = &app.page_state.current_page;
