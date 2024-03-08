@@ -77,14 +77,16 @@ pub fn track_list<'a>(
                                 .push(Space::with_width(Length::Fixed(5.0))),
                         )
                         .on_press(
-                            message::ArtistNavMessage::ArtistAlbumView(
+                            message::ArtistNavMessage::AlbumView(
                                 info.metadata.album_artist_id,
                                 info.metadata.album_id,
-                                model::AlbumSize::Regular,
-                                Some(musiqlibrary::TrackUniqueIdentifier::from_track(
-                                    &info.metadata,
-                                )),
-                                None,
+                                message::ArtistAlbumView::ArtistAlbumTrackView(
+                                    model::AlbumSize::Regular,
+                                    Some(musiqlibrary::TrackUniqueIdentifier::from_track(
+                                        &info.metadata,
+                                    )),
+                                    None,
+                                ),
                             )
                             .into_message(),
                         ),

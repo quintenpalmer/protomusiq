@@ -113,13 +113,8 @@ fn artist_breadcrumbs(
                 .into_message(),
             ));
         }
-        message::ArtistNavMessage::ArtistAlbumView(
-            artist_id,
-            album_id,
-            _size,
-            _selected_track,
-            _sort_order_placement,
-        ) => {
+
+        message::ArtistNavMessage::AlbumView(artist_id, album_id, _track_view) => {
             let artist_album_info = library.get_artist_album_info(*artist_id, *album_id);
             let artist_name = artist_album_info.artist.artist_name.clone();
             let album_name = artist_album_info.album.album_name.clone();
@@ -134,12 +129,14 @@ fn artist_breadcrumbs(
             ));
             ret.push((
                 common::abr_str(album_name, consts::NAV_STR_LENGTH),
-                message::ArtistNavMessage::ArtistAlbumView(
+                message::ArtistNavMessage::AlbumView(
                     *artist_id,
                     *album_id,
-                    model::AlbumSize::Regular,
-                    None,
-                    None,
+                    message::ArtistAlbumView::ArtistAlbumTrackView(
+                        model::AlbumSize::Regular,
+                        None,
+                        None,
+                    ),
                 )
                 .into_message(),
             ));

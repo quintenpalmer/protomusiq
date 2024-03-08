@@ -317,16 +317,18 @@ fn handle_nav_rel_msg(
                 let (new_artist_id, new_album_id) = albums_sorted_by_key.get(new_index).unwrap();
 
                 Some(
-                    message::ArtistNavMessage::ArtistAlbumView(
+                    message::ArtistNavMessage::AlbumView(
                         *new_artist_id,
                         *new_album_id,
-                        model::AlbumSize::Regular,
-                        None,
-                        Some(model::AlbumSortPlacement {
-                            index: new_index,
-                            sort_key: sort_key.clone(),
-                            sort_order: sort_order.clone(),
-                        }),
+                        message::ArtistAlbumView::ArtistAlbumTrackView(
+                            model::AlbumSize::Regular,
+                            None,
+                            Some(model::AlbumSortPlacement {
+                                index: new_index,
+                                sort_key: sort_key.clone(),
+                                sort_order: sort_order.clone(),
+                            }),
+                        ),
                     )
                     .into_message(),
                 )

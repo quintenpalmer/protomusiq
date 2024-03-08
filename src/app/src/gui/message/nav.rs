@@ -25,13 +25,7 @@ pub enum PlaylistNavMessage {
 pub enum ArtistNavMessage {
     ArtistList(usize, model::ArtistSortKey, model::SortOrder),
     ArtistView(musiqlibrary::ID, ArtistViewType),
-    ArtistAlbumView(
-        musiqlibrary::ID,
-        musiqlibrary::ID,
-        model::AlbumSize,
-        Option<musiqlibrary::TrackUniqueIdentifier>,
-        Option<model::AlbumSortPlacement>,
-    ),
+    AlbumView(musiqlibrary::ID, musiqlibrary::ID, ArtistAlbumView),
 }
 
 #[derive(Debug, Clone)]
@@ -40,6 +34,15 @@ pub enum ArtistViewType {
     ArtistTrackView(model::ArtistTrackSortKey, model::SortOrder),
     ArtistFeaturedTrackView(model::ArtistFeaturedTrackSortKey, model::SortOrder),
     InPlaylist,
+}
+
+#[derive(Debug, Clone)]
+pub enum ArtistAlbumView {
+    ArtistAlbumTrackView(
+        model::AlbumSize,
+        Option<musiqlibrary::TrackUniqueIdentifier>,
+        Option<model::AlbumSortPlacement>,
+    ),
 }
 
 #[derive(Debug, Clone)]

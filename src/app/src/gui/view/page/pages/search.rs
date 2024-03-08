@@ -54,12 +54,14 @@ pub fn search_page<'a>(
                                                     ),
                                             )
                                             .on_press(
-                                                message::ArtistNavMessage::ArtistAlbumView(
+                                                message::ArtistNavMessage::AlbumView(
                                                     result.artist.artist_id,
                                                     result.album.album_id,
-                                                    model::AlbumSize::Regular,
-                                                    None,
-                                                    None,
+                                                    message::ArtistAlbumView::ArtistAlbumTrackView(
+                                                        model::AlbumSize::Regular,
+                                                        None,
+                                                        None,
+                                                    ),
                                                 )
                                                 .into_message(),
                                             ),

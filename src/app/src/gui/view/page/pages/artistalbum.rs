@@ -69,12 +69,14 @@ pub fn artist_album_view_state<'a>(
                                         album.album_info.album_id,
                                     ),
                                     current,
-                                )).on_press(message::ArtistNavMessage::ArtistAlbumView(
+                                )).on_press(message::ArtistNavMessage::AlbumView(
                                     *artist_id,
                                     *album_id,
-                                    toggle_to,
-                                    maybe_selected_track.clone(),
-                                    maybe_current_sort_order.clone(),
+                                    message::ArtistAlbumView::ArtistAlbumTrackView(
+                                        toggle_to,
+                                        maybe_selected_track.clone(),
+                                        maybe_current_sort_order.clone(),
+                                    )
                                 ).into_message())
                             })
                             .push(

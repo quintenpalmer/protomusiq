@@ -642,12 +642,14 @@ fn controls_with_maybe_track_info<'a>(
                                         .album
                                         .clone()))
                                     .on_press(
-                                        message::ArtistNavMessage::ArtistAlbumView(
+                                        message::ArtistNavMessage::AlbumView(
                                             current_playback.track.metadata.album_artist_id,
                                             current_playback.track.metadata.album_id,
-                                            model::AlbumSize::Regular,
-                                            None,
-                                            None,
+                                            message::ArtistAlbumView::ArtistAlbumTrackView(
+                                                model::AlbumSize::Regular,
+                                                None,
+                                                None,
+                                            ),
                                         )
                                         .into_message(),
                                     ),

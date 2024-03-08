@@ -71,16 +71,18 @@ pub fn album_list<'a>(
                                 ))),
                         ))
                         .on_press(
-                            message::ArtistNavMessage::ArtistAlbumView(
+                            message::ArtistNavMessage::AlbumView(
                                 info.artist.artist_id,
                                 info.album.album_id,
-                                model::AlbumSize::Regular,
-                                None,
-                                Some(model::AlbumSortPlacement {
-                                    index: base_album_total_index + album_index_offset,
-                                    sort_key: sort_key.clone(),
-                                    sort_order: sort_order.clone(),
-                                }),
+                                message::ArtistAlbumView::ArtistAlbumTrackView(
+                                    model::AlbumSize::Regular,
+                                    None,
+                                    Some(model::AlbumSortPlacement {
+                                        index: base_album_total_index + album_index_offset,
+                                        sort_key: sort_key.clone(),
+                                        sort_order: sort_order.clone(),
+                                    }),
+                                ),
                             )
                             .into_message(),
                         ),

@@ -53,12 +53,14 @@ pub fn artist_album_list<'a>(
                                 ))),
                         ))
                         .on_press(
-                            message::ArtistNavMessage::ArtistAlbumView(
+                            message::ArtistNavMessage::AlbumView(
                                 artist.artist_id,
                                 album.album_info.album_id,
-                                model::AlbumSize::Regular,
-                                None,
-                                None,
+                                message::ArtistAlbumView::ArtistAlbumTrackView(
+                                    model::AlbumSize::Regular,
+                                    None,
+                                    None,
+                                ),
                             )
                             .into_message(),
                         ),

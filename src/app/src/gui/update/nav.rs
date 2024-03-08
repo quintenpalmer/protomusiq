@@ -150,12 +150,14 @@ pub fn handle_nav(
                     Command::none()
                 }
             },
-            message::ArtistNavMessage::ArtistAlbumView(
+            message::ArtistNavMessage::AlbumView(
                 artist_id,
                 album_id,
-                album_size,
-                maybe_selected_track,
-                maybe_current_sort_order,
+                message::ArtistAlbumView::ArtistAlbumTrackView(
+                    album_size,
+                    maybe_selected_track,
+                    maybe_current_sort_order,
+                ),
             ) => {
                 app.page_state.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
                     artist_id,

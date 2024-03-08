@@ -195,14 +195,16 @@ pub fn artist_featured_track_view_state<'a>(
                             .push(Space::with_width(Length::Fixed(5.0))),
                     )
                     .on_press(
-                        message::ArtistNavMessage::ArtistAlbumView(
+                        message::ArtistNavMessage::AlbumView(
                             track.metadata.album_artist_id,
                             track.metadata.album_id,
-                            model::AlbumSize::Regular,
-                            Some(musiqlibrary::TrackUniqueIdentifier::from_track(
-                                &track.metadata,
-                            )),
-                            None,
+                            message::ArtistAlbumView::ArtistAlbumTrackView(
+                                model::AlbumSize::Regular,
+                                Some(musiqlibrary::TrackUniqueIdentifier::from_track(
+                                    &track.metadata,
+                                )),
+                                None,
+                            ),
                         )
                         .into_message(),
                     ),
