@@ -32,6 +32,18 @@ impl nav::ArtistViewType {
     }
 }
 
+impl nav::ArtistAlbumView {
+    pub fn into_message(
+        self,
+        artist_id: musiqlibrary::ID,
+        album_id: musiqlibrary::ID,
+    ) -> top::Message {
+        top::Message::Nav(nav::NavMessage::Artist(nav::ArtistNavMessage::AlbumView(
+            artist_id, album_id, self,
+        )))
+    }
+}
+
 impl nav::MovieNavMessage {
     pub fn into_message(self) -> top::Message {
         top::Message::Nav(nav::NavMessage::Movie(self))
