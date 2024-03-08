@@ -50,7 +50,23 @@ pub fn artist_album_view_state<'a>(
                 .max()
                 .unwrap_or(0);
 
+            let album_view_button_row = line_row()
+                .push(
+                    dark_button(h2("Track List")).on_press(
+                        message::ArtistAlbumView::ArtistAlbumTrackView(
+                            model::AlbumSize::Regular,
+                            None,
+                            None,
+                        )
+                        .into_message(*artist_id, *album_id),
+                    ),
+                )
+                .push(dark_button(dark(h2("In Playlists"))).on_press(
+                    message::ArtistAlbumView::InPlaylist.into_message(*artist_id, *album_id),
+                ));
+
             let mut body_column = Column::new()
+                    .push(album_view_button_row)
                     .push(
                         Row::new()
                             .push({

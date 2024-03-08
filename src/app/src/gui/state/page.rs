@@ -25,6 +25,7 @@ pub enum Page {
     ArtistFeaturedTrackView(ArtistFeaturedTrackViewState),
     ArtistFeaturedInPlaylist(ArtistFeaturedInPlaylistState),
     ArtistAlbumView(ArtistAlbumViewState),
+    ArtistAlbumFeaturedInPlaylist(ArtistAlbumFeaturedInPlaylistState),
     MovieHome,
     MovieList(MovieListState),
     MovieView(MovieViewState),
@@ -49,6 +50,7 @@ impl Page {
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistFeaturedInPlaylist(_) => "ArtistFeaturedInPlaylist",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
+            Page::ArtistAlbumFeaturedInPlaylist(_) => "ArtistAlbumFeaturedInPlaylist",
             Page::MovieHome => "MovieHome",
             Page::MovieList(_) => "MovieList",
             Page::MovieAttributes(_) => "MovieAttributes",
@@ -148,6 +150,14 @@ pub struct ArtistAlbumViewState {
     pub album_id: musiqlibrary::ID,
     pub maybe_selected_track: Option<musiqlibrary::TrackUniqueIdentifier>,
     pub maybe_current_sort_order: Option<model::AlbumSortPlacement>,
+}
+
+#[derive(Debug)]
+pub struct ArtistAlbumFeaturedInPlaylistState {
+    pub artist_id: musiqlibrary::ID,
+    pub album_id: musiqlibrary::ID,
+
+    pub playlist_ids: BTreeSet<u32>,
 }
 
 #[derive(Debug)]

@@ -50,6 +50,9 @@ pub fn render_page<'a>(
         Page::ArtistAlbumView(ref state) => {
             pages::artistalbum::artist_album_view_state(library, action_state, player_info, state)
         }
+        Page::ArtistAlbumFeaturedInPlaylist(ref state) => {
+            pages::artistalbuminplaylist::artist_album_featured_in_playlist_state(library, state)
+        }
         Page::ArtistTrackView(ref state) => {
             pages::artisttracks::artist_track_view_state(library, player_info, state)
         }

@@ -1,5 +1,6 @@
 pub mod albumlist;
 pub mod artistalbum;
+pub mod artistalbuminplaylist;
 pub mod artistalbums;
 pub mod artistfeatured;
 pub mod artistinplaylists;

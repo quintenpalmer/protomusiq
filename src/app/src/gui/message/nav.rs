@@ -43,6 +43,7 @@ pub enum ArtistAlbumView {
         Option<musiqlibrary::TrackUniqueIdentifier>,
         Option<model::AlbumSortPlacement>,
     ),
+    InPlaylist,
 }
 
 #[derive(Debug, Clone)]

@@ -168,6 +168,30 @@ pub fn handle_nav(
                 });
                 Command::none()
             }
+            message::ArtistNavMessage::AlbumView(
+                artist_id,
+                album_id,
+                message::ArtistAlbumView::InPlaylist,
+            ) => {
+                let mut playlist_ids = BTreeSet::new();
+
+                for playlist in app.library.user_playlists.entries_as_vec() {
+                    for track in playlist.tracks.iter() {
+                        if artist_id == track.artist_id && album_id == track.album_id {
+                            playlist_ids.insert(playlist.id);
+                        }
+                    }
+                }
+
+                app.page_state.current_page = Page::ArtistAlbumFeaturedInPlaylist(
+                    state::ArtistAlbumFeaturedInPlaylistState {
+                        artist_id,
+                        album_id,
+                        playlist_ids,
+                    },
+                );
+                Command::none()
+            }
         },
         NavMessage::Movie(movie_message) => match movie_message {
             message::MovieNavMessage::MovieHome => {
