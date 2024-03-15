@@ -31,7 +31,9 @@ pub fn resolve_metadata_from_parser<P: AsRef<Path>>(
     let album_id = ID::new(&album);
     let album_artist = parser.album_artist().unwrap_or_else(|| parser.artist());
     let album_artist_id = ID::new(&album_artist);
-    let date = parser.date().unwrap();
+    let date = parser
+        .date()
+        .expect(format!("album: {}, artist: {}", album, album_artist).as_str());
 
     FullTrackMetadata {
         album,
