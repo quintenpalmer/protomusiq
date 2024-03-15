@@ -8,4 +8,5 @@ members = [
   "src/tui/",
   "src/playhistoryimport",
   "src/ytimporter",
+  "src/musicbrainz",
 ]
