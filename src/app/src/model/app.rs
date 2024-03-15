@@ -11,6 +11,8 @@ pub struct AppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
 
+    pub compressed_library_path: Option<path::PathBuf>,
+
     pub app_data_path: path::PathBuf,
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
@@ -50,6 +52,8 @@ pub struct RawAppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
 
+    pub compressed_library_path: Option<path::PathBuf>,
+
     pub hostname: String,
     pub load_mode: Option<LoadMode>,
     pub sink_mode: Option<SinkMode>,
@@ -72,6 +76,7 @@ impl RawAppConfigState {
         AppConfigState {
             library_path: self.library_path,
             movie_path: self.movie_path,
+            compressed_library_path: self.compressed_library_path,
             app_data_path: app_data_path.as_ref().to_path_buf(),
             hostname: self.hostname,
             load_mode: self.load_mode,
