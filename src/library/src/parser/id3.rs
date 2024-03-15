@@ -116,7 +116,28 @@ impl MetadataParser for ID3MetadataParser {
                 Some(v) => Some(v.to_string()),
                 None => match self.tag.date_recorded() {
                     Some(v) => Some(v.to_string()),
-                    None => None,
+                    None => {
+                        let mut found = None;
+                        for frame in self.tag.frames() {
+                            if frame.id() == "TXXX" {
+                                match frame.content().extended_text() {
+                                    Some(extended_text) => {
+                                        if extended_text.description == "YEAR" {
+                                            found = Some(
+                                                extended_text
+                                                    .value
+                                                    .trim()
+                                                    .trim_matches(char::from(0))
+                                                    .to_string(),
+                                            )
+                                        }
+                                    }
+                                    None => (),
+                                }
+                            }
+                        }
+                        found
+                    }
                 },
             },
         }
