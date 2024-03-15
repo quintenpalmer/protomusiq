@@ -1,4 +1,5 @@
 pub mod background;
+pub mod difflibs;
 pub mod explore;
 pub mod proto;
 pub mod reconcile;
