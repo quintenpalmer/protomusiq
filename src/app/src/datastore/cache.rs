@@ -81,7 +81,7 @@ pub fn read_musicbrainz_artist_match_file(
     .ok()
 }
 
-/// Read to the raw.json file for an artist with a given (assumed) json payload
+/// Write to the raw.json file for an artist with a given (assumed) json payload
 pub fn write_musicbrainz_artist_match_file(
     musicbrainz_artist_cache: &path::PathBuf,
     artist_name: String,
