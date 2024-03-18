@@ -9,7 +9,7 @@ pub struct ArtistListResult {
     pub artists: Vec<Artist>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Artist {
     pub id: String,
     pub score: i32,
@@ -20,7 +20,7 @@ pub struct Artist {
     pub tags: Option<Vec<ArtistTag>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ArtistTag {
     pub count: i32,
     pub name: String,
