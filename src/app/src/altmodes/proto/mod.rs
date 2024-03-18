@@ -1,4 +1,5 @@
-use std::io;
+use std::fs;
+use std::io::{self, Write};
 use std::path;
 use std::thread;
 use std::time;
@@ -35,6 +36,7 @@ pub fn entry_point() -> Result<(), Error> {
     }
 
     println!("going to try to reload all and compute lev distance");
+    let mut match_100_output_file = fs::File::create("100match.csv").unwrap();
     for ml_artist in library.artists.values() {
         match cache::read_musicbrainz_artist_match_file(
             &musicbrainz_artist_cache,
@@ -45,16 +47,26 @@ pub fn entry_point() -> Result<(), Error> {
                     &artist.name.to_lowercase(),
                     &ml_artist.artist_info.artist_name.to_lowercase(),
                 );
-                println!(
-                    "{}\t between \"{}\" and \"{}\"",
-                    distance, artist.name, ml_artist.artist_info.artist_name
-                );
+                match_100_output_file
+                    .write_all(
+                        format!(
+                            "{}\t between \"{}\" and \"{}\"\n",
+                            distance, artist.name, ml_artist.artist_info.artist_name
+                        )
+                        .as_bytes(),
+                    )
+                    .unwrap();
             }
             None => {
-                println!(
-                    "1000\t between ??? and \"{}\"",
-                    ml_artist.artist_info.artist_name
-                );
+                match_100_output_file
+                    .write_all(
+                        format!(
+                            "1000\t between ??? and \"{}\"\n",
+                            ml_artist.artist_info.artist_name
+                        )
+                        .as_bytes(),
+                    )
+                    .unwrap();
             }
         }
     }
