@@ -16,8 +16,18 @@ pub struct Artist {
     pub name: String,
     #[serde(alias = "sort-name")]
     pub sort_name: String,
+    pub aliases: Option<Vec<ArtistNameAlias>>,
     pub isnis: Option<Vec<String>>,
     pub tags: Option<Vec<ArtistTag>>,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct ArtistNameAlias {
+    pub name: String,
+    #[serde(alias = "sort-name")]
+    pub sort_name: String,
+    #[serde(alias = "type")]
+    pub type_: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
