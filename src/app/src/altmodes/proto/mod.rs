@@ -71,7 +71,124 @@ pub fn entry_point() -> Result<(), Error> {
         }
     }
 
+    println!("going to try to interactively find matches for non-perfect matches");
+    let mut no_matches = Vec::new();
+    for ml_artist in library.artists.values() {
+        match cache::read_musicbrainz_artist_match_file(
+            &musicbrainz_artist_cache,
+            ml_artist.artist_info.artist_name.clone(),
+        ) {
+            Some(artist) => {
+                let distance = model::functions::levenshtein(
+                    &artist.name.to_lowercase(),
+                    &ml_artist.artist_info.artist_name.to_lowercase(),
+                );
+                if distance == 0 {
+                    cache::write_musicbrainz_artist_approved_file(
+                        &musicbrainz_artist_cache,
+                        ml_artist.artist_info.artist_name.clone(),
+                        &artist,
+                    );
+                } else {
+                    if cache::approved_exists(
+                        &musicbrainz_artist_cache,
+                        ml_artist.artist_info.artist_name.clone(),
+                    ) {
+                        println!(
+                            "found existing approved file for {}",
+                            ml_artist.artist_info.artist_name
+                        );
+                    } else {
+                        let stop = prompt_for_close_enough_match(
+                            &musicbrainz_artist_cache,
+                            &ml_artist.artist_info,
+                        );
+                        if stop {
+                            break;
+                        }
+                    }
+                }
+            }
+            None => {
+                no_matches.push(ml_artist.clone());
+            }
+        }
+    }
+
+    for no_match in no_matches.iter() {
+        println!("{} had no match", no_match.artist_info.artist_name);
+    }
+
     Ok(())
+}
+
+fn prompt_for_close_enough_match(
+    musicbrainz_artist_cache: &path::PathBuf,
+    artist_info: &musiqlibrary::ArtistInfo,
+) -> bool {
+    let raw_musicbrainz_results_str = cache::read_musicbrainz_artist_cache_file(
+        &musicbrainz_artist_cache,
+        artist_info.artist_name.clone(),
+    );
+    let raw_musicbrainz_results =
+        musicbrainz::ArtistListResult::from_json(raw_musicbrainz_results_str);
+
+    println!(
+        "{} what should we do with this artist?",
+        artist_info.artist_name
+    );
+    println!("s\t<split artist>");
+    println!("c\t<continue to next artist>");
+    println!("q\t<quit interactive mode>");
+    for (i, artist) in raw_musicbrainz_results.artists.iter().enumerate() {
+        println!("{}\t{}", i, artist.name);
+    }
+
+    let mut input = String::new();
+
+    io::stdin().read_line(&mut input).unwrap();
+    input = input.trim_end().to_string();
+
+    println!("I saw that you wanted to: {}", input);
+
+    if input == "q" {
+        return true;
+    }
+
+    if input == "s" {
+        println!("I would learn to split an artist here");
+        return false;
+    }
+
+    if input == "c" {
+        println!("We are continuing to the next artist, as requested");
+        return false;
+    }
+
+    let picked_index = match input.parse::<usize>() {
+        Ok(i) => {
+            if i < raw_musicbrainz_results.artists.len() {
+                i
+            } else {
+                println!("that index is too large!");
+                return prompt_for_close_enough_match(musicbrainz_artist_cache, artist_info);
+            }
+        }
+        Err(_) => {
+            println!("that's not a number");
+            return prompt_for_close_enough_match(musicbrainz_artist_cache, artist_info);
+        }
+    };
+
+    let picked_artist = raw_musicbrainz_results.artists[picked_index].clone();
+
+    cache::write_musicbrainz_artist_approved_file(
+        &musicbrainz_artist_cache,
+        artist_info.artist_name.clone(),
+        &picked_artist,
+    );
+
+    false
 }
 
 pub fn grab_raw_musicbrainz_data(
