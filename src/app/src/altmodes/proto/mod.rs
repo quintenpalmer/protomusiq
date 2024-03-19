@@ -1,6 +1,5 @@
 use std::fs;
 use std::io::{self, Write};
-use std::path;
 use std::thread;
 use std::time;
 
@@ -26,7 +25,7 @@ pub fn entry_point() -> Result<(), Error> {
     let library = musiqlibrary::RawLibrary::new(lib_path.clone()).unwrap();
     println!("got library");
 
-    let musicbrainz_artist_cache = cache::musicbrainz_artist_cache_dir();
+    let musicbrainz_artist_cache = cache::MusicBrainzCacheInterface::new();
 
     println!("iterating over artists");
     for artist in library.artists.values() {
@@ -38,10 +37,9 @@ pub fn entry_point() -> Result<(), Error> {
     println!("going to try to reload all and compute lev distance");
     let mut match_100_output_file = fs::File::create("100match.csv").unwrap();
     for ml_artist in library.artists.values() {
-        match cache::read_musicbrainz_artist_match_file(
-            &musicbrainz_artist_cache,
-            ml_artist.artist_info.artist_name.clone(),
-        ) {
+        match musicbrainz_artist_cache
+            .read_musicbrainz_artist_match_file(ml_artist.artist_info.artist_name.clone())
+        {
             Some(artist) => {
                 let distance = model::functions::levenshtein(
                     &artist.name.to_lowercase(),
@@ -74,26 +72,23 @@ pub fn entry_point() -> Result<(), Error> {
     println!("going to try to interactively find matches for non-perfect matches");
     let mut no_matches = Vec::new();
     for ml_artist in library.artists.values() {
-        match cache::read_musicbrainz_artist_match_file(
-            &musicbrainz_artist_cache,
-            ml_artist.artist_info.artist_name.clone(),
-        ) {
+        match musicbrainz_artist_cache
+            .read_musicbrainz_artist_match_file(ml_artist.artist_info.artist_name.clone())
+        {
             Some(artist) => {
                 let distance = model::functions::levenshtein(
                     &artist.name.to_lowercase(),
                     &ml_artist.artist_info.artist_name.to_lowercase(),
                 );
                 if distance == 0 {
-                    cache::write_musicbrainz_artist_approved_file(
-                        &musicbrainz_artist_cache,
+                    musicbrainz_artist_cache.write_musicbrainz_artist_approved_file(
                         ml_artist.artist_info.artist_name.clone(),
                         &artist,
                     );
                 } else {
-                    if cache::approved_exists(
-                        &musicbrainz_artist_cache,
-                        ml_artist.artist_info.artist_name.clone(),
-                    ) {
+                    if musicbrainz_artist_cache
+                        .approved_exists(ml_artist.artist_info.artist_name.clone())
+                    {
                         println!(
                             "found existing approved file for {}",
                             ml_artist.artist_info.artist_name
@@ -123,13 +118,11 @@ pub fn entry_point() -> Result<(), Error> {
 }
 
 fn prompt_for_close_enough_match(
-    musicbrainz_artist_cache: &path::PathBuf,
+    musicbrainz_artist_cache: &cache::MusicBrainzCacheInterface,
     artist_info: &musiqlibrary::ArtistInfo,
 ) -> bool {
-    let raw_musicbrainz_results_str = cache::read_musicbrainz_artist_cache_file(
-        &musicbrainz_artist_cache,
-        artist_info.artist_name.clone(),
-    );
+    let raw_musicbrainz_results_str = musicbrainz_artist_cache
+        .read_musicbrainz_artist_cache_file(artist_info.artist_name.clone());
     let raw_musicbrainz_results =
         musicbrainz::ArtistListResult::from_json(raw_musicbrainz_results_str);
 
@@ -182,24 +175,21 @@ fn prompt_for_close_enough_match(
 
     let picked_artist = raw_musicbrainz_results.artists[picked_index].clone();
 
-    cache::write_musicbrainz_artist_approved_file(
-        &musicbrainz_artist_cache,
-        artist_info.artist_name.clone(),
-        &picked_artist,
-    );
+    musicbrainz_artist_cache
+        .write_musicbrainz_artist_approved_file(artist_info.artist_name.clone(), &picked_artist);
 
     false
 }
 
 pub fn grab_raw_musicbrainz_data(
-    musicbrainz_artist_cache: &path::PathBuf,
+    musicbrainz_artist_cache: &cache::MusicBrainzCacheInterface,
     artist_info: &musiqlibrary::ArtistInfo,
 ) {
     println!(
         "checking if cached musicbrainz exists for {}",
         artist_info.artist_name,
     );
-    if cache::raw_exists(&musicbrainz_artist_cache, artist_info.artist_name.clone()) {
+    if musicbrainz_artist_cache.raw_exists(artist_info.artist_name.clone()) {
         println!(
             "cached musicbrainz data does exist for {}",
             artist_info.artist_name,
@@ -212,11 +202,8 @@ pub fn grab_raw_musicbrainz_data(
         let json_str = musicbrainz::query_for_artist_raw(artist_info.artist_name.clone());
 
         println!("writing json for: {}", artist_info.artist_name);
-        cache::write_musicbrainz_artist_cache_file(
-            &musicbrainz_artist_cache,
-            artist_info.artist_name.clone(),
-            json_str,
-        );
+        musicbrainz_artist_cache
+            .write_musicbrainz_artist_cache_file(artist_info.artist_name.clone(), json_str);
 
         println!(
             "done querying musicbrainz for artist: {}",
@@ -228,14 +215,14 @@ pub fn grab_raw_musicbrainz_data(
 }
 
 pub fn select_singular_artist_match(
-    musicbrainz_artist_cache: &path::PathBuf,
+    musicbrainz_artist_cache: &cache::MusicBrainzCacheInterface,
     artist_info: &musiqlibrary::ArtistInfo,
 ) {
     println!(
         "trying to find singular artist match: {}",
         artist_info.artist_name,
     );
-    if cache::match_exists(&musicbrainz_artist_cache, artist_info.artist_name.clone()) {
+    if musicbrainz_artist_cache.match_exists(artist_info.artist_name.clone()) {
         println!(
             "matched single musicbrainz entry does exist for artist: {}",
             artist_info.artist_name,
@@ -245,10 +232,8 @@ pub fn select_singular_artist_match(
             "finding single musicbrainz match for artist: {}",
             artist_info.artist_name,
         );
-        let json_str = cache::read_musicbrainz_artist_cache_file(
-            &musicbrainz_artist_cache,
-            artist_info.artist_name.clone(),
-        );
+        let json_str = musicbrainz_artist_cache
+            .read_musicbrainz_artist_cache_file(artist_info.artist_name.clone());
 
         let artist_results = musicbrainz::ArtistListResult::from_json(json_str);
 
@@ -261,11 +246,8 @@ pub fn select_singular_artist_match(
         }
 
         match found_100_matches.as_slice() {
-            &[ref single_match] => cache::write_musicbrainz_artist_match_file(
-                &musicbrainz_artist_cache,
-                artist_info.artist_name.clone(),
-                single_match,
-            ),
+            &[ref single_match] => musicbrainz_artist_cache
+                .write_musicbrainz_artist_match_file(artist_info.artist_name.clone(), single_match),
             &[] => println!(
                 "found no 100 matches for this artist: {}",
                 artist_info.artist_name
