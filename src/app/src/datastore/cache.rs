@@ -34,6 +34,16 @@ pub fn match_exists(musicbrainz_artist_cache: &path::PathBuf, artist_name: Strin
     this_artist_cache_file.exists()
 }
 
+/// Check if a approved.json file exists for an artist
+pub fn approved_exists(musicbrainz_artist_cache: &path::PathBuf, artist_name: String) -> bool {
+    let this_artist_cache_file = localfs::build_tree_for_file(
+        &musicbrainz_artist_cache,
+        vec![artist_name, "approved.json".to_string()],
+    );
+
+    this_artist_cache_file.exists()
+}
+
 /// Read the raw.json file for an artist
 pub fn read_musicbrainz_artist_cache_file(
     musicbrainz_artist_cache: &path::PathBuf,
@@ -90,6 +100,24 @@ pub fn write_musicbrainz_artist_match_file(
     let this_artist_cache_file = localfs::build_tree_for_file(
         &musicbrainz_artist_cache,
         vec![artist_name, "match.json".to_string()],
+    );
+
+    serde_json::to_writer_pretty(
+        io::BufWriter::new(fs::File::create(this_artist_cache_file.clone()).unwrap()),
+        artist,
+    )
+    .unwrap();
+}
+
+/// Write to the approved.json file for an artist with a given (assumed) json payload
+pub fn write_musicbrainz_artist_approved_file(
+    musicbrainz_artist_cache: &path::PathBuf,
+    artist_name: String,
+    artist: &musicbrainz::Artist,
+) {
+    let this_artist_cache_file = localfs::build_tree_for_file(
+        &musicbrainz_artist_cache,
+        vec![artist_name, "approved.json".to_string()],
     );
 
     serde_json::to_writer_pretty(
