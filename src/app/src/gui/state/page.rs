@@ -21,6 +21,7 @@ pub enum Page {
     AlbumList(AlbumListState),
     ArtistList(ArtistListState),
     ArtistAlbumsView(ArtistViewState),
+    ArtistInfoView(ArtistInfoState),
     ArtistTrackView(ArtistTrackViewState),
     ArtistFeaturedTrackView(ArtistFeaturedTrackViewState),
     ArtistFeaturedInPlaylist(ArtistFeaturedInPlaylistState),
@@ -47,6 +48,7 @@ impl Page {
             Page::ArtistList(_) => "ArtistList",
             Page::ArtistAlbumsView(_) => "ArtistAlbumsView",
             Page::ArtistTrackView(_) => "ArtistTrackViewState",
+            Page::ArtistInfoView(_) => "ArtistInfoView",
             Page::ArtistFeaturedTrackView(_) => "ArtistFeaturedTrackView",
             Page::ArtistFeaturedInPlaylist(_) => "ArtistFeaturedInPlaylist",
             Page::ArtistAlbumView(_) => "ArtistAlbumView",
@@ -118,6 +120,11 @@ pub struct ArtistListState {
 pub struct ArtistViewState {
     pub artist_id: musiqlibrary::ID,
     pub albums: Vec<musiqlibrary::ID>,
+}
+
+#[derive(Debug)]
+pub struct ArtistInfoState {
+    pub artist_id: musiqlibrary::ID,
 }
 
 #[derive(Debug)]

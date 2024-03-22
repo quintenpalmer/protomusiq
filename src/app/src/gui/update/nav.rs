@@ -110,6 +110,11 @@ pub fn handle_nav(
                     });
                     Command::none()
                 }
+                message::ArtistViewType::ArtistInfo => {
+                    app.page_state.current_page =
+                        Page::ArtistInfoView(state::ArtistInfoState { artist_id });
+                    Command::none()
+                }
                 message::ArtistViewType::ArtistTrackView(sort_key, sort_order) => {
                     app.page_state.current_page =
                         Page::ArtistTrackView(state::ArtistTrackViewState {

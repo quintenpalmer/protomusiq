@@ -56,6 +56,9 @@ pub fn render_page<'a>(
         Page::ArtistTrackView(ref state) => {
             pages::artisttracks::artist_track_view_state(library, player_info, state)
         }
+        Page::ArtistInfoView(ref state) => {
+            pages::artistinfo::artist_info_view_state(library, state)
+        }
         Page::ArtistFeaturedTrackView(ref state) => {
             pages::artistfeatured::artist_featured_track_view_state(library, player_info, state)
         }

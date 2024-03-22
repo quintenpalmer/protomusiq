@@ -127,6 +127,10 @@ pub fn artist_album_list<'a>(
                     .push(
                         dark_button(dark(h2("In Playlists")))
                             .on_press(message::ArtistViewType::InPlaylist.into_message(*artist_id)),
+                    )
+                    .push(
+                        dark_button(dark(h2("Info")))
+                            .on_press(message::ArtistViewType::ArtistInfo.into_message(*artist_id)),
                     );
 
                 Container::new(

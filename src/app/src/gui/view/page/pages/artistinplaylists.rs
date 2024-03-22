@@ -47,6 +47,10 @@ pub fn artist_in_playlist_view_state<'a>(
                     .push(
                         dark_button(h2("In Playlists"))
                             .on_press(message::ArtistViewType::InPlaylist.into_message(*artist_id)),
+                    )
+                    .push(
+                        dark_button(dark(h2("Info")))
+                            .on_press(message::ArtistViewType::ArtistInfo.into_message(*artist_id)),
                     );
 
             let mut playlists = Vec::new();

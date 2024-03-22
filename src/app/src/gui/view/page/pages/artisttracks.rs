@@ -51,6 +51,10 @@ pub fn artist_track_view_state<'a>(
                     .push(
                         dark_button(dark(h2("In Playlists")))
                             .on_press(message::ArtistViewType::InPlaylist.into_message(*artist_id)),
+                    )
+                    .push(
+                        dark_button(dark(h2("Info")))
+                            .on_press(message::ArtistViewType::ArtistInfo.into_message(*artist_id)),
                     );
 
             let artist_tracks = library.get_artist_tracks(artist_id);

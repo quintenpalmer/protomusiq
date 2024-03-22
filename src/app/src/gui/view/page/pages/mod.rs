@@ -3,6 +3,7 @@ pub mod artistalbum;
 pub mod artistalbuminplaylist;
 pub mod artistalbums;
 pub mod artistfeatured;
+pub mod artistinfo;
 pub mod artistinplaylists;
 pub mod artistlist;
 pub mod artisttracks;

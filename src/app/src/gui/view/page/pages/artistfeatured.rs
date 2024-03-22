@@ -53,6 +53,10 @@ pub fn artist_featured_track_view_state<'a>(
                     .push(
                         dark_button(dark(h2("In Playlists")))
                             .on_press(message::ArtistViewType::InPlaylist.into_message(*artist_id)),
+                    )
+                    .push(
+                        dark_button(dark(h2("Info")))
+                            .on_press(message::ArtistViewType::ArtistInfo.into_message(*artist_id)),
                     );
 
             let track_sorts = model::AlbumFeaturedTrackSorts::new(featured_tracks);
