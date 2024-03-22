@@ -4,12 +4,16 @@ use crate::datastore::jsonbacked::playlists;
 
 use super::{augmented, common, sorts};
 
+use super::musicbrainzlib;
+
 pub struct LibraryState {
     pub raw_library: augmented::AugmentedLibrary,
 
     pub extra_library: ExtraLibraryKeys,
 
     pub user_playlists: playlists::PlaylistData,
+
+    pub musicbrainz_library: musicbrainzlib::Library,
 
     pub artist_sorts: sorts::ArtistSorts,
     pub album_sorts: sorts::AlbumSorts,
@@ -24,6 +28,7 @@ impl LibraryState {
     pub fn new(
         mut augmented_library: augmented::AugmentedLibrary,
         extra_library: ExtraLibraryKeys,
+        musicbrainz_library: musicbrainzlib::Library,
         playlists: playlists::PlaylistData,
         artist_sorts: sorts::ArtistSorts,
         album_sorts: sorts::AlbumSorts,
@@ -52,6 +57,8 @@ impl LibraryState {
         LibraryState {
             raw_library: augmented_library,
             extra_library,
+
+            musicbrainz_library,
 
             user_playlists: playlists,
 

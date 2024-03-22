@@ -126,6 +126,8 @@ pub fn initialize_everything() -> state::App {
         config_state.grid_layout_track_multiplier,
     );
 
+    let musicbrainz_library = model::musicbrainzlib::Library::new(&loaded_library);
+
     let augmented_library =
         model::augmented_from_raw(loaded_library, read_only_tracker, historical_reporter);
     logger.print_elapsed("augmenting raw library");
@@ -186,6 +188,7 @@ pub fn initialize_everything() -> state::App {
         library: model::LibraryState::new(
             augmented_library,
             extra_library,
+            musicbrainz_library,
             playlists,
             artist_sorts,
             album_sorts,

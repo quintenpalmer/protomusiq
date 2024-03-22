@@ -4,6 +4,7 @@ mod common;
 mod constants;
 pub mod functions;
 mod library;
+pub mod musicbrainzlib;
 pub mod playlist;
 mod sortkeys;
 mod sorts;
