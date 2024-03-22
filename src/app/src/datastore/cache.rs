@@ -111,6 +111,21 @@ impl MusicBrainzCacheInterface {
         .unwrap();
     }
 
+    pub fn read_musicbrainz_artist_approved_file(
+        &self,
+        artist_name: String,
+    ) -> Option<musicbrainz::Artist> {
+        let this_artist_cache_file = localfs::build_tree_for_file(
+            &self.cache_dir,
+            vec![artist_name, "approved.json".to_string()],
+        );
+
+        serde_json::from_reader(io::BufReader::new(
+            fs::File::open(this_artist_cache_file.clone()).ok()?,
+        ))
+        .ok()
+    }
+
     /// Write to the approved.json file for an artist with a given (assumed) json payload
     pub fn write_musicbrainz_artist_approved_file(
         &self,
