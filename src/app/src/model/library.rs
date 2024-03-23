@@ -79,6 +79,13 @@ impl LibraryState {
         &self.raw_library.artists
     }
 
+    pub fn get_artist_albums(
+        &self,
+        artist_id: &musiqlibrary::ID,
+    ) -> &musiqlibrary::KeyedArtistAlbums<augmented::AugmentedTrack> {
+        self.raw_library.artists.get(artist_id).unwrap()
+    }
+
     pub fn get_album_map(
         &self,
     ) -> BTreeMap<
