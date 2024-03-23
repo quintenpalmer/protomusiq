@@ -37,6 +37,11 @@ pub fn artist_list<'a>(
             let mut buttons: Vec<Button<Message>> = Vec::new();
 
             for artist in paged_artists.into_iter() {
+                let full_artist_info = library.get_artist_albums(&artist.artist_id);
+
+                let relevant_sub_header =
+                    get_sub_header_from_sort(&artist, &full_artist_info, &sort_key);
+
                 buttons.push(
                     dark_button(bottom_label(
                         album_image(
@@ -48,7 +53,7 @@ pub fn artist_list<'a>(
                         )
                         .into(),
                         bright_paragraph(common::abr_str(
-                            artist.artist_name.clone(),
+                            relevant_sub_header,
                             consts::ICON_STR_LENGTH,
                         )),
                     ))
@@ -214,6 +219,42 @@ pub fn artist_list<'a>(
                     .push(scrollable),
             )
         }
+    }
+}
+
+fn get_sub_header_from_sort(
+    info: &musiqlibrary::ArtistInfo,
+    full_artist_info: &musiqlibrary::KeyedArtistAlbums<model::AugmentedTrack>,
+    sort_key: &model::ArtistSortKey,
+) -> String {
+    match sort_key {
+        model::ArtistSortKey::ByName => info.artist_name.clone(),
+        model::ArtistSortKey::ByPlayCount => format!(
+            "{} listens",
+            model::artist_total_play_count(&full_artist_info)
+        ),
+        model::ArtistSortKey::ByAlbumCount => format!("{}", full_artist_info.albums.len(),),
+        model::ArtistSortKey::ByTrackCount => format!(
+            "{}",
+            full_artist_info
+                .albums
+                .values()
+                .fold(0, |total, album| total
+                    + album
+                        .discs
+                        .values()
+                        .fold(0, |inner_total, disc| inner_total
+                            + disc.tracks.len())),
+        ),
+        model::ArtistSortKey::ByTrackDuration => {
+            common::format_duration(full_artist_info.albums.values().fold(0, |total, album| {
+                total + album.album_info.total_duration.as_secs()
+            }))
+        }
+        model::ArtistSortKey::ByPlayedDuration => {
+            common::format_duration(model::artist_total_played_duration(&full_artist_info))
+        }
+        model::ArtistSortKey::Random => info.artist_name.clone(),
     }
 }
 
