@@ -60,12 +60,29 @@ pub fn entry_point() -> Result<(), Error> {
 }
 
 fn compute_diff(
-    input_left: &BTreeMap<musiqlibrary::TrackUniqueIdentifier, musiqlibrary::FullTrackMetadata>,
-    input_right: &BTreeMap<musiqlibrary::TrackUniqueIdentifier, musiqlibrary::FullTrackMetadata>,
+    input_btree_left: &BTreeMap<
+        musiqlibrary::TrackUniqueIdentifier,
+        musiqlibrary::FullTrackMetadata,
+    >,
+    input_btree_right: &BTreeMap<
+        musiqlibrary::TrackUniqueIdentifier,
+        musiqlibrary::FullTrackMetadata,
+    >,
 ) -> (
     Vec<musiqlibrary::FullTrackMetadata>,
     Vec<musiqlibrary::FullTrackMetadata>,
 ) {
+    let input_left: BTreeMap<PartialTrackMetadata, musiqlibrary::FullTrackMetadata> =
+        input_btree_left
+            .values()
+            .map(|v| (PartialTrackMetadata::from_full(v), v.clone()))
+            .collect();
+    let input_right: BTreeMap<PartialTrackMetadata, musiqlibrary::FullTrackMetadata> =
+        input_btree_right
+            .values()
+            .map(|v| (PartialTrackMetadata::from_full(v), v.clone()))
+            .collect();
+
     let mut only_left = Vec::new();
     let mut only_right = Vec::new();
 
