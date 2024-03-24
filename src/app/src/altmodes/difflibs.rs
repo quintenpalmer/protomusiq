@@ -84,6 +84,50 @@ fn compute_diff(
     (only_left, only_right)
 }
 
+/// Full Track Metadata
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
+pub struct PartialTrackMetadata {
+    pub title: String,
+    pub track: u64,
+    pub raw_track: Option<u64>,
+    pub disc: u64,
+    pub raw_disc: Option<u64>,
+    pub disc_total: Option<u64>,
+    pub album: String,
+    pub raw_album: Option<String>,
+    pub album_id: musiqlibrary::ID,
+    pub album_artist: String,
+    pub album_artist_id: musiqlibrary::ID,
+    pub track_artist: String,
+    pub track_artist_id: musiqlibrary::ID,
+    pub genre: String,
+    pub date_number: u32,
+    pub raw_date: String,
+}
+
+impl PartialTrackMetadata {
+    fn from_full(full: &musiqlibrary::FullTrackMetadata) -> Self {
+        PartialTrackMetadata {
+            title: full.title.clone(),
+            track: full.track,
+            raw_track: full.raw_track,
+            disc: full.disc,
+            raw_disc: full.raw_disc,
+            disc_total: full.disc_total,
+            album: full.album.clone(),
+            raw_album: full.raw_album.clone(),
+            album_id: full.album_id,
+            album_artist: full.album_artist.clone(),
+            album_artist_id: full.album_artist_id,
+            track_artist: full.track_artist.clone(),
+            track_artist_id: full.track_artist_id,
+            genre: full.genre.clone(),
+            date_number: full.date_number,
+            raw_date: full.raw_date.clone(),
+        }
+    }
+}
+
 fn track_uniq_tree(
     library: musiqlibrary::RawLibrary,
 ) -> BTreeMap<musiqlibrary::TrackUniqueIdentifier, musiqlibrary::FullTrackMetadata> {
