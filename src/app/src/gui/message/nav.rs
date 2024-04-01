@@ -18,6 +18,7 @@ pub enum MusicNavMessage {
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     Artist(ArtistNavMessage),
+    Genres,
 }
 
 #[derive(Debug, Clone)]

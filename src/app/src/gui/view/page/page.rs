@@ -37,6 +37,7 @@ pub fn render_page<'a>(
         Page::Search(ref state) => {
             pages::search::search_page(library, movie_library, app_images, state)
         }
+        Page::GenreHome => pages::musicgenrehome::genre_home(),
         Page::TrackList(ref state) => pages::tracklist::track_list(library, state),
         Page::AlbumList(ref state) => {
             pages::albumlist::album_list(library, play_queue_visible, state)
