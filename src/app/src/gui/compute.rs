@@ -33,25 +33,29 @@ pub fn compute_breadcrumb(
             }
             ret
         }
-        message::NavMessage::TrackList(_, _, _) => vec![(
-            "Tracks".to_string(),
-            message::NavMessage::TrackList(
-                0,
-                model::TrackSortKey::ByName,
-                model::TrackSortKey::ByName.default_order(),
-            )
-            .into_message(),
-        )],
-        message::NavMessage::AlbumList(_, _, _) => vec![(
-            "Albums".to_string(),
-            message::NavMessage::AlbumList(
-                0,
-                model::AlbumSortKey::ByParent,
-                model::AlbumSortKey::ByParent.default_order(),
-            )
-            .into_message(),
-        )],
-        message::NavMessage::Artist(artist_message) => artist_breadcrumbs(library, artist_message),
+        message::NavMessage::Music(m) => match m {
+            message::MusicNavMessage::TrackList(_, _, _) => vec![(
+                "Tracks".to_string(),
+                message::MusicNavMessage::TrackList(
+                    0,
+                    model::TrackSortKey::ByName,
+                    model::TrackSortKey::ByName.default_order(),
+                )
+                .into_message(),
+            )],
+            message::MusicNavMessage::AlbumList(_, _, _) => vec![(
+                "Albums".to_string(),
+                message::MusicNavMessage::AlbumList(
+                    0,
+                    model::AlbumSortKey::ByParent,
+                    model::AlbumSortKey::ByParent.default_order(),
+                )
+                .into_message(),
+            )],
+            message::MusicNavMessage::Artist(artist_message) => {
+                artist_breadcrumbs(library, artist_message)
+            }
+        },
         message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
         message::NavMessage::Playlist(playlist_message) => {
             playlist_breadcrumbs(library, playlist_message)

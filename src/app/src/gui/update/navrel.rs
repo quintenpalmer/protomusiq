@@ -37,11 +37,10 @@ fn handle_sort_order_toggle(app: &mut AppState) -> Option<message::Message> {
         }) => {
             let new_sort_order = sort_order.toggle();
 
-            Some(message::Message::Nav(message::NavMessage::AlbumList(
-                *page,
-                sort_key.clone(),
-                new_sort_order,
-            )))
+            Some(
+                message::MusicNavMessage::AlbumList(*page, sort_key.clone(), new_sort_order)
+                    .into_message(),
+            )
         }
 
         Page::ArtistList(state::ArtistListState {
@@ -96,11 +95,10 @@ fn handle_sort_order_toggle(app: &mut AppState) -> Option<message::Message> {
         }) => {
             let new_sort_order = sort_order.toggle();
 
-            Some(message::Message::Nav(message::NavMessage::TrackList(
-                *page,
-                sort_key.clone(),
-                new_sort_order,
-            )))
+            Some(
+                message::MusicNavMessage::TrackList(*page, sort_key.clone(), new_sort_order)
+                    .into_message(),
+            )
         }
         Page::MovieList(state::MovieListState {
             ref sort_key,
@@ -152,11 +150,9 @@ fn handle_switch_sort_by_msg(
 
             let new_sort_order = new_sort_key.default_order();
 
-            Some(message::Message::Nav(message::NavMessage::AlbumList(
-                0,
-                new_sort_key,
-                new_sort_order,
-            )))
+            Some(
+                message::MusicNavMessage::AlbumList(0, new_sort_key, new_sort_order).into_message(),
+            )
         }
 
         Page::ArtistList(state::ArtistListState {
@@ -228,11 +224,9 @@ fn handle_switch_sort_by_msg(
 
             let new_sort_order = new_sort_key.default_order();
 
-            Some(message::Message::Nav(message::NavMessage::TrackList(
-                0,
-                new_sort_key,
-                new_sort_order,
-            )))
+            Some(
+                message::MusicNavMessage::TrackList(0, new_sort_key, new_sort_order).into_message(),
+            )
         }
         Page::MovieList(state::MovieListState {
             ref sort_key,
@@ -272,11 +266,10 @@ fn handle_nav_rel_msg(
                 app.library.grid_info.get_page_size_usize(),
                 entity_length,
             );
-            Some(message::Message::Nav(message::NavMessage::AlbumList(
-                new_page,
-                sort_key.clone(),
-                sort_order.clone(),
-            )))
+            Some(
+                message::MusicNavMessage::AlbumList(new_page, sort_key.clone(), sort_order.clone())
+                    .into_message(),
+            )
         }
         Page::ArtistAlbumView(state::ArtistAlbumViewState {
             artist_id: ref _artist_id,
@@ -356,11 +349,10 @@ fn handle_nav_rel_msg(
                 total_tracks,
             );
 
-            Some(message::Message::Nav(message::NavMessage::TrackList(
-                new_page,
-                sort_key.clone(),
-                sort_order.clone(),
-            )))
+            Some(
+                message::MusicNavMessage::TrackList(new_page, sort_key.clone(), sort_order.clone())
+                    .into_message(),
+            )
         }
         Page::ArtistList(state::ArtistListState {
             ref page,

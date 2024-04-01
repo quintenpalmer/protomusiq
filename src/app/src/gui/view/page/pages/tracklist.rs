@@ -3,9 +3,7 @@ use iced::{Alignment, Element, Length};
 
 use crate::model;
 
-use crate::gui::message::{
-    self, user_nav_message, Message, NavMessage, NavRelMsg, PagifiedMovementMsg,
-};
+use crate::gui::message::{self, Message, NavRelMsg, PagifiedMovementMsg};
 use crate::state;
 
 use super::super::super::common;
@@ -141,13 +139,14 @@ pub fn track_list<'a>(
                                         dark_paragraph("^")
                                     }
                                 })
-                                .on_press(user_nav_message(
-                                    NavMessage::TrackList(
+                                .on_press(
+                                    message::MusicNavMessage::TrackList(
                                         0,
                                         sort_key.clone(),
                                         model::SortOrder::Reversed,
-                                    ),
-                                )),
+                                    )
+                                    .into_message(),
+                                ),
                             )
                             .push(
                                 dark_button({
@@ -157,13 +156,14 @@ pub fn track_list<'a>(
                                         dark_paragraph("v")
                                     }
                                 })
-                                .on_press(user_nav_message(
-                                    NavMessage::TrackList(
+                                .on_press(
+                                    message::MusicNavMessage::TrackList(
                                         0,
                                         sort_key.clone(),
                                         model::SortOrder::Regular,
-                                    ),
-                                )),
+                                    )
+                                    .into_message(),
+                                ),
                             ),
                     );
 
@@ -238,5 +238,6 @@ fn sort_button<'a>(
     } else {
         dark_paragraph(display_text)
     };
-    dark_button(text_element).on_press(user_nav_message(NavMessage::TrackList(0, sort_key, order)))
+    dark_button(text_element)
+        .on_press(message::MusicNavMessage::TrackList(0, sort_key, order).into_message())
 }

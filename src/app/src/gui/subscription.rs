@@ -57,7 +57,7 @@ pub fn keybinding_subscription_fn(
             .into_message(),
         ),
         (keyboard::Key::Character("a"), Mods::Shift) => Some(
-            message::NavMessage::AlbumList(
+            message::MusicNavMessage::AlbumList(
                 0,
                 model::AlbumSortKey::ByParent,
                 model::AlbumSortKey::ByParent.default_order(),
@@ -65,7 +65,7 @@ pub fn keybinding_subscription_fn(
             .into_message(),
         ),
         (keyboard::Key::Character("t"), Mods::Shift) => Some(
-            message::NavMessage::TrackList(
+            message::MusicNavMessage::TrackList(
                 0,
                 model::TrackSortKey::ByName,
                 model::TrackSortKey::ByName.default_order(),

@@ -9,10 +9,15 @@ pub enum NavMessage {
     PlayQueueFocus,
     SearchPage(String, model::SearchDomain, bool),
     Playlist(PlaylistNavMessage),
+    Music(MusicNavMessage),
+    Movie(MovieNavMessage),
+}
+
+#[derive(Debug, Clone)]
+pub enum MusicNavMessage {
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     Artist(ArtistNavMessage),
-    Movie(MovieNavMessage),
 }
 
 #[derive(Debug, Clone)]

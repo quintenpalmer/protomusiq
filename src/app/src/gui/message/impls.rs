@@ -17,17 +17,22 @@ impl nav::PlaylistNavMessage {
         top::Message::Nav(nav::NavMessage::Playlist(self))
     }
 }
+impl nav::MusicNavMessage {
+    pub fn into_message(self) -> top::Message {
+        top::Message::Nav(nav::NavMessage::Music(self))
+    }
+}
 
 impl nav::ArtistNavMessage {
     pub fn into_message(self) -> top::Message {
-        top::Message::Nav(nav::NavMessage::Artist(self))
+        top::Message::Nav(nav::NavMessage::Music(nav::MusicNavMessage::Artist(self)))
     }
 }
 
 impl nav::ArtistViewType {
     pub fn into_message(self, artist_id: musiqlibrary::ID) -> top::Message {
-        top::Message::Nav(nav::NavMessage::Artist(nav::ArtistNavMessage::ArtistView(
-            artist_id, self,
+        top::Message::Nav(nav::NavMessage::Music(nav::MusicNavMessage::Artist(
+            nav::ArtistNavMessage::ArtistView(artist_id, self),
         )))
     }
 }
@@ -38,8 +43,8 @@ impl nav::ArtistAlbumView {
         artist_id: musiqlibrary::ID,
         album_id: musiqlibrary::ID,
     ) -> top::Message {
-        top::Message::Nav(nav::NavMessage::Artist(nav::ArtistNavMessage::AlbumView(
-            artist_id, album_id, self,
+        top::Message::Nav(nav::NavMessage::Music(nav::MusicNavMessage::Artist(
+            nav::ArtistNavMessage::AlbumView(artist_id, album_id, self),
         )))
     }
 }

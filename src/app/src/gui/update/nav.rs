@@ -69,134 +69,138 @@ pub fn handle_nav(
             });
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }
-        NavMessage::TrackList(page, sort, sort_order) => {
-            app.page_state.current_page = Page::TrackList(state::TrackListState {
-                page,
-                sort_key: sort,
-                sort_order,
-            });
-            Command::none()
-        }
-        NavMessage::AlbumList(page, sort, sort_order) => {
-            app.page_state.current_page = Page::AlbumList(state::AlbumListState {
-                page,
-                sort_key: sort,
-                sort_order,
-            });
-            Command::none()
-        }
-        NavMessage::Artist(artist_message) => match artist_message {
-            message::ArtistNavMessage::ArtistList(page, sort, sort_order) => {
-                app.page_state.current_page = Page::ArtistList(state::ArtistListState {
+        NavMessage::Music(music_message) => match music_message {
+            message::MusicNavMessage::TrackList(page, sort, sort_order) => {
+                app.page_state.current_page = Page::TrackList(state::TrackListState {
                     page,
                     sort_key: sort,
                     sort_order,
                 });
                 Command::none()
             }
-            message::ArtistNavMessage::ArtistView(artist_id, type_) => match type_ {
-                message::ArtistViewType::ArtistAlbumsView => {
-                    app.page_state.current_page = Page::ArtistAlbumsView(state::ArtistViewState {
-                        artist_id,
-                        albums: app
-                            .library
-                            .get_artist_map()
-                            .get(&artist_id)
-                            .unwrap()
-                            .albums
-                            .keys()
-                            .cloned()
-                            .collect(),
+            message::MusicNavMessage::AlbumList(page, sort, sort_order) => {
+                app.page_state.current_page = Page::AlbumList(state::AlbumListState {
+                    page,
+                    sort_key: sort,
+                    sort_order,
+                });
+                Command::none()
+            }
+            message::MusicNavMessage::Artist(artist_message) => match artist_message {
+                message::ArtistNavMessage::ArtistList(page, sort, sort_order) => {
+                    app.page_state.current_page = Page::ArtistList(state::ArtistListState {
+                        page,
+                        sort_key: sort,
+                        sort_order,
                     });
                     Command::none()
                 }
-                message::ArtistViewType::ArtistInfo => {
-                    app.page_state.current_page =
-                        Page::ArtistInfoView(state::ArtistInfoState { artist_id });
-                    Command::none()
-                }
-                message::ArtistViewType::ArtistTrackView(sort_key, sort_order) => {
-                    app.page_state.current_page =
-                        Page::ArtistTrackView(state::ArtistTrackViewState {
-                            artist_id,
+                message::ArtistNavMessage::ArtistView(artist_id, type_) => match type_ {
+                    message::ArtistViewType::ArtistAlbumsView => {
+                        app.page_state.current_page =
+                            Page::ArtistAlbumsView(state::ArtistViewState {
+                                artist_id,
+                                albums: app
+                                    .library
+                                    .get_artist_map()
+                                    .get(&artist_id)
+                                    .unwrap()
+                                    .albums
+                                    .keys()
+                                    .cloned()
+                                    .collect(),
+                            });
+                        Command::none()
+                    }
+                    message::ArtistViewType::ArtistInfo => {
+                        app.page_state.current_page =
+                            Page::ArtistInfoView(state::ArtistInfoState { artist_id });
+                        Command::none()
+                    }
+                    message::ArtistViewType::ArtistTrackView(sort_key, sort_order) => {
+                        app.page_state.current_page =
+                            Page::ArtistTrackView(state::ArtistTrackViewState {
+                                artist_id,
 
-                            sort_key,
-                            sort_order,
+                                sort_key,
+                                sort_order,
+                            });
+                        Command::none()
+                    }
+                    message::ArtistViewType::ArtistFeaturedTrackView(sort_key, sort_order) => {
+                        app.page_state.current_page =
+                            Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
+                                artist_id,
+
+                                sort_key,
+                                sort_order,
+                            });
+                        Command::none()
+                    }
+                    message::ArtistViewType::InPlaylist => {
+                        let mut playlist_ids = BTreeSet::new();
+
+                        for playlist in app.library.user_playlists.entries_as_vec() {
+                            for track in playlist.tracks.iter() {
+                                if artist_id == track.artist_id {
+                                    playlist_ids.insert(playlist.id);
+                                }
+                            }
+                        }
+
+                        app.page_state.current_page =
+                            Page::ArtistFeaturedInPlaylist(state::ArtistFeaturedInPlaylistState {
+                                artist_id,
+
+                                playlist_ids,
+                            });
+                        Command::none()
+                    }
+                },
+                message::ArtistNavMessage::AlbumView(
+                    artist_id,
+                    album_id,
+                    message::ArtistAlbumView::ArtistAlbumTrackView(
+                        album_size,
+                        maybe_selected_track,
+                        maybe_current_sort_order,
+                    ),
+                ) => {
+                    app.page_state.current_page =
+                        Page::ArtistAlbumView(state::ArtistAlbumViewState {
+                            artist_id,
+                            album_id,
+                            album_size,
+                            maybe_selected_track,
+                            maybe_current_sort_order,
                         });
                     Command::none()
                 }
-                message::ArtistViewType::ArtistFeaturedTrackView(sort_key, sort_order) => {
-                    app.page_state.current_page =
-                        Page::ArtistFeaturedTrackView(state::ArtistFeaturedTrackViewState {
-                            artist_id,
-
-                            sort_key,
-                            sort_order,
-                        });
-                    Command::none()
-                }
-                message::ArtistViewType::InPlaylist => {
+                message::ArtistNavMessage::AlbumView(
+                    artist_id,
+                    album_id,
+                    message::ArtistAlbumView::InPlaylist,
+                ) => {
                     let mut playlist_ids = BTreeSet::new();
 
                     for playlist in app.library.user_playlists.entries_as_vec() {
                         for track in playlist.tracks.iter() {
-                            if artist_id == track.artist_id {
+                            if artist_id == track.artist_id && album_id == track.album_id {
                                 playlist_ids.insert(playlist.id);
                             }
                         }
                     }
 
-                    app.page_state.current_page =
-                        Page::ArtistFeaturedInPlaylist(state::ArtistFeaturedInPlaylistState {
+                    app.page_state.current_page = Page::ArtistAlbumFeaturedInPlaylist(
+                        state::ArtistAlbumFeaturedInPlaylistState {
                             artist_id,
-
+                            album_id,
                             playlist_ids,
-                        });
+                        },
+                    );
                     Command::none()
                 }
             },
-            message::ArtistNavMessage::AlbumView(
-                artist_id,
-                album_id,
-                message::ArtistAlbumView::ArtistAlbumTrackView(
-                    album_size,
-                    maybe_selected_track,
-                    maybe_current_sort_order,
-                ),
-            ) => {
-                app.page_state.current_page = Page::ArtistAlbumView(state::ArtistAlbumViewState {
-                    artist_id,
-                    album_id,
-                    album_size,
-                    maybe_selected_track,
-                    maybe_current_sort_order,
-                });
-                Command::none()
-            }
-            message::ArtistNavMessage::AlbumView(
-                artist_id,
-                album_id,
-                message::ArtistAlbumView::InPlaylist,
-            ) => {
-                let mut playlist_ids = BTreeSet::new();
-
-                for playlist in app.library.user_playlists.entries_as_vec() {
-                    for track in playlist.tracks.iter() {
-                        if artist_id == track.artist_id && album_id == track.album_id {
-                            playlist_ids.insert(playlist.id);
-                        }
-                    }
-                }
-
-                app.page_state.current_page = Page::ArtistAlbumFeaturedInPlaylist(
-                    state::ArtistAlbumFeaturedInPlaylistState {
-                        artist_id,
-                        album_id,
-                        playlist_ids,
-                    },
-                );
-                Command::none()
-            }
         },
         NavMessage::Movie(movie_message) => match movie_message {
             message::MovieNavMessage::MovieHome => {

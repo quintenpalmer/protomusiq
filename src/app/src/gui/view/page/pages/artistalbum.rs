@@ -4,7 +4,7 @@ use iced::{Element, Length};
 use crate::model;
 use crate::shared;
 
-use crate::gui::message::{self, user_nav_message, Message, NavMessage};
+use crate::gui::message::{self, Message};
 use crate::state::{self, ActionState, PlayerInfo};
 use crate::util::shuffle;
 
@@ -445,14 +445,15 @@ pub fn artist_album_view_state<'a>(
                                     current_sort_order.sort_key.display_text(),
                                     current_sort_order.sort_order.display_text(),
                                 )))
-                                .on_press(user_nav_message(
-                                    NavMessage::AlbumList(
+                                .on_press(
+                                    message::MusicNavMessage::AlbumList(
                                         current_sort_order.index
                                             / library.grid_info.get_page_size_usize(),
                                         current_sort_order.sort_key.clone(),
                                         current_sort_order.sort_order.clone(),
-                                    ),
-                                )),
+                                    )
+                                    .into_message(),
+                                ),
                             );
                     body_column = body_column.push(sort_nav_row);
                 }

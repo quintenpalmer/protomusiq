@@ -29,7 +29,7 @@ pub fn home_page<'a>(
                 )),
             )))
             .on_press(
-                NavMessage::AlbumList(
+                message::MusicNavMessage::AlbumList(
                     0,
                     model::AlbumSortKey::ByParent,
                     model::AlbumSortKey::ByParent.default_order(),
@@ -66,11 +66,14 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(user_nav_message(NavMessage::TrackList(
-                0,
-                model::TrackSortKey::ByName,
-                model::TrackSortKey::ByName.default_order(),
-            )));
+            .on_press(
+                message::MusicNavMessage::TrackList(
+                    0,
+                    model::TrackSortKey::ByName,
+                    model::TrackSortKey::ByName.default_order(),
+                )
+                .into_message(),
+            );
             let playlist = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_playlists_image().clone(),
