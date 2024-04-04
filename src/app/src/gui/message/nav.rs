@@ -18,7 +18,12 @@ pub enum MusicNavMessage {
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     Artist(ArtistNavMessage),
-    Genres,
+    Genres(MusicGenreNavMessage),
+}
+
+#[derive(Debug, Clone)]
+pub enum MusicGenreNavMessage {
+    Home,
 }
 
 #[derive(Debug, Clone)]

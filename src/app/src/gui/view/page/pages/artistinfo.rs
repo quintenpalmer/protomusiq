@@ -84,7 +84,7 @@ pub fn artist_info_view_state<'a>(
                         Some(ref tags) => {
                             ret = ret.push(
                                 dark_button(h3("Tags:"))
-                                    .on_press(message::MusicNavMessage::Genres.into_message()),
+                                    .on_press(message::MusicGenreNavMessage::Home.into_message()),
                             );
                             let mut row = Column::new();
 
