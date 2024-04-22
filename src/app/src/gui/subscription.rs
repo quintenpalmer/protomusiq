@@ -30,6 +30,9 @@ pub fn on_mouse_event(mouse_event: mouse::Event) -> Option<message::Message> {
         mouse::Event::ButtonPressed(mouse::Button::Back) => Some(message::Message::HistoryNav(
             message::HistoryDirection::Backwards,
         )),
+        mouse::Event::ButtonPressed(mouse::Button::Forward) => Some(message::Message::HistoryNav(
+            message::HistoryDirection::Forwards,
+        )),
         _ => None,
     }
 }
