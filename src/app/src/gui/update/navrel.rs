@@ -396,6 +396,59 @@ fn handle_nav_rel_msg(
                     .into_message(),
             )
         }
+        Page::MovieView(state::MovieViewState {
+            movie: ref _movie,
+            movie_size: ref _movie_size,
+            ref maybe_current_sort_order,
+        }) => match maybe_current_sort_order {
+            Some(model::MovieSortPlacement {
+                index,
+                sort_key,
+                sort_order,
+            }) => {
+                let movies_sorted_by_key = app
+                    .video_library
+                    .movie_sorts
+                    .from_sort_key(sort_key, sort_order);
+
+                let last_index = movies_sorted_by_key.len() - 1;
+
+                let new_index = match nav_message {
+                    message::PagifiedMovementMsg::First => 0,
+                    message::PagifiedMovementMsg::Backwards => {
+                        if *index == 0 {
+                            0
+                        } else {
+                            index - 1
+                        }
+                    }
+                    message::PagifiedMovementMsg::Forwards => {
+                        if *index == last_index {
+                            last_index
+                        } else {
+                            index + 1
+                        }
+                    }
+                    message::PagifiedMovementMsg::Last => last_index,
+                };
+
+                let new_movie_id = movies_sorted_by_key.get(new_index).unwrap();
+
+                Some(
+                    message::MovieNavMessage::MovieView(
+                        new_movie_id.clone(),
+                        None,
+                        Some(model::MovieSortPlacement {
+                            index: new_index,
+                            sort_key: sort_key.clone(),
+                            sort_order: sort_order.clone(),
+                        }),
+                    )
+                    .into_message(),
+                )
+            }
+            None => None,
+        },
         _ => None,
     }
 }

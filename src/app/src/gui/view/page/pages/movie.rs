@@ -257,11 +257,19 @@ pub fn movie_page<'a>(
             let sort_nav_row = line_row()
                 .spacing(8)
                 .push(
-                    bright_paragraph("<"),
+                    dark_button(bright_paragraph("<")).on_press(Message::NavRelative(
+                        message::NavRelMsg::PagifiedMovement(
+                            message::PagifiedMovementMsg::Backwards,
+                        ),
+                    )),
                 )
                 .push(h3(format!("{}", current_sort_order.index)))
                 .push(
-                    bright_paragraph(">"),
+                    dark_button(bright_paragraph(">")).on_press(Message::NavRelative(
+                        message::NavRelMsg::PagifiedMovement(
+                            message::PagifiedMovementMsg::Forwards,
+                        ),
+                    )),
                 )
                 .push(
                     dark_button(h3(format!(
