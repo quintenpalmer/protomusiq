@@ -311,4 +311,15 @@ impl MovieSortKey {
             MovieSortKey::Random => SortOrder::Regular,
         }
     }
+
+    pub fn display_text(&self) -> String {
+        match self {
+            MovieSortKey::ByTitle => "Title",
+            MovieSortKey::LastModified => "Modified",
+            MovieSortKey::ByDuration => "Length",
+            MovieSortKey::ByRelease => "Release",
+            MovieSortKey::Random => "Random",
+        }
+        .to_string()
+    }
 }

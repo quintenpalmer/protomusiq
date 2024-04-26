@@ -437,9 +437,12 @@ pub fn handle_nav(
                 });
                 Command::none()
             }
-            message::MovieNavMessage::MovieView(movie, movie_size) => {
-                app.page_state.current_page =
-                    Page::MovieView(state::MovieViewState { movie, movie_size });
+            message::MovieNavMessage::MovieView(movie, movie_size, maybe_current_sort_order) => {
+                app.page_state.current_page = Page::MovieView(state::MovieViewState {
+                    movie,
+                    movie_size,
+                    maybe_current_sort_order,
+                });
                 Command::none()
             }
         },

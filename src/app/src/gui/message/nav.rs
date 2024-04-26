@@ -64,7 +64,11 @@ pub enum MovieNavMessage {
     MovieList(usize, model::MovieSortKey, model::SortOrder),
     MovieAttributes(Option<model::MovieAttribute>),
     MovieQuery(Option<model::MovieQueryParams>),
-    MovieView(video::MovieMetadata, Option<model::MovieSize>),
+    MovieView(
+        video::MovieMetadata,
+        Option<model::MovieSize>,
+        Option<model::MovieSortPlacement>,
+    ),
 }
 
 #[derive(Debug, Clone)]

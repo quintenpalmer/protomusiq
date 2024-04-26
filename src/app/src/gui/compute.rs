@@ -197,7 +197,7 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
                 None => (),
             }
         }
-        message::MovieNavMessage::MovieView(movie, _) => {
+        message::MovieNavMessage::MovieView(movie, _, _) => {
             ret.push((
                 "Movies".to_string(),
                 message::MovieNavMessage::MovieList(
@@ -209,7 +209,7 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
             ));
             ret.push((
                 common::abr_str(movie.title.clone(), consts::NAV_STR_LENGTH),
-                message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
+                message::MovieNavMessage::MovieView(movie.clone(), None, None).into_message(),
             ))
         }
     }

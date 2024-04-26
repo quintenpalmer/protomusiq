@@ -167,7 +167,7 @@ pub fn movie_query<'a>(
                 let movie_info = h1(movie.title.clone());
 
                 let movie_link =
-                    message::MovieNavMessage::MovieView(movie.clone(), None).into_message();
+                    message::MovieNavMessage::MovieView(movie.clone(), None, None).into_message();
 
                 let movie_image_element = match movie_library.art.get_movie_cover(
                     model::MovieSize::Small,

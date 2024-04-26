@@ -26,6 +26,13 @@ pub struct AlbumSortPlacement {
 }
 
 #[derive(Debug, Clone)]
+pub struct MovieSortPlacement {
+    pub index: usize,
+    pub sort_key: sortkeys::MovieSortKey,
+    pub sort_order: sortkeys::SortOrder,
+}
+
+#[derive(Debug, Clone)]
 pub enum Direction {
     Up,
     Down,

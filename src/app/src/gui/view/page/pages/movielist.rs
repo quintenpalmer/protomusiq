@@ -36,7 +36,9 @@ pub fn movie_list<'a>(
 
             let mut buttons: Vec<Button<Message>> = Vec::new();
 
-            for movie in indices.iter() {
+            let base_album_total_index = page * grid_info.get_page_size_usize();
+
+            for (album_index_offset, movie) in indices.iter().enumerate() {
                 let mut movie_info = Column::new();
                 movie_info = movie_info.push(bright_paragraph(common::abr_str(
                     movie.title.clone(),
@@ -59,7 +61,16 @@ pub fn movie_list<'a>(
 
                 buttons.push(
                     dark_button(bottom_label(movie_image_element.into(), movie_info)).on_press(
-                        message::MovieNavMessage::MovieView(movie.clone(), None).into_message(),
+                        message::MovieNavMessage::MovieView(
+                            movie.clone(),
+                            None,
+                            Some(model::MovieSortPlacement {
+                                index: base_album_total_index + album_index_offset,
+                                sort_key: sort_key.clone(),
+                                sort_order: sort_order.clone(),
+                            }),
+                        )
+                        .into_message(),
                     ),
                 );
             }

@@ -13,6 +13,7 @@ use super::super::super::elements::*;
 pub fn movie_page<'a>(
     movie_library: &'a model::VideoLibraryState,
     state: &'a state::MovieViewState,
+    grid_info: &model::GridInfo,
     app_images: &embedded::AppImages,
 ) -> Container<'a, Message> {
     let maybe_cover_size = state.movie_size.clone();
@@ -21,6 +22,8 @@ pub fn movie_page<'a>(
         Some(c) => c,
         None => model::MovieSize::SemiLarge,
     };
+
+    let maybe_current_sort_order = state.maybe_current_sort_order.clone();
 
     let title_element = h1(state.movie.title.clone());
 
@@ -44,8 +47,12 @@ pub fn movie_page<'a>(
             let movie_image = movie_image(movie_image_bytes, current, false);
 
             let movie_button = dark_button(movie_image).on_press(
-                message::MovieNavMessage::MovieView(state.movie.clone(), Some(toggle_to))
-                    .into_message(),
+                message::MovieNavMessage::MovieView(
+                    state.movie.clone(),
+                    Some(toggle_to),
+                    maybe_current_sort_order,
+                )
+                .into_message(),
             );
 
             Container::new(movie_button)
@@ -239,12 +246,44 @@ pub fn movie_page<'a>(
                 .to_string(),
         ));
 
-    let contents = Column::new()
+    let mut contents = Column::new()
         .spacing(10)
         .push(title_element)
         .push(top_header)
-        .push(cast_main_container.height(Length::Fill))
-        .push(bottom_footer);
+        .push(cast_main_container.height(Length::Fill));
+
+    match state.maybe_current_sort_order {
+        Some(ref current_sort_order) => {
+            let sort_nav_row = line_row()
+                .spacing(8)
+                .push(
+                    bright_paragraph("<"),
+                )
+                .push(h3(format!("{}", current_sort_order.index)))
+                .push(
+                    bright_paragraph(">"),
+                )
+                .push(
+                    dark_button(h3(format!(
+                        "{} ({})",
+                        current_sort_order.sort_key.display_text(),
+                        current_sort_order.sort_order.display_text(),
+                    )))
+                    .on_press(
+                        message::MovieNavMessage::MovieList(
+                            current_sort_order.index / grid_info.get_page_size_usize(),
+                            current_sort_order.sort_key.clone(),
+                            current_sort_order.sort_order.clone(),
+                        )
+                        .into_message(),
+                    ),
+                );
+            contents = contents.push(sort_nav_row);
+        }
+        None => (),
+    }
+
+    contents = contents.push(bottom_footer);
 
     let body = Container::new(contents);
 

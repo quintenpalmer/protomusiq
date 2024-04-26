@@ -242,6 +242,7 @@ pub fn search_page<'a>(
                                             message::MovieNavMessage::MovieView(
                                                 result.clone(),
                                                 None,
+                                                None,
                                             )
                                             .into_message(),
                                         ),

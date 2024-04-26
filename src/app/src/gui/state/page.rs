@@ -180,6 +180,7 @@ pub struct MovieListState {
 pub struct MovieViewState {
     pub movie: video::MovieMetadata,
     pub movie_size: Option<model::MovieSize>,
+    pub maybe_current_sort_order: Option<model::MovieSortPlacement>,
 }
 
 #[derive(Debug)]
