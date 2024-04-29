@@ -219,13 +219,17 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
 }
 
 fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)> {
-    let ret = vec![(
+    let mut ret = vec![(
         "Games".to_string(),
         message::GameNavMessage::GameHome.into_message(),
     )];
 
     match message {
         message::GameNavMessage::GameHome => (),
+        message::GameNavMessage::GBAList => ret.push((
+            "GBA".to_string(),
+            message::GameNavMessage::GBAList.into_message(),
+        )),
     }
 
     ret

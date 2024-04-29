@@ -8,6 +8,7 @@ pub mod artistinplaylists;
 pub mod artistlist;
 pub mod artisttracks;
 pub mod config;
+pub mod gamegba;
 pub mod gamehome;
 pub mod home;
 pub mod movie;

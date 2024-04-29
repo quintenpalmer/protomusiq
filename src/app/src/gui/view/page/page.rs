@@ -82,6 +82,7 @@ pub fn render_page<'a>(
             pages::movie::movie_page(movie_library, state, &library.grid_info, app_images)
         }
         Page::GameHome => pages::gamehome::game_home(app_images),
+        Page::GBAList => pages::gamegba::gba_list(),
     };
 
     (message_sourced_breadcrumbs, ret_page)
