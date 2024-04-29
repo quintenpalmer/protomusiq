@@ -37,6 +37,8 @@ pub fn initialize_everything() -> state::App {
     let video_library = model::VideoLibrary::new(&config_state.movie_path);
     logger.print_elapsed("loading video library");
 
+    let game_library = model::GameLibrary::new(&config_state.game_gba_path);
+
     let loaded_images = jsonbacked::albumart::process_cache_and_get_album_art(
         &loaded_library,
         config_state.app_data_path.to_path_buf(),
@@ -50,6 +52,8 @@ pub fn initialize_everything() -> state::App {
     logger.print_elapsed("processing album art (with cache)");
 
     let video_library_state = model::VideoLibraryState::new(video_library, loaded_movie_images);
+
+    let game_library_state = model::GameLibraryState::new(game_library);
 
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
@@ -172,6 +176,7 @@ pub fn initialize_everything() -> state::App {
             group_buttons_shuffle: false,
         },
         video_library: video_library_state,
+        game_library: game_library_state,
         config: config_state,
         player_info: state::PlayerInfo {
             playing: false,
