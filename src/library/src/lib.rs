@@ -1,3 +1,4 @@
+pub mod games;
 pub mod impls;
 pub mod model;
 mod organizer;
