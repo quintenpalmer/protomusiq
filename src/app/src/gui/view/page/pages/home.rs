@@ -131,13 +131,26 @@ pub fn home_page<'a>(
                 .into_message(),
             );
 
+            let game_home = dark_button(Container::new(bottom_label(
+                album_image(
+                    app_images.get_game_controller_image().clone(),
+                    model::AlbumSize::Small,
+                )
+                .into(),
+                bright_paragraph(common::abr_str(
+                    "Games".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(message::GameNavMessage::GameHome.into_message());
+
             let page = Container::new(
                 Scrollable::new(
                     Column::new()
                         .width(Length::Fill)
                         .push(Row::new().push(album_list).push(artist_list).push(search))
                         .push(Row::new().push(track_list).push(dvd).push(playlist))
-                        .push(Row::new().push(settings)),
+                        .push(Row::new().push(game_home).push(settings)),
                 )
                 .height(Length::Fill),
             );

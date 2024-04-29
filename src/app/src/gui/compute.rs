@@ -61,6 +61,7 @@ pub fn compute_breadcrumb(
             }
         },
         message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
+        message::NavMessage::Game(game_message) => game_breadcrumbs(game_message),
         message::NavMessage::Playlist(playlist_message) => {
             playlist_breadcrumbs(library, playlist_message)
         }
@@ -212,6 +213,19 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
                 message::MovieNavMessage::MovieView(movie.clone(), None, None).into_message(),
             ))
         }
+    }
+
+    ret
+}
+
+fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)> {
+    let ret = vec![(
+        "Games".to_string(),
+        message::GameNavMessage::GameHome.into_message(),
+    )];
+
+    match message {
+        message::GameNavMessage::GameHome => (),
     }
 
     ret

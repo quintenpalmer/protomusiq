@@ -11,6 +11,7 @@ pub enum NavMessage {
     Playlist(PlaylistNavMessage),
     Music(MusicNavMessage),
     Movie(MovieNavMessage),
+    Game(GameNavMessage),
 }
 
 #[derive(Debug, Clone)]
@@ -69,6 +70,11 @@ pub enum MovieNavMessage {
         Option<model::MovieSize>,
         Option<model::MovieSortPlacement>,
     ),
+}
+
+#[derive(Debug, Clone)]
+pub enum GameNavMessage {
+    GameHome,
 }
 
 #[derive(Debug, Clone)]

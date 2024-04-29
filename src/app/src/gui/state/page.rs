@@ -33,6 +33,7 @@ pub enum Page {
     MovieView(MovieViewState),
     MovieQuery(MovieQueryState),
     MovieAttributes(MovieAttributeState),
+    GameHome,
 }
 
 impl Page {
@@ -60,6 +61,7 @@ impl Page {
             Page::MovieAttributes(_) => "MovieAttributes",
             Page::MovieQuery(_) => "MovieQuery",
             Page::MovieView(_) => "MovieView",
+            Page::GameHome => "GameHome",
         }
         .to_string()
     }

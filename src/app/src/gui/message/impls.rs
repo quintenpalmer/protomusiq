@@ -61,3 +61,9 @@ impl nav::MovieNavMessage {
         top::Message::Nav(nav::NavMessage::Movie(self))
     }
 }
+
+impl nav::GameNavMessage {
+    pub fn into_message(self) -> top::Message {
+        top::Message::Nav(nav::NavMessage::Game(self))
+    }
+}
