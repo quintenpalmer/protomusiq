@@ -11,7 +11,7 @@ pub struct AppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
 
-    pub game_gba_path: path::PathBuf,
+    pub game_gba_path: Option<path::PathBuf>,
 
     pub compressed_library_path: Option<path::PathBuf>,
 
@@ -54,7 +54,7 @@ pub struct RawAppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
 
-    pub game_gba_path: path::PathBuf,
+    pub game_gba_path: Option<path::PathBuf>,
 
     pub compressed_library_path: Option<path::PathBuf>,
 
