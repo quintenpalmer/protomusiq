@@ -78,6 +78,7 @@ pub enum VolumeRequest {
 #[derive(Debug, Clone)]
 pub enum ExternalSpawn {
     Mpv(path::PathBuf),
+    MGBA(path::PathBuf),
 }
 
 pub struct MessageFuture {

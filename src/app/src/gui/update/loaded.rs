@@ -69,6 +69,6 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
             };
             Command::none()
         }
-        Message::ExternalSpawn(spawn_cmd) => spawner::exec_cmd(spawn_cmd),
+        Message::ExternalSpawn(spawn_cmd) => spawner::exec_cmd(&app.game_library, spawn_cmd),
     }
 }
