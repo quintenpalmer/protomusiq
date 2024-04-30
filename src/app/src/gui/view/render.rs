@@ -29,6 +29,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     );
     let library = &app.library;
     let movie_library = &app.video_library;
+    let game_library = &app.game_library;
     let config = &app.config;
     let messages = &app.messages;
     let app_images = &app.app_images;
@@ -47,6 +48,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         current_page_message,
         library,
         movie_library,
+        game_library,
         app_images,
         action_state,
         play_queue_info.play_queue_visible && !cross_page_display_info.fullscreen_display,

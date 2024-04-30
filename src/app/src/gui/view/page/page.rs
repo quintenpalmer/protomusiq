@@ -17,6 +17,7 @@ pub fn render_page<'a>(
     page_current_history: &'a message::NavMessage,
     library: &'a model::LibraryState,
     movie_library: &'a model::VideoLibraryState,
+    game_library: &'a model::GameLibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
     play_queue_visible: bool,
@@ -82,7 +83,7 @@ pub fn render_page<'a>(
             pages::movie::movie_page(movie_library, state, &library.grid_info, app_images)
         }
         Page::GameHome => pages::gamehome::game_home(app_images),
-        Page::GBAList => pages::gamegba::gba_list(),
+        Page::GBAList => pages::gamegba::gba_list(game_library),
     };
 
     (message_sourced_breadcrumbs, ret_page)

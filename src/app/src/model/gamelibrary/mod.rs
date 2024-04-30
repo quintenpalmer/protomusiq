@@ -29,4 +29,8 @@ impl GameLibraryState {
             games: game_library,
         }
     }
+
+    pub fn get_gba_rom_paths(&self) -> &Vec<path::PathBuf> {
+        &self.games.gba_rom_paths
+    }
 }
