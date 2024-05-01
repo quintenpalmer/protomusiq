@@ -1,4 +1,4 @@
-use iced::widget::{Column, Container, Row, Scrollable};
+use iced::widget::{Column, Container, Scrollable};
 use iced::Length;
 
 use crate::model;
@@ -12,7 +12,7 @@ pub fn gba_list<'a>(game_library: &'a model::GameLibraryState) -> Container<'a, 
 
     for gba_rom_path in game_library.get_gba_rom_paths() {
         body_column = body_column.push(
-            Row::new()
+            line_row()
                 .push(
                     dark_button(h2(">")).on_press(message::Message::ExternalSpawn(
                         message::ExternalSpawn::MGBA(gba_rom_path.path.clone()),
