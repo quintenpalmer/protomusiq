@@ -2,6 +2,8 @@ use std::path;
 
 use musiqlibrary::games;
 
+use crate::model;
+
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
@@ -67,21 +69,27 @@ pub struct GameLibrary {
 }
 
 impl GameLibrary {
-    pub fn new<P: AsRef<path::Path> + Clone>(gba_path: &Option<P>) -> Self {
-        let gba_rom_paths = match gba_path {
-            Some(actual_gba_path) => games::gba::scan_for_gba_rom_files(&actual_gba_path).unwrap(),
-            None => Vec::new(),
+    pub fn new(games: &Option<model::app::GameConfig>) -> Self {
+        let (gba_prefix_dir, gba_rom_paths) = match games {
+            Some(actual_games) => {
+                let gba_rom_paths =
+                    games::gba::scan_for_gba_rom_files(&actual_games.gba_path).unwrap();
+
+                let mut sorted_rom_paths: Vec<GBAGame> =
+                    gba_rom_paths.into_iter().map(|x| GBAGame::new(x)).collect();
+
+                sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
+                let prefix_dir = actual_games.gba_path.clone();
+
+                (Some(prefix_dir), sorted_rom_paths)
+            }
+            None => (None, Vec::new()),
         };
 
-        let mut sorted_gba_rom_paths: Vec<GBAGame> =
-            gba_rom_paths.into_iter().map(|x| GBAGame::new(x)).collect();
-
-        sorted_gba_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
-
         GameLibrary {
-            gba_prefix_dir: <std::option::Option<P> as Clone>::clone(gba_path)
-                .map(|x| x.as_ref().to_path_buf()),
-            gba_rom_paths: sorted_gba_rom_paths,
+            gba_prefix_dir: gba_prefix_dir,
+            gba_rom_paths: gba_rom_paths,
         }
     }
 }
