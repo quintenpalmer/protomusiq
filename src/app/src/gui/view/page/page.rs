@@ -67,7 +67,7 @@ pub fn render_page<'a>(
         Page::ArtistFeaturedInPlaylist(ref state) => {
             pages::artistinplaylists::artist_in_playlist_view_state(library, state)
         }
-        Page::MovieHome => pages::moviehome::movie_home(),
+        Page::MovieHome => pages::moviehome::movie_home(app_images),
         Page::MovieList(ref state) => pages::movielist::movie_list(
             movie_library,
             state,

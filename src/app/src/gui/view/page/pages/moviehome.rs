@@ -1,18 +1,28 @@
-use iced::widget::{Column, Container, Scrollable};
+use iced::widget::{Container, Row, Scrollable};
 use iced::Length;
 
 use crate::model;
 
+use crate::datastore::staticassets::embedded;
 use crate::gui::message::{self, Message};
 
+use super::super::super::common;
+use super::super::super::consts;
 use super::super::super::elements::*;
 
-pub fn movie_home<'a>() -> Container<'a, Message> {
-    let body_column = Column::new()
+pub fn movie_home<'a>(app_images: &embedded::AppImages) -> Container<'a, Message> {
+    let body_column = Row::new()
         .spacing(10)
         .padding(10)
         .push(
-            dark_button(h1("Movie List")).on_press(
+            dark_button(Container::new(bottom_label(
+                album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
+                bright_paragraph(common::abr_str(
+                    "Movie List".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(
                 message::MovieNavMessage::MovieList(
                     0,
                     model::MovieSortKey::ByTitle,
@@ -22,12 +32,28 @@ pub fn movie_home<'a>() -> Container<'a, Message> {
             ),
         )
         .push(
-            dark_button(h1("Movie Query"))
-                .on_press(message::MovieNavMessage::MovieQuery(None).into_message()),
+            dark_button(Container::new(bottom_label(
+                album_image(
+                    app_images.get_search_image().clone(),
+                    model::AlbumSize::Small,
+                )
+                .into(),
+                bright_paragraph(common::abr_str(
+                    "Movie Query".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(message::MovieNavMessage::MovieQuery(None).into_message()),
         )
         .push(
-            dark_button(h1("Movie Attributes"))
-                .on_press(message::MovieNavMessage::MovieAttributes(None).into_message()),
+            dark_button(Container::new(bottom_label(
+                album_image(app_images.get_tag_image().clone(), model::AlbumSize::Small).into(),
+                bright_paragraph(common::abr_str(
+                    "Movie Attrs".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(message::MovieNavMessage::MovieAttributes(None).into_message()),
         );
 
     let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
