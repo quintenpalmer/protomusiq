@@ -11,6 +11,7 @@ pub struct AppImages {
     settings_image: Vec<u8>,
     dvd_image: Vec<u8>,
     game_controller_image: Vec<u8>,
+    gba_image: Vec<u8>,
 }
 
 impl AppImages {
@@ -42,6 +43,8 @@ impl AppImages {
             "/embedded/game_controller.png",
         ));
 
+        let gba_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/gba.png",));
+
         AppImages {
             artists_image: artists_image.to_vec(),
             albums_image: albums_image.to_vec(),
@@ -52,6 +55,7 @@ impl AppImages {
             settings_image: settings_image.to_vec(),
             dvd_image: dvd_image.to_vec(),
             game_controller_image: game_controller_image.to_vec(),
+            gba_image: gba_image.to_vec(),
         }
     }
 
@@ -89,5 +93,9 @@ impl AppImages {
 
     pub fn get_game_controller_image(&self) -> &Vec<u8> {
         &self.game_controller_image
+    }
+
+    pub fn get_gba_image(&self) -> &Vec<u8> {
+        &self.gba_image
     }
 }
