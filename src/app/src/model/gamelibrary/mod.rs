@@ -73,10 +73,15 @@ impl GameLibrary {
             None => Vec::new(),
         };
 
+        let mut sorted_gba_rom_paths: Vec<GBAGame> =
+            gba_rom_paths.into_iter().map(|x| GBAGame::new(x)).collect();
+
+        sorted_gba_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
         GameLibrary {
             gba_prefix_dir: <std::option::Option<P> as Clone>::clone(gba_path)
                 .map(|x| x.as_ref().to_path_buf()),
-            gba_rom_paths: gba_rom_paths.into_iter().map(|x| GBAGame::new(x)).collect(),
+            gba_rom_paths: sorted_gba_rom_paths,
         }
     }
 }
