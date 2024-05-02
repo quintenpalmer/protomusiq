@@ -80,6 +80,9 @@ pub fn keybinding_subscription_fn(
             )
             .into_message(),
         ),
+        (keyboard::Key::Character("g"), Mods::Shift) => {
+            Some(message::GameNavMessage::GameHome.into_message())
+        }
         (keyboard::Key::Character("p"), Mods::Shift) => {
             Some(message::PlaylistNavMessage::PlaylistList("".to_string()).into_message())
         }
