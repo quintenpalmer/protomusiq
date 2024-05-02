@@ -455,6 +455,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::GBAList;
                 Command::none()
             }
+            message::GameNavMessage::SNESList => {
+                app.page_state.current_page = Page::SNESList;
+                Command::none()
+            }
         },
     }
 }

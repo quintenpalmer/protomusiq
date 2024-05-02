@@ -35,6 +35,7 @@ pub enum Page {
     MovieAttributes(MovieAttributeState),
     GameHome,
     GBAList,
+    SNESList,
 }
 
 impl Page {
@@ -64,6 +65,7 @@ impl Page {
             Page::MovieView(_) => "MovieView",
             Page::GameHome => "GameHome",
             Page::GBAList => "GBAList",
+            Page::SNESList => "SNESList",
         }
         .to_string()
     }

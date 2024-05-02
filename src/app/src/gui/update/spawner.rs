@@ -26,5 +26,13 @@ pub fn exec_cmd(
                 .expect("Failed to execute command");
             Command::none()
         }
+        message::ExternalSpawn::ZSNES(snes_rom_path) => {
+            let _wanted_to_be_detached = process::Command::new("zsnes")
+                .current_dir(game_library.get_snes_prefix_path().clone().unwrap())
+                .arg(snes_rom_path.into_os_string())
+                .spawn()
+                .expect("Failed to execute command");
+            Command::none()
+        }
     }
 }

@@ -10,6 +10,7 @@ pub mod artisttracks;
 pub mod config;
 pub mod gamegba;
 pub mod gamehome;
+pub mod gamesnes;
 pub mod home;
 pub mod movie;
 pub mod movieattrs;

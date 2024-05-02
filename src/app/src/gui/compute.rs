@@ -230,6 +230,10 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
             "GBA".to_string(),
             message::GameNavMessage::GBAList.into_message(),
         )),
+        message::GameNavMessage::SNESList => ret.push((
+            "SNES".to_string(),
+            message::GameNavMessage::SNESList.into_message(),
+        )),
     }
 
     ret

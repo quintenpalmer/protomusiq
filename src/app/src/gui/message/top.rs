@@ -79,6 +79,7 @@ pub enum VolumeRequest {
 pub enum ExternalSpawn {
     Mpv(path::PathBuf),
     MGBA(path::PathBuf),
+    ZSNES(path::PathBuf),
 }
 
 pub struct MessageFuture {
