@@ -463,6 +463,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::N64List;
                 Command::none()
             }
+            message::GameNavMessage::NDSList => {
+                app.page_state.current_page = Page::NDSList;
+                Command::none()
+            }
         },
     }
 }

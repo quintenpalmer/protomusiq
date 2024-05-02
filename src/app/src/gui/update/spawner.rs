@@ -42,5 +42,13 @@ pub fn exec_cmd(
                 .expect("Failed to execute command");
             Command::none()
         }
+        message::ExternalSpawn::Desmume(nds_rom_path) => {
+            let _wanted_to_be_detached = process::Command::new("desmume")
+                .current_dir(game_library.get_nds_prefix_path().clone().unwrap())
+                .arg(nds_rom_path.into_os_string())
+                .spawn()
+                .expect("Failed to execute command");
+            Command::none()
+        }
     }
 }

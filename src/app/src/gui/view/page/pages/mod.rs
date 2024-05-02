@@ -11,6 +11,7 @@ pub mod config;
 pub mod gamegba;
 pub mod gamehome;
 pub mod gamen64;
+pub mod gamends;
 pub mod gamesnes;
 pub mod home;
 pub mod movie;

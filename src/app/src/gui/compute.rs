@@ -238,6 +238,10 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
             "N64".to_string(),
             message::GameNavMessage::N64List.into_message(),
         )),
+        message::GameNavMessage::NDSList => ret.push((
+            "DS".to_string(),
+            message::GameNavMessage::NDSList.into_message(),
+        )),
     }
 
     ret
