@@ -34,5 +34,13 @@ pub fn exec_cmd(
                 .expect("Failed to execute command");
             Command::none()
         }
+        message::ExternalSpawn::Mupen64(n64_rom_path) => {
+            let _wanted_to_be_detached = process::Command::new("mupen64plus")
+                .current_dir(game_library.get_n64_prefix_path().clone().unwrap())
+                .arg(n64_rom_path.into_os_string())
+                .spawn()
+                .expect("Failed to execute command");
+            Command::none()
+        }
     }
 }

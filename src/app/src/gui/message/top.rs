@@ -80,6 +80,7 @@ pub enum ExternalSpawn {
     Mpv(path::PathBuf),
     MGBA(path::PathBuf),
     ZSNES(path::PathBuf),
+    Mupen64(path::PathBuf),
 }
 
 pub struct MessageFuture {

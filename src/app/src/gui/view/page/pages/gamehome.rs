@@ -29,6 +29,13 @@ pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message:
                 bright_paragraph(common::abr_str("SNES".to_string(), consts::ICON_STR_LENGTH)),
             )))
             .on_press(message::GameNavMessage::SNESList.into_message()),
+        )
+        .push(
+            dark_button(Container::new(bottom_label(
+                album_image(app_images.get_n64_image().clone(), model::AlbumSize::Small).into(),
+                bright_paragraph(common::abr_str("N64".to_string(), consts::ICON_STR_LENGTH)),
+            )))
+            .on_press(message::GameNavMessage::N64List.into_message()),
         );
 
     let body = Container::new(Scrollable::new(body_column).height(Length::Fill));

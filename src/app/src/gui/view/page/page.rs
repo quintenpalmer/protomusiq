@@ -85,6 +85,7 @@ pub fn render_page<'a>(
         Page::GameHome => pages::gamehome::game_home(app_images),
         Page::GBAList => pages::gamegba::gba_list(game_library),
         Page::SNESList => pages::gamesnes::snes_list(game_library),
+        Page::N64List => pages::gamen64::n64_list(game_library),
     };
 
     (message_sourced_breadcrumbs, ret_page)

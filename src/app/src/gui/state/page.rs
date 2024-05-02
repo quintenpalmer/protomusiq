@@ -36,6 +36,7 @@ pub enum Page {
     GameHome,
     GBAList,
     SNESList,
+    N64List,
 }
 
 impl Page {
@@ -66,6 +67,7 @@ impl Page {
             Page::GameHome => "GameHome",
             Page::GBAList => "GBAList",
             Page::SNESList => "SNESList",
+            Page::N64List => "N64List",
         }
         .to_string()
     }
