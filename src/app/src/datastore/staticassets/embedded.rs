@@ -15,6 +15,8 @@ pub struct AppImages {
     snes_image: Vec<u8>,
     n64_image: Vec<u8>,
     nds_image: Vec<u8>,
+    ngc_image: Vec<u8>,
+    wii_image: Vec<u8>,
 }
 
 impl AppImages {
@@ -50,6 +52,11 @@ impl AppImages {
         let snes_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/snes.png",));
         let n64_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/n64.png",));
         let nds_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/nds.png",));
+        let ngc_image = include_bytes!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/embedded/gamecube.png",
+        ));
+        let wii_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/wii.png",));
 
         AppImages {
             artists_image: artists_image.to_vec(),
@@ -65,9 +72,10 @@ impl AppImages {
             snes_image: snes_image.to_vec(),
             n64_image: n64_image.to_vec(),
             nds_image: nds_image.to_vec(),
+            ngc_image: ngc_image.to_vec(),
+            wii_image: wii_image.to_vec(),
         }
     }
-
     pub fn get_artists_image(&self) -> &Vec<u8> {
         &self.artists_image
     }
@@ -118,5 +126,13 @@ impl AppImages {
 
     pub fn get_nds_image(&self) -> &Vec<u8> {
         &self.nds_image
+    }
+
+    pub fn get_ngc_image(&self) -> &Vec<u8> {
+        &self.ngc_image
+    }
+
+    pub fn get_wii_image(&self) -> &Vec<u8> {
+        &self.wii_image
     }
 }
