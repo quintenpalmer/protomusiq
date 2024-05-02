@@ -49,6 +49,7 @@ pub struct LivehistoryRecord {
     pub listened_date: DateTime<Local>,
 }
 
+#[allow(unused)]
 #[derive(Clone)]
 pub struct PrehistoryRecord {
     pub source: String,
@@ -56,6 +57,7 @@ pub struct PrehistoryRecord {
     pub count: u32,
 }
 
+#[allow(unused)]
 #[derive(Clone)]
 pub struct DBTrackUniqueIdentifier {
     pub artist_id: u32,

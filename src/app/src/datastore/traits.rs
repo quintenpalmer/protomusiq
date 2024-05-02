@@ -39,10 +39,12 @@ pub struct AlbumArtKey {
 }
 
 pub trait CachedAlbumImageInfo {
+    #[allow(unused)]
     fn get_all_known_art(
         &self,
         albums: Vec<musiqlibrary::AlbumInfo>,
     ) -> BTreeMap<AlbumArtKey, Vec<u8>>;
 
+    #[allow(unused)]
     fn write_all_art(&mut self, art: BTreeMap<AlbumArtKey, Vec<u8>>);
 }
