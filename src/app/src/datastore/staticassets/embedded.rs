@@ -12,6 +12,7 @@ pub struct AppImages {
     dvd_image: Vec<u8>,
     game_controller_image: Vec<u8>,
     gba_image: Vec<u8>,
+    snes_image: Vec<u8>,
 }
 
 impl AppImages {
@@ -44,6 +45,7 @@ impl AppImages {
         ));
 
         let gba_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/gba.png",));
+        let snes_image = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/snes.png",));
 
         AppImages {
             artists_image: artists_image.to_vec(),
@@ -56,6 +58,7 @@ impl AppImages {
             dvd_image: dvd_image.to_vec(),
             game_controller_image: game_controller_image.to_vec(),
             gba_image: gba_image.to_vec(),
+            snes_image: snes_image.to_vec(),
         }
     }
 
@@ -97,5 +100,9 @@ impl AppImages {
 
     pub fn get_gba_image(&self) -> &Vec<u8> {
         &self.gba_image
+    }
+
+    pub fn get_snes_image(&self) -> &Vec<u8> {
+        &self.snes_image
     }
 }
