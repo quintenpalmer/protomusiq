@@ -46,6 +46,20 @@ impl N64Game {
     }
 }
 
+pub struct NDSGame {
+    pub name: String,
+    pub path: path::PathBuf,
+}
+
+impl NDSGame {
+    pub fn new(path: path::PathBuf) -> Self {
+        NDSGame {
+            name: clean_filename_to_game_name(&path),
+            path: path.clone(),
+        }
+    }
+}
+
 fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
     let mut unstripped = path
         .file_stem()
@@ -141,6 +155,20 @@ impl GameLibrary {
                     (prefix_dir, sorted_rom_paths)
                 };
 
+                let (nds_prefix_dir, nds_rom_paths) = {
+                    let rom_paths =
+                        games::nds::scan_for_nds_rom_files(&actual_games.nds_path).unwrap();
+
+                    let mut sorted_rom_paths: Vec<NDSGame> =
+                        rom_paths.into_iter().map(|x| NDSGame::new(x)).collect();
+
+                    sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
+                    let prefix_dir = actual_games.snes_path.clone();
+
+                    (prefix_dir, sorted_rom_paths)
+                };
+
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
                         gba_prefix_dir: gba_prefix_dir,
@@ -149,6 +177,8 @@ impl GameLibrary {
                         snes_rom_paths: snes_rom_paths,
                         n64_prefix_dir: n64_prefix_dir,
                         n64_rom_paths: n64_rom_paths,
+                        nds_prefix_dir: nds_prefix_dir,
+                        nds_rom_paths: nds_rom_paths,
                     }),
                 }
             }
@@ -166,6 +196,9 @@ struct InnerGameLibrary {
 
     pub n64_prefix_dir: path::PathBuf,
     pub n64_rom_paths: Vec<N64Game>,
+
+    pub nds_prefix_dir: path::PathBuf,
+    pub nds_rom_paths: Vec<NDSGame>,
 }
 
 pub struct GameLibraryState {
@@ -217,6 +250,20 @@ impl GameLibraryState {
     pub fn get_n64_rom_paths(&self) -> Option<&Vec<N64Game>> {
         match self.games.inner {
             Some(ref v) => Some(&v.n64_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_nds_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.nds_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_nds_rom_paths(&self) -> Option<&Vec<NDSGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.nds_rom_paths),
             None => None,
         }
     }

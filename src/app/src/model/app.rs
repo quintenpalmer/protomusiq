@@ -103,4 +103,5 @@ pub struct GameConfig {
     pub gba_path: path::PathBuf,
     pub snes_path: path::PathBuf,
     pub n64_path: path::PathBuf,
+    pub nds_path: path::PathBuf,
 }
