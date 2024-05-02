@@ -64,13 +64,12 @@ fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
 }
 
 pub struct GameLibrary {
-    pub gba_prefix_dir: Option<path::PathBuf>,
-    pub gba_rom_paths: Vec<GBAGame>,
+    inner: Option<InnerGameLibrary>,
 }
 
 impl GameLibrary {
     pub fn new(games: &Option<model::app::GameConfig>) -> Self {
-        let (gba_prefix_dir, gba_rom_paths) = match games {
+        match games {
             Some(actual_games) => {
                 let gba_rom_paths =
                     games::gba::scan_for_gba_rom_files(&actual_games.gba_path).unwrap();
@@ -82,16 +81,21 @@ impl GameLibrary {
 
                 let prefix_dir = actual_games.gba_path.clone();
 
-                (Some(prefix_dir), sorted_rom_paths)
+                GameLibrary {
+                    inner: Some(InnerGameLibrary {
+                        gba_prefix_dir: prefix_dir,
+                        gba_rom_paths: sorted_rom_paths,
+                    }),
+                }
             }
-            None => (None, Vec::new()),
-        };
-
-        GameLibrary {
-            gba_prefix_dir: gba_prefix_dir,
-            gba_rom_paths: gba_rom_paths,
+            None => GameLibrary { inner: None },
         }
     }
+}
+
+struct InnerGameLibrary {
+    pub gba_prefix_dir: path::PathBuf,
+    pub gba_rom_paths: Vec<GBAGame>,
 }
 
 pub struct GameLibraryState {
@@ -105,11 +109,17 @@ impl GameLibraryState {
         }
     }
 
-    pub fn get_gba_prefix_path(&self) -> &Option<path::PathBuf> {
-        &self.games.gba_prefix_dir
+    pub fn get_gba_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gba_prefix_dir),
+            None => None,
+        }
     }
 
-    pub fn get_gba_rom_paths(&self) -> &Vec<GBAGame> {
-        &self.games.gba_rom_paths
+    pub fn get_gba_rom_paths(&self) -> Option<&Vec<GBAGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gba_rom_paths),
+            None => None,
+        }
     }
 }
