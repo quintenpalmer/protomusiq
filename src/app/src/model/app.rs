@@ -104,4 +104,12 @@ pub struct GameConfig {
     pub snes_path: path::PathBuf,
     pub n64_path: path::PathBuf,
     pub nds_path: path::PathBuf,
+    pub gamecube: GameCubeWiiConfig,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct GameCubeWiiConfig {
+    pub metadata_path: path::PathBuf,
+    pub gamecube_path: path::PathBuf,
+    pub wii_path: path::PathBuf,
 }

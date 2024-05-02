@@ -1,3 +1,6 @@
+use std::collections::BTreeMap;
+use std::fs;
+use std::io;
 use std::path;
 
 use musiqlibrary::games;
@@ -58,6 +61,59 @@ impl NDSGame {
             path: path.clone(),
         }
     }
+}
+
+pub struct GameCubeGame {
+    pub name: String,
+    pub code: String,
+    pub path: path::PathBuf,
+}
+
+impl GameCubeGame {
+    pub fn new(path: path::PathBuf, lookup_table: &BTreeMap<String, String>) -> Self {
+        let code = extract_code_from_path(&path);
+        let name = lookup_name_from_code(&code, lookup_table);
+
+        GameCubeGame {
+            name: name,
+            code: code,
+            path: path.clone(),
+        }
+    }
+}
+
+pub struct WiiGame {
+    pub name: String,
+    pub code: String,
+    pub path: path::PathBuf,
+}
+
+impl WiiGame {
+    pub fn new(path: path::PathBuf, lookup_table: &BTreeMap<String, String>) -> Self {
+        let code = extract_code_from_path(&path);
+        let name = lookup_name_from_code(&code, lookup_table);
+
+        WiiGame {
+            name: name,
+            code: code,
+            path: path.clone(),
+        }
+    }
+}
+
+fn extract_code_from_path(path: &path::PathBuf) -> String {
+    path.file_stem()
+        .map(|x| x.to_string_lossy().to_string())
+        .unwrap_or("<unknown>".to_string())
+}
+
+fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>) -> String {
+    let code_lookup = match code.strip_suffix("-disc2") {
+        Some(v) => v.to_string(),
+        None => code.clone(),
+    };
+    println!("code: {}", code_lookup);
+    lookup_table.get(&code_lookup).unwrap().clone()
 }
 
 fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
@@ -169,6 +225,55 @@ impl GameLibrary {
                     (prefix_dir, sorted_rom_paths)
                 };
 
+                let gamecube_metadata_path = actual_games.gamecube.metadata_path.clone();
+
+                let gamecube_lookup_table = {
+                    let file = fs::File::open(
+                        gamecube_metadata_path.join("gamecube_wii_code_to_name_lookup_table.json"),
+                    )
+                    .unwrap();
+                    let reader = io::BufReader::new(file);
+                    let lookup_table: BTreeMap<String, String> =
+                        serde_json::from_reader(reader).unwrap();
+
+                    lookup_table
+                };
+
+                let (ngc_prefix_dir, ngc_rom_paths) = {
+                    let rom_paths = games::gamecube::scan_for_gamecube_rom_files(
+                        &actual_games.gamecube.gamecube_path,
+                    )
+                    .unwrap();
+
+                    let mut sorted_rom_paths: Vec<GameCubeGame> = rom_paths
+                        .into_iter()
+                        .map(|x| GameCubeGame::new(x, &gamecube_lookup_table))
+                        .collect();
+
+                    sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
+                    let prefix_dir = actual_games.snes_path.clone();
+
+                    (prefix_dir, sorted_rom_paths)
+                };
+
+                let (wii_prefix_dir, wii_rom_paths) = {
+                    let rom_paths =
+                        games::wii::scan_for_wii_rom_files(&actual_games.gamecube.wii_path)
+                            .unwrap();
+
+                    let mut sorted_rom_paths: Vec<WiiGame> = rom_paths
+                        .into_iter()
+                        .map(|x| WiiGame::new(x, &gamecube_lookup_table))
+                        .collect();
+
+                    sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
+                    let prefix_dir = actual_games.snes_path.clone();
+
+                    (prefix_dir, sorted_rom_paths)
+                };
+
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
                         gba_prefix_dir: gba_prefix_dir,
@@ -179,6 +284,11 @@ impl GameLibrary {
                         n64_rom_paths: n64_rom_paths,
                         nds_prefix_dir: nds_prefix_dir,
                         nds_rom_paths: nds_rom_paths,
+                        gamecube_metadata_path: gamecube_metadata_path,
+                        gamecube_prefix_dir: ngc_prefix_dir,
+                        gamecube_rom_paths: ngc_rom_paths,
+                        wii_prefix_dir: wii_prefix_dir,
+                        wii_rom_paths: wii_rom_paths,
                     }),
                 }
             }
@@ -199,6 +309,14 @@ struct InnerGameLibrary {
 
     pub nds_prefix_dir: path::PathBuf,
     pub nds_rom_paths: Vec<NDSGame>,
+
+    pub gamecube_metadata_path: path::PathBuf,
+
+    pub gamecube_prefix_dir: path::PathBuf,
+    pub gamecube_rom_paths: Vec<GameCubeGame>,
+
+    pub wii_prefix_dir: path::PathBuf,
+    pub wii_rom_paths: Vec<WiiGame>,
 }
 
 pub struct GameLibraryState {
