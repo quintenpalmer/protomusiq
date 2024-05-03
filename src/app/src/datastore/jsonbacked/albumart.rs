@@ -253,7 +253,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     large_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
@@ -277,7 +277,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     regular_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
@@ -301,7 +301,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     small_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
@@ -325,7 +325,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     centi_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
@@ -349,7 +349,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     mini_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
@@ -373,7 +373,7 @@ pub fn process_cache_and_get_album_art(
 
                     let mut buf = io::Cursor::new(Vec::new());
                     micro_album_art
-                        .write_to(&mut buf, image::ImageOutputFormat::Png)
+                        .write_to(&mut buf, image::ImageFormat::Png)
                         .unwrap();
 
                     cached_album_art_checker.write_art_for_size(
