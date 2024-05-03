@@ -1,4 +1,4 @@
-use iced::widget::{Container, Row, Scrollable};
+use iced::widget::{Column, Container, Row, Scrollable};
 use iced::Length;
 
 use crate::model;
@@ -12,8 +12,6 @@ use super::super::super::elements::*;
 
 pub fn movie_home<'a>(app_images: &embedded::AppImages) -> Container<'a, Message> {
     let body_column = Row::new()
-        .spacing(10)
-        .padding(10)
         .push(
             dark_button(Container::new(bottom_label(
                 album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
@@ -56,7 +54,11 @@ pub fn movie_home<'a>(app_images: &embedded::AppImages) -> Container<'a, Message
             .on_press(message::MovieNavMessage::MovieAttributes(None).into_message()),
         );
 
-    let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
+    let body = Container::new(
+        Column::new()
+            .push(h1("Movies"))
+            .push(Scrollable::new(body_column).height(Length::Fill)),
+    );
 
     body
 }
