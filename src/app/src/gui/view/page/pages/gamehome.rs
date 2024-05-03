@@ -55,8 +55,6 @@ pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message:
     .on_press(message::GameNavMessage::WiiList.into_message());
 
     let body_column = Column::new()
-        .spacing(10)
-        .padding(10)
         .push(h1("Games"))
         .push(line_row().push(gba_link).push(nds_link))
         .push(line_row().push(snes_link).push(n64_link))
