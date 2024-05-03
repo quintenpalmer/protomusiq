@@ -112,7 +112,6 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
         Some(v) => v.to_string(),
         None => code.clone(),
     };
-    println!("code: {}", code_lookup);
     lookup_table.get(&code_lookup).unwrap().clone()
 }
 
