@@ -17,75 +17,18 @@ pub fn home_page<'a>(
 ) -> Container<'a, Message> {
     match state {
         state::HomeState {} => {
-            let album_list = dark_button(Container::new(bottom_label(
+            let music_list = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_albums_image().clone(),
                     model::AlbumSize::Small,
                 )
                 .into(),
                 bright_paragraph(common::abr_str(
-                    "Albums".to_string(),
+                    "Music".to_string(),
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(
-                message::MusicNavMessage::AlbumList(
-                    0,
-                    model::AlbumSortKey::ByParent,
-                    model::AlbumSortKey::ByParent.default_order(),
-                )
-                .into_message(),
-            );
-            let artist_list = dark_button(Container::new(bottom_label(
-                album_image(
-                    app_images.get_artists_image().clone(),
-                    model::AlbumSize::Small,
-                )
-                .into(),
-                bright_paragraph(common::abr_str(
-                    "Artists".to_string(),
-                    consts::ICON_STR_LENGTH,
-                )),
-            )))
-            .on_press(
-                message::ArtistNavMessage::ArtistList(
-                    0,
-                    model::ArtistSortKey::ByName,
-                    model::ArtistSortKey::ByName.default_order(),
-                )
-                .into_message(),
-            );
-            let track_list = dark_button(Container::new(bottom_label(
-                album_image(
-                    app_images.get_tracks_image().clone(),
-                    model::AlbumSize::Small,
-                )
-                .into(),
-                bright_paragraph(common::abr_str(
-                    "Tracks".to_string(),
-                    consts::ICON_STR_LENGTH,
-                )),
-            )))
-            .on_press(
-                message::MusicNavMessage::TrackList(
-                    0,
-                    model::TrackSortKey::ByName,
-                    model::TrackSortKey::ByName.default_order(),
-                )
-                .into_message(),
-            );
-            let playlist = dark_button(Container::new(bottom_label(
-                album_image(
-                    app_images.get_playlists_image().clone(),
-                    model::AlbumSize::Small,
-                )
-                .into(),
-                bright_paragraph(common::abr_str(
-                    "Playlists".to_string(),
-                    consts::ICON_STR_LENGTH,
-                )),
-            )))
-            .on_press(message::PlaylistNavMessage::PlaylistList("".to_string()).into_message());
+            .on_press(message::MusicNavMessage::MusicHome.into_message());
             let search = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_search_image().clone(),
@@ -148,9 +91,8 @@ pub fn home_page<'a>(
                 Scrollable::new(
                     Column::new()
                         .width(Length::Fill)
-                        .push(Row::new().push(album_list).push(artist_list).push(search))
-                        .push(Row::new().push(track_list).push(dvd).push(playlist))
-                        .push(Row::new().push(game_home).push(settings)),
+                        .push(Row::new().push(music_list).push(dvd).push(game_home))
+                        .push(Row::new().push(search).push(settings)),
                 )
                 .height(Length::Fill),
             );

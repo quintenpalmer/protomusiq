@@ -16,6 +16,7 @@ pub enum NavMessage {
 
 #[derive(Debug, Clone)]
 pub enum MusicNavMessage {
+    MusicHome,
     TrackList(usize, model::TrackSortKey, model::SortOrder),
     AlbumList(usize, model::AlbumSortKey, model::SortOrder),
     Artist(ArtistNavMessage),

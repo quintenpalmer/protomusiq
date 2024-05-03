@@ -70,6 +70,10 @@ pub fn handle_nav(
             text_input::focus(state::TEXT_INPUT_ID.clone())
         }
         NavMessage::Music(music_message) => match music_message {
+            message::MusicNavMessage::MusicHome => {
+                app.page_state.current_page = Page::MusicHome;
+                Command::none()
+            }
             message::MusicNavMessage::Genres(message::MusicGenreNavMessage::Home) => {
                 app.page_state.current_page = Page::GenreHome;
                 Command::none()

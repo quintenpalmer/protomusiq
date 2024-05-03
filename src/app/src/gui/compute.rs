@@ -34,6 +34,7 @@ pub fn compute_breadcrumb(
             ret
         }
         message::NavMessage::Music(m) => match m {
+            message::MusicNavMessage::MusicHome => Vec::new(),
             message::MusicNavMessage::Genres(message::MusicGenreNavMessage::Home) => vec![(
                 "Genres".to_string(),
                 message::MusicGenreNavMessage::Home.into_message(),

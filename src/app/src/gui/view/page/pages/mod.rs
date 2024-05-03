@@ -22,6 +22,7 @@ pub mod moviehome;
 pub mod movielist;
 pub mod moviequery;
 pub mod musicgenrehome;
+pub mod musichome;
 pub mod playlist;
 pub mod playlists;
 pub mod search;

@@ -31,6 +31,7 @@ pub fn render_page<'a>(
         Page::PlayQueue(state::PlayQueueState {}) => {
             Container::new(bright_paragraph("The Play Queue"))
         }
+        Page::MusicHome => pages::musichome::music_home(app_images),
         Page::PlaylistView(ref state) => {
             pages::playlist::playlist_view(library, action_state, player_info, state)
         }
