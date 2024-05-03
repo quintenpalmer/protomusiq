@@ -58,12 +58,9 @@ pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message:
         .spacing(10)
         .padding(10)
         .push(h1("Games"))
-        .push(gba_link)
-        .push(nds_link)
-        .push(snes_link)
-        .push(n64_link)
-        .push(ngc_link)
-        .push(wii_link);
+        .push(line_row().push(gba_link).push(nds_link))
+        .push(line_row().push(snes_link).push(n64_link))
+        .push(line_row().push(ngc_link).push(wii_link));
 
     let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
 
