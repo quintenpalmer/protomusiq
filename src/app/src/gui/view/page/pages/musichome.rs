@@ -86,8 +86,6 @@ pub fn music_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message
     .on_press(message::PlaylistNavMessage::PlaylistList("".to_string()).into_message());
 
     let body_column = Column::new()
-        .spacing(10)
-        .padding(10)
         .push(h1("Music"))
         .push(line_row().push(album_link).push(artist_link))
         .push(line_row().push(track_link).push(playlist_link));
