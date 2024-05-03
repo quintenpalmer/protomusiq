@@ -12,58 +12,58 @@ use super::super::super::consts;
 use super::super::super::elements::*;
 
 pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message::Message> {
+    let gba_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_gba_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str("GBA".to_string(), consts::ICON_STR_LENGTH)),
+    )))
+    .on_press(message::GameNavMessage::GBAList.into_message());
+
+    let nds_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_nds_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str(
+            "Nintendo DS".to_string(),
+            consts::ICON_STR_LENGTH,
+        )),
+    )))
+    .on_press(message::GameNavMessage::NDSList.into_message());
+
+    let snes_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_snes_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str("SNES".to_string(), consts::ICON_STR_LENGTH)),
+    )))
+    .on_press(message::GameNavMessage::SNESList.into_message());
+
+    let n64_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_n64_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str("N64".to_string(), consts::ICON_STR_LENGTH)),
+    )))
+    .on_press(message::GameNavMessage::N64List.into_message());
+
+    let ngc_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_ngc_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str(
+            "GameCube".to_string(),
+            consts::ICON_STR_LENGTH,
+        )),
+    )))
+    .on_press(message::GameNavMessage::GameCubeList.into_message());
+
+    let wii_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_wii_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str("Wii".to_string(), consts::ICON_STR_LENGTH)),
+    )))
+    .on_press(message::GameNavMessage::WiiList.into_message());
+
     let body_column = Column::new()
         .spacing(10)
         .padding(10)
         .push(h1("Games"))
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_gba_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str("GBA".to_string(), consts::ICON_STR_LENGTH)),
-            )))
-            .on_press(message::GameNavMessage::GBAList.into_message()),
-        )
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_nds_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str(
-                    "Nintendo DS".to_string(),
-                    consts::ICON_STR_LENGTH,
-                )),
-            )))
-            .on_press(message::GameNavMessage::NDSList.into_message()),
-        )
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_snes_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str("SNES".to_string(), consts::ICON_STR_LENGTH)),
-            )))
-            .on_press(message::GameNavMessage::SNESList.into_message()),
-        )
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_n64_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str("N64".to_string(), consts::ICON_STR_LENGTH)),
-            )))
-            .on_press(message::GameNavMessage::N64List.into_message()),
-        )
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_ngc_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str(
-                    "GameCube".to_string(),
-                    consts::ICON_STR_LENGTH,
-                )),
-            )))
-            .on_press(message::GameNavMessage::GameCubeList.into_message()),
-        )
-        .push(
-            dark_button(Container::new(bottom_label(
-                album_image(app_images.get_wii_image().clone(), model::AlbumSize::Small).into(),
-                bright_paragraph(common::abr_str("Wii".to_string(), consts::ICON_STR_LENGTH)),
-            )))
-            .on_press(message::GameNavMessage::WiiList.into_message()),
-        );
+        .push(gba_link)
+        .push(nds_link)
+        .push(snes_link)
+        .push(n64_link)
+        .push(ngc_link)
+        .push(wii_link);
 
     let body = Container::new(Scrollable::new(body_column).height(Length::Fill));
 
