@@ -87,6 +87,8 @@ pub fn render_page<'a>(
         Page::SNESList => pages::gamesnes::snes_list(game_library),
         Page::N64List => pages::gamen64::n64_list(game_library),
         Page::NDSList => pages::gamends::nds_list(game_library),
+        Page::GameCubeList => pages::gamengc::ngc_list(game_library),
+        Page::WiiList => pages::gamewii::wii_list(game_library),
     };
 
     (message_sourced_breadcrumbs, ret_page)

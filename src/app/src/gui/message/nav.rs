@@ -79,6 +79,8 @@ pub enum GameNavMessage {
     SNESList,
     N64List,
     NDSList,
+    GameCubeList,
+    WiiList,
 }
 
 #[derive(Debug, Clone)]

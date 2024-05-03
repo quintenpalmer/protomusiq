@@ -82,6 +82,8 @@ pub enum ExternalSpawn {
     ZSNES(path::PathBuf),
     Mupen64(path::PathBuf),
     Desmume(path::PathBuf),
+    DolphinGC(path::PathBuf),
+    DolphinWii(path::PathBuf),
 }
 
 pub struct MessageFuture {

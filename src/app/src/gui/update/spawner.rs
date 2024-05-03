@@ -50,5 +50,21 @@ pub fn exec_cmd(
                 .expect("Failed to execute command");
             Command::none()
         }
+        message::ExternalSpawn::DolphinGC(ngc_rom_path) => {
+            let _wanted_to_be_detached = process::Command::new("dolphin-emu-nogui")
+                .current_dir(game_library.get_ngc_prefix_path().clone().unwrap())
+                .arg(ngc_rom_path.into_os_string())
+                .spawn()
+                .expect("Failed to execute command");
+            Command::none()
+        }
+        message::ExternalSpawn::DolphinWii(wii_rom_path) => {
+            let _wanted_to_be_detached = process::Command::new("dolphin-emu-nogui")
+                .current_dir(game_library.get_wii_prefix_path().clone().unwrap())
+                .arg(wii_rom_path.into_os_string())
+                .spawn()
+                .expect("Failed to execute command");
+            Command::none()
+        }
     }
 }

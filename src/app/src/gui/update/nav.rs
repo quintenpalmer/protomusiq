@@ -467,6 +467,14 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::NDSList;
                 Command::none()
             }
+            message::GameNavMessage::GameCubeList => {
+                app.page_state.current_page = Page::GameCubeList;
+                Command::none()
+            }
+            message::GameNavMessage::WiiList => {
+                app.page_state.current_page = Page::WiiList;
+                Command::none()
+            }
         },
     }
 }

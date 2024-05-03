@@ -385,4 +385,32 @@ impl GameLibraryState {
             None => None,
         }
     }
+
+    pub fn get_ngc_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gamecube_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_ngc_rom_paths(&self) -> Option<&Vec<GameCubeGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gamecube_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_wii_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.wii_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_wii_rom_paths(&self) -> Option<&Vec<WiiGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.wii_rom_paths),
+            None => None,
+        }
+    }
 }

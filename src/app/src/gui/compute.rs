@@ -242,6 +242,14 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
             "DS".to_string(),
             message::GameNavMessage::NDSList.into_message(),
         )),
+        message::GameNavMessage::GameCubeList => ret.push((
+            "GameCube".to_string(),
+            message::GameNavMessage::GameCubeList.into_message(),
+        )),
+        message::GameNavMessage::WiiList => ret.push((
+            "Wii".to_string(),
+            message::GameNavMessage::WiiList.into_message(),
+        )),
     }
 
     ret
