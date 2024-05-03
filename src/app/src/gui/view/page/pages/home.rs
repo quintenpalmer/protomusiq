@@ -91,6 +91,7 @@ pub fn home_page<'a>(
                 Scrollable::new(
                     Column::new()
                         .width(Length::Fill)
+                        .push(h1("Home"))
                         .push(Row::new().push(music_list).push(dvd).push(game_home))
                         .push(Row::new().push(search).push(settings)),
                 )
