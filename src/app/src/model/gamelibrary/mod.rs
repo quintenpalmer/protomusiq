@@ -284,7 +284,6 @@ impl GameLibrary {
                         n64_rom_paths: n64_rom_paths,
                         nds_prefix_dir: nds_prefix_dir,
                         nds_rom_paths: nds_rom_paths,
-                        gamecube_metadata_path: gamecube_metadata_path,
                         gamecube_prefix_dir: ngc_prefix_dir,
                         gamecube_rom_paths: ngc_rom_paths,
                         wii_prefix_dir: wii_prefix_dir,
@@ -309,8 +308,6 @@ struct InnerGameLibrary {
 
     pub nds_prefix_dir: path::PathBuf,
     pub nds_rom_paths: Vec<NDSGame>,
-
-    pub gamecube_metadata_path: path::PathBuf,
 
     pub gamecube_prefix_dir: path::PathBuf,
     pub gamecube_rom_paths: Vec<GameCubeGame>,
