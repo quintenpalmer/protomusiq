@@ -33,34 +33,43 @@ pub fn compute_breadcrumb(
             }
             ret
         }
-        message::NavMessage::Music(m) => match m {
-            message::MusicNavMessage::MusicHome => Vec::new(),
-            message::MusicNavMessage::Genres(message::MusicGenreNavMessage::Home) => vec![(
-                "Genres".to_string(),
-                message::MusicGenreNavMessage::Home.into_message(),
-            )],
-            message::MusicNavMessage::TrackList(_, _, _) => vec![(
-                "Tracks".to_string(),
-                message::MusicNavMessage::TrackList(
-                    0,
-                    model::TrackSortKey::ByName,
-                    model::TrackSortKey::ByName.default_order(),
-                )
-                .into_message(),
-            )],
-            message::MusicNavMessage::AlbumList(_, _, _) => vec![(
-                "Albums".to_string(),
-                message::MusicNavMessage::AlbumList(
-                    0,
-                    model::AlbumSortKey::ByParent,
-                    model::AlbumSortKey::ByParent.default_order(),
-                )
-                .into_message(),
-            )],
-            message::MusicNavMessage::Artist(artist_message) => {
-                artist_breadcrumbs(library, artist_message)
-            }
-        },
+        message::NavMessage::Music(m) => {
+            let mut ret = vec![(
+                "Music".to_string(),
+                message::MusicNavMessage::MusicHome.into_message(),
+            )];
+            match m {
+                message::MusicNavMessage::MusicHome => (),
+                message::MusicNavMessage::Genres(message::MusicGenreNavMessage::Home) => {
+                    ret.push((
+                        "Genres".to_string(),
+                        message::MusicGenreNavMessage::Home.into_message(),
+                    ))
+                }
+                message::MusicNavMessage::TrackList(_, _, _) => ret.push((
+                    "Tracks".to_string(),
+                    message::MusicNavMessage::TrackList(
+                        0,
+                        model::TrackSortKey::ByName,
+                        model::TrackSortKey::ByName.default_order(),
+                    )
+                    .into_message(),
+                )),
+                message::MusicNavMessage::AlbumList(_, _, _) => ret.push((
+                    "Albums".to_string(),
+                    message::MusicNavMessage::AlbumList(
+                        0,
+                        model::AlbumSortKey::ByParent,
+                        model::AlbumSortKey::ByParent.default_order(),
+                    )
+                    .into_message(),
+                )),
+                message::MusicNavMessage::Artist(artist_message) => {
+                    ret.append(&mut artist_breadcrumbs(library, artist_message))
+                }
+            };
+            ret
+        }
         message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
         message::NavMessage::Game(game_message) => game_breadcrumbs(game_message),
         message::NavMessage::Playlist(playlist_message) => {
