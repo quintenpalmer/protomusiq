@@ -8,7 +8,10 @@ use crate::gui::message;
 use super::super::super::elements::*;
 
 pub fn nds_list<'a>(game_library: &'a model::GameLibraryState) -> Container<'a, message::Message> {
-    let mut body_column = Column::new().spacing(10).padding(10).push(h1("N64 Games:"));
+    let mut body_column = Column::new()
+        .spacing(10)
+        .padding(10)
+        .push(h1("Nintendo DS Games:"));
 
     match game_library.get_nds_rom_paths() {
         Some(nds_rom_paths) => {
