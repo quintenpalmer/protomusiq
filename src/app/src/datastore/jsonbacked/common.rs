@@ -26,16 +26,18 @@ pub fn _create_new_raw_data<T: Serialize, S: Into<String>>(
 
 pub fn maybe_get_existing_raw_data<T: DeserializeOwned>(json_db_path: &PathBuf) -> Option<T> {
     let maybe_raw: Option<T> = match fs::File::open(json_db_path.clone()) {
-        Ok(reader) => match serde_json::from_reader(io::BufReader::new(reader)) {
-            Ok(tracker) => Some(tracker),
-            Err(_) => {
-                println!(
-                    "could not deserialize data from path: {:?}",
-                    json_db_path.display()
-                );
-                None
+        Ok(reader) => {
+            match serde_json::from_reader(io::BufReader::with_capacity(8388608, reader)) {
+                Ok(tracker) => Some(tracker),
+                Err(_) => {
+                    println!(
+                        "could not deserialize data from path: {:?}",
+                        json_db_path.display()
+                    );
+                    None
+                }
             }
-        },
+        }
         Err(_) => {
             println!("could not load file: {:?}", json_db_path.display());
             None
