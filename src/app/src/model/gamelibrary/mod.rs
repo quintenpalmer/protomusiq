@@ -7,6 +7,8 @@ use musiqlibrary::games;
 
 use crate::model;
 
+mod consoles;
+
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
