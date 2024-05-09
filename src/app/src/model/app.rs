@@ -100,6 +100,7 @@ impl RawAppConfigState {
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct GameConfig {
+    pub image_path: path::PathBuf,
     pub gba_path: path::PathBuf,
     pub snes_path: path::PathBuf,
     pub n64_path: path::PathBuf,
