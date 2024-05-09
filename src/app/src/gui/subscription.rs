@@ -59,8 +59,8 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("a"), Mods::Shift) => Some(
             message::MusicNavMessage::AlbumList(
                 0,
-                model::AlbumSortKey::ByParent,
-                model::AlbumSortKey::ByParent.default_order(),
+                model::AlbumSortKey::preferred_home(),
+                model::AlbumSortKey::preferred_home().default_order(),
             )
             .into_message(),
         ),
@@ -75,8 +75,8 @@ pub fn keybinding_subscription_fn(
         (keyboard::Key::Character("m"), Mods::Shift) => Some(
             message::MovieNavMessage::MovieList(
                 0,
-                model::MovieSortKey::ByTitle,
-                model::MovieSortKey::ByTitle.default_order(),
+                model::MovieSortKey::preferred_home(),
+                model::MovieSortKey::preferred_home().default_order(),
             )
             .into_message(),
         ),
