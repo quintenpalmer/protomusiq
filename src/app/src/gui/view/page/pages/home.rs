@@ -75,8 +75,8 @@ pub fn home_page<'a>(
             .on_press(
                 message::MovieNavMessage::MovieList(
                     0,
-                    model::MovieSortKey::ByTitle,
-                    model::MovieSortKey::ByTitle.default_order(),
+                    model::MovieSortKey::preferred_home(),
+                    model::MovieSortKey::preferred_home().default_order(),
                 )
                 .into_message(),
             );

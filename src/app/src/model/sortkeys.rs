@@ -326,4 +326,8 @@ impl MovieSortKey {
         }
         .to_string()
     }
+
+    pub fn preferred_home() -> Self {
+        MovieSortKey::LastModified
+    }
 }
