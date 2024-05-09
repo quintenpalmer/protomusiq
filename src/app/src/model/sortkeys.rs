@@ -270,6 +270,10 @@ impl AlbumSortKey {
         }
         .to_string()
     }
+
+    pub fn preferred_home() -> Self {
+        AlbumSortKey::ByLastMod
+    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]

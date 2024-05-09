@@ -31,8 +31,8 @@ pub fn home_page<'a>(
             .on_press(
                 message::MusicNavMessage::AlbumList(
                     0,
-                    model::AlbumSortKey::ByParent,
-                    model::AlbumSortKey::ByParent.default_order(),
+                    model::AlbumSortKey::preferred_home(),
+                    model::AlbumSortKey::preferred_home().default_order(),
                 )
                 .into_message(),
             );
