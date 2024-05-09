@@ -13,15 +13,16 @@ pub fn gba_list<'a>(game_library: &'a model::GameLibraryState) -> Container<'a, 
     match game_library.get_gba_rom_paths() {
         Some(gba_rom_paths) => {
             for gba_rom_path in gba_rom_paths.iter() {
-                body_column = body_column.push(
-                    line_row()
-                        .push(
-                            dark_button(h2(">")).on_press(message::Message::ExternalSpawn(
-                                message::ExternalSpawn::MGBA(gba_rom_path.path.clone()),
-                            )),
-                        )
-                        .push(h2(gba_rom_path.name.clone())),
-                );
+                body_column = body_column.push({
+                    let mut row = line_row();
+                    row = row.push(
+                        dark_button(h2(">")).on_press(message::Message::ExternalSpawn(
+                            message::ExternalSpawn::MGBA(gba_rom_path.path.clone()),
+                        )),
+                    );
+                    row = row.push(h2(gba_rom_path.name.clone()));
+                    row
+                });
             }
         }
         None => (),
