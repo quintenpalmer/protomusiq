@@ -28,7 +28,14 @@ pub fn home_page<'a>(
                     consts::ICON_STR_LENGTH,
                 )),
             )))
-            .on_press(message::MusicNavMessage::MusicHome.into_message());
+            .on_press(
+                message::MusicNavMessage::AlbumList(
+                    0,
+                    model::AlbumSortKey::ByParent,
+                    model::AlbumSortKey::ByParent.default_order(),
+                )
+                .into_message(),
+            );
             let search = dark_button(Container::new(bottom_label(
                 album_image(
                     app_images.get_search_image().clone(),
