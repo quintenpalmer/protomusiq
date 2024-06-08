@@ -11,16 +11,53 @@ mod consoles;
 mod images;
 mod nameutil;
 
+fn find_best_match(map: &BTreeMap<String, path::PathBuf>, key: String) -> Option<&path::PathBuf> {
+    let mut best_so_far = (1000, None);
+
+    for (iter_key, iter_value) in map.iter() {
+        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
+        if iter_distance < best_so_far.0 {
+            best_so_far = (iter_distance, Some(iter_value));
+        }
+    }
+
+    best_so_far.1
+}
+
+fn get_game_image_bytes(
+    image_map: &images::ConsoleGameImageMap,
+    path: &path::PathBuf,
+    game_console: consoles::GameConsole,
+) -> Option<Vec<u8>> {
+    let this_game_maybe_image_file = match (
+        path.file_stem().map(|x| x.to_string_lossy().to_string()),
+        image_map.get_console_map(&game_console),
+    ) {
+        (Some(game_path), Some(console_map)) => find_best_match(console_map, game_path),
+        (_, _) => None,
+    };
+
+    match this_game_maybe_image_file {
+        Some(image_path) => Some(fs::read(image_path).unwrap()),
+        None => None,
+    }
+}
+
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
 }
 
 impl GBAGame {
-    pub fn new(path: path::PathBuf) -> Self {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameBoyAdvance);
+
         GBAGame {
             name: nameutil::clean_filename_to_game_name(&path),
             path: path.clone(),
+            image: loaded_image_bytes,
         }
     }
 }
@@ -127,12 +164,16 @@ impl GameLibrary {
     pub fn new(games: &Option<model::app::GameConfig>) -> Self {
         match games {
             Some(actual_games) => {
+                let image_map = images::ConsoleGameImageMap::new(&actual_games.image_path);
+
                 let (gba_prefix_dir, gba_rom_paths) = {
                     let rom_paths =
                         games::gba::scan_for_gba_rom_files(&actual_games.gba_path).unwrap();
 
-                    let mut sorted_rom_paths: Vec<GBAGame> =
-                        rom_paths.into_iter().map(|x| GBAGame::new(x)).collect();
+                    let mut sorted_rom_paths: Vec<GBAGame> = rom_paths
+                        .into_iter()
+                        .map(|x| GBAGame::new(x, &image_map))
+                        .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
