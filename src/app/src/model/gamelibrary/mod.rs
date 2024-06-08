@@ -8,6 +8,7 @@ use musiqlibrary::games;
 use crate::model;
 
 mod consoles;
+mod images;
 mod nameutil;
 
 pub struct GBAGame {
