@@ -8,6 +8,7 @@ use musiqlibrary::games;
 use crate::model;
 
 mod consoles;
+mod nameutil;
 
 pub struct GBAGame {
     pub name: String,
@@ -17,7 +18,7 @@ pub struct GBAGame {
 impl GBAGame {
     pub fn new(path: path::PathBuf) -> Self {
         GBAGame {
-            name: clean_filename_to_game_name(&path),
+            name: nameutil::clean_filename_to_game_name(&path),
             path: path.clone(),
         }
     }
@@ -31,7 +32,7 @@ pub struct SNESGame {
 impl SNESGame {
     pub fn new(path: path::PathBuf) -> Self {
         SNESGame {
-            name: clean_filename_to_game_name(&path),
+            name: nameutil::clean_filename_to_game_name(&path),
             path: path.clone(),
         }
     }
@@ -45,7 +46,7 @@ pub struct N64Game {
 impl N64Game {
     pub fn new(path: path::PathBuf) -> Self {
         N64Game {
-            name: clean_filename_to_game_name(&path),
+            name: nameutil::clean_filename_to_game_name(&path),
             path: path.clone(),
         }
     }
@@ -59,7 +60,7 @@ pub struct NDSGame {
 impl NDSGame {
     pub fn new(path: path::PathBuf) -> Self {
         NDSGame {
-            name: clean_filename_to_game_name(&path),
+            name: nameutil::clean_filename_to_game_name(&path),
             path: path.clone(),
         }
     }
@@ -115,22 +116,6 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
         None => code.clone(),
     };
     lookup_table.get(&code_lookup).unwrap().clone()
-}
-
-fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
-    let unsplit = path
-        .file_stem()
-        .map(|x| x.to_string_lossy().to_string())
-        .unwrap_or("<unknown>".to_string());
-
-    let unstripped = unsplit
-        .strip_suffix(" ")
-        .map(|x| x.to_string())
-        .unwrap_or(unsplit.clone());
-
-    let stripped = unstripped.split("(").collect::<Vec<_>>()[0].to_string();
-
-    stripped
 }
 
 pub struct GameLibrary {
