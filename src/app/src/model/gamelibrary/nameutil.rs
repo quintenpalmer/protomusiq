@@ -6,12 +6,12 @@ pub fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
         .map(|x| x.to_string_lossy().to_string())
         .unwrap_or("<unknown>".to_string());
 
-    let unstripped = unsplit
+    let unstripped = unsplit.split("(").collect::<Vec<_>>()[0].to_string();
+
+    let stripped_and_split = unstripped
         .strip_suffix(" ")
         .map(|x| x.to_string())
-        .unwrap_or(unsplit.clone());
+        .unwrap_or(unstripped.clone());
 
-    let stripped = unstripped.split("(").collect::<Vec<_>>()[0].to_string();
-
-    stripped
+    stripped_and_split
 }
