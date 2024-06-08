@@ -118,48 +118,19 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
 }
 
 fn clean_filename_to_game_name(path: &path::PathBuf) -> String {
-    let mut unstripped = path
+    let unsplit = path
         .file_stem()
         .map(|x| x.to_string_lossy().to_string())
         .unwrap_or("<unknown>".to_string());
 
-    unstripped = unstripped
-        .strip_suffix("(Rev 1)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-    unstripped = unstripped
-        .strip_suffix("(Rev 2)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-    unstripped = unstripped
-        .strip_suffix("(Rev 3)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-
-    unstripped = unstripped
+    let unstripped = unsplit
         .strip_suffix(" ")
         .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
+        .unwrap_or(unsplit.clone());
 
-    unstripped = unstripped
-        .strip_suffix("(USA)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-    unstripped = unstripped
-        .strip_suffix("(USA, Europe)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-    unstripped = unstripped
-        .strip_suffix("(USA, Australia)")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
+    let stripped = unstripped.split("(").collect::<Vec<_>>()[0].to_string();
 
-    unstripped = unstripped
-        .strip_suffix(" ")
-        .map(|x| x.to_string())
-        .unwrap_or(unstripped.clone());
-
-    unstripped
+    stripped
 }
 
 pub struct GameLibrary {
