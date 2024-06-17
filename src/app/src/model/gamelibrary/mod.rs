@@ -15,6 +15,7 @@ fn find_best_match(map: &BTreeMap<String, path::PathBuf>, key: String) -> Option
     let mut best_so_far = (1000, None);
 
     for (iter_key, iter_value) in map.iter() {
+        let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
         let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
         if iter_distance < best_so_far.0 {
             best_so_far = (iter_distance, Some(iter_value));
