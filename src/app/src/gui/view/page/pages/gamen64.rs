@@ -13,15 +13,17 @@ pub fn n64_list<'a>(game_library: &'a model::GameLibraryState) -> Container<'a, 
     match game_library.get_n64_rom_paths() {
         Some(n64_rom_paths) => {
             for n64_rom_path in n64_rom_paths.iter() {
-                body_column = body_column.push(
-                    line_row()
+                body_column = body_column.push({
+                    let mut ret_row = line_row();
+                    ret_row = ret_row
                         .push(
                             dark_button(h2(">")).on_press(message::Message::ExternalSpawn(
                                 message::ExternalSpawn::Mupen64(n64_rom_path.path.clone()),
                             )),
                         )
-                        .push(h2(n64_rom_path.name.clone())),
-                );
+                        .push(h2(n64_rom_path.name.clone()));
+                    ret_row
+                });
             }
         }
         None => (),
