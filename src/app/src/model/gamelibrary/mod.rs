@@ -131,17 +131,26 @@ pub struct GameCubeGame {
     pub name: String,
     pub code: String,
     pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
 }
 
 impl GameCubeGame {
-    pub fn new(path: path::PathBuf, lookup_table: &BTreeMap<String, String>) -> Self {
+    pub fn new(
+        path: path::PathBuf,
+        lookup_table: &BTreeMap<String, String>,
+        image_map: &images::ConsoleGameImageMap,
+    ) -> Self {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::GameCube);
 
         GameCubeGame {
             name: name,
             code: code,
             path: path.clone(),
+            image: loaded_image_bytes,
         }
     }
 }
@@ -284,7 +293,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<GameCubeGame> = rom_paths
                         .into_iter()
-                        .map(|x| GameCubeGame::new(x, &gamecube_lookup_table))
+                        .map(|x| GameCubeGame::new(x, &gamecube_lookup_table, &image_map))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
