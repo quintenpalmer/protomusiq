@@ -26,15 +26,12 @@ fn find_best_match(map: &BTreeMap<String, path::PathBuf>, key: String) -> Option
 
 fn get_game_image_bytes(
     image_map: &images::ConsoleGameImageMap,
-    path: &path::PathBuf,
+    name: String,
     game_console: consoles::GameConsole,
 ) -> Option<Vec<u8>> {
-    let this_game_maybe_image_file = match (
-        path.file_stem().map(|x| x.to_string_lossy().to_string()),
-        image_map.get_console_map(&game_console),
-    ) {
-        (Some(game_path), Some(console_map)) => find_best_match(console_map, game_path),
-        (_, _) => None,
+    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
+        Some(console_map) => find_best_match(console_map, name),
+        _ => None,
     };
 
     match this_game_maybe_image_file {
@@ -51,11 +48,16 @@ pub struct GBAGame {
 
 impl GBAGame {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameBoyAdvance);
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes = get_game_image_bytes(
+            image_map,
+            name.clone(),
+            consoles::GameConsole::GameBoyAdvance,
+        );
 
         GBAGame {
-            name: nameutil::clean_filename_to_game_name(&path),
+            name,
             path: path.clone(),
             image: loaded_image_bytes,
         }
@@ -70,11 +72,13 @@ pub struct SNESGame {
 
 impl SNESGame {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
         let loaded_image_bytes =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::SNES);
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::SNES);
 
         SNESGame {
-            name: nameutil::clean_filename_to_game_name(&path),
+            name,
             path: path.clone(),
             image: loaded_image_bytes,
         }
