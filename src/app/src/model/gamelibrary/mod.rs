@@ -109,13 +109,20 @@ impl N64Game {
 pub struct NDSGame {
     pub name: String,
     pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
 }
 
 impl NDSGame {
-    pub fn new(path: path::PathBuf) -> Self {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::NintendoDS);
+
         NDSGame {
-            name: nameutil::clean_filename_to_game_name(&path),
+            name,
             path: path.clone(),
+            image: loaded_image_bytes,
         }
     }
 }
@@ -234,8 +241,10 @@ impl GameLibrary {
                     let rom_paths =
                         games::nds::scan_for_nds_rom_files(&actual_games.nds_path).unwrap();
 
-                    let mut sorted_rom_paths: Vec<NDSGame> =
-                        rom_paths.into_iter().map(|x| NDSGame::new(x)).collect();
+                    let mut sorted_rom_paths: Vec<NDSGame> = rom_paths
+                        .into_iter()
+                        .map(|x| NDSGame::new(x, &image_map))
+                        .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
