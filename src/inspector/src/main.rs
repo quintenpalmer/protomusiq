@@ -370,3 +370,25 @@ impl AppCmd for FlacTagCollector {
         println!("-----------------");
     }
 }
+
+pub fn format_duration(seconds: u64) -> String {
+    let to_display_seconds = seconds % 60;
+    let to_display_minutes = (seconds / 60) % 60;
+    let to_display_hours = (seconds / 3600) % 24;
+    let to_display_days = seconds / 86400;
+    if to_display_days > 0 {
+        format!(
+            "{}d{:02}h{:02}m{:02}s",
+            to_display_days, to_display_hours, to_display_minutes, to_display_seconds,
+        )
+    } else if to_display_hours > 0 {
+        format!(
+            "{}h{:02}m{:02}s",
+            to_display_hours, to_display_minutes, to_display_seconds
+        )
+    } else if to_display_minutes > 0 {
+        format!("{}m{:02}s", seconds / 60, seconds % 60)
+    } else {
+        format!("0m{:02}s", seconds)
+    }
+}
