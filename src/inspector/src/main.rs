@@ -30,6 +30,7 @@ fn main() {
             ("length", Box::new(LengthCalcer {})),
             ("length-check", Box::new(LengthChecker {})),
             ("tree", Box::new(TreeViewer {})),
+            ("table-view", Box::new(TableViewer {})),
             ("movie-tree", Box::new(MovieTreeViewer {})),
             ("yearendreport", Box::new(YearEndReporter {})),
             ("flac-tags", Box::new(FlacTagCollector {})),
@@ -300,6 +301,80 @@ impl AppCmd for TreeViewer {
                             }
                         );
                     }
+                }
+            }
+        }
+    }
+}
+
+pub struct TableViewer {}
+
+impl AppCmd for TableViewer {
+    fn operate(&self, path: PathBuf) {
+        let bar_width = 64;
+        let library = library::model::RawLibrary::new(path.clone()).unwrap();
+
+        println!("Library Table:");
+        for artist in library.artists.values() {
+            for album in artist.albums.values() {
+                println!("┌{}", "─".repeat(bar_width));
+
+                println!(
+                    "│ {: <40} ({})",
+                    album.album_info.album_name,
+                    album.album_info.album_id.hashed()
+                );
+
+                println!(
+                    "│       {: <34} ({})",
+                    artist.artist_info.artist_name,
+                    artist.artist_info.artist_id.hashed()
+                );
+
+                println!(
+                    "│       Year: {: <5} {}Duration:  {}",
+                    album.album_info.start_date,
+                    " ".repeat(22),
+                    format_duration(album.album_info.total_duration.as_secs()),
+                );
+
+                println!("├{}", "─".repeat(bar_width));
+
+                let disc_count = album.discs.keys().len() - 1;
+                for (current_disc_index, disc) in album.discs.values().enumerate() {
+                    println!(
+                        "│       Disc: {: <29}(of {})",
+                        disc.disc_no,
+                        disc.tracks
+                            .values()
+                            .next()
+                            .unwrap()
+                            .disc_total
+                            .map(|x| x.to_string())
+                            .unwrap_or("\"1\"".to_string())
+                    );
+
+                    println!("├{}┬{} ", "─".repeat(6), "─".repeat(bar_width - 7));
+
+                    for track in disc.tracks.values() {
+                        println!(
+                            "│ {: >4} │ {: <44}{}",
+                            track.track,
+                            track.title,
+                            format_duration(track.duration.as_secs())
+                        );
+                    }
+
+                    println!(
+                        "{}{}┴{} ",
+                        if current_disc_index == disc_count {
+                            "└"
+                        } else {
+                            "├"
+                        },
+                        "─".repeat(6),
+                        "─".repeat(bar_width - 7)
+                    );
                 }
             }
         }
