@@ -1,3 +1,4 @@
+use std::ffi;
 use std::process;
 
 use iced::Command;
@@ -27,9 +28,13 @@ pub fn exec_cmd(
             Command::none()
         }
         message::ExternalSpawn::ZSNES(snes_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("zsnes")
+            let _wanted_to_be_detached = process::Command::new("snes9x")
                 .current_dir(game_library.get_snes_prefix_path().clone().unwrap())
-                .arg(snes_rom_path.into_os_string())
+                .args(vec![
+                    ffi::OsStr::new("-fullscreen"),
+                    ffi::OsStr::new("-xvideo"),
+                    snes_rom_path.into_os_string().as_os_str(),
+                ])
                 .spawn()
                 .expect("Failed to execute command");
             Command::none()
