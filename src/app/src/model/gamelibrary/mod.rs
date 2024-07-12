@@ -18,14 +18,9 @@ fn find_best_match(
 ) -> Option<path::PathBuf> {
     let mut best_so_far = (1000, Vec::new());
 
-    println!("{}:", key.as_str());
-
     for (iter_value, iter_key) in map.iter() {
         let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
         let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
-        println!("{} iter value", nameutil::clean_filename_stem(iter_value));
-        println!("{} vs {}", iter_key.as_str(), key.as_str());
-        println!("{} <=? {}", iter_distance, best_so_far.0);
         if iter_distance < best_so_far.0 {
             best_so_far = (iter_distance, vec![iter_value]);
         } else if iter_distance == best_so_far.0 {
@@ -38,12 +33,8 @@ fn find_best_match(
         matches @ [_, ..] => {
             let mut ret = matches[0].clone();
             for m in matches.into_iter() {
-                println!("{}:", nameutil::clean_filename_stem(m));
                 if nameutil::get_game_region_info(m).contains(&preferred_region) {
-                    println!("{}", nameutil::get_game_region_info(m));
                     ret = m.to_path_buf();
-                } else {
-                    println!("didn't see: {}", preferred_region);
                 }
             }
             Some(ret)
