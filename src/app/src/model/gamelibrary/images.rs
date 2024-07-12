@@ -6,11 +6,12 @@ use super::consoles;
 use super::nameutil;
 
 pub struct ConsoleGameImageMap {
+    preferred_region: String,
     consoles: BTreeMap<consoles::GameConsole, BTreeMap<String, path::PathBuf>>,
 }
 
 impl ConsoleGameImageMap {
-    pub fn new(image_parent_path: &path::PathBuf) -> Self {
+    pub fn new(image_parent_path: &path::PathBuf, preferred_region: String) -> Self {
         let mut btreemap = BTreeMap::new();
 
         let gba_games =
@@ -36,7 +37,10 @@ impl ConsoleGameImageMap {
         let wii_games = load_all_games_for_console(&image_parent_path, consoles::GameConsole::Wii);
         btreemap.insert(consoles::GameConsole::Wii, wii_games);
 
-        ConsoleGameImageMap { consoles: btreemap }
+        ConsoleGameImageMap {
+            preferred_region: preferred_region,
+            consoles: btreemap,
+        }
     }
 
     pub fn get_console_map(
@@ -44,6 +48,10 @@ impl ConsoleGameImageMap {
         console: &consoles::GameConsole,
     ) -> Option<&BTreeMap<String, path::PathBuf>> {
         self.consoles.get(console)
+    }
+
+    pub fn get_preferred_region(&self) -> String {
+        self.preferred_region.clone()
     }
 }
 

@@ -11,18 +11,44 @@ mod consoles;
 mod images;
 mod nameutil;
 
-fn find_best_match(map: &BTreeMap<String, path::PathBuf>, key: String) -> Option<&path::PathBuf> {
-    let mut best_so_far = (1000, None);
+fn find_best_match(
+    map: &BTreeMap<String, path::PathBuf>,
+    key: String,
+    preferred_region: String,
+) -> Option<path::PathBuf> {
+    let mut best_so_far = (1000, Vec::new());
+
+    println!("{}:", key.as_str());
 
     for (iter_key, iter_value) in map.iter() {
         let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
         let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
+        println!("{} iter value", nameutil::clean_filename_stem(iter_value));
+        println!("{} vs {}", iter_key.as_str(), key.as_str());
+        println!("{} <=? {}", iter_distance, best_so_far.0);
         if iter_distance < best_so_far.0 {
-            best_so_far = (iter_distance, Some(iter_value));
+            best_so_far = (iter_distance, vec![iter_value]);
+        } else if iter_distance == best_so_far.0 {
+            best_so_far.1.push(iter_value);
         }
     }
 
-    best_so_far.1
+    match best_so_far.1.as_slice() {
+        [] => None,
+        matches @ [_, ..] => {
+            let mut ret = matches[0].clone();
+            for m in matches.into_iter() {
+                println!("{}:", nameutil::clean_filename_stem(m));
+                if nameutil::get_game_region_info(m).contains(&preferred_region) {
+                    println!("{}", nameutil::get_game_region_info(m));
+                    ret = m.to_path_buf();
+                } else {
+                    println!("didn't see: {}", preferred_region);
+                }
+            }
+            Some(ret)
+        }
+    }
 }
 
 fn get_game_image_bytes(
@@ -31,7 +57,7 @@ fn get_game_image_bytes(
     game_console: consoles::GameConsole,
 ) -> Option<Vec<u8>> {
     let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
-        Some(console_map) => find_best_match(console_map, name),
+        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
         _ => None,
     };
 
@@ -206,7 +232,10 @@ impl GameLibrary {
     pub fn new(games: &Option<model::app::GameConfig>) -> Self {
         match games {
             Some(actual_games) => {
-                let image_map = images::ConsoleGameImageMap::new(&actual_games.image_path);
+                let image_map = images::ConsoleGameImageMap::new(
+                    &actual_games.image_path,
+                    actual_games.preferred_region.clone(),
+                );
 
                 let (gba_prefix_dir, gba_rom_paths) = {
                     let rom_paths =
@@ -323,6 +352,7 @@ impl GameLibrary {
 
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
+                        preferred_region: actual_games.preferred_region.clone(),
                         gba_prefix_dir: gba_prefix_dir,
                         gba_rom_paths: gba_rom_paths,
                         snes_prefix_dir: snes_prefix_dir,
@@ -344,6 +374,8 @@ impl GameLibrary {
 }
 
 struct InnerGameLibrary {
+    pub preferred_region: String,
+
     pub gba_prefix_dir: path::PathBuf,
     pub gba_rom_paths: Vec<GBAGame>,
 
