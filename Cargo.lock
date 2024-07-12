@@ -2710,6 +2710,10 @@ name = "musiqassistant"
 version = "0.1.0"
 
 [[package]]
+name = "musiqcore"
+version = "0.1.0"
+
+[[package]]
 name = "musiqinspector"
 version = "0.1.0"
 dependencies = [
