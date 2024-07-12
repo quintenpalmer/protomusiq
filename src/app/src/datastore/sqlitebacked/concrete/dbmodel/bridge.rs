@@ -87,16 +87,19 @@ impl SixtyFourLibrary {
 }
 
 pub struct Artist {
+    #[allow(unused)]
     pub info: structs::Artist,
     pub albums: BTreeMap<musiqlibrary::ID, Album>,
 }
 
 pub struct Album {
+    #[allow(unused)]
     pub info: structs::Album,
     pub discs: BTreeMap<u64, Disc>,
 }
 
 pub struct Disc {
+    #[allow(unused)]
     pub info: structs::Disc,
     pub tracks: BTreeMap<u64, structs::Track>,
 }

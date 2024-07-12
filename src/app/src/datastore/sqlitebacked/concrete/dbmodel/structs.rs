@@ -24,6 +24,7 @@ pub struct Album {
 pub struct Disc {
     pub id: u32,
     pub disc_no: u32,
+    #[allow(unused)]
     pub name: Option<String>,
     pub album_id: u32,
 }

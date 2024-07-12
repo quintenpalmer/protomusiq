@@ -33,6 +33,7 @@ pub trait LiveHistoryWriteDS {
     );
 }
 
+#[allow(unused)]
 pub struct AlbumArtKey {
     pub album_key: musiqlibrary::AlbumUniqueIdentifier,
     pub size: model::AlbumSizeWithOrig,

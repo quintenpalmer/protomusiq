@@ -65,16 +65,19 @@ impl Library {
 }
 
 pub struct Artist {
+    #[allow(unused)]
     pub info: structs::Artist,
     pub albums: BTreeMap<u32, Album>,
 }
 
 pub struct Album {
+    #[allow(unused)]
     pub info: structs::Album,
     pub discs: BTreeMap<u32, Disc>,
 }
 
 pub struct Disc {
+    #[allow(unused)]
     pub info: structs::Disc,
     pub tracks: BTreeMap<u32, structs::Track>,
 }
