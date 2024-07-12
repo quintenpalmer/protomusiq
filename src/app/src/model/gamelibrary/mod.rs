@@ -343,7 +343,6 @@ impl GameLibrary {
 
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
-                        preferred_region: actual_games.preferred_region.clone(),
                         gba_prefix_dir: gba_prefix_dir,
                         gba_rom_paths: gba_rom_paths,
                         snes_prefix_dir: snes_prefix_dir,
@@ -365,8 +364,6 @@ impl GameLibrary {
 }
 
 struct InnerGameLibrary {
-    pub preferred_region: String,
-
     pub gba_prefix_dir: path::PathBuf,
     pub gba_rom_paths: Vec<GBAGame>,
 
