@@ -7,7 +7,7 @@ use super::nameutil;
 
 pub struct ConsoleGameImageMap {
     preferred_region: String,
-    consoles: BTreeMap<consoles::GameConsole, BTreeMap<String, path::PathBuf>>,
+    consoles: BTreeMap<consoles::GameConsole, BTreeMap<path::PathBuf, String>>,
 }
 
 impl ConsoleGameImageMap {
@@ -46,7 +46,7 @@ impl ConsoleGameImageMap {
     pub fn get_console_map(
         &self,
         console: &consoles::GameConsole,
-    ) -> Option<&BTreeMap<String, path::PathBuf>> {
+    ) -> Option<&BTreeMap<path::PathBuf, String>> {
         self.consoles.get(console)
     }
 
@@ -58,7 +58,7 @@ impl ConsoleGameImageMap {
 fn load_all_games_for_console(
     parent_path: &path::PathBuf,
     console: consoles::GameConsole,
-) -> BTreeMap<String, path::PathBuf> {
+) -> BTreeMap<path::PathBuf, String> {
     let console_sub_path = console.full_name();
 
     let console_path = parent_path.clone().join(console_sub_path);
@@ -68,7 +68,7 @@ fn load_all_games_for_console(
     for game_path in fs::read_dir(console_path).unwrap() {
         let game_path = game_path.unwrap().path();
         let game_name = clean_game_image_filename(&game_path, &console);
-        game_map.insert(game_name, game_path);
+        game_map.insert(game_path, game_name);
     }
 
     game_map

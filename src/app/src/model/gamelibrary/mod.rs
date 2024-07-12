@@ -12,7 +12,7 @@ mod images;
 mod nameutil;
 
 fn find_best_match(
-    map: &BTreeMap<String, path::PathBuf>,
+    map: &BTreeMap<path::PathBuf, String>,
     key: String,
     preferred_region: String,
 ) -> Option<path::PathBuf> {
@@ -20,7 +20,7 @@ fn find_best_match(
 
     println!("{}:", key.as_str());
 
-    for (iter_key, iter_value) in map.iter() {
+    for (iter_value, iter_key) in map.iter() {
         let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
         let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
         println!("{} iter value", nameutil::clean_filename_stem(iter_value));
