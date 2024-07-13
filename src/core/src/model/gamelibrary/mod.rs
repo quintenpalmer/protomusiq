@@ -184,7 +184,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<GBAGame> = rom_paths
                         .into_iter()
-                        .map(|x| GBAGame::new(x, &image_map))
+                        .map(|x| GBAGame::new(x, &image_map, image_mode))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -200,7 +200,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<SNESGame> = rom_paths
                         .into_iter()
-                        .map(|x| SNESGame::new(x, &image_map))
+                        .map(|x| SNESGame::new(x, &image_map, image_mode))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -216,7 +216,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<N64Game> = rom_paths
                         .into_iter()
-                        .map(|x| N64Game::new(x, &image_map))
+                        .map(|x| N64Game::new(x, &image_map, image_mode))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -232,7 +232,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<NDSGame> = rom_paths
                         .into_iter()
-                        .map(|x| NDSGame::new(x, &image_map))
+                        .map(|x| NDSGame::new(x, &image_map, image_mode))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -264,7 +264,9 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<GameCubeGame> = rom_paths
                         .into_iter()
-                        .map(|x| GameCubeGame::new(x, &gamecube_lookup_table, &image_map))
+                        .map(|x| {
+                            GameCubeGame::new(x, &gamecube_lookup_table, &image_map, image_mode)
+                        })
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -281,7 +283,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<WiiGame> = rom_paths
                         .into_iter()
-                        .map(|x| WiiGame::new(x, &gamecube_lookup_table, &image_map))
+                        .map(|x| WiiGame::new(x, &gamecube_lookup_table, &image_map, image_mode))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -347,7 +349,11 @@ pub struct GBAGame {
 }
 
 impl GBAGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+    pub fn new(
+        path: path::PathBuf,
+        image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
+    ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
@@ -387,7 +393,11 @@ pub struct SNESGame {
 }
 
 impl SNESGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+    pub fn new(
+        path: path::PathBuf,
+        image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
+    ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
@@ -424,7 +434,11 @@ pub struct N64Game {
 }
 
 impl N64Game {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+    pub fn new(
+        path: path::PathBuf,
+        image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
+    ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
@@ -461,7 +475,11 @@ pub struct NDSGame {
 }
 
 impl NDSGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+    pub fn new(
+        path: path::PathBuf,
+        image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
+    ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
@@ -503,6 +521,7 @@ impl GameCubeGame {
         path: path::PathBuf,
         lookup_table: &BTreeMap<String, String>,
         image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
     ) -> Self {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
@@ -547,6 +566,7 @@ impl WiiGame {
         path: path::PathBuf,
         lookup_table: &BTreeMap<String, String>,
         image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
     ) -> Self {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
