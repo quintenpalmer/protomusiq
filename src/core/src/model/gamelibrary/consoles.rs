@@ -20,4 +20,15 @@ impl GameConsole {
         }
         .to_string()
     }
+
+    pub fn all() -> Vec<Self> {
+        vec![
+            GameConsole::GameBoyAdvance,
+            GameConsole::NintendoDS,
+            GameConsole::SNES,
+            GameConsole::Nintendo64,
+            GameConsole::GameCube,
+            GameConsole::Wii,
+        ]
+    }
 }
