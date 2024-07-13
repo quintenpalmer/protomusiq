@@ -26,7 +26,7 @@ pub struct AppState {
 
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
-    pub game_library: model::GameLibraryState,
+    pub game_library: model::gl::GameLibraryState,
 
     pub player_info: PlayerInfo,
 

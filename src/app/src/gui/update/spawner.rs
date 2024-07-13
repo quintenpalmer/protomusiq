@@ -8,7 +8,7 @@ use crate::model;
 use crate::gui::message;
 
 pub fn exec_cmd(
-    game_library: &model::GameLibraryState,
+    game_library: &model::gl::GameLibraryState,
     cmd: message::ExternalSpawn,
 ) -> Command<message::Message> {
     match cmd {

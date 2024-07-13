@@ -7,7 +7,9 @@ use crate::gui::message;
 
 use super::super::super::elements::*;
 
-pub fn gba_list<'a>(game_library: &'a model::GameLibraryState) -> Container<'a, message::Message> {
+pub fn gba_list<'a>(
+    game_library: &'a model::gl::GameLibraryState,
+) -> Container<'a, message::Message> {
     let mut body_column = Column::new().spacing(10).padding(10).push(h1("GBA Games:"));
 
     match game_library.get_gba_rom_paths() {

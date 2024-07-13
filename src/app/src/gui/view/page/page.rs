@@ -17,7 +17,7 @@ pub fn render_page<'a>(
     page_current_history: &'a message::NavMessage,
     library: &'a model::LibraryState,
     movie_library: &'a model::VideoLibraryState,
-    game_library: &'a model::GameLibraryState,
+    game_library: &'a model::gl::GameLibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
     play_queue_visible: bool,
