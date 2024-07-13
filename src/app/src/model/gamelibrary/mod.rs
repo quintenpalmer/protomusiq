@@ -11,210 +11,6 @@ mod consoles;
 mod images;
 mod nameutil;
 
-pub struct GBAGame {
-    pub name: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl GBAGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
-        let name = nameutil::clean_filename_to_game_name(&path);
-
-        let loaded_image_bytes = get_game_image_bytes(
-            image_map,
-            name.clone(),
-            consoles::GameConsole::GameBoyAdvance,
-        );
-
-        GBAGame {
-            name,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-pub struct SNESGame {
-    pub name: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl SNESGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
-        let name = nameutil::clean_filename_to_game_name(&path);
-
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::SNES);
-
-        SNESGame {
-            name,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-pub struct N64Game {
-    pub name: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl N64Game {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
-        let name = nameutil::clean_filename_to_game_name(&path);
-
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Nintendo64);
-
-        N64Game {
-            name,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-pub struct NDSGame {
-    pub name: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl NDSGame {
-    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
-        let name = nameutil::clean_filename_to_game_name(&path);
-
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::NintendoDS);
-
-        NDSGame {
-            name,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-pub struct GameCubeGame {
-    pub name: String,
-    pub code: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl GameCubeGame {
-    pub fn new(
-        path: path::PathBuf,
-        lookup_table: &BTreeMap<String, String>,
-        image_map: &images::ConsoleGameImageMap,
-    ) -> Self {
-        let code = extract_code_from_path(&path);
-        let name = lookup_name_from_code(&code, lookup_table);
-
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::GameCube);
-
-        GameCubeGame {
-            name: name,
-            code: code,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-pub struct WiiGame {
-    pub name: String,
-    pub code: String,
-    pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
-}
-
-impl WiiGame {
-    pub fn new(
-        path: path::PathBuf,
-        lookup_table: &BTreeMap<String, String>,
-        image_map: &images::ConsoleGameImageMap,
-    ) -> Self {
-        let code = extract_code_from_path(&path);
-        let name = lookup_name_from_code(&code, lookup_table);
-
-        let loaded_image_bytes =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Wii);
-
-        WiiGame {
-            name: name,
-            code: code,
-            path: path.clone(),
-            image: loaded_image_bytes,
-        }
-    }
-}
-
-fn extract_code_from_path(path: &path::PathBuf) -> String {
-    path.file_stem()
-        .map(|x| x.to_string_lossy().to_string())
-        .unwrap_or("<unknown>".to_string())
-}
-
-fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>) -> String {
-    let code_lookup = match code.strip_suffix("-disc2") {
-        Some(v) => v.to_string(),
-        None => code.clone(),
-    };
-    lookup_table.get(&code_lookup).unwrap().clone()
-}
-
-fn get_game_image_bytes(
-    image_map: &images::ConsoleGameImageMap,
-    name: String,
-    game_console: consoles::GameConsole,
-) -> Option<Vec<u8>> {
-    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
-        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
-        _ => None,
-    };
-
-    match this_game_maybe_image_file {
-        Some(image_path) => Some(fs::read(image_path).unwrap()),
-        None => None,
-    }
-}
-
-fn find_best_match(
-    map: &BTreeMap<path::PathBuf, String>,
-    key: String,
-    preferred_region: String,
-) -> Option<path::PathBuf> {
-    let mut best_so_far = (1000, Vec::new());
-
-    for (iter_value, iter_key) in map.iter() {
-        let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
-        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
-        if iter_distance < best_so_far.0 {
-            best_so_far = (iter_distance, vec![iter_value]);
-        } else if iter_distance == best_so_far.0 {
-            best_so_far.1.push(iter_value);
-        }
-    }
-
-    match best_so_far.1.as_slice() {
-        [] => None,
-        matches @ [_, ..] => {
-            let mut ret = matches[0].clone();
-            for m in matches.into_iter() {
-                if nameutil::get_game_region_info(m).contains(&preferred_region) {
-                    ret = m.to_path_buf();
-                }
-            }
-            Some(ret)
-        }
-    }
-}
-
 pub struct GameLibrary {
     inner: Option<InnerGameLibrary>,
 }
@@ -475,6 +271,210 @@ impl GameLibraryState {
         match self.games.inner {
             Some(ref v) => Some(&v.wii_rom_paths),
             None => None,
+        }
+    }
+}
+
+pub struct GBAGame {
+    pub name: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl GBAGame {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes = get_game_image_bytes(
+            image_map,
+            name.clone(),
+            consoles::GameConsole::GameBoyAdvance,
+        );
+
+        GBAGame {
+            name,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+pub struct SNESGame {
+    pub name: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl SNESGame {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::SNES);
+
+        SNESGame {
+            name,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+pub struct N64Game {
+    pub name: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl N64Game {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Nintendo64);
+
+        N64Game {
+            name,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+pub struct NDSGame {
+    pub name: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl NDSGame {
+    pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::NintendoDS);
+
+        NDSGame {
+            name,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+pub struct GameCubeGame {
+    pub name: String,
+    pub code: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl GameCubeGame {
+    pub fn new(
+        path: path::PathBuf,
+        lookup_table: &BTreeMap<String, String>,
+        image_map: &images::ConsoleGameImageMap,
+    ) -> Self {
+        let code = extract_code_from_path(&path);
+        let name = lookup_name_from_code(&code, lookup_table);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::GameCube);
+
+        GameCubeGame {
+            name: name,
+            code: code,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+pub struct WiiGame {
+    pub name: String,
+    pub code: String,
+    pub path: path::PathBuf,
+    pub image: Option<Vec<u8>>,
+}
+
+impl WiiGame {
+    pub fn new(
+        path: path::PathBuf,
+        lookup_table: &BTreeMap<String, String>,
+        image_map: &images::ConsoleGameImageMap,
+    ) -> Self {
+        let code = extract_code_from_path(&path);
+        let name = lookup_name_from_code(&code, lookup_table);
+
+        let loaded_image_bytes =
+            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Wii);
+
+        WiiGame {
+            name: name,
+            code: code,
+            path: path.clone(),
+            image: loaded_image_bytes,
+        }
+    }
+}
+
+fn extract_code_from_path(path: &path::PathBuf) -> String {
+    path.file_stem()
+        .map(|x| x.to_string_lossy().to_string())
+        .unwrap_or("<unknown>".to_string())
+}
+
+fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>) -> String {
+    let code_lookup = match code.strip_suffix("-disc2") {
+        Some(v) => v.to_string(),
+        None => code.clone(),
+    };
+    lookup_table.get(&code_lookup).unwrap().clone()
+}
+
+fn get_game_image_bytes(
+    image_map: &images::ConsoleGameImageMap,
+    name: String,
+    game_console: consoles::GameConsole,
+) -> Option<Vec<u8>> {
+    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
+        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
+        _ => None,
+    };
+
+    match this_game_maybe_image_file {
+        Some(image_path) => Some(fs::read(image_path).unwrap()),
+        None => None,
+    }
+}
+
+fn find_best_match(
+    map: &BTreeMap<path::PathBuf, String>,
+    key: String,
+    preferred_region: String,
+) -> Option<path::PathBuf> {
+    let mut best_so_far = (1000, Vec::new());
+
+    for (iter_value, iter_key) in map.iter() {
+        let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
+        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
+        if iter_distance < best_so_far.0 {
+            best_so_far = (iter_distance, vec![iter_value]);
+        } else if iter_distance == best_so_far.0 {
+            best_so_far.1.push(iter_value);
+        }
+    }
+
+    match best_so_far.1.as_slice() {
+        [] => None,
+        matches @ [_, ..] => {
+            let mut ret = matches[0].clone();
+            for m in matches.into_iter() {
+                if nameutil::get_game_region_info(m).contains(&preferred_region) {
+                    ret = m.to_path_buf();
+                }
+            }
+            Some(ret)
         }
     }
 }
