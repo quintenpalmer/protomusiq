@@ -28,5 +28,6 @@ glib = "0.17"
 tiny_http = "0.12"
 ureq = "2.9"
 
+musiqcore = {path = "../core"}
 musiqlibrary = {path = "../library"}
 musicbrainz = {path = "../musicbrainz"}
