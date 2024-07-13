@@ -5,7 +5,7 @@ use std::path;
 
 use musiqlibrary::games;
 
-mod consoles;
+pub mod consoles;
 mod images;
 mod nameutil;
 
