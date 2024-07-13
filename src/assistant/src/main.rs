@@ -43,6 +43,6 @@ fn main() {
                 println!("cp {:?} {:?}", source_image_path, dest_image_path);
             }
         }
-        _ => println!("skipping gbas"),
+        _ => eprintln!("skipping gbas"),
     }
 }
