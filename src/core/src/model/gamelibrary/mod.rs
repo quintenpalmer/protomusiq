@@ -110,11 +110,14 @@ pub struct GameLibrary {
 }
 
 impl GameLibrary {
-    pub fn new(games: &Option<crate::model::app::GameConfig>) -> Self {
-        match games {
-            Some(actual_games) => {
+    pub fn new(
+        maybe_source_image_path: &Option<path::PathBuf>,
+        games: &Option<crate::model::app::GameConfig>,
+    ) -> Self {
+        match (maybe_source_image_path, games) {
+            (Some(source_image_path), Some(actual_games)) => {
                 let image_map = images::ConsoleGameImageMap::new(
-                    &actual_games.image_path,
+                    source_image_path,
                     actual_games.preferred_region.clone(),
                 );
 
@@ -248,7 +251,7 @@ impl GameLibrary {
                     }),
                 }
             }
-            None => GameLibrary { inner: None },
+            _ => GameLibrary { inner: None },
         }
     }
 }
