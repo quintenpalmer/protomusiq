@@ -20,6 +20,16 @@ fn main() {
 
     let consoles = musiqcore::model::gl::consoles::GameConsole::all();
 
+    for console in consoles.iter() {
+        let dest_prefix = config_state.games.clone().unwrap().image_path;
+
+        let dest_console_piece = path::PathBuf::from(console.full_name());
+
+        let dest_image_path = dest_prefix.join(dest_console_piece);
+
+        println!("mkdir -p {:?}", dest_image_path);
+    }
+
     for console in consoles.into_iter() {
         let maybe_prefix_roms = game_library_state.get_generic_game_and_prefix(&console);
 
