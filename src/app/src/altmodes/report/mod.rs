@@ -4,13 +4,12 @@ use chrono::TimeZone;
 
 use crate::datastore::{jsonbacked, loader};
 use crate::model;
-use crate::util::config;
 
 #[derive(Debug)]
 pub enum Error {}
 
 pub fn generate_year_end_report() -> Result<(), Error> {
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     let organized = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
         &config_state,

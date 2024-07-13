@@ -10,7 +10,7 @@ use crate::datastore::{
 };
 
 use crate::model;
-use crate::util::{config, logging};
+use crate::util::logging;
 
 use crate::datastore::loader;
 use crate::datastore::staticassets::embedded;
@@ -23,7 +23,7 @@ pub fn initialize_everything() -> state::App {
 
     logger.print_elapsed("starting loading (should be 0)");
 
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     let load_mode = config_state.get_safe_load_mode();
     let loader = loader::Loader::from_load_mode(config_state.clone(), load_mode);

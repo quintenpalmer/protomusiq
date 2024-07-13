@@ -3,7 +3,7 @@ use std::io::{self, Write};
 use std::thread;
 use std::time;
 
-use crate::util::{config, logging};
+use crate::util::logging;
 
 use crate::datastore::cache;
 use crate::datastore::jsonbacked::{self, tracker};
@@ -15,7 +15,7 @@ pub enum Error {}
 
 pub fn entry_point() -> Result<(), Error> {
     println!("prototype start");
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     let lib_path = config_state.library_path.clone();
     println!("library path is: {:?}", lib_path);
@@ -266,7 +266,7 @@ pub fn select_singular_artist_match(
 
 #[allow(unused)]
 pub fn sql_mode() -> Result<(), Error> {
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     let mut keep_going = true;
 

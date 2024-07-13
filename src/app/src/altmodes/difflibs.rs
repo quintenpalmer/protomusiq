@@ -1,13 +1,11 @@
 use std::collections::BTreeMap;
 
-use crate::util::config;
-
 #[derive(Debug)]
 pub enum Error {}
 
 pub fn entry_point() -> Result<(), Error> {
     eprintln!("let's compute some diffs");
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     eprintln!("getting (un)compressed library paths");
     let uncompressed_library_path = config_state.library_path.clone();

@@ -1,3 +1,5 @@
+use std::fs;
+use std::io;
 use std::path;
 
 use serde::Deserialize;
@@ -94,6 +96,17 @@ impl RawAppConfigState {
             allowed_tracker_files: self.allowed_tracker_files,
             allowed_prehistory_files: self.allowed_prehistory_files,
         }
+    }
+}
+
+impl AppConfigState {
+    pub fn get_default() -> Self {
+        let file = fs::File::open(crate::model::functions::get_default_config_path()).unwrap();
+        let reader = io::BufReader::new(file);
+        let raw_config_state: crate::model::app::RawAppConfigState =
+            serde_json::from_reader(reader).unwrap();
+
+        raw_config_state.to_real(crate::model::functions::get_default_data_path())
     }
 }
 

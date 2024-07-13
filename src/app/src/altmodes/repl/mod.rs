@@ -9,7 +9,6 @@ use crate::datastore::loader;
 use crate::datastore::traits::LiveHistoryWriteDS;
 
 use crate::model;
-use crate::util::config;
 
 #[derive(Debug)]
 pub enum TrackerError {
@@ -38,7 +37,7 @@ fn report_tracks_with_io() -> io::Result<()> {
 
     let hostname = input;
 
-    let config_state = config::get_default_config();
+    let config_state = musiqcore::model::app::AppConfigState::get_default();
 
     let mut tracker = tracker::JSONTracker::new(
         &config_state.app_data_path,
