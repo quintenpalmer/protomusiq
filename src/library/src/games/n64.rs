@@ -28,9 +28,9 @@ fn scan_for_n64_rom_files_helper<O: AsRef<path::Path>, P: AsRef<path::Path>>(
             {
                 Some(Some(ext)) => match ext.as_str() {
                     "z64" => path_info_list.push(path.path().to_path_buf()),
-                    _ => println!("skipping non-n64 file"),
+                    _ => eprintln!("skipping non-n64 file"),
                 },
-                _ => println!("skipping file with extension we didn't know what to do with"),
+                _ => eprintln!("skipping file with extension we didn't know what to do with"),
             }
         }
     }

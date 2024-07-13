@@ -28,9 +28,9 @@ fn scan_for_snes_rom_files_helper<O: AsRef<path::Path>, P: AsRef<path::Path>>(
             {
                 Some(Some(ext)) => match ext.as_str() {
                     "sfc" => path_info_list.push(path.path().to_path_buf()),
-                    _ => println!("skipping non-snes file"),
+                    _ => eprintln!("skipping non-snes file"),
                 },
-                _ => println!("skipping file with extension we didn't know what to do with"),
+                _ => eprintln!("skipping file with extension we didn't know what to do with"),
             }
         }
     }
