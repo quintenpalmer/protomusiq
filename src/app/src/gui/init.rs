@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::path;
 
 use super::update;
 
@@ -38,13 +37,9 @@ pub fn initialize_everything() -> state::App {
     let video_library = model::VideoLibrary::new(&config_state.movie_path);
     logger.print_elapsed("loading video library");
 
-    let source_image_path = config_state
-        .games
-        .as_ref()
-        .map(|games| path::PathBuf::from(games.image_path.clone()));
+    let image_mode = musiqcore::model::gl::ImageMode::ExactMatch;
 
-    let game_library =
-        musiqcore::model::gl::GameLibrary::new(&source_image_path, &config_state.games);
+    let game_library = musiqcore::model::gl::GameLibrary::new(&image_mode, &config_state.games);
 
     let loaded_images = jsonbacked::albumart::process_cache_and_get_album_art(
         &loaded_library,

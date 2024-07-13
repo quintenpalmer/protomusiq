@@ -9,12 +9,12 @@ fn main() {
         return;
     }
 
-    let source_image_path = Some(path::PathBuf::from(args[1].clone()));
+    let image_mode =
+        musiqcore::model::gl::ImageMode::BestMatch(path::PathBuf::from(args[1].clone()));
 
     let config_state = musiqcore::model::app::AppConfigState::get_default();
 
-    let game_library =
-        musiqcore::model::gl::GameLibrary::new(&source_image_path, &config_state.games);
+    let game_library = musiqcore::model::gl::GameLibrary::new(&image_mode, &config_state.games);
 
     let game_library_state = musiqcore::model::gl::GameLibraryState::new(game_library);
 

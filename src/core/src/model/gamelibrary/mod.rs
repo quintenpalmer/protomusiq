@@ -9,6 +9,11 @@ pub mod consoles;
 mod images;
 mod nameutil;
 
+pub enum ImageMode {
+    BestMatch(path::PathBuf),
+    ExactMatch,
+}
+
 pub struct GameLibraryState {
     pub games: GameLibrary,
 }
@@ -160,12 +165,14 @@ pub struct GameLibrary {
 }
 
 impl GameLibrary {
-    pub fn new(
-        maybe_source_image_path: &Option<path::PathBuf>,
-        games: &Option<crate::model::app::GameConfig>,
-    ) -> Self {
-        match (maybe_source_image_path, games) {
-            (Some(source_image_path), Some(actual_games)) => {
+    pub fn new(image_mode: &ImageMode, games: &Option<crate::model::app::GameConfig>) -> Self {
+        match games {
+            Some(actual_games) => {
+                let source_image_path = match image_mode {
+                    ImageMode::BestMatch(best_match_source_path) => best_match_source_path,
+                    ImageMode::ExactMatch => &actual_games.image_path,
+                };
+
                 let image_map = images::ConsoleGameImageMap::new(
                     source_image_path,
                     actual_games.preferred_region.clone(),
