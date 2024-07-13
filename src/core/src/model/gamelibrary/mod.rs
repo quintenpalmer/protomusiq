@@ -184,7 +184,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<GBAGame> = rom_paths
                         .into_iter()
-                        .map(|x| GBAGame::new(x, &image_map, image_mode))
+                        .map(|x| GBAGame::new(x, &image_map, image_mode, &actual_games))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -200,7 +200,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<SNESGame> = rom_paths
                         .into_iter()
-                        .map(|x| SNESGame::new(x, &image_map, image_mode))
+                        .map(|x| SNESGame::new(x, &image_map, image_mode, &actual_games))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -216,7 +216,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<N64Game> = rom_paths
                         .into_iter()
-                        .map(|x| N64Game::new(x, &image_map, image_mode))
+                        .map(|x| N64Game::new(x, &image_map, image_mode, &actual_games))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -232,7 +232,7 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<NDSGame> = rom_paths
                         .into_iter()
-                        .map(|x| NDSGame::new(x, &image_map, image_mode))
+                        .map(|x| NDSGame::new(x, &image_map, image_mode, &actual_games))
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -265,7 +265,13 @@ impl GameLibrary {
                     let mut sorted_rom_paths: Vec<GameCubeGame> = rom_paths
                         .into_iter()
                         .map(|x| {
-                            GameCubeGame::new(x, &gamecube_lookup_table, &image_map, image_mode)
+                            GameCubeGame::new(
+                                x,
+                                &gamecube_lookup_table,
+                                &image_map,
+                                image_mode,
+                                &actual_games,
+                            )
                         })
                         .collect();
 
@@ -283,7 +289,15 @@ impl GameLibrary {
 
                     let mut sorted_rom_paths: Vec<WiiGame> = rom_paths
                         .into_iter()
-                        .map(|x| WiiGame::new(x, &gamecube_lookup_table, &image_map, image_mode))
+                        .map(|x| {
+                            WiiGame::new(
+                                x,
+                                &gamecube_lookup_table,
+                                &image_map,
+                                image_mode,
+                                &actual_games,
+                            )
+                        })
                         .collect();
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
@@ -353,11 +367,17 @@ impl GBAGame {
         path: path::PathBuf,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameBoyAdvance);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::GameBoyAdvance,
+        );
 
         GBAGame {
             name,
@@ -394,11 +414,17 @@ impl SNESGame {
         path: path::PathBuf,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::SNES);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::SNES,
+        );
 
         SNESGame {
             name,
@@ -435,11 +461,17 @@ impl N64Game {
         path: path::PathBuf,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::Nintendo64);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::Nintendo64,
+        );
 
         N64Game {
             name,
@@ -476,11 +508,17 @@ impl NDSGame {
         path: path::PathBuf,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::NintendoDS);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::NintendoDS,
+        );
 
         NDSGame {
             name,
@@ -519,12 +557,18 @@ impl GameCubeGame {
         lookup_table: &BTreeMap<String, String>,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameCube);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::GameCube,
+        );
 
         GameCubeGame {
             name: name,
@@ -564,12 +608,18 @@ impl WiiGame {
         lookup_table: &BTreeMap<String, String>,
         image_map: &images::ConsoleGameImageMap,
         image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
     ) -> Self {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
 
-        let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, &path, consoles::GameConsole::Wii);
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::Wii,
+        );
 
         WiiGame {
             name: name,
@@ -612,6 +662,8 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
 fn get_game_image_bytes(
     image_map: &images::ConsoleGameImageMap,
     path: &path::PathBuf,
+    image_mode: &ImageMode,
+    game_config: &crate::model::app::GameConfig,
     game_console: consoles::GameConsole,
 ) -> (Vec<u8>, path::PathBuf) {
     let name = nameutil::clean_filename_to_game_name(&path);
