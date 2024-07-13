@@ -437,16 +437,9 @@ fn get_game_image_bytes(
 ) -> Option<Vec<u8>> {
     let console_map = image_map.get_console_map(&game_console);
 
-    let this_game_maybe_image_file = Some(find_best_match(
-        console_map,
-        name,
-        image_map.get_preferred_region(),
-    ));
+    let this_game_image_file = find_best_match(console_map, name, image_map.get_preferred_region());
 
-    match this_game_maybe_image_file {
-        Some(image_path) => Some(fs::read(image_path).unwrap()),
-        None => None,
-    }
+    Some(fs::read(this_game_image_file).unwrap())
 }
 
 fn find_best_match(
