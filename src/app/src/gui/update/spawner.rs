@@ -3,12 +3,10 @@ use std::process;
 
 use iced::Command;
 
-use crate::model;
-
 use crate::gui::message;
 
 pub fn exec_cmd(
-    game_library: &model::gl::GameLibraryState,
+    game_library: &musiqcore::model::gl::GameLibraryState,
     cmd: message::ExternalSpawn,
 ) -> Command<message::Message> {
     match cmd {

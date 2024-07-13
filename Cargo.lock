@@ -2714,7 +2714,9 @@ version = "0.1.0"
 name = "musiqcore"
 version = "0.1.0"
 dependencies = [
+ "musiqlibrary",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

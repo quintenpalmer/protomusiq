@@ -1,14 +1,12 @@
 use iced::widget::{Column, Container, Image, Scrollable};
 use iced::Length;
 
-use crate::model;
-
 use crate::gui::message;
 
 use super::super::super::elements::*;
 
 pub fn ngc_list<'a>(
-    game_library: &'a model::gl::GameLibraryState,
+    game_library: &'a musiqcore::model::gl::GameLibraryState,
 ) -> Container<'a, message::Message> {
     let mut body_column = Column::new()
         .spacing(10)
