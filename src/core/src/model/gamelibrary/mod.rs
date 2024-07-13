@@ -356,11 +356,8 @@ impl GBAGame {
     ) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
-            image_map,
-            name.clone(),
-            consoles::GameConsole::GameBoyAdvance,
-        );
+        let (loaded_image_bytes, loaded_image_path) =
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameBoyAdvance);
 
         GBAGame {
             name,
@@ -401,7 +398,7 @@ impl SNESGame {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::SNES);
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::SNES);
 
         SNESGame {
             name,
@@ -442,7 +439,7 @@ impl N64Game {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Nintendo64);
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::Nintendo64);
 
         N64Game {
             name,
@@ -483,7 +480,7 @@ impl NDSGame {
         let name = nameutil::clean_filename_to_game_name(&path);
 
         let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::NintendoDS);
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::NintendoDS);
 
         NDSGame {
             name,
@@ -527,7 +524,7 @@ impl GameCubeGame {
         let name = lookup_name_from_code(&code, lookup_table);
 
         let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::GameCube);
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::GameCube);
 
         GameCubeGame {
             name: name,
@@ -572,7 +569,7 @@ impl WiiGame {
         let name = lookup_name_from_code(&code, lookup_table);
 
         let (loaded_image_bytes, loaded_image_path) =
-            get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Wii);
+            get_game_image_bytes(image_map, &path, consoles::GameConsole::Wii);
 
         WiiGame {
             name: name,
@@ -614,9 +611,11 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
 
 fn get_game_image_bytes(
     image_map: &images::ConsoleGameImageMap,
-    name: String,
+    path: &path::PathBuf,
     game_console: consoles::GameConsole,
 ) -> (Vec<u8>, path::PathBuf) {
+    let name = nameutil::clean_filename_to_game_name(&path);
+
     let console_map = image_map.get_console_map(&game_console);
 
     let this_game_image_file = find_best_match(console_map, name, image_map.get_preferred_region());
