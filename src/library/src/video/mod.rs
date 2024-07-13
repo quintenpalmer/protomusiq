@@ -44,7 +44,7 @@ pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetad
         .filter_map(|x| {
             match x {
                 Ok(_) => (),
-                Err(ref e) => println!("error: {:?}", e),
+                Err(ref e) => eprintln!("error: {:?}", e),
             };
             x.ok()
         })
@@ -61,7 +61,7 @@ pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
         return match fileext {
             "m4v" | "mp4" => vec![current_path.clone()],
             _ => {
-                println!("unexpected file extension: {}", fileext);
+                eprintln!("unexpected file extension: {}", fileext);
                 Vec::new()
             }
         };
@@ -75,7 +75,7 @@ pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
         }
         return ret;
     }
-    println!(
+    eprintln!(
         "unexpected file type: {}",
         current_path.into_os_string().to_string_lossy()
     );
@@ -88,7 +88,7 @@ pub fn find_movie_metadata(
     orig_scan_path: &path::PathBuf,
     movie_path: &path::PathBuf,
 ) -> Result<MovieMetadata, Error> {
-    println!(
+    eprintln!(
         "path: {}",
         movie_path.clone().into_os_string().to_string_lossy()
     );
@@ -120,7 +120,7 @@ fn find_mp4_metadata(
     let title = match udta.meta.unwrap() {
         mp4::MetaBox::Mdir { ilst } => {
             let ilst = ilst.unwrap();
-            //println!("ilst {:?}", ilst.items);
+            //eprintln!("ilst {:?}", ilst.items);
             let title_data = &ilst.items.get(&mp4::MetadataKey::Title).unwrap().data;
             if title_data.data_type == mp4::DataType::Text {
                 Ok(str::from_utf8(title_data.data.as_slice())
@@ -162,7 +162,7 @@ fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
         Ok(reader) => match serde_json::from_reader(io::BufReader::new(reader)) {
             Ok(metadata) => Some(metadata),
             Err(e) => {
-                println!(
+                eprintln!(
                     "could not deserialize data from path: {:?} {:?}",
                     metadata_json_file.display(),
                     e
@@ -171,7 +171,7 @@ fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
             }
         },
         Err(e) => {
-            println!(
+            eprintln!(
                 "could not load file: {:?} {:?}",
                 metadata_json_file.display(),
                 e
