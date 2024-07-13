@@ -20,6 +20,9 @@ fn main() {
 
     let consoles = musiqcore::model::gl::consoles::GameConsole::all();
 
+    println!("# Please replace all \\' values with just '");
+    println!("# Please replace all $ values with \\$");
+
     for console in consoles.iter() {
         let dest_prefix = config_state.games.clone().unwrap().image_path;
 
