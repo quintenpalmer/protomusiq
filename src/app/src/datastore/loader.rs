@@ -12,17 +12,17 @@ pub enum Loader {
 impl Loader {
     pub fn from_load_mode(
         config_state: model::app::AppConfigState,
-        load_mode: model::LoadMode,
+        load_mode: musiqcore::model::LoadMode,
     ) -> Self {
         match load_mode {
-            model::LoadMode::NoCache => Loader::NoCache,
-            model::LoadMode::Json => Loader::Json,
-            model::LoadMode::Sqlite => Loader::Sqlite(sqlitebacked::Connections::first_bootup(
-                config_state.clone(),
-            )),
-            model::LoadMode::Latest => Loader::Latest(sqlitebacked::Connections::first_bootup(
-                config_state.clone(),
-            )),
+            musiqcore::model::LoadMode::NoCache => Loader::NoCache,
+            musiqcore::model::LoadMode::Json => Loader::Json,
+            musiqcore::model::LoadMode::Sqlite => Loader::Sqlite(
+                sqlitebacked::Connections::first_bootup(config_state.clone()),
+            ),
+            musiqcore::model::LoadMode::Latest => Loader::Latest(
+                sqlitebacked::Connections::first_bootup(config_state.clone()),
+            ),
         }
     }
 

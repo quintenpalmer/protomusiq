@@ -10,14 +10,6 @@ use super::augmented;
 use super::constants;
 use super::sortkeys;
 
-#[derive(Deserialize, Debug, Clone)]
-pub enum LoadMode {
-    NoCache,
-    Latest,
-    Json,
-    Sqlite,
-}
-
 #[derive(Debug, Clone)]
 pub struct AlbumSortPlacement {
     pub index: usize,

@@ -3,8 +3,7 @@ use std::path;
 use serde::Deserialize;
 
 use musiqcore::model::shared::SinkMode;
-
-use super::common::LoadMode;
+use musiqcore::model::LoadMode;
 
 #[derive(Debug, Clone)]
 pub struct AppConfigState {
