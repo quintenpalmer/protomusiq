@@ -20,6 +20,56 @@ impl GameLibraryState {
         }
     }
 
+    pub fn get_generic_game_and_prefix(
+        &self,
+        console: &consoles::GameConsole,
+    ) -> Option<(Vec<Box<&dyn GenericGame>>, &path::PathBuf)> {
+        match console {
+            consoles::GameConsole::GameBoyAdvance => Some((
+                self.get_gba_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_gba_prefix_path()?,
+            )),
+            consoles::GameConsole::NintendoDS => Some((
+                self.get_nds_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_nds_prefix_path()?,
+            )),
+            consoles::GameConsole::SNES => Some((
+                self.get_snes_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_snes_prefix_path()?,
+            )),
+            consoles::GameConsole::Nintendo64 => Some((
+                self.get_n64_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_n64_prefix_path()?,
+            )),
+            consoles::GameConsole::GameCube => Some((
+                self.get_ngc_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_ngc_prefix_path()?,
+            )),
+            consoles::GameConsole::Wii => Some((
+                self.get_wii_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_wii_prefix_path()?,
+            )),
+        }
+    }
+
     pub fn get_gba_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
             Some(ref v) => Some(&v.gba_prefix_dir),
