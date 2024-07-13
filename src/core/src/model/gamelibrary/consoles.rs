@@ -1,4 +1,4 @@
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum GameConsole {
     GameBoyAdvance,
     NintendoDS,
