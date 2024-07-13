@@ -435,10 +435,13 @@ fn get_game_image_bytes(
     name: String,
     game_console: consoles::GameConsole,
 ) -> Option<Vec<u8>> {
-    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
-        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
-        _ => None,
-    };
+    let console_map = image_map.get_console_map(&game_console);
+
+    let this_game_maybe_image_file = Some(find_best_match(
+        console_map,
+        name,
+        image_map.get_preferred_region(),
+    ));
 
     match this_game_maybe_image_file {
         Some(image_path) => Some(fs::read(image_path).unwrap()),
@@ -450,7 +453,7 @@ fn find_best_match(
     map: &BTreeMap<path::PathBuf, String>,
     key: String,
     preferred_region: String,
-) -> Option<path::PathBuf> {
+) -> path::PathBuf {
     let mut best_so_far = (1000, Vec::new());
 
     for (iter_value, iter_key) in map.iter() {
@@ -464,7 +467,7 @@ fn find_best_match(
     }
 
     match best_so_far.1.as_slice() {
-        [] => None,
+        [] => panic!("there should always be at least one match, even if it was really bad"),
         matches @ [_, ..] => {
             let mut ret = matches[0].clone();
             for m in matches.into_iter() {
@@ -472,7 +475,7 @@ fn find_best_match(
                     ret = m.to_path_buf();
                 }
             }
-            Some(ret)
+            ret
         }
     }
 }

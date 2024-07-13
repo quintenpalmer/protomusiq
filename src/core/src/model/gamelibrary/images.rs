@@ -46,8 +46,8 @@ impl ConsoleGameImageMap {
     pub fn get_console_map(
         &self,
         console: &consoles::GameConsole,
-    ) -> Option<&BTreeMap<path::PathBuf, String>> {
-        self.consoles.get(console)
+    ) -> &BTreeMap<path::PathBuf, String> {
+        self.consoles.get(console).unwrap()
     }
 
     pub fn get_preferred_region(&self) -> String {
