@@ -276,6 +276,12 @@ struct InnerGameLibrary {
     pub wii_rom_paths: Vec<WiiGame>,
 }
 
+pub trait GenericGame {
+    fn get_name(&self) -> String;
+    fn get_rom_path(&self) -> &path::PathBuf;
+    fn get_matched_source_image_path(&self) -> &path::PathBuf;
+}
+
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
@@ -302,6 +308,20 @@ impl GBAGame {
     }
 }
 
+impl GenericGame for GBAGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
+    }
+}
+
 pub struct SNESGame {
     pub name: String,
     pub path: path::PathBuf,
@@ -322,6 +342,20 @@ impl SNESGame {
             image: loaded_image_bytes,
             image_path: loaded_image_path,
         }
+    }
+}
+
+impl GenericGame for SNESGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
     }
 }
 
@@ -348,6 +382,20 @@ impl N64Game {
     }
 }
 
+impl GenericGame for N64Game {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
+    }
+}
+
 pub struct NDSGame {
     pub name: String,
     pub path: path::PathBuf,
@@ -368,6 +416,20 @@ impl NDSGame {
             image: loaded_image_bytes,
             image_path: loaded_image_path,
         }
+    }
+}
+
+impl GenericGame for NDSGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
     }
 }
 
@@ -401,6 +463,20 @@ impl GameCubeGame {
     }
 }
 
+impl GenericGame for GameCubeGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
+    }
+}
+
 pub struct WiiGame {
     pub name: String,
     pub code: String,
@@ -428,6 +504,20 @@ impl WiiGame {
             image: loaded_image_bytes,
             image_path: loaded_image_path,
         }
+    }
+}
+
+impl GenericGame for WiiGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
     }
 }
 
