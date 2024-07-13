@@ -1,3 +1,4 @@
+pub mod app;
 mod common;
 pub mod gamelibrary;
 pub mod shared;

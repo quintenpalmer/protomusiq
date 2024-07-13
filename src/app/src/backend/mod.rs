@@ -3,7 +3,6 @@ use std::thread;
 use std::time;
 
 use crate::datastore::loader;
-use crate::model;
 use crate::shared;
 
 use crate::services::{mpris, sink, tracker};
@@ -11,7 +10,7 @@ use crate::services::{mpris, sink, tracker};
 mod playback;
 
 pub fn create_backend_with_client_and_callback(
-    config_state: model::app::AppConfigState,
+    config_state: musiqcore::model::app::AppConfigState,
     loader: loader::Loader,
     sink_mode: musiqcore::model::shared::SinkMode,
 ) -> (
@@ -55,7 +54,7 @@ impl TrackedState {
 }
 
 pub fn run_forever(
-    config_state: model::app::AppConfigState,
+    config_state: musiqcore::model::app::AppConfigState,
     loader: loader::Loader,
     sink_mode: musiqcore::model::shared::SinkMode,
     gui_rx: mpsc::Receiver<shared::GUIToBackendMessage>,

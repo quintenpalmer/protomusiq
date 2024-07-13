@@ -2,8 +2,8 @@ use std::path;
 
 use serde::Deserialize;
 
-use musiqcore::model::shared::SinkMode;
-use musiqcore::model::LoadMode;
+use crate::model::shared::SinkMode;
+use crate::model::LoadMode;
 
 #[derive(Debug, Clone)]
 pub struct AppConfigState {

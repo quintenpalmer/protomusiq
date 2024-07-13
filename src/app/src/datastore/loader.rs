@@ -1,5 +1,3 @@
-use crate::model;
-
 use super::sqlitebacked;
 
 pub enum Loader {
@@ -11,7 +9,7 @@ pub enum Loader {
 
 impl Loader {
     pub fn from_load_mode(
-        config_state: model::app::AppConfigState,
+        config_state: musiqcore::model::app::AppConfigState,
         load_mode: musiqcore::model::LoadMode,
     ) -> Self {
         match load_mode {

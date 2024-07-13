@@ -81,7 +81,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
 }
 
 pub fn render_entire_page<'a>(
-    config: &model::app::AppConfigState,
+    config: &musiqcore::model::app::AppConfigState,
     cross_page_display_info: &state::CrossPageDisplayInfo,
     header: Container<'a, Message>,
     rendered_page: Container<'a, Message>,

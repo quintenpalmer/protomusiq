@@ -1,4 +1,3 @@
-pub mod app;
 mod augmented;
 mod common;
 mod constants;

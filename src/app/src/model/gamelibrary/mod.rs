@@ -112,7 +112,7 @@ pub struct GameLibrary {
 }
 
 impl GameLibrary {
-    pub fn new(games: &Option<model::app::GameConfig>) -> Self {
+    pub fn new(games: &Option<musiqcore::model::app::GameConfig>) -> Self {
         match games {
             Some(actual_games) => {
                 let image_map = images::ConsoleGameImageMap::new(

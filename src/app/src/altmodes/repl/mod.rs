@@ -149,7 +149,7 @@ fn prompt_for_date() -> Result<DateTime<Local>, ()> {
 }
 
 fn prompt_for_tracks(
-    config_state: &model::app::AppConfigState,
+    config_state: &musiqcore::model::app::AppConfigState,
     raw_library: &musiqlibrary::RawLibrary,
 ) -> Result<Vec<musiqlibrary::FullTrackMetadata>, ()> {
     println!("are you adding an `album`, `track`, or `playlist` (enter one)");

@@ -312,7 +312,7 @@ pub fn sql_mode() -> Result<(), Error> {
     Ok(())
 }
 
-fn read(config_state: &model::app::AppConfigState) {
+fn read(config_state: &musiqcore::model::app::AppConfigState) {
     let conn = sqlitebacked::Connections::first_bootup(config_state.clone());
 
     let mut logger = logging::Logger::new(logging::LogType::Timing, "sql load");
@@ -338,15 +338,15 @@ fn read(config_state: &model::app::AppConfigState) {
     logger.print_elapsed("counting tracks");
 }
 
-fn create_tables(config_state: &model::app::AppConfigState) {
+fn create_tables(config_state: &musiqcore::model::app::AppConfigState) {
     sqlitebacked::Connections::first_bootup(config_state.clone());
 }
 
-fn seed(_config_state: &model::app::AppConfigState) {
+fn seed(_config_state: &musiqcore::model::app::AppConfigState) {
     // TODO use bootstrap_tracks and the rest
 }
 
-fn check_tracked(config_state: &model::app::AppConfigState) {
+fn check_tracked(config_state: &musiqcore::model::app::AppConfigState) {
     let library = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
         config_state,
         &loader::Loader::NoCache,

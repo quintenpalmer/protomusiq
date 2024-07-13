@@ -22,7 +22,7 @@ pub struct AppState {
     pub action_state: ActionState,
     pub cross_page_display_info: CrossPageDisplayInfo,
 
-    pub config: model::app::AppConfigState,
+    pub config: musiqcore::model::app::AppConfigState,
 
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,

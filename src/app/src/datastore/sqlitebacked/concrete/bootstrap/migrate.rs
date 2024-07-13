@@ -1,11 +1,12 @@
 use std::cmp;
 use std::fs;
 
-use crate::model;
-
 use crate::datastore::localfs;
 
-pub fn create_all_tables(config_state: model::app::AppConfigState, main_db: &rusqlite::Connection) {
+pub fn create_all_tables(
+    config_state: musiqcore::model::app::AppConfigState,
+    main_db: &rusqlite::Connection,
+) {
     let app_data_path = config_state.app_data_path.clone();
 
     let migrations_to_process_path =
