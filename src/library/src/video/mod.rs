@@ -60,6 +60,8 @@ pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
 
         return match fileext {
             "m4v" | "mp4" => vec![current_path.clone()],
+            "jpg" | "json" => Vec::new(), // movies should have jpg box art and json metadata
+            // files, but there's nothing to do with them here
             _ => {
                 eprintln!("unexpected file extension: {}", fileext);
                 Vec::new()
