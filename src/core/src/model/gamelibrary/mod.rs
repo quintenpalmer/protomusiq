@@ -164,7 +164,7 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.snes_path.clone();
+                    let prefix_dir = actual_games.n64_path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
@@ -180,7 +180,7 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.snes_path.clone();
+                    let prefix_dir = actual_games.nds_path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
@@ -212,7 +212,7 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.snes_path.clone();
+                    let prefix_dir = actual_games.gamecube.gamecube_path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
@@ -229,7 +229,7 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.snes_path.clone();
+                    let prefix_dir = actual_games.gamecube.wii_path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
