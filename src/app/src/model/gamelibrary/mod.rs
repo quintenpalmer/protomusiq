@@ -11,6 +11,22 @@ mod consoles;
 mod images;
 mod nameutil;
 
+fn get_game_image_bytes(
+    image_map: &images::ConsoleGameImageMap,
+    name: String,
+    game_console: consoles::GameConsole,
+) -> Option<Vec<u8>> {
+    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
+        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
+        _ => None,
+    };
+
+    match this_game_maybe_image_file {
+        Some(image_path) => Some(fs::read(image_path).unwrap()),
+        None => None,
+    }
+}
+
 fn find_best_match(
     map: &BTreeMap<path::PathBuf, String>,
     key: String,
@@ -39,22 +55,6 @@ fn find_best_match(
             }
             Some(ret)
         }
-    }
-}
-
-fn get_game_image_bytes(
-    image_map: &images::ConsoleGameImageMap,
-    name: String,
-    game_console: consoles::GameConsole,
-) -> Option<Vec<u8>> {
-    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
-        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
-        _ => None,
-    };
-
-    match this_game_maybe_image_file {
-        Some(image_path) => Some(fs::read(image_path).unwrap()),
-        None => None,
     }
 }
 
