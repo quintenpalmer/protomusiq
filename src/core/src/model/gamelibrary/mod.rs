@@ -666,16 +666,33 @@ fn get_game_image_bytes(
     game_config: &crate::model::app::GameConfig,
     game_console: consoles::GameConsole,
 ) -> (Vec<u8>, path::PathBuf) {
-    let name = nameutil::clean_filename_to_game_name(&path);
-
     let console_map = image_map.get_console_map(&game_console);
 
-    let this_game_image_file = find_best_match(console_map, name, image_map.get_preferred_region());
+    match image_mode {
+        ImageMode::BestMatch(_) => {
+            let name = nameutil::clean_filename_to_game_name(&path);
 
-    (
-        fs::read(this_game_image_file.clone()).unwrap(),
-        this_game_image_file,
-    )
+            let this_game_image_file =
+                find_best_match(console_map, name, image_map.get_preferred_region());
+
+            (
+                fs::read(this_game_image_file.clone()).unwrap(),
+                this_game_image_file,
+            )
+        }
+        ImageMode::ExactMatch => {
+            let dest_prefix = &game_config.image_path;
+
+            let dest_console_piece = path::PathBuf::from(game_console.full_name());
+
+            let dest_base_name =
+                path::PathBuf::from(path.file_name().unwrap()).with_extension("png");
+
+            let dest_image_path = dest_prefix.join(dest_console_piece).join(dest_base_name);
+
+            (fs::read(dest_image_path.clone()).unwrap(), dest_image_path)
+        }
+    }
 }
 
 fn find_best_match(
