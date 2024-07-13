@@ -11,53 +11,6 @@ mod consoles;
 mod images;
 mod nameutil;
 
-fn get_game_image_bytes(
-    image_map: &images::ConsoleGameImageMap,
-    name: String,
-    game_console: consoles::GameConsole,
-) -> Option<Vec<u8>> {
-    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
-        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
-        _ => None,
-    };
-
-    match this_game_maybe_image_file {
-        Some(image_path) => Some(fs::read(image_path).unwrap()),
-        None => None,
-    }
-}
-
-fn find_best_match(
-    map: &BTreeMap<path::PathBuf, String>,
-    key: String,
-    preferred_region: String,
-) -> Option<path::PathBuf> {
-    let mut best_so_far = (1000, Vec::new());
-
-    for (iter_value, iter_key) in map.iter() {
-        let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
-        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
-        if iter_distance < best_so_far.0 {
-            best_so_far = (iter_distance, vec![iter_value]);
-        } else if iter_distance == best_so_far.0 {
-            best_so_far.1.push(iter_value);
-        }
-    }
-
-    match best_so_far.1.as_slice() {
-        [] => None,
-        matches @ [_, ..] => {
-            let mut ret = matches[0].clone();
-            for m in matches.into_iter() {
-                if nameutil::get_game_region_info(m).contains(&preferred_region) {
-                    ret = m.to_path_buf();
-                }
-            }
-            Some(ret)
-        }
-    }
-}
-
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
@@ -213,6 +166,53 @@ fn lookup_name_from_code(code: &String, lookup_table: &BTreeMap<String, String>)
         None => code.clone(),
     };
     lookup_table.get(&code_lookup).unwrap().clone()
+}
+
+fn get_game_image_bytes(
+    image_map: &images::ConsoleGameImageMap,
+    name: String,
+    game_console: consoles::GameConsole,
+) -> Option<Vec<u8>> {
+    let this_game_maybe_image_file = match image_map.get_console_map(&game_console) {
+        Some(console_map) => find_best_match(console_map, name, image_map.get_preferred_region()),
+        _ => None,
+    };
+
+    match this_game_maybe_image_file {
+        Some(image_path) => Some(fs::read(image_path).unwrap()),
+        None => None,
+    }
+}
+
+fn find_best_match(
+    map: &BTreeMap<path::PathBuf, String>,
+    key: String,
+    preferred_region: String,
+) -> Option<path::PathBuf> {
+    let mut best_so_far = (1000, Vec::new());
+
+    for (iter_value, iter_key) in map.iter() {
+        let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
+        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
+        if iter_distance < best_so_far.0 {
+            best_so_far = (iter_distance, vec![iter_value]);
+        } else if iter_distance == best_so_far.0 {
+            best_so_far.1.push(iter_value);
+        }
+    }
+
+    match best_so_far.1.as_slice() {
+        [] => None,
+        matches @ [_, ..] => {
+            let mut ret = matches[0].clone();
+            for m in matches.into_iter() {
+                if nameutil::get_game_region_info(m).contains(&preferred_region) {
+                    ret = m.to_path_buf();
+                }
+            }
+            Some(ret)
+        }
+    }
 }
 
 pub struct GameLibrary {
