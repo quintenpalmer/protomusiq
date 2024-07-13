@@ -18,31 +18,32 @@ fn main() {
 
     let game_library_state = musiqcore::model::gl::GameLibraryState::new(game_library);
 
-    match (
-        game_library_state.get_gba_prefix_path(),
-        game_library_state.get_gba_rom_paths(),
-    ) {
-        (Some(rom_prefix), Some(rom_paths)) => {
-            let console = musiqcore::model::gl::consoles::GameConsole::GameBoyAdvance;
+    let consoles = musiqcore::model::gl::consoles::GameConsole::all();
 
-            for game in rom_paths.iter() {
-                let source_image_path = game.image_path.clone();
+    for console in consoles.into_iter() {
+        let maybe_prefix_roms = game_library_state.get_generic_game_and_prefix(&console);
 
-                let dest_prefix = config_state.games.clone().unwrap().image_path;
+        match maybe_prefix_roms {
+            Some((rom_paths, rom_prefix)) => {
+                for game in rom_paths.iter() {
+                    let source_image_path = game.get_matched_source_image_path().clone();
 
-                let dest_console_piece = path::PathBuf::from(console.full_name());
+                    let dest_prefix = config_state.games.clone().unwrap().image_path;
 
-                let dest_base_name = game
-                    .path
-                    .strip_prefix(rom_prefix)
-                    .unwrap()
-                    .with_extension("png");
+                    let dest_console_piece = path::PathBuf::from(console.full_name());
 
-                let dest_image_path = dest_prefix.join(dest_console_piece).join(dest_base_name);
+                    let dest_base_name = game
+                        .get_rom_path()
+                        .strip_prefix(rom_prefix)
+                        .unwrap()
+                        .with_extension("png");
 
-                println!("cp {:?} {:?}", source_image_path, dest_image_path);
+                    let dest_image_path = dest_prefix.join(dest_console_piece).join(dest_base_name);
+
+                    println!("cp {:?}\t{:?}", source_image_path, dest_image_path);
+                }
             }
+            _ => eprintln!("skipping console: {:?}", console),
         }
-        _ => eprintln!("skipping gbas"),
     }
 }
