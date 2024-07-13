@@ -276,7 +276,7 @@ struct InnerGameLibrary {
 pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl GBAGame {
@@ -300,7 +300,7 @@ impl GBAGame {
 pub struct SNESGame {
     pub name: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl SNESGame {
@@ -321,7 +321,7 @@ impl SNESGame {
 pub struct N64Game {
     pub name: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl N64Game {
@@ -342,7 +342,7 @@ impl N64Game {
 pub struct NDSGame {
     pub name: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl NDSGame {
@@ -364,7 +364,7 @@ pub struct GameCubeGame {
     pub name: String,
     pub code: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl GameCubeGame {
@@ -392,7 +392,7 @@ pub struct WiiGame {
     pub name: String,
     pub code: String,
     pub path: path::PathBuf,
-    pub image: Option<Vec<u8>>,
+    pub image: Vec<u8>,
 }
 
 impl WiiGame {
@@ -434,12 +434,12 @@ fn get_game_image_bytes(
     image_map: &images::ConsoleGameImageMap,
     name: String,
     game_console: consoles::GameConsole,
-) -> Option<Vec<u8>> {
+) -> Vec<u8> {
     let console_map = image_map.get_console_map(&game_console);
 
     let this_game_image_file = find_best_match(console_map, name, image_map.get_preferred_region());
 
-    Some(fs::read(this_game_image_file).unwrap())
+    fs::read(this_game_image_file).unwrap()
 }
 
 fn find_best_match(

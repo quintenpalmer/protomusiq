@@ -21,18 +21,13 @@ pub fn gba_list<'a>(
                         )),
                     );
 
-                    match gba_rom_path.image {
-                        Some(ref game_image_bytes) => {
-                            row = row.push(
-                                Image::new(iced::widget::image::Handle::from_memory(
-                                    game_image_bytes.clone(),
-                                ))
-                                .width(Length::Fixed(500.0))
-                                .height(Length::Fixed(500.0)),
-                            );
-                        }
-                        None => (),
-                    };
+                    row = row.push(
+                        Image::new(iced::widget::image::Handle::from_memory(
+                            gba_rom_path.image.clone(),
+                        ))
+                        .width(Length::Fixed(500.0))
+                        .height(Length::Fixed(500.0)),
+                    );
 
                     row = row.push(h2(gba_rom_path.name.clone()));
                     row

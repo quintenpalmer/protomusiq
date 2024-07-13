@@ -24,18 +24,13 @@ pub fn ngc_list<'a>(
                         )),
                     ));
 
-                    match ngc_rom_path.image {
-                        Some(ref game_image_bytes) => {
-                            ret_row = ret_row.push(
-                                Image::new(iced::widget::image::Handle::from_memory(
-                                    game_image_bytes.clone(),
-                                ))
-                                .width(Length::Fixed(500.0))
-                                .height(Length::Fixed(500.0)),
-                            );
-                        }
-                        None => (),
-                    };
+                    ret_row = ret_row.push(
+                        Image::new(iced::widget::image::Handle::from_memory(
+                            ngc_rom_path.image.clone(),
+                        ))
+                        .width(Length::Fixed(500.0))
+                        .height(Length::Fixed(500.0)),
+                    );
 
                     ret_row = ret_row.push(h2(ngc_rom_path.name.clone()));
                     ret_row
