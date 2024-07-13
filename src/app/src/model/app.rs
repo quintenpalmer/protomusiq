@@ -2,7 +2,7 @@ use std::path;
 
 use serde::Deserialize;
 
-use crate::shared::SinkMode;
+use musiqcore::model::shared::SinkMode;
 
 use super::common::LoadMode;
 

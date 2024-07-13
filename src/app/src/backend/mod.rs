@@ -13,7 +13,7 @@ mod playback;
 pub fn create_backend_with_client_and_callback(
     config_state: model::app::AppConfigState,
     loader: loader::Loader,
-    sink_mode: shared::SinkMode,
+    sink_mode: musiqcore::model::shared::SinkMode,
 ) -> (
     shared::Client<shared::GUIToBackendMessage>,
     shared::Callback<shared::BackendToGUIMessage>,
@@ -57,7 +57,7 @@ impl TrackedState {
 pub fn run_forever(
     config_state: model::app::AppConfigState,
     loader: loader::Loader,
-    sink_mode: shared::SinkMode,
+    sink_mode: musiqcore::model::shared::SinkMode,
     gui_rx: mpsc::Receiver<shared::GUIToBackendMessage>,
     gui_callback: mpsc::Sender<shared::BackendToGUIMessage>,
 ) {
@@ -68,8 +68,12 @@ pub fn run_forever(
     let mut play_queue = shared::PlayQueueInfo::new();
 
     let (sink_client, sink_callback) = match sink_mode {
-        shared::SinkMode::Local => sink::create_backend_with_client_and_callback(),
-        shared::SinkMode::Remote => sink::create_remote_backend_with_client_and_callback(),
+        musiqcore::model::shared::SinkMode::Local => {
+            sink::create_backend_with_client_and_callback()
+        }
+        musiqcore::model::shared::SinkMode::Remote => {
+            sink::create_remote_backend_with_client_and_callback()
+        }
     };
 
     let (mpris_client, mpris_callback) = mpris::create_backend_with_client_and_callback();
