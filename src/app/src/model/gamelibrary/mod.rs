@@ -11,6 +11,102 @@ mod consoles;
 mod images;
 mod nameutil;
 
+pub struct GameLibraryState {
+    pub games: GameLibrary,
+}
+
+impl GameLibraryState {
+    pub fn new(game_library: GameLibrary) -> Self {
+        GameLibraryState {
+            games: game_library,
+        }
+    }
+
+    pub fn get_gba_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gba_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_gba_rom_paths(&self) -> Option<&Vec<GBAGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gba_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_snes_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.snes_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_snes_rom_paths(&self) -> Option<&Vec<SNESGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.snes_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_n64_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.n64_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_n64_rom_paths(&self) -> Option<&Vec<N64Game>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.n64_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_nds_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.nds_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_nds_rom_paths(&self) -> Option<&Vec<NDSGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.nds_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_ngc_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gamecube_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_ngc_rom_paths(&self) -> Option<&Vec<GameCubeGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gamecube_rom_paths),
+            None => None,
+        }
+    }
+
+    pub fn get_wii_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.wii_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_wii_rom_paths(&self) -> Option<&Vec<WiiGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.wii_rom_paths),
+            None => None,
+        }
+    }
+}
+
 pub struct GameLibrary {
     inner: Option<InnerGameLibrary>,
 }
@@ -177,102 +273,6 @@ struct InnerGameLibrary {
 
     pub wii_prefix_dir: path::PathBuf,
     pub wii_rom_paths: Vec<WiiGame>,
-}
-
-pub struct GameLibraryState {
-    pub games: GameLibrary,
-}
-
-impl GameLibraryState {
-    pub fn new(game_library: GameLibrary) -> Self {
-        GameLibraryState {
-            games: game_library,
-        }
-    }
-
-    pub fn get_gba_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.gba_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_gba_rom_paths(&self) -> Option<&Vec<GBAGame>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.gba_rom_paths),
-            None => None,
-        }
-    }
-
-    pub fn get_snes_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.snes_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_snes_rom_paths(&self) -> Option<&Vec<SNESGame>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.snes_rom_paths),
-            None => None,
-        }
-    }
-
-    pub fn get_n64_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.n64_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_n64_rom_paths(&self) -> Option<&Vec<N64Game>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.n64_rom_paths),
-            None => None,
-        }
-    }
-
-    pub fn get_nds_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.nds_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_nds_rom_paths(&self) -> Option<&Vec<NDSGame>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.nds_rom_paths),
-            None => None,
-        }
-    }
-
-    pub fn get_ngc_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.gamecube_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_ngc_rom_paths(&self) -> Option<&Vec<GameCubeGame>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.gamecube_rom_paths),
-            None => None,
-        }
-    }
-
-    pub fn get_wii_prefix_path(&self) -> Option<&path::PathBuf> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.wii_prefix_dir),
-            None => None,
-        }
-    }
-
-    pub fn get_wii_rom_paths(&self) -> Option<&Vec<WiiGame>> {
-        match self.games.inner {
-            Some(ref v) => Some(&v.wii_rom_paths),
-            None => None,
-        }
-    }
 }
 
 pub struct GBAGame {
