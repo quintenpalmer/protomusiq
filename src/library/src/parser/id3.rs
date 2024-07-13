@@ -30,9 +30,9 @@ impl ID3MetadataParser {
         let duration = mp3_duration::from_path(path.as_ref()).unwrap();
 
         /*
-        println!("and another:");
+        eprintln!("and another:");
         for frame in tag.frames() {
-            println!("\t{}:\t{}", frame.id(), frame.content());
+            eprintln!("\t{}:\t{}", frame.id(), frame.content());
         }
         */
 

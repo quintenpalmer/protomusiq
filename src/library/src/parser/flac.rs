@@ -16,9 +16,9 @@ pub struct FlacMetadataParser {
 impl FlacMetadataParser {
     pub fn new<P: AsRef<Path>>(path: P) -> Result<Self, String> {
         /*
-        println!("and another:");
+        eprintln!("and another:");
         for (key, value) in tag_map.iter() {
-            println!("\t{}:\t{}", key, value);
+            eprintln!("\t{}:\t{}", key, value);
         }
         */
 
