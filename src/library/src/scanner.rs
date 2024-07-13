@@ -55,7 +55,7 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
                             "pdf" => None,
                             "webp" => None,
                             unexpected_ext => {
-                                println!(
+                                eprintln!(
                                     "no music metadata parsed for extension {}\t(path: {})",
                                     unexpected_ext,
                                     path.path().display()
@@ -64,13 +64,13 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
                             }
                         },
                         None => {
-                            println!("could not resolve file extension, let me know if you ever see this");
+                            eprintln!("could not resolve file extension, let me know if you ever see this");
                             None
                         }
                     }
                 }
                 None => {
-                    println!(
+                    eprintln!(
                         "no music metadata parsed file with no extension\t(path: {})",
                         path.path().display()
                     );
@@ -136,7 +136,7 @@ pub fn find_files<O: AsRef<Path>, P: AsRef<Path>>(
                             }
                         },
                         None => {
-                            println!("could not resolve file extension, let me know if you ever see this");
+                            eprintln!("could not resolve file extension, let me know if you ever see this");
                             None
                         }
                     }
