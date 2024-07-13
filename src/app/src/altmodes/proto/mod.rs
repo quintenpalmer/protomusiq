@@ -3,7 +3,6 @@ use std::io::{self, Write};
 use std::thread;
 use std::time;
 
-use crate::model;
 use crate::util::{config, logging};
 
 use crate::datastore::cache;
@@ -41,7 +40,7 @@ pub fn entry_point() -> Result<(), Error> {
             .read_musicbrainz_artist_match_file(ml_artist.artist_info.artist_name.clone())
         {
             Some(artist) => {
-                let distance = model::functions::levenshtein(
+                let distance = musiqcore::model::functions::levenshtein(
                     &artist.name.to_lowercase(),
                     &ml_artist.artist_info.artist_name.to_lowercase(),
                 );
@@ -76,7 +75,7 @@ pub fn entry_point() -> Result<(), Error> {
             .read_musicbrainz_artist_match_file(ml_artist.artist_info.artist_name.clone())
         {
             Some(artist) => {
-                let distance = model::functions::levenshtein(
+                let distance = musiqcore::model::functions::levenshtein(
                     &artist.name.to_lowercase(),
                     &ml_artist.artist_info.artist_name.to_lowercase(),
                 );

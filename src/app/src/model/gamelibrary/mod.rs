@@ -5,8 +5,6 @@ use std::path;
 
 use musiqlibrary::games;
 
-use crate::model;
-
 mod consoles;
 mod images;
 mod nameutil;
@@ -457,7 +455,8 @@ fn find_best_match(
 
     for (iter_value, iter_key) in map.iter() {
         let iter_key = nameutil::clean_filename_to_game_name(&path::PathBuf::from(iter_key));
-        let iter_distance = model::functions::levenshtein(iter_key.as_str(), key.as_str());
+        let iter_distance =
+            musiqcore::model::functions::levenshtein(iter_key.as_str(), key.as_str());
         if iter_distance < best_so_far.0 {
             best_so_far = (iter_distance, vec![iter_value]);
         } else if iter_distance == best_so_far.0 {

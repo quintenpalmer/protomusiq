@@ -1,5 +1,6 @@
 pub mod app;
 mod common;
+pub mod functions;
 pub mod gamelibrary;
 pub mod shared;
 
