@@ -277,13 +277,14 @@ pub struct GBAGame {
     pub name: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl GBAGame {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let loaded_image_bytes = get_game_image_bytes(
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
             image_map,
             name.clone(),
             consoles::GameConsole::GameBoyAdvance,
@@ -293,6 +294,7 @@ impl GBAGame {
             name,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -301,19 +303,21 @@ pub struct SNESGame {
     pub name: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl SNESGame {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let loaded_image_bytes =
+        let (loaded_image_bytes, loaded_image_path) =
             get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::SNES);
 
         SNESGame {
             name,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -322,19 +326,21 @@ pub struct N64Game {
     pub name: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl N64Game {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let loaded_image_bytes =
+        let (loaded_image_bytes, loaded_image_path) =
             get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Nintendo64);
 
         N64Game {
             name,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -343,19 +349,21 @@ pub struct NDSGame {
     pub name: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl NDSGame {
     pub fn new(path: path::PathBuf, image_map: &images::ConsoleGameImageMap) -> Self {
         let name = nameutil::clean_filename_to_game_name(&path);
 
-        let loaded_image_bytes =
+        let (loaded_image_bytes, loaded_image_path) =
             get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::NintendoDS);
 
         NDSGame {
             name,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -365,6 +373,7 @@ pub struct GameCubeGame {
     pub code: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl GameCubeGame {
@@ -376,7 +385,7 @@ impl GameCubeGame {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
 
-        let loaded_image_bytes =
+        let (loaded_image_bytes, loaded_image_path) =
             get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::GameCube);
 
         GameCubeGame {
@@ -384,6 +393,7 @@ impl GameCubeGame {
             code: code,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -393,6 +403,7 @@ pub struct WiiGame {
     pub code: String,
     pub path: path::PathBuf,
     pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
 }
 
 impl WiiGame {
@@ -404,7 +415,7 @@ impl WiiGame {
         let code = extract_code_from_path(&path);
         let name = lookup_name_from_code(&code, lookup_table);
 
-        let loaded_image_bytes =
+        let (loaded_image_bytes, loaded_image_path) =
             get_game_image_bytes(image_map, name.clone(), consoles::GameConsole::Wii);
 
         WiiGame {
@@ -412,6 +423,7 @@ impl WiiGame {
             code: code,
             path: path.clone(),
             image: loaded_image_bytes,
+            image_path: loaded_image_path,
         }
     }
 }
@@ -434,12 +446,15 @@ fn get_game_image_bytes(
     image_map: &images::ConsoleGameImageMap,
     name: String,
     game_console: consoles::GameConsole,
-) -> Vec<u8> {
+) -> (Vec<u8>, path::PathBuf) {
     let console_map = image_map.get_console_map(&game_console);
 
     let this_game_image_file = find_best_match(console_map, name, image_map.get_preferred_region());
 
-    fs::read(this_game_image_file).unwrap()
+    (
+        fs::read(this_game_image_file.clone()).unwrap(),
+        this_game_image_file,
+    )
 }
 
 fn find_best_match(
