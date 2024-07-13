@@ -1,4 +1,27 @@
 use std::cmp;
+use std::env;
+use std::path;
+
+pub fn get_default_config_path() -> path::PathBuf {
+    let home_dir = env::var_os("HOME").unwrap();
+    let config_path = path::Path::new(&home_dir)
+        .join(".config")
+        .join("musiqapp")
+        .join("config.json");
+
+    config_path
+}
+
+pub fn get_default_data_path() -> path::PathBuf {
+    let home_dir = env::var_os("HOME").unwrap();
+    let data_path = path::Path::new(&home_dir)
+        .join(".local")
+        .join("share")
+        .join("musiq")
+        .join("v1");
+
+    data_path
+}
 
 pub fn levenshtein(first: &str, second: &str) -> usize {
     let first_len = first.chars().count();

@@ -3,8 +3,6 @@ use std::io;
 use std::io::{Read, Write};
 use std::path;
 
-use crate::model;
-
 use super::localfs;
 
 pub struct MusicBrainzCacheInterface {
@@ -13,7 +11,7 @@ pub struct MusicBrainzCacheInterface {
 
 impl MusicBrainzCacheInterface {
     pub fn new() -> Self {
-        let app_data_path = model::functions::get_default_data_path();
+        let app_data_path = musiqcore::model::functions::get_default_data_path();
 
         let cache_dir =
             localfs::build_tree_for_dirs(&app_data_path, vec!["cache", "musicbrainz", "artists"]);
