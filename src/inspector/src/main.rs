@@ -400,7 +400,12 @@ impl AppCmd for MovieTreeViewer {
                 movie.title,
             );
             println!(
-                "    └─── {}",
+                "{}    └─── {}",
+                if current_movie_index < movie_count {
+                    "│"
+                } else {
+                    " "
+                },
                 movie.path.clone().into_os_string().to_string_lossy()
             );
         }
