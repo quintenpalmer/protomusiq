@@ -33,6 +33,13 @@ pub struct ExtraMetadata {
     pub producers: Vec<String>,
     pub directors: Vec<String>,
     pub writers: Vec<String>,
+    pub series: Option<SeriesInfo>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct SeriesInfo {
+    pub index: u32,
+    pub name: String,
 }
 
 /// Recursively find all movies with metadata
