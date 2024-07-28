@@ -391,13 +391,22 @@ impl AppCmd for MovieTreeViewer {
         let movie_count = movies.len() - 1;
         for (current_movie_index, movie) in movies.iter().enumerate() {
             println!(
-                "{} Movie: '{}'",
+                "{} Movie: '{}'{}",
                 if current_movie_index == movie_count {
                     "└───"
                 } else {
                     "├───"
                 },
                 movie.title,
+                match movie.extra {
+                    Some(ref extra) => match extra.series {
+                        Some(ref series) => {
+                            format!("\t{} in {}", series.index, series.name)
+                        }
+                        None => "".to_string(),
+                    },
+                    None => "".to_string(),
+                }
             );
             println!(
                 "{}    └─── {}",
