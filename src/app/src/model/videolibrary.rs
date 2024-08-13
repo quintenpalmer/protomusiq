@@ -26,6 +26,7 @@ impl MovieRelPath {
 
 pub struct VideoLibrary {
     pub movies: BTreeMap<MovieRelPath, video::MovieMetadata>,
+    pub movie_id_to_path: BTreeMap<video::MovieID, MovieRelPath>,
 }
 
 impl VideoLibrary {
@@ -33,18 +34,26 @@ impl VideoLibrary {
         let movies = video::find_movies_in_dir(movie_path);
 
         let mut movie_btree = BTreeMap::new();
+        let mut movie_id_to_path = BTreeMap::new();
+
         for movie in movies.into_iter() {
-            movie_btree.insert(MovieRelPath::from_metadata(&movie), movie);
+            let rel_path = MovieRelPath::from_metadata(&movie);
+            let id = movie.get_id();
+            movie_btree.insert(rel_path.clone(), movie);
+            movie_id_to_path.insert(id, rel_path);
         }
 
         VideoLibrary {
             movies: movie_btree,
+            movie_id_to_path,
         }
     }
 }
 
 pub struct VideoLibraryState {
     pub movies: VideoLibrary,
+
+    pub series: BTreeMap<String, (u32, video::MovieID)>,
 
     pub art: model::MovieArt,
 
@@ -61,8 +70,26 @@ impl VideoLibraryState {
                 .collect::<Vec<video::MovieMetadata>>(),
         );
 
+        let mut series_info = BTreeMap::new();
+
+        for movie in movies.movies.values() {
+            match movie.extra {
+                Some(ref extra) => match extra.series {
+                    Some(ref parsed_movie_series_info) => {
+                        series_info.insert(
+                            parsed_movie_series_info.name.clone(),
+                            (parsed_movie_series_info.index, movie.get_id()),
+                        );
+                    }
+                    None => (),
+                },
+                None => (),
+            }
+        }
+
         VideoLibraryState {
             movies,
+            series: series_info,
             art,
             movie_sorts,
         }
