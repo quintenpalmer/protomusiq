@@ -42,6 +42,19 @@ pub struct SeriesInfo {
     pub name: String,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+pub struct MovieID {
+    inner_id: String,
+}
+
+impl MovieMetadata {
+    pub fn get_id(&self) -> MovieID {
+        MovieID {
+            inner_id: self.title.clone(),
+        }
+    }
+}
+
 /// Recursively find all movies with metadata
 pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetadata> {
     let all_paths = find_movie_paths(movie_path.as_ref().to_path_buf());
