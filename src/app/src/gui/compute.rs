@@ -223,6 +223,10 @@ fn movie_breadcrumbs(message: &message::MovieNavMessage) -> Vec<(String, Message
                 message::MovieNavMessage::MovieView(movie.clone(), None, None).into_message(),
             ))
         }
+        message::MovieNavMessage::SeriesList => ret.push((
+            "Series".to_string(),
+            message::MovieNavMessage::SeriesList.into_message(),
+        )),
     }
 
     ret

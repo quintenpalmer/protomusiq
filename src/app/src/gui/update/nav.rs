@@ -449,6 +449,10 @@ pub fn handle_nav(
                 });
                 Command::none()
             }
+            message::MovieNavMessage::SeriesList => {
+                app.page_state.current_page = Page::MovieSeriesList;
+                Command::none()
+            }
         },
         NavMessage::Game(game_message) => match game_message {
             message::GameNavMessage::GameHome => {

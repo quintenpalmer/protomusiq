@@ -71,6 +71,7 @@ pub enum MovieNavMessage {
         Option<model::MovieSize>,
         Option<model::MovieSortPlacement>,
     ),
+    SeriesList,
 }
 
 #[derive(Debug, Clone)]
