@@ -53,7 +53,7 @@ impl VideoLibrary {
 pub struct VideoLibraryState {
     pub movies: VideoLibrary,
 
-    pub series: BTreeMap<String, (u32, video::MovieID)>,
+    pub series: BTreeMap<String, Vec<(u32, video::MovieID)>>,
 
     pub art: model::MovieArt,
 
@@ -76,10 +76,10 @@ impl VideoLibraryState {
             match movie.extra {
                 Some(ref extra) => match extra.series {
                     Some(ref parsed_movie_series_info) => {
-                        series_info.insert(
-                            parsed_movie_series_info.name.clone(),
-                            (parsed_movie_series_info.index, movie.get_id()),
-                        );
+                        series_info
+                            .entry(parsed_movie_series_info.name.clone())
+                            .or_insert(Vec::new())
+                            .push((parsed_movie_series_info.index, movie.get_id()));
                     }
                     None => (),
                 },
@@ -113,6 +113,10 @@ impl VideoLibraryState {
         }
 
         common::MovieSearchResults { titles }
+    }
+
+    pub fn get_series(&self) -> &BTreeMap<String, Vec<(u32, video::MovieID)>> {
+        &self.series
     }
 }
 
