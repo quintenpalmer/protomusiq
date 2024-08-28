@@ -85,6 +85,7 @@ pub fn render_page<'a>(
         }
         Page::MovieSeriesList => pages::movieseries::movie_series(movie_library, app_images),
         Page::GameHome => pages::gamehome::game_home(app_images),
+        Page::GBList => pages::gamegb::gb_list(game_library),
         Page::GBCList => pages::gamegbc::gbc_list(game_library),
         Page::GBAList => pages::gamegba::gba_list(game_library),
         Page::SNESList => pages::gamesnes::snes_list(game_library),

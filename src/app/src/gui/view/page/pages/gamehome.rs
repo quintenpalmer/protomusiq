@@ -12,6 +12,12 @@ use super::super::super::consts;
 use super::super::super::elements::*;
 
 pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message::Message> {
+    let gb_link = dark_button(Container::new(bottom_label(
+        album_image(app_images.get_gba_image().clone(), model::AlbumSize::Small).into(),
+        bright_paragraph(common::abr_str("GB".to_string(), consts::ICON_STR_LENGTH)),
+    )))
+    .on_press(message::GameNavMessage::GBList.into_message());
+
     let gbc_link = dark_button(Container::new(bottom_label(
         album_image(app_images.get_gba_image().clone(), model::AlbumSize::Small).into(),
         bright_paragraph(common::abr_str("GBC".to_string(), consts::ICON_STR_LENGTH)),
@@ -62,7 +68,7 @@ pub fn game_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message:
 
     let body_column = Column::new()
         .push(h1("Games"))
-        .push(line_row().push(gbc_link))
+        .push(line_row().push(gb_link).push(gbc_link))
         .push(line_row().push(gba_link).push(nds_link))
         .push(line_row().push(snes_link).push(n64_link))
         .push(line_row().push(ngc_link).push(wii_link));

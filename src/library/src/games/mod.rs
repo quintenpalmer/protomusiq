@@ -1,4 +1,5 @@
 pub mod gamecube;
+pub mod gb;
 pub mod gba;
 pub mod gbc;
 pub mod n64;

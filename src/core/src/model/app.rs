@@ -114,6 +114,7 @@ impl AppConfigState {
 pub struct GameConfig {
     pub preferred_region: String,
     pub image_path: path::PathBuf,
+    pub gb_path: path::PathBuf,
     pub gbc_path: path::PathBuf,
     pub gba_path: path::PathBuf,
     pub snes_path: path::PathBuf,

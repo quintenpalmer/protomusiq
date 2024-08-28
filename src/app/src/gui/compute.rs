@@ -240,6 +240,10 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
 
     match message {
         message::GameNavMessage::GameHome => (),
+        message::GameNavMessage::GBList => ret.push((
+            "GB".to_string(),
+            message::GameNavMessage::GBList.into_message(),
+        )),
         message::GameNavMessage::GBCList => ret.push((
             "GBC".to_string(),
             message::GameNavMessage::GBCList.into_message(),
