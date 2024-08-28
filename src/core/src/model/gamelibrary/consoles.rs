@@ -1,5 +1,6 @@
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum GameConsole {
+    GameBoyColor,
     GameBoyAdvance,
     NintendoDS,
     SNES,
@@ -11,6 +12,7 @@ pub enum GameConsole {
 impl GameConsole {
     pub fn full_name(&self) -> String {
         match self {
+            GameConsole::GameBoyColor => "Game Boy Color",
             GameConsole::GameBoyAdvance => "Game Boy Advance",
             GameConsole::NintendoDS => "Nintendo DS",
             GameConsole::SNES => "Super Nintendo Entertainment System",
@@ -23,6 +25,7 @@ impl GameConsole {
 
     pub fn all() -> Vec<Self> {
         vec![
+            GameConsole::GameBoyColor,
             GameConsole::GameBoyAdvance,
             GameConsole::NintendoDS,
             GameConsole::SNES,

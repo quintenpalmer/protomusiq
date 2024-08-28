@@ -30,6 +30,13 @@ impl GameLibraryState {
         console: &consoles::GameConsole,
     ) -> Option<(Vec<Box<&dyn GenericGame>>, &path::PathBuf)> {
         match console {
+            consoles::GameConsole::GameBoyColor => Some((
+                self.get_gbc_rom_paths()?
+                    .iter()
+                    .map(|x| Box::new(x as &dyn GenericGame))
+                    .collect(),
+                self.get_gbc_prefix_path()?,
+            )),
             consoles::GameConsole::GameBoyAdvance => Some((
                 self.get_gba_rom_paths()?
                     .iter()
@@ -72,6 +79,20 @@ impl GameLibraryState {
                     .collect(),
                 self.get_wii_prefix_path()?,
             )),
+        }
+    }
+
+    pub fn get_gbc_prefix_path(&self) -> Option<&path::PathBuf> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gbc_prefix_dir),
+            None => None,
+        }
+    }
+
+    pub fn get_gbc_rom_paths(&self) -> Option<&Vec<GBCGame>> {
+        match self.games.inner {
+            Some(ref v) => Some(&v.gbc_rom_paths),
+            None => None,
         }
     }
 
@@ -177,6 +198,22 @@ impl GameLibrary {
                     source_image_path,
                     actual_games.preferred_region.clone(),
                 );
+
+                let (gbc_prefix_dir, gbc_rom_paths) = {
+                    let rom_paths =
+                        games::gbc::scan_for_gbc_rom_files(&actual_games.gbc_path).unwrap();
+
+                    let mut sorted_rom_paths: Vec<GBCGame> = rom_paths
+                        .into_iter()
+                        .map(|x| GBCGame::new(x, &image_map, image_mode, &actual_games))
+                        .collect();
+
+                    sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
+
+                    let prefix_dir = actual_games.gbc_path.clone();
+
+                    (prefix_dir, sorted_rom_paths)
+                };
 
                 let (gba_prefix_dir, gba_rom_paths) = {
                     let rom_paths =
@@ -309,6 +346,8 @@ impl GameLibrary {
 
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
+                        gbc_prefix_dir: gbc_prefix_dir,
+                        gbc_rom_paths: gbc_rom_paths,
                         gba_prefix_dir: gba_prefix_dir,
                         gba_rom_paths: gba_rom_paths,
                         snes_prefix_dir: snes_prefix_dir,
@@ -330,6 +369,9 @@ impl GameLibrary {
 }
 
 struct InnerGameLibrary {
+    pub gbc_prefix_dir: path::PathBuf,
+    pub gbc_rom_paths: Vec<GBCGame>,
+
     pub gba_prefix_dir: path::PathBuf,
     pub gba_rom_paths: Vec<GBAGame>,
 
@@ -353,6 +395,53 @@ pub trait GenericGame {
     fn get_name(&self) -> String;
     fn get_rom_path(&self) -> &path::PathBuf;
     fn get_matched_source_image_path(&self) -> &path::PathBuf;
+}
+
+pub struct GBCGame {
+    pub name: String,
+    pub path: path::PathBuf,
+    pub image: Vec<u8>,
+    pub image_path: path::PathBuf,
+}
+
+impl GBCGame {
+    pub fn new(
+        path: path::PathBuf,
+        image_map: &images::ConsoleGameImageMap,
+        image_mode: &ImageMode,
+        game_config: &crate::model::app::GameConfig,
+    ) -> Self {
+        let name = nameutil::clean_filename_to_game_name(&path);
+
+        let (loaded_image_bytes, loaded_image_path) = get_game_image_bytes(
+            image_map,
+            &path,
+            image_mode,
+            game_config,
+            consoles::GameConsole::GameBoyColor,
+        );
+
+        GBCGame {
+            name,
+            path: path.clone(),
+            image: loaded_image_bytes,
+            image_path: loaded_image_path,
+        }
+    }
+}
+
+impl GenericGame for GBCGame {
+    fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn get_rom_path(&self) -> &path::PathBuf {
+        &self.path
+    }
+
+    fn get_matched_source_image_path(&self) -> &path::PathBuf {
+        &self.image_path
+    }
 }
 
 pub struct GBAGame {

@@ -77,6 +77,7 @@ pub enum MovieNavMessage {
 #[derive(Debug, Clone)]
 pub enum GameNavMessage {
     GameHome,
+    GBCList,
     GBAList,
     SNESList,
     N64List,

@@ -459,6 +459,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::GameHome;
                 Command::none()
             }
+            message::GameNavMessage::GBCList => {
+                app.page_state.current_page = Page::GBCList;
+                Command::none()
+            }
             message::GameNavMessage::GBAList => {
                 app.page_state.current_page = Page::GBAList;
                 Command::none()

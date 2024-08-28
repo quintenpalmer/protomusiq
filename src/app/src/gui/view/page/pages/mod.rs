@@ -9,6 +9,7 @@ pub mod artistlist;
 pub mod artisttracks;
 pub mod config;
 pub mod gamegba;
+pub mod gamegbc;
 pub mod gamehome;
 pub mod gamen64;
 pub mod gamends;

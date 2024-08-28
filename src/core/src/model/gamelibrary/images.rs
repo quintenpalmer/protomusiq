@@ -14,6 +14,10 @@ impl ConsoleGameImageMap {
     pub fn new(image_parent_path: &path::PathBuf, preferred_region: String) -> Self {
         let mut btreemap = BTreeMap::new();
 
+        let gbc_games =
+            load_all_games_for_console(&image_parent_path, consoles::GameConsole::GameBoyColor);
+        btreemap.insert(consoles::GameConsole::GameBoyColor, gbc_games);
+
         let gba_games =
             load_all_games_for_console(&image_parent_path, consoles::GameConsole::GameBoyAdvance);
         btreemap.insert(consoles::GameConsole::GameBoyAdvance, gba_games);
@@ -76,6 +80,7 @@ fn load_all_games_for_console(
 
 fn clean_game_image_filename(game_path: &path::PathBuf, console: &consoles::GameConsole) -> String {
     let cleaned_game_name = match console {
+        consoles::GameConsole::GameBoyColor => nameutil::clean_filename_to_game_name(game_path),
         consoles::GameConsole::GameBoyAdvance => nameutil::clean_filename_to_game_name(game_path),
         consoles::GameConsole::SNES => nameutil::clean_filename_to_game_name(game_path),
         consoles::GameConsole::NintendoDS => nameutil::clean_filename_to_game_name(game_path),
