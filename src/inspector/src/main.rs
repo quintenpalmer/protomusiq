@@ -42,7 +42,7 @@ fn main() {
 
     let printable_cmds = available_commands.keys().map(|x| x.to_string()).collect();
 
-    let mut args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
     if args.len() < 3 {
         help_text(&printable_cmds, "".to_string())
     }
