@@ -10,7 +10,7 @@ use musiqlibrary::video;
 use musiqlibrary::claxon;
 
 fn help_text(cmds: &Vec<String>, extra: String) {
-    println!("Must supply <library-path> <cmds...>");
+    println!("Must supply <cmd> <library-path>");
     println!("available commands are:");
     for cmd in cmds.into_iter() {
         println!("  {}", cmd);
@@ -47,16 +47,18 @@ fn main() {
         help_text(&printable_cmds, "".to_string())
     }
 
-    let lib_path = args[1].clone();
-    let parsed_cmds = args.split_off(2);
+    let parsed_cmd = args[1].clone();
+    let lib_path = args[2].clone();
 
+    println!("parsed cmd: {}", parsed_cmd);
     println!("lib path: {}", lib_path);
 
-    for cmd in parsed_cmds.into_iter() {
-        match available_commands.get(cmd.to_string().as_str()) {
-            Some(f) => f.operate(Path::new(lib_path.as_str()).to_path_buf()),
-            _ => help_text(&printable_cmds, format!("unknown command: {}", cmd.clone())),
-        }
+    match available_commands.get(parsed_cmd.to_string().as_str()) {
+        Some(f) => f.operate(Path::new(lib_path.as_str()).to_path_buf()),
+        _ => help_text(
+            &printable_cmds,
+            format!("unknown command: {}", parsed_cmd.clone()),
+        ),
     }
 }
 
