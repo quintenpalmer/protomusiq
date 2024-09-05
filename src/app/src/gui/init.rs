@@ -51,7 +51,7 @@ pub fn initialize_everything() -> state::App {
         &video_library,
         config_state.app_data_path.to_path_buf(),
     );
-    logger.print_elapsed("processing album art (with cache)");
+    logger.print_elapsed("processing movie art (with cache)");
 
     let video_library_state = model::VideoLibraryState::new(video_library, loaded_movie_images);
 
