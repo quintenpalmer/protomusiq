@@ -3,6 +3,7 @@ use std::fs;
 use std::io;
 use std::path;
 use std::path::PathBuf;
+use std::sync::mpsc;
 
 use image;
 use image::io::Reader as ImageReader;
@@ -173,244 +174,295 @@ pub fn process_cache_and_get_album_art(
 
     let filesystem_album_art_checker = FilesystemCachedAlbumArt::new(library, app_data_path);
 
+    let num_threads = std::thread::available_parallelism()
+        .map(|x| x.into())
+        .unwrap_or(1);
+
+    println!("creating thread pool with {} threads", num_threads);
+
+    let tpool = threadpool::ThreadPool::new(num_threads);
+    let (tx, rx) = mpsc::channel();
+
     for artist in library.artists.values() {
         for album in artist.albums.values() {
-            let cached_album_art_checker: Box<dyn CachedAlbumImageInfo> =
-                Box::new(filesystem_album_art_checker.clone());
+            let tx = tx.clone();
+
+            let album = album.clone();
 
             let key = musiqlibrary::AlbumUniqueIdentifier::new(
                 artist.artist_info.artist_id,
                 album.album_info.album_id,
             );
 
-            let has_micro =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
-            let has_mini =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
-            let has_centi =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
-            let has_small =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Small);
-            let has_regular =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Regular);
-            let has_large =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Large);
-            let has_orig =
-                cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Original);
+            let filesystem_album_art_checker = filesystem_album_art_checker.clone();
 
-            let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");
-            let local_path = album.album_info.relative_path.clone().join("cover.jpg");
+            tpool.execute(move || {
+                let cached_album_art_checker: Box<dyn CachedAlbumImageInfo> =
+                    Box::new(filesystem_album_art_checker);
 
-            if has_micro
-                && has_mini
-                && has_centi
-                && has_small
-                && has_regular
-                && has_large
-                && has_orig
-            {
-                found_cache_entries += 1;
-            } else {
-                println!(
-                    "some missing data for {:?}, from {:?}",
-                    local_path, full_album_cover_path
-                );
-                if !has_orig {
-                    println!(
-                        "copying original album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let album_cover_bytes = fs::read(full_album_cover_path.clone()).unwrap();
+                let has_micro = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
+                let has_mini =
+                    cached_album_art_checker.has_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
+                let has_centi = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
+                let has_small = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Small);
+                let has_regular = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Regular);
+                let has_large = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Large);
+                let has_orig = cached_album_art_checker
+                    .has_art_for_size(&key, model::AlbumSizeWithOrig::Original);
 
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Original,
-                        album_cover_bytes.clone(),
-                    );
-                }
+                let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");
+                let local_path = album.album_info.relative_path.clone().join("cover.jpg");
 
-                let orig_album_art = match ImageReader::open(full_album_cover_path.clone())
-                    .unwrap()
-                    .decode()
+                if has_micro
+                    && has_mini
+                    && has_centi
+                    && has_small
+                    && has_regular
+                    && has_large
+                    && has_orig
                 {
-                    Ok(v) => v,
-                    Err(_e) => ImageReader::with_format(
-                        io::BufReader::new(fs::File::open(full_album_cover_path.clone()).unwrap()),
-                        image::ImageFormat::Png,
-                    )
-                    .decode()
-                    .unwrap(),
-                };
-
-                if !has_large {
+                    tx.send(None)
+                        .expect("please let the album cache recv be listening");
+                } else {
                     println!(
-                        "translating large size album art to cache dir for {:?}",
-                        local_path
+                        "some missing data for {:?}, from {:?}",
+                        local_path, full_album_cover_path
                     );
+                    if !has_orig {
+                        println!(
+                            "copying original album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let album_cover_bytes = fs::read(full_album_cover_path.clone()).unwrap();
 
-                    let large_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::LARGE_ICON_WIDTH as u32,
-                        model::LARGE_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Original,
+                            album_cover_bytes.clone(),
+                        );
+                    }
 
-                    let mut buf = io::Cursor::new(Vec::new());
-                    large_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
+                    let orig_album_art = match ImageReader::open(full_album_cover_path.clone())
+                        .unwrap()
+                        .decode()
+                    {
+                        Ok(v) => v,
+                        Err(_e) => ImageReader::with_format(
+                            io::BufReader::new(
+                                fs::File::open(full_album_cover_path.clone()).unwrap(),
+                            ),
+                            image::ImageFormat::Png,
+                        )
+                        .decode()
+                        .unwrap(),
+                    };
 
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Large,
-                        buf.into_inner(),
-                    );
+                    if !has_large {
+                        println!(
+                            "translating large size album art to cache dir for {:?}",
+                            local_path
+                        );
+
+                        let large_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::LARGE_ICON_WIDTH as u32,
+                            model::LARGE_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        large_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Large,
+                            buf.into_inner(),
+                        );
+                    }
+
+                    if !has_regular {
+                        println!(
+                            "translating regular size album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let regular_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::REGULAR_ICON_WIDTH as u32,
+                            model::REGULAR_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        regular_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Regular,
+                            buf.into_inner(),
+                        );
+                    }
+
+                    if !has_small {
+                        println!(
+                            "translating small size album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let small_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::SMALL_ICON_WIDTH as u32,
+                            model::SMALL_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        small_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Small,
+                            buf.into_inner(),
+                        );
+                    }
+
+                    if !has_centi {
+                        println!(
+                            "translating centi size album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let centi_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::CENTI_ICON_WIDTH as u32,
+                            model::CENTI_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        centi_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Centi,
+                            buf.into_inner(),
+                        );
+                    }
+
+                    if !has_mini {
+                        println!(
+                            "translating mini size album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let mini_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::MINI_ICON_WIDTH as u32,
+                            model::MINI_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        mini_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Mini,
+                            buf.into_inner(),
+                        );
+                    }
+
+                    if !has_micro {
+                        println!(
+                            "translating micro size album art to cache dir for {:?}",
+                            local_path
+                        );
+                        let micro_album_art = image::imageops::resize(
+                            &orig_album_art,
+                            model::MICRO_ICON_WIDTH as u32,
+                            model::MICRO_ICON_HEIGHT as u32,
+                            image::imageops::FilterType::Lanczos3,
+                        );
+
+                        let mut buf = io::Cursor::new(Vec::new());
+                        micro_album_art
+                            .write_to(&mut buf, image::ImageFormat::Png)
+                            .unwrap();
+
+                        cached_album_art_checker.write_art_for_size(
+                            &key,
+                            model::AlbumSizeWithOrig::Micro,
+                            buf.into_inner(),
+                        );
+                    }
                 }
 
-                if !has_regular {
-                    println!(
-                        "translating regular size album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let regular_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::REGULAR_ICON_WIDTH as u32,
-                        model::REGULAR_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
+                let large_path = cached_album_art_checker
+                    .get_path_for_size(&key, model::AlbumSizeWithOrig::Large);
 
-                    let mut buf = io::Cursor::new(Vec::new());
-                    regular_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
+                let regular_bytes = cached_album_art_checker
+                    .get_art_for_size(&key, model::AlbumSizeWithOrig::Regular);
 
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Regular,
-                        buf.into_inner(),
-                    );
-                }
+                let small_bytes = cached_album_art_checker
+                    .get_art_for_size(&key, model::AlbumSizeWithOrig::Small);
 
-                if !has_small {
-                    println!(
-                        "translating small size album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let small_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::SMALL_ICON_WIDTH as u32,
-                        model::SMALL_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
+                let centi_bytes = cached_album_art_checker
+                    .get_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
 
-                    let mut buf = io::Cursor::new(Vec::new());
-                    small_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
+                let mini_bytes =
+                    cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
 
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Small,
-                        buf.into_inner(),
-                    );
-                }
+                let micro_bytes = cached_album_art_checker
+                    .get_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
 
-                if !has_centi {
-                    println!(
-                        "translating centi size album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let centi_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::CENTI_ICON_WIDTH as u32,
-                        model::CENTI_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
+                let ret = (
+                    key,
+                    large_path,
+                    regular_bytes,
+                    small_bytes,
+                    centi_bytes,
+                    mini_bytes,
+                    micro_bytes,
+                );
 
-                    let mut buf = io::Cursor::new(Vec::new());
-                    centi_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
+                tx.send(Some(ret))
+                    .expect("please let the album cache recv be listening");
+            });
+        }
+    }
 
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Centi,
-                        buf.into_inner(),
-                    );
-                }
+    drop(tx);
 
-                if !has_mini {
-                    println!(
-                        "translating mini size album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let mini_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::MINI_ICON_WIDTH as u32,
-                        model::MINI_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
-
-                    let mut buf = io::Cursor::new(Vec::new());
-                    mini_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
-
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Mini,
-                        buf.into_inner(),
-                    );
-                }
-
-                if !has_micro {
-                    println!(
-                        "translating micro size album art to cache dir for {:?}",
-                        local_path
-                    );
-                    let micro_album_art = image::imageops::resize(
-                        &orig_album_art,
-                        model::MICRO_ICON_WIDTH as u32,
-                        model::MICRO_ICON_HEIGHT as u32,
-                        image::imageops::FilterType::Lanczos3,
-                    );
-
-                    let mut buf = io::Cursor::new(Vec::new());
-                    micro_album_art
-                        .write_to(&mut buf, image::ImageFormat::Png)
-                        .unwrap();
-
-                    cached_album_art_checker.write_art_for_size(
-                        &key,
-                        model::AlbumSizeWithOrig::Micro,
-                        buf.into_inner(),
-                    );
-                }
+    for recved in rx {
+        match recved {
+            Some((
+                key,
+                large_path,
+                regular_bytes,
+                small_bytes,
+                centi_bytes,
+                mini_bytes,
+                micro_bytes,
+            )) => {
+                large.insert(key.clone(), large_path);
+                regular.insert(key.clone(), regular_bytes);
+                small.insert(key.clone(), small_bytes);
+                centi.insert(key.clone(), centi_bytes);
+                mini.insert(key.clone(), mini_bytes);
+                micro.insert(key.clone(), micro_bytes);
             }
-
-            let large_path =
-                cached_album_art_checker.get_path_for_size(&key, model::AlbumSizeWithOrig::Large);
-            large.insert(key.clone(), large_path);
-
-            let regular_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Regular);
-            regular.insert(key.clone(), regular_bytes);
-
-            let small_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Small);
-            small.insert(key.clone(), small_bytes);
-
-            let centi_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Centi);
-            centi.insert(key.clone(), centi_bytes);
-
-            let mini_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Mini);
-            mini.insert(key.clone(), mini_bytes);
-
-            let micro_bytes =
-                cached_album_art_checker.get_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
-            micro.insert(key.clone(), micro_bytes);
+            None => found_cache_entries += 1,
         }
     }
 
