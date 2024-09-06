@@ -38,10 +38,12 @@ trait CachedAlbumImageInfo {
     );
 }
 
+#[derive(Clone)]
 struct FilesystemAlbumArt {
     cache_album_dir: PathBuf,
 }
 
+#[derive(Clone)]
 struct FilesystemCachedAlbumArt {
     album_art: BTreeMap<musiqlibrary::AlbumUniqueIdentifier, FilesystemAlbumArt>,
 }
@@ -169,11 +171,13 @@ pub fn process_cache_and_get_album_art(
 
     let mut found_cache_entries = 0;
 
-    let cached_album_art_checker: Box<dyn CachedAlbumImageInfo> =
-        Box::new(FilesystemCachedAlbumArt::new(library, app_data_path));
+    let filesystem_album_art_checker = FilesystemCachedAlbumArt::new(library, app_data_path);
 
     for artist in library.artists.values() {
         for album in artist.albums.values() {
+            let cached_album_art_checker: Box<dyn CachedAlbumImageInfo> =
+                Box::new(filesystem_album_art_checker.clone());
+
             let key = musiqlibrary::AlbumUniqueIdentifier::new(
                 artist.artist_info.artist_id,
                 album.album_info.album_id,
