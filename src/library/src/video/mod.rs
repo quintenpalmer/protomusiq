@@ -58,17 +58,15 @@ impl MovieMetadata {
 /// Recursively find all movies with metadata
 pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetadata> {
     let all_paths = find_movie_paths(movie_path.as_ref().to_path_buf());
-    let all_movie_metadata: Vec<_> = all_paths
-        .iter()
-        .map(|x| find_movie_metadata(&movie_path.as_ref().to_path_buf(), x))
-        .filter_map(|x| {
-            match x {
-                Ok(_) => (),
-                Err(ref e) => eprintln!("error: {:?}", e),
-            };
-            x.ok()
-        })
-        .collect();
+
+    let mut all_movie_metadata = Vec::new();
+
+    for specific_movie_path in all_paths.into_iter() {
+        match find_movie_metadata(&movie_path.as_ref().to_path_buf(), &specific_movie_path) {
+            Ok(movie_metadata) => all_movie_metadata.push(movie_metadata),
+            Err(ref e) => eprintln!("error: {:?}", e),
+        }
+    }
 
     all_movie_metadata
 }
