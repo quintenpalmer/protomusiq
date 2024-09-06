@@ -197,6 +197,7 @@ pub fn process_cache_and_get_movie_art(
                 }
             }
 
+            // TODO wrap this in a struct so that it's not this opaque tuple
             let mut ret = (key, None, None, None, None, None);
 
             if localfs::check_exists(&cached_large_movie_art_path) {

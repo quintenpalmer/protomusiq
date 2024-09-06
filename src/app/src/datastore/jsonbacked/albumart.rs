@@ -426,6 +426,7 @@ pub fn process_cache_and_get_album_art(
                 let micro_bytes = cached_album_art_checker
                     .get_art_for_size(&key, model::AlbumSizeWithOrig::Micro);
 
+                // TODO wrap this in a struct so that it's not this opaque tuple
                 let ret = (
                     key,
                     large_path,
