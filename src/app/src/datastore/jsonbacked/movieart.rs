@@ -185,8 +185,8 @@ pub fn process_cache_and_get_movie_art(
         }
 
         if localfs::check_exists(&cached_semilarge_movie_art_path) {
-            let large_bytes = fs::read(cached_semilarge_movie_art_path).unwrap();
-            semilarge_movie_covers.insert(key.clone(), large_bytes);
+            let semilarge_bytes = fs::read(cached_semilarge_movie_art_path).unwrap();
+            semilarge_movie_covers.insert(key.clone(), semilarge_bytes);
         }
 
         if localfs::check_exists(&cached_regular_movie_art_path) {
