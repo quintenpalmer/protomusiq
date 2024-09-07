@@ -1,3 +1,4 @@
+use std::sync::mpsc;
 use std::{fs, io, path, str, time};
 
 use chrono::NaiveDate;
@@ -61,11 +62,34 @@ pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetad
 
     let mut all_movie_metadata = Vec::new();
 
+    let num_threads = std::thread::available_parallelism()
+        .map(|x| x.into())
+        .unwrap_or(1);
+
+    println!("creating thread pool with {} threads", num_threads);
+
+    let tpool = threadpool::ThreadPool::new(num_threads);
+    let (tx, rx) = mpsc::channel();
+
     for specific_movie_path in all_paths.into_iter() {
-        match find_movie_metadata(&movie_path.as_ref().to_path_buf(), &specific_movie_path) {
-            Ok(movie_metadata) => all_movie_metadata.push(movie_metadata),
-            Err(ref e) => eprintln!("error: {:?}", e),
-        }
+        let tx = tx.clone();
+
+        let movie_path = movie_path.as_ref().to_path_buf().clone();
+
+        tpool.execute(
+            move || match find_movie_metadata(&movie_path, &specific_movie_path) {
+                Ok(v) => tx
+                    .send(v)
+                    .expect("I hope the movie metadata rx is receiving"),
+                Err(ref e) => eprintln!("error: {:?}", e),
+            },
+        );
+    }
+
+    drop(tx);
+
+    for movie_metadata in rx {
+        all_movie_metadata.push(movie_metadata);
     }
 
     all_movie_metadata
