@@ -6,7 +6,7 @@ use crate::scanner;
 
 impl RawLibrary {
     pub fn new<P: AsRef<path::Path>>(scan_prefix: P) -> Result<Self, Error> {
-        let tracks = scanner::find_files(&scan_prefix, &scan_prefix).map_err(Error::IO)?;
+        let tracks = scanner::find_files(&scan_prefix).map_err(Error::IO)?;
 
         RawLibrary::from_track_list(Some(scan_prefix), tracks)
     }

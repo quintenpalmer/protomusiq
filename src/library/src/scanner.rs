@@ -89,7 +89,11 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
     Ok(path_info_list)
 }
 
-pub fn find_files<O: AsRef<Path>, P: AsRef<Path>>(
+pub fn find_files<O: AsRef<Path>>(orig_prefix: &O) -> io::Result<Vec<FullTrackMetadata>> {
+    find_files_helper(orig_prefix, orig_prefix)
+}
+
+pub fn find_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
     orig_prefix: &O,
     path: &P,
 ) -> io::Result<Vec<FullTrackMetadata>> {
@@ -97,7 +101,7 @@ pub fn find_files<O: AsRef<Path>, P: AsRef<Path>>(
     for path in fs::read_dir(path)? {
         let path = path?;
         if path.file_type()?.is_dir() {
-            metadata_map.append(&mut find_files(orig_prefix, &path.path())?);
+            metadata_map.append(&mut find_files_helper(orig_prefix, &path.path())?);
         }
         if path.file_type()?.is_file() {
             let maybe_parser: Option<Box<dyn parser::MetadataParser>> = match path

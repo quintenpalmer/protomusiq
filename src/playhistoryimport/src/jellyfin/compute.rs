@@ -32,7 +32,7 @@ pub fn compute_jellyfin_play_history_for_musiqapp() -> ResultingInformation {
     let library_path = "/home/quinten/storage/media/music/bestexisting";
     let lib_path = path::PathBuf::from(&library_path);
 
-    let tracks = musiqlibrary::find_files(&lib_path, &lib_path).unwrap();
+    let tracks = musiqlibrary::find_files(&lib_path).unwrap();
 
     let mut tracks_as_line_items: BTreeMap<String, (musiqlibrary::FullTrackMetadata, u32)> = tracks
         .iter()

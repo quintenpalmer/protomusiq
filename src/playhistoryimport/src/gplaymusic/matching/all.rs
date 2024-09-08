@@ -29,7 +29,7 @@ pub fn match_gplay_music_data_for_musiqapp() -> gmodel::BestEffortMatchedInforma
     let library_path = "/home/quinten/storage/media/music/bestexisting";
     let lib_path = path::PathBuf::from(&library_path);
 
-    let tracks = musiqlibrary::find_files(&lib_path, &lib_path).unwrap();
+    let tracks = musiqlibrary::find_files(&lib_path).unwrap();
 
     let mut tracks_as_line_items: BTreeMap<
         gmodel::GPlayMusicKey,

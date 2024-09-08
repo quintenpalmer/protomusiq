@@ -12,7 +12,7 @@ pub fn get_library() -> musiqlibrary::RawLibrary {
     let library_path = "/home/quinten/storage/media/music/bestexisting";
     let lib_path = path::PathBuf::from(&library_path);
 
-    let tracks = musiqlibrary::find_files(&lib_path, &lib_path).unwrap();
+    let tracks = musiqlibrary::find_files(&lib_path).unwrap();
 
     let raw_library =
         musiqlibrary::RawLibrary::from_track_list(Some(&library_path), tracks).unwrap();

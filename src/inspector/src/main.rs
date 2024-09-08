@@ -71,7 +71,7 @@ pub struct ConflictLister {}
 impl AppCmd for ConflictLister {
     fn operate(&self, path: PathBuf) {
         println!("finding conflicts by artist/album/disc/track...");
-        let tracks = library::find_files(&path, &path).unwrap();
+        let tracks = library::find_files(&path).unwrap();
         let (_library, conflicts) = library::organize_tracks(tracks);
         for conflict in conflicts.into_iter() {
             println!("\t{}", conflict.path.to_str().unwrap());
@@ -84,7 +84,7 @@ pub struct TrackLister {}
 
 impl AppCmd for TrackLister {
     fn operate(&self, path: PathBuf) {
-        let tracks = library::find_files(&path, &path).unwrap();
+        let tracks = library::find_files(&path).unwrap();
         println!("found these ({}) tracks...", tracks.len());
         for track in tracks.iter() {
             println!(
@@ -184,7 +184,7 @@ pub struct LengthChecker {}
 
 impl AppCmd for LengthChecker {
     fn operate(&self, path: PathBuf) {
-        let tracks = library::find_files(&path, &path).unwrap();
+        let tracks = library::find_files(&path).unwrap();
         for track in tracks.into_iter() {
             if track.duration == time::Duration::ZERO {
                 println!("track: {} has no duration", track.title);
@@ -197,7 +197,7 @@ pub struct DateDisplayer {}
 
 impl AppCmd for DateDisplayer {
     fn operate(&self, path: PathBuf) {
-        let tracks = library::find_files(&path, &path).unwrap();
+        let tracks = library::find_files(&path).unwrap();
         for track in tracks.into_iter() {
             println!(
                 "{} date for album {}'s track: {}",
