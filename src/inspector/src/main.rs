@@ -81,10 +81,6 @@ fn main() {
         ("tree", Command::Specific(Box::new(TreeViewer {}))),
         ("table-view", Command::Specific(Box::new(TableViewer {}))),
         ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
-        (
-            "yearendreport",
-            Command::Specific(Box::new(YearEndReporter {})),
-        ),
         ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
         ("json", Command::Specific(Box::new(JsonProducer {}))),
         ("dates", Command::Specific(Box::new(DateDisplayer {}))),
@@ -491,12 +487,6 @@ impl AppCmd for MovieTreeViewer {
             );
         }
     }
-}
-
-pub struct YearEndReporter {}
-
-impl AppCmd for YearEndReporter {
-    fn operate(&self, _path: PathBuf) {}
 }
 
 pub struct FlacTagCollector {}
