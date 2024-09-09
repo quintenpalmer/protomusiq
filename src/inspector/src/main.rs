@@ -81,21 +81,30 @@ fn main() {
                         "list-files",
                         Command::Specific(Box::new(MusicFileLister {})),
                     ),
-                    ("tracks", Command::Specific(Box::new(TrackLister {}))),
                     ("tree", Command::Specific(Box::new(TreeViewer {}))),
                     ("table-view", Command::Specific(Box::new(TableViewer {}))),
                     ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
-                    ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
-                    ("json", Command::Specific(Box::new(JsonProducer {}))),
-                    ("dates", Command::Specific(Box::new(DateDisplayer {}))),
-                    ("length", Command::Specific(Box::new(LengthCalcer {}))),
                     (
-                        "length-check",
-                        Command::Specific(Box::new(LengthChecker {})),
-                    ),
-                    (
-                        "flac-tags",
-                        Command::Specific(Box::new(FlacTagCollector {})),
+                        "misc",
+                        Command::new_parent(
+                            vec![
+                                ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
+                                ("tracks", Command::Specific(Box::new(TrackLister {}))),
+                                ("json", Command::Specific(Box::new(JsonProducer {}))),
+                                ("dates", Command::Specific(Box::new(DateDisplayer {}))),
+                                ("length", Command::Specific(Box::new(LengthCalcer {}))),
+                                (
+                                    "length-check",
+                                    Command::Specific(Box::new(LengthChecker {})),
+                                ),
+                                (
+                                    "flac-tags",
+                                    Command::Specific(Box::new(FlacTagCollector {})),
+                                ),
+                            ]
+                            .into_iter()
+                            .collect(),
+                        ),
                     ),
                 ]
                 .into_iter()
