@@ -72,7 +72,7 @@ impl Command {
 }
 
 fn main() {
-    let available_commands: BTreeMap<&'static str, Command> = vec![
+    let music_commands = vec![
         ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
         ("tracks", Command::Specific(Box::new(TrackLister {}))),
         ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
@@ -86,10 +86,6 @@ fn main() {
         ("tree", Command::Specific(Box::new(TreeViewer {}))),
         ("table-view", Command::Specific(Box::new(TableViewer {}))),
         (
-            "movie-tree",
-            Command::Specific(Box::new(MovieTreeViewer {})),
-        ),
-        (
             "yearendreport",
             Command::Specific(Box::new(YearEndReporter {})),
         ),
@@ -101,6 +97,20 @@ fn main() {
             "list-music-files",
             Command::Specific(Box::new(MusicFileLister {})),
         ),
+    ]
+    .into_iter()
+    .collect();
+
+    let movie_commands = vec![(
+        "movie-tree",
+        Command::Specific(Box::new(MovieTreeViewer {})),
+    )]
+    .into_iter()
+    .collect();
+
+    let available_commands: BTreeMap<&'static str, Command> = vec![
+        ("music", Command::new_parent(music_commands)),
+        ("movies", Command::new_parent(movie_commands)),
     ]
     .into_iter()
     .collect();
