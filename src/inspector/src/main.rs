@@ -94,19 +94,16 @@ fn main() {
             Command::Specific(Box::new(FlacTagCollector {})),
         ),
         (
-            "list-music-files",
+            "list-files",
             Command::Specific(Box::new(MusicFileLister {})),
         ),
     ]
     .into_iter()
     .collect();
 
-    let movie_commands = vec![(
-        "movie-tree",
-        Command::Specific(Box::new(MovieTreeViewer {})),
-    )]
-    .into_iter()
-    .collect();
+    let movie_commands = vec![("tree", Command::Specific(Box::new(MovieTreeViewer {})))]
+        .into_iter()
+        .collect();
 
     let available_commands: BTreeMap<&'static str, Command> = vec![
         ("music", Command::new_parent(music_commands)),
