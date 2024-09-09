@@ -130,13 +130,13 @@ pub struct ConflictLister {}
 
 impl AppCmd for ConflictLister {
     fn operate(&self, path: PathBuf) {
-        println!("finding conflicts by artist/album/disc/track...");
+        eprintln!("finding conflicts by artist/album/disc/track...");
         let tracks = library::find_files(&path).unwrap();
         let (_library, conflicts) = library::organize_tracks(tracks);
         for conflict in conflicts.into_iter() {
             println!("\t{}", conflict.path.to_str().unwrap());
         }
-        println!("...done reporting said conflicts");
+        eprintln!("...done reporting said conflicts");
     }
 }
 
@@ -145,14 +145,14 @@ pub struct TrackLister {}
 impl AppCmd for TrackLister {
     fn operate(&self, path: PathBuf) {
         let tracks = library::find_files(&path).unwrap();
-        println!("found these ({}) tracks...", tracks.len());
+        eprintln!("found these ({}) tracks...", tracks.len());
         for track in tracks.iter() {
             println!(
                 "\t{}\t-\t{}\t({:?})\t-\t{}",
                 track.title, track.track, track.raw_track, track.disc
             );
         }
-        println!("...done listing tracks");
+        eprintln!("...done listing tracks");
     }
 }
 
@@ -160,7 +160,7 @@ pub struct AlbumCoverChecker {}
 
 impl AppCmd for AlbumCoverChecker {
     fn operate(&self, path: PathBuf) {
-        println!("finding albums without cover art...");
+        eprintln!("finding albums without cover art...");
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
         for artist in library.artists.values() {
             for album in artist.albums.values() {
@@ -170,7 +170,7 @@ impl AppCmd for AlbumCoverChecker {
                 }
             }
         }
-        println!("...done reporting said albums");
+        eprintln!("...done reporting said albums");
     }
 }
 
@@ -194,7 +194,7 @@ impl AppCmd for LengthCalcer {
             Some(inner_opt) => match inner_opt {
                 Some(ext) => match ext.as_str() {
                     "flac" => {
-                        println!("FLAC:");
+                        eprintln!("FLAC:");
                         let reader = library::claxon::FlacReader::open(path).unwrap();
                         let stream_info = reader.streaminfo();
 
@@ -207,35 +207,35 @@ impl AppCmd for LengthCalcer {
                         Some(total_duration)
                     }
                     "mp3" => {
-                        println!("MP3:");
+                        eprintln!("MP3:");
                         let total_duration = library::mp3_duration::from_path(path).unwrap();
                         Some(total_duration)
                     }
                     "m4a" => {
-                        println!("M4A/MP4A:");
+                        eprintln!("M4A/MP4A:");
                         let tag = library::mp4ameta::Tag::read_from_path(path.clone()).unwrap();
 
                         let total_duration = tag.duration().unwrap_or(time::Duration::ZERO);
                         Some(total_duration)
                     }
                     _ => {
-                        println!("could not resolve file extension");
+                        eprintln!("could not resolve file extension");
                         None
                     }
                 },
                 None => {
-                    println!("could not resolve file extension");
+                    eprintln!("could not resolve file extension");
                     None
                 }
             },
             None => {
-                println!("could not resolve file extension even higher");
+                eprintln!("could not resolve file extension even higher");
                 None
             }
         };
         match maybe_duration {
             Some(duration) => println!("duration: {:?}", duration),
-            None => println!("could not parse duration"),
+            None => eprintln!("could not parse duration"),
         };
     }
 }
@@ -272,7 +272,7 @@ pub struct TreeViewer {}
 impl AppCmd for TreeViewer {
     fn operate(&self, path: PathBuf) {
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
-        println!("Library:");
+        eprintln!("Library:");
         let artist_count = library.artists.keys().len() - 1;
         for (current_artist_index, artist) in library.artists.values().enumerate() {
             println!(
@@ -376,7 +376,7 @@ impl AppCmd for TableViewer {
         let bar_width = 64;
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
 
-        println!("Library Table:");
+        eprintln!("Library Table:");
         for artist in library.artists.values() {
             for album in artist.albums.values() {
                 println!("┌{}", "─".repeat(bar_width));
@@ -449,7 +449,7 @@ impl AppCmd for MovieTreeViewer {
     fn operate(&self, path: PathBuf) {
         let mut movies = video::find_movies_in_dir(path.clone());
         movies.sort_by(|a, b| a.title.cmp(&b.title));
-        println!("Movie Library:");
+        eprintln!("Movie Library:");
         let movie_count = movies.len() - 1;
         for (current_movie_index, movie) in movies.iter().enumerate() {
             println!(
@@ -495,7 +495,7 @@ impl AppCmd for FlacTagCollector {
     fn operate(&self, path: PathBuf) {
         let mut tags = BTreeMap::new();
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
-        println!("Library:");
+        eprintln!("Library:");
         for artist in library.artists.values() {
             for album in artist.albums.values() {
                 for disc in album.discs.values() {
@@ -526,9 +526,9 @@ pub struct MusicFileLister {}
 
 impl AppCmd for MusicFileLister {
     fn operate(&self, path: PathBuf) {
-        println!("let's find the files");
+        eprintln!("let's find the files");
         let files = library::find_only_files(&path).unwrap();
-        println!("we found them, they are:");
+        eprintln!("we found them, they are:");
         for f in files.into_iter() {
             println!("{}", f.relative_path.to_string_lossy());
         }
