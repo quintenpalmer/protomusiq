@@ -34,6 +34,7 @@ fn main() {
             ("movie-tree", Box::new(MovieTreeViewer {})),
             ("yearendreport", Box::new(YearEndReporter {})),
             ("flac-tags", Box::new(FlacTagCollector {})),
+            ("list-music-files", Box::new(MusicFileLister {})),
         ];
         inner
     }
@@ -459,6 +460,19 @@ impl AppCmd for FlacTagCollector {
             println!("{} ({})", key, value);
         }
         println!("-----------------");
+    }
+}
+
+pub struct MusicFileLister {}
+
+impl AppCmd for MusicFileLister {
+    fn operate(&self, path: PathBuf) {
+        println!("let's find the files");
+        let files = library::find_only_files(&path).unwrap();
+        println!("we found them, they are:");
+        for f in files.into_iter() {
+            println!("{}", f.relative_path.to_string_lossy());
+        }
     }
 }
 
