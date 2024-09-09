@@ -90,78 +90,69 @@ fn find_only_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
 }
 
 pub fn find_files<O: AsRef<Path>>(orig_prefix: &O) -> io::Result<Vec<FullTrackMetadata>> {
-    find_files_helper(orig_prefix, orig_prefix)
-}
+    let files = find_only_files(orig_prefix)?;
 
-pub fn find_files_helper<O: AsRef<Path>, P: AsRef<Path>>(
-    orig_prefix: &O,
-    path: &P,
-) -> io::Result<Vec<FullTrackMetadata>> {
     let mut metadata_map = Vec::new();
-    for path in fs::read_dir(path)? {
-        let path = path?;
-        if path.file_type()?.is_dir() {
-            metadata_map.append(&mut find_files_helper(orig_prefix, &path.path())?);
-        }
-        if path.file_type()?.is_file() {
-            let maybe_parser: Option<Box<dyn parser::MetadataParser>> = match path
-                .path()
-                .extension()
-                .map(|a| a.to_str().map(|x| x.to_lowercase()))
-            {
-                Some(inner_opt) => {
-                    match inner_opt {
-                        Some(ext) => match ext.as_str() {
-                            "flac" => Some(Box::new(
-                                parser::FlacMetadataParser::new(path.path()).unwrap(),
-                            )),
-                            "mp3" => Some(Box::new(
-                                parser::ID3MetadataParser::new(path.path()).unwrap(),
-                            )),
-                            "m4a" => Some(Box::new(
-                                parser::MP4AMetadataParser::new(path.path()).unwrap(),
-                            )),
-                            // these files are common to see, so we don't log if we see them
-                            // consider extracting this out to an 'silent-ignore-suffix' list
-                            "png" => None,
-                            "txt" => None,
-                            "rtf" => None,
-                            "jpg" => None,
-                            "gif" => None,
-                            "pdf" => None,
-                            "webp" => None,
-                            unexpected_ext => {
-                                eprintln!(
-                                    "no music metadata parsed for extension {}\t(path: {})",
-                                    unexpected_ext,
-                                    path.path().display()
-                                );
-                                None
-                            }
-                        },
-                        None => {
-                            eprintln!("could not resolve file extension, let me know if you ever see this");
+
+    for path in files.into_iter() {
+        let maybe_parser: Option<Box<dyn parser::MetadataParser>> = match path
+            .path
+            .extension()
+            .map(|a| a.to_str().map(|x| x.to_lowercase()))
+        {
+            Some(inner_opt) => {
+                match inner_opt {
+                    Some(ext) => match ext.as_str() {
+                        "flac" => Some(Box::new(
+                            parser::FlacMetadataParser::new(path.path).unwrap(),
+                        )),
+                        "mp3" => Some(Box::new(parser::ID3MetadataParser::new(path.path).unwrap())),
+                        "m4a" => Some(Box::new(
+                            parser::MP4AMetadataParser::new(path.path).unwrap(),
+                        )),
+                        // these files are common to see, so we don't log if we see them
+                        // consider extracting this out to an 'silent-ignore-suffix' list
+                        "png" => None,
+                        "txt" => None,
+                        "rtf" => None,
+                        "jpg" => None,
+                        "gif" => None,
+                        "pdf" => None,
+                        "webp" => None,
+                        unexpected_ext => {
+                            eprintln!(
+                                "no music metadata parsed for extension {}\t(path: {})",
+                                unexpected_ext,
+                                path.path.display()
+                            );
                             None
                         }
+                    },
+                    None => {
+                        eprintln!(
+                            "could not resolve file extension, let me know if you ever see this"
+                        );
+                        None
                     }
                 }
-                None => {
-                    eprintln!(
-                        "no music metadata parsed file with no extension\t(path: {})",
-                        path.path().display()
-                    );
-                    None
-                }
-            };
+            }
+            None => {
+                eprintln!(
+                    "no music metadata parsed file with no extension\t(path: {})",
+                    path.path.display()
+                );
+                None
+            }
+        };
 
-            match maybe_parser {
-                Some(parser) => {
-                    let track_info = parser::resolve_metadata_from_parser(orig_prefix, parser);
-                    metadata_map.push(track_info);
-                }
-                None => (),
-            };
-        }
+        match maybe_parser {
+            Some(parser) => {
+                let track_info = parser::resolve_metadata_from_parser(orig_prefix, parser);
+                metadata_map.push(track_info);
+            }
+            None => (),
+        };
     }
+
     Ok(metadata_map)
 }
