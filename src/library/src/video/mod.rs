@@ -66,7 +66,7 @@ pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetad
         .map(|x| x.into())
         .unwrap_or(1);
 
-    println!("creating thread pool with {} threads", num_threads);
+    eprintln!("creating thread pool with {} threads", num_threads);
 
     let tpool = threadpool::ThreadPool::new(num_threads);
     let (tx, rx) = mpsc::channel();
