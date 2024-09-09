@@ -10,12 +10,12 @@ use musiqlibrary::video;
 use musiqlibrary::claxon;
 
 fn help_text(cmds: &Vec<String>, extra: String) {
-    println!("Must supply <cmd> <library-path>");
-    println!("available commands are:");
+    eprintln!("Must supply <cmd> <library-path>");
+    eprintln!("available commands are:");
     for cmd in cmds.into_iter() {
-        println!("  {}", cmd);
+        eprintln!("  {}", cmd);
     }
-    println!("{}", extra);
+    eprintln!("{}", extra);
     panic!("exiting with non-zero status");
 }
 
@@ -36,7 +36,7 @@ impl Command {
     }
 
     pub fn operate_on_args(&self, mut args: Vec<String>) {
-        println!("operating on: {:?}", args);
+        eprintln!("operating on: {:?}", args);
         if args.len() < 1 {
             panic!("no arguments provided, and I don't actually know how to provide a useful help text");
         }
@@ -57,7 +57,7 @@ impl Command {
 
                 let parsed_cmd = args.remove(0);
 
-                println!("parsed cmd: {}", parsed_cmd);
+                eprintln!("parsed cmd: {}", parsed_cmd);
 
                 match parent.sub_commands.get(parsed_cmd.to_string().as_str()) {
                     Some(f) => f.operate_on_args(args),
@@ -117,7 +117,7 @@ fn main() {
     let mut args: Vec<String> = env::args().collect();
     args.remove(0);
 
-    println!("args: {:?}", args);
+    eprintln!("args: {:?}", args);
 
     command.operate_on_args(args)
 }
