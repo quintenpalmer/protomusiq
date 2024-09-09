@@ -4,7 +4,10 @@ use musiqlibrary as library;
 
 use super::commands::AppCmd;
 
+mod difflibs;
 pub mod misc;
+
+pub use difflibs::LibDiffer;
 
 pub struct ConflictLister {}
 

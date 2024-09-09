@@ -91,6 +91,10 @@ fn main() {
                         Command::Specific(Box::new(music::ConflictLister {})),
                     ),
                     (
+                        "diff-libs",
+                        Command::Specific(Box::new(music::LibDiffer {})),
+                    ),
+                    (
                         "misc",
                         Command::new_parent(
                             vec![
