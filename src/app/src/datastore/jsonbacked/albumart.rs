@@ -10,7 +10,7 @@ use image::io::Reader as ImageReader;
 
 use crate::model;
 
-use super::super::localfs;
+use musiqcore::datastore::localfs;
 
 trait CachedAlbumImageInfo {
     fn has_art_for_size(

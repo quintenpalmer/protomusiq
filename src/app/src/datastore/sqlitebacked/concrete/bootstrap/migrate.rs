@@ -1,7 +1,7 @@
 use std::cmp;
 use std::fs;
 
-use crate::datastore::localfs;
+use musiqcore::datastore::localfs;
 
 pub fn create_all_tables(
     config_state: musiqcore::model::app::AppConfigState,

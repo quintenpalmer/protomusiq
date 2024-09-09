@@ -5,9 +5,10 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
+use musiqcore::datastore::localfs;
+
 use crate::model;
 
-use super::super::localfs;
 use super::common;
 
 const EMPTY_PLAYLIST_VEC: Vec<model::playlist::PlaylistEntry> = Vec::new();

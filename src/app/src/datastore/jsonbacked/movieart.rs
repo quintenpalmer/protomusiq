@@ -9,7 +9,7 @@ use image::GenericImageView;
 
 use crate::model;
 
-use super::super::localfs;
+use musiqcore::datastore::localfs;
 
 pub fn process_cache_and_get_movie_art(
     library: &model::VideoLibrary,

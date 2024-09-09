@@ -3,7 +3,7 @@ use std::io;
 use std::io::{Read, Write};
 use std::path;
 
-use super::localfs;
+use musiqcore::datastore::localfs;
 
 pub struct MusicBrainzCacheInterface {
     cache_dir: path::PathBuf,

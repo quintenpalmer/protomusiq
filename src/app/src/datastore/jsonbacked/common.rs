@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
-use super::super::localfs;
+use musiqcore::datastore::localfs;
 
 pub fn _create_new_raw_data<T: Serialize, S: Into<String>>(
     app_data_path: &PathBuf,
