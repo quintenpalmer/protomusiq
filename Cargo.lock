@@ -2711,6 +2711,7 @@ dependencies = [
 name = "musiqcore"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "musiqlibrary",
  "serde",
  "serde_json",
