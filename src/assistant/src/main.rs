@@ -9,8 +9,9 @@ fn main() {
         return;
     }
 
-    let image_mode =
-        musiqcore::model::gl::ImageMode::BestMatch(path::PathBuf::from(args[1].clone()));
+    let path = path::PathBuf::from(args[1].clone());
+
+    let image_mode = musiqcore::model::gl::ImageMode::BestMatch(path);
 
     let config_state = musiqcore::model::app::AppConfigState::get_default();
 
