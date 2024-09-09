@@ -1,18 +1,21 @@
 use std::collections::BTreeMap;
-use std::path::PathBuf;
+use std::path::Path;
 
-use super::super::commands::AppCmd;
+use super::super::commands::FlexibleCmd;
 
 pub struct LibDiffer {}
 
-impl AppCmd for LibDiffer {
-    fn operate(&self, _path: PathBuf) {
-        eprintln!("let's compute some diffs");
-        let config_state = musiqcore::model::app::AppConfigState::get_default();
+impl FlexibleCmd for LibDiffer {
+    fn flex_operate(&self, args: Vec<String>) {
+        if args.len() != 2 {
+            panic!("diff lib needs <uncompressed-lib> <compressed-lib>");
+        }
 
-        eprintln!("getting (un)compressed library paths");
-        let uncompressed_library_path = config_state.library_path.clone();
-        let compressed_library_path = config_state.compressed_library_path.unwrap().clone();
+        let uncompressed_library_path = Path::new(args[0].as_str()).to_path_buf();
+        let compressed_library_path = Path::new(args[1].as_str()).to_path_buf();
+
+        println!("uncompressed library: {:?}", uncompressed_library_path);
+        println!("  compressed library: {:?}", compressed_library_path);
 
         eprintln!("getting (un)compressed libraries");
         let uncompressed_library =

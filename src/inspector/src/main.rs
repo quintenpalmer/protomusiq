@@ -7,7 +7,7 @@ mod games;
 mod movies;
 mod music;
 
-pub use commands::AppCmd;
+pub use commands::{AppCmd, FlexibleCmd};
 
 fn help_text(cmds: &Vec<String>, extra: String) {
     eprintln!("Must supply <cmd> <library-path>");
@@ -26,6 +26,7 @@ pub struct ParentCommand {
 pub enum Command {
     Parent(ParentCommand),
     Specific(Box<dyn AppCmd>),
+    Flexible(Box<dyn FlexibleCmd>),
 }
 
 impl Command {
@@ -48,6 +49,7 @@ impl Command {
                 let lib_path = args[0].clone();
                 inner.operate(Path::new(lib_path.as_str()).to_path_buf())
             }
+            Command::Flexible(inner) => inner.flex_operate(args),
             Command::Parent(parent) => {
                 let printable_cmds = parent.sub_commands.keys().map(|x| x.to_string()).collect();
 
@@ -92,7 +94,7 @@ fn main() {
                     ),
                     (
                         "diff-libs",
-                        Command::Specific(Box::new(music::LibDiffer {})),
+                        Command::Flexible(Box::new(music::LibDiffer {})),
                     ),
                     (
                         "misc",
