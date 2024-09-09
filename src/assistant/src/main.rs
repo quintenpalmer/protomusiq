@@ -1,5 +1,5 @@
 use std::env;
-use std::path;
+use std::path::PathBuf;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -9,7 +9,7 @@ fn main() {
         return;
     }
 
-    let path = path::PathBuf::from(args[1].clone());
+    let path = PathBuf::from(args[1].clone());
 
     let image_mode = musiqcore::model::gl::ImageMode::BestMatch(path);
 
@@ -27,7 +27,7 @@ fn main() {
     for console in consoles.iter() {
         let dest_prefix = config_state.games.clone().unwrap().image_path;
 
-        let dest_console_piece = path::PathBuf::from(console.full_name());
+        let dest_console_piece = PathBuf::from(console.full_name());
 
         let dest_image_path = dest_prefix.join(dest_console_piece);
 
@@ -44,7 +44,7 @@ fn main() {
 
                     let dest_prefix = config_state.games.clone().unwrap().image_path;
 
-                    let dest_console_piece = path::PathBuf::from(console.full_name());
+                    let dest_console_piece = PathBuf::from(console.full_name());
 
                     let dest_base_name = game
                         .get_rom_path()
