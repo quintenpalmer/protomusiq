@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use chrono::TimeZone;
 
-use crate::datastore::{jsonbacked, loader};
+use crate::datastore::jsonbacked;
 use crate::model;
 
 #[derive(Debug)]
@@ -11,10 +11,8 @@ pub enum Error {}
 pub fn generate_year_end_report() -> Result<(), Error> {
     let config_state = musiqcore::model::app::AppConfigState::get_default();
 
-    let organized = jsonbacked::tracklibrary::load_library_from_cache_and_scan(
-        &config_state,
-        &loader::Loader::NoCache,
-    );
+    let lib_path = config_state.library_path.clone();
+    let organized = musiqlibrary::RawLibrary::new(lib_path.clone()).unwrap();
 
     let read_only_tracker = jsonbacked::tracker::ReadOnlyTracker::new(
         &config_state.app_data_path.to_path_buf(),
