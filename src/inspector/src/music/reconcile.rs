@@ -4,7 +4,7 @@ use std::io;
 
 use serde::de::DeserializeOwned;
 
-use musiqcore::model::jsonbacked::tracker;
+use musiqcore::datastore::jsonbacked::tracker;
 
 use super::super::commands::FlexibleCmd;
 

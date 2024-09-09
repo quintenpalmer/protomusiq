@@ -9,7 +9,7 @@ use chrono::{DateTime, Local};
 use crate::datastore;
 use crate::datastore::localfs;
 
-use musiqcore::model::jsonbacked::tracker::RawTrackedPayload;
+use musiqcore::datastore::jsonbacked::tracker::RawTrackedPayload;
 
 use super::super::common;
 

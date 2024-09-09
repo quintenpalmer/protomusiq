@@ -1,3 +1,4 @@
+pub mod datastore;
 pub mod model;
 
 pub fn entry() {
