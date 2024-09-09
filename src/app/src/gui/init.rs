@@ -2,9 +2,10 @@ use std::cell::RefCell;
 
 use super::update;
 
+use musiqcore::datastore;
+
 use crate::backend;
 use crate::datastore::{
-    self,
     jsonbacked::{self, playlists as userplaylists},
     sqlitebacked,
 };

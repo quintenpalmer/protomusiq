@@ -3,7 +3,8 @@ use std::thread;
 
 use chrono::{DateTime, Local};
 
-use crate::datastore;
+use musiqcore::datastore;
+
 use crate::datastore::jsonbacked::tracker;
 use crate::datastore::loader;
 use crate::datastore::sqlitebacked;

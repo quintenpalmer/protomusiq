@@ -1,7 +1,7 @@
 use super::prehistory;
 use super::tracker;
 
-use super::super::super::datastore;
+use musiqcore::datastore;
 
 impl datastore::traits::HistoricalTrackCountReporter for prehistory::Reporter {
     fn get_historical_track_count(&self, id: &musiqlibrary::TrackUniqueIdentifier) -> usize {

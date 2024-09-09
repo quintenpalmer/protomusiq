@@ -1,4 +1,4 @@
-use crate::datastore;
+use musiqcore::datastore;
 
 pub type AugmentedLibrary = musiqlibrary::Library<AugmentedTrack>;
 

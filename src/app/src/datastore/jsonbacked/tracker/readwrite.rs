@@ -11,7 +11,7 @@ use musiqcore::datastore::localfs;
 use musiqcore::datastore::jsonbacked::common;
 use musiqcore::datastore::jsonbacked::tracker::RawTrackedPayload;
 
-use crate::datastore;
+use musiqcore::datastore;
 
 pub struct JSONTracker {
     pub tracker_db_json_path: PathBuf,
