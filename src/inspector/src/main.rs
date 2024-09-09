@@ -178,6 +178,10 @@ pub struct JsonProducer {}
 
 impl AppCmd for JsonProducer {
     fn operate(&self, path: PathBuf) {
+        eprintln!(
+            "we're going to try to provide the JSON output for the provided path: {:?}",
+            path
+        );
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
         println!("{}", serde_json::to_string_pretty(&library).unwrap());
     }
@@ -187,6 +191,10 @@ pub struct LengthCalcer {}
 
 impl AppCmd for LengthCalcer {
     fn operate(&self, path: PathBuf) {
+        eprintln!(
+            "let's calculation the length for this specific track: {:?}",
+            path
+        );
         let maybe_duration = match path
             .extension()
             .map(|a| a.to_str().map(|x| x.to_lowercase()))
@@ -244,6 +252,7 @@ pub struct LengthChecker {}
 
 impl AppCmd for LengthChecker {
     fn operate(&self, path: PathBuf) {
+        eprintln!("let's see if the duration for the provided track is zero (will be no output if it's non-zero)");
         let tracks = library::find_files(&path).unwrap();
         for track in tracks.into_iter() {
             if track.duration == time::Duration::ZERO {
@@ -257,6 +266,7 @@ pub struct DateDisplayer {}
 
 impl AppCmd for DateDisplayer {
     fn operate(&self, path: PathBuf) {
+        eprintln!("let's see the date for all of the tracks under: {:?}", path);
         let tracks = library::find_files(&path).unwrap();
         for track in tracks.into_iter() {
             println!(
@@ -495,7 +505,10 @@ impl AppCmd for FlacTagCollector {
     fn operate(&self, path: PathBuf) {
         let mut tags = BTreeMap::new();
         let library = library::model::RawLibrary::new(path.clone()).unwrap();
-        eprintln!("Library:");
+        eprintln!(
+            "Let's see the flac tags for every file in the directory: {:?}",
+            path
+        );
         for artist in library.artists.values() {
             for album in artist.albums.values() {
                 for disc in album.discs.values() {
