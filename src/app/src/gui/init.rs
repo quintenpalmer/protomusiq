@@ -61,11 +61,12 @@ pub fn initialize_everything() -> state::App {
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
         loader::Loader::NoCache | loader::Loader::Json => {
-            let json_track_reporter = jsonbacked::tracker::ReadOnlyTracker::new(
-                &config_state.app_data_path.to_path_buf(),
-                config_state.hostname.clone(),
-                &config_state.allowed_tracker_files,
-            );
+            let json_track_reporter =
+                musiqcore::datastore::jsonbacked::tracker::ReadOnlyTracker::new(
+                    &config_state.app_data_path.to_path_buf(),
+                    config_state.hostname.clone(),
+                    &config_state.allowed_tracker_files,
+                );
             logger.print_elapsed("read only tracker");
 
             Box::new(json_track_reporter)
@@ -77,10 +78,11 @@ pub fn initialize_everything() -> state::App {
             // `config_state.allowed_prehistory_files` in sqlite implementation
             match conn.needs_livehistory_seeded() {
                 true => {
-                    let livehistory_records = jsonbacked::tracker::list_all_tracker_records(
-                        &config_state.app_data_path.clone(),
-                        &config_state.allowed_tracker_files,
-                    );
+                    let livehistory_records =
+                        musiqcore::datastore::jsonbacked::tracker::list_all_tracker_records(
+                            &config_state.app_data_path.clone(),
+                            &config_state.allowed_tracker_files,
+                        );
 
                     conn.bootstrap_livehistory(&livehistory_records);
                 }

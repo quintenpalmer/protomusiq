@@ -6,12 +6,10 @@ use std::sync::mpsc;
 
 use chrono::{DateTime, Local};
 
-use musiqcore::datastore::localfs;
-
-use musiqcore::datastore::jsonbacked::common;
-use musiqcore::datastore::jsonbacked::tracker::RawTrackedPayload;
-
-use musiqcore::datastore;
+use crate::datastore;
+use crate::datastore::jsonbacked::common;
+use crate::datastore::jsonbacked::tracker::RawTrackedPayload;
+use crate::datastore::localfs;
 
 pub struct JSONTracker {
     pub tracker_db_json_path: PathBuf,

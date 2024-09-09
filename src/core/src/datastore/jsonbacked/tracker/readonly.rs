@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use chrono::{DateTime, Local};
 
-use musiqcore::datastore::traits::LiveHistoryReadDS;
+use crate::datastore::traits::LiveHistoryReadDS;
 
 use super::JSONTracker;
 

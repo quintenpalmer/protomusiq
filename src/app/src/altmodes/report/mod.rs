@@ -2,7 +2,8 @@ use std::collections::BTreeMap;
 
 use chrono::TimeZone;
 
-use crate::datastore::jsonbacked;
+use musiqcore::datastore::jsonbacked;
+
 use crate::model;
 
 #[derive(Debug)]
