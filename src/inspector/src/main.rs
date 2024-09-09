@@ -73,25 +73,39 @@ impl Command {
 
 fn main() {
     let available_commands: BTreeMap<&'static str, Command> = {
-        let inner: Vec<(&'static str, Box<dyn AppCmd>)> = vec![
-            ("conflicts", Box::new(ConflictLister {})),
-            ("tracks", Box::new(TrackLister {})),
-            ("covers", Box::new(AlbumCoverChecker {})),
-            ("json", Box::new(JsonProducer {})),
-            ("dates", Box::new(DateDisplayer {})),
-            ("length", Box::new(LengthCalcer {})),
-            ("length-check", Box::new(LengthChecker {})),
-            ("tree", Box::new(TreeViewer {})),
-            ("table-view", Box::new(TableViewer {})),
-            ("movie-tree", Box::new(MovieTreeViewer {})),
-            ("yearendreport", Box::new(YearEndReporter {})),
-            ("flac-tags", Box::new(FlacTagCollector {})),
-            ("list-music-files", Box::new(MusicFileLister {})),
+        let inner: Vec<(&'static str, Command)> = vec![
+            ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
+            ("tracks", Command::Specific(Box::new(TrackLister {}))),
+            ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
+            ("json", Command::Specific(Box::new(JsonProducer {}))),
+            ("dates", Command::Specific(Box::new(DateDisplayer {}))),
+            ("length", Command::Specific(Box::new(LengthCalcer {}))),
+            (
+                "length-check",
+                Command::Specific(Box::new(LengthChecker {})),
+            ),
+            ("tree", Command::Specific(Box::new(TreeViewer {}))),
+            ("table-view", Command::Specific(Box::new(TableViewer {}))),
+            (
+                "movie-tree",
+                Command::Specific(Box::new(MovieTreeViewer {})),
+            ),
+            (
+                "yearendreport",
+                Command::Specific(Box::new(YearEndReporter {})),
+            ),
+            (
+                "flac-tags",
+                Command::Specific(Box::new(FlacTagCollector {})),
+            ),
+            (
+                "list-music-files",
+                Command::Specific(Box::new(MusicFileLister {})),
+            ),
         ];
         inner
     }
     .into_iter()
-    .map(|(x, y)| (x, Command::Specific(y)))
     .collect();
 
     let command = Command::new_parent(available_commands);
