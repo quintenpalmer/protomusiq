@@ -73,8 +73,18 @@ impl Command {
 
 fn main() {
     let music_commands = vec![
-        ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
+        (
+            "list-files",
+            Command::Specific(Box::new(MusicFileLister {})),
+        ),
         ("tracks", Command::Specific(Box::new(TrackLister {}))),
+        ("tree", Command::Specific(Box::new(TreeViewer {}))),
+        ("table-view", Command::Specific(Box::new(TableViewer {}))),
+        ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
+        (
+            "yearendreport",
+            Command::Specific(Box::new(YearEndReporter {})),
+        ),
         ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
         ("json", Command::Specific(Box::new(JsonProducer {}))),
         ("dates", Command::Specific(Box::new(DateDisplayer {}))),
@@ -83,19 +93,9 @@ fn main() {
             "length-check",
             Command::Specific(Box::new(LengthChecker {})),
         ),
-        ("tree", Command::Specific(Box::new(TreeViewer {}))),
-        ("table-view", Command::Specific(Box::new(TableViewer {}))),
-        (
-            "yearendreport",
-            Command::Specific(Box::new(YearEndReporter {})),
-        ),
         (
             "flac-tags",
             Command::Specific(Box::new(FlacTagCollector {})),
-        ),
-        (
-            "list-files",
-            Command::Specific(Box::new(MusicFileLister {})),
         ),
     ]
     .into_iter()
