@@ -6,8 +6,10 @@ use super::commands::AppCmd;
 
 mod difflibs;
 pub mod misc;
+mod reconcile;
 
 pub use difflibs::LibDiffer;
+pub use reconcile::TrackerReconciler;
 
 pub struct ConflictLister {}
 

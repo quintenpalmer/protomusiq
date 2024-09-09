@@ -97,6 +97,10 @@ fn main() {
                         Command::Flexible(Box::new(music::LibDiffer {})),
                     ),
                     (
+                        "reconcile-tracker-files",
+                        Command::Flexible(Box::new(music::TrackerReconciler {})),
+                    ),
+                    (
                         "misc",
                         Command::new_parent(
                             vec![
