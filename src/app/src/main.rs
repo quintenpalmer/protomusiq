@@ -20,7 +20,6 @@ pub enum RunMode {
     GenerateReport,
     Prototype,
     Explore,
-    ReconcileHistory,
 }
 
 #[derive(Debug)]
@@ -31,7 +30,6 @@ pub enum AppError {
     ReportGeneration(altmodes::report::Error),
     Prototype(altmodes::proto::Error),
     Explore(altmodes::explore::Error),
-    ReconcileHistory(altmodes::reconcile::Error),
 }
 
 pub fn main() -> Result<(), AppError> {
@@ -55,9 +53,6 @@ pub fn main() -> Result<(), AppError> {
         if arg == "--explore" {
             run_mode = RunMode::Explore;
         }
-        if arg == "--reconcile" {
-            run_mode = RunMode::ReconcileHistory;
-        }
     }
 
     match run_mode {
@@ -71,8 +66,5 @@ pub fn main() -> Result<(), AppError> {
         }
         RunMode::Prototype => altmodes::proto::entry_point().map_err(AppError::Prototype),
         RunMode::Explore => altmodes::explore::entry_point().map_err(AppError::Explore),
-        RunMode::ReconcileHistory => {
-            altmodes::reconcile::entry_point().map_err(AppError::ReconcileHistory)
-        }
     }
 }
