@@ -8,11 +8,10 @@ use chrono::{DateTime, Local};
 
 use musiqcore::datastore::localfs;
 
-use crate::datastore;
-
+use musiqcore::datastore::jsonbacked::common;
 use musiqcore::datastore::jsonbacked::tracker::RawTrackedPayload;
 
-use super::super::common;
+use crate::datastore;
 
 pub struct JSONTracker {
     pub tracker_db_json_path: PathBuf,

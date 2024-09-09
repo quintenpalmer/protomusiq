@@ -1,5 +1,4 @@
 pub mod albumart;
-mod common;
 pub mod impls;
 pub mod movieart;
 pub mod playlists;

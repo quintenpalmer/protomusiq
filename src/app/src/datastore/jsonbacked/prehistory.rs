@@ -4,9 +4,9 @@ use std::path;
 
 use serde::{Deserialize, Serialize};
 
-use crate::model;
+use musiqcore::datastore::jsonbacked::common;
 
-use super::common;
+use crate::model;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct PrehistoryPlayCountEntry {

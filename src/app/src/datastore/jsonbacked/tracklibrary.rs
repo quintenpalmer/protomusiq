@@ -5,11 +5,11 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
+use musiqcore::datastore::jsonbacked::common;
+
 use crate::datastore::loader;
 use crate::datastore::sqlitebacked;
 use crate::util::logging;
-
-use super::common;
 
 #[derive(Serialize, Deserialize, Default)]
 struct CacheMetadataPayload {
