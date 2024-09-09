@@ -2708,13 +2708,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "musiqassistant"
-version = "0.1.0"
-dependencies = [
- "musiqcore",
-]
-
-[[package]]
 name = "musiqcore"
 version = "0.1.0"
 dependencies = [

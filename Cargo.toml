@@ -5,7 +5,6 @@ members = [
   "src/core",
   "src/webserver/",
   "src/app/",
-  "src/assistant",
   "src/inspector/",
   "src/tui/",
   "src/playhistoryimport",
