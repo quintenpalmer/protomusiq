@@ -72,43 +72,52 @@ impl Command {
 }
 
 fn main() {
-    let music_commands = vec![
-        (
-            "list-files",
-            Command::Specific(Box::new(MusicFileLister {})),
-        ),
-        ("tracks", Command::Specific(Box::new(TrackLister {}))),
-        ("tree", Command::Specific(Box::new(TreeViewer {}))),
-        ("table-view", Command::Specific(Box::new(TableViewer {}))),
-        ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
-        ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
-        ("json", Command::Specific(Box::new(JsonProducer {}))),
-        ("dates", Command::Specific(Box::new(DateDisplayer {}))),
-        ("length", Command::Specific(Box::new(LengthCalcer {}))),
-        (
-            "length-check",
-            Command::Specific(Box::new(LengthChecker {})),
-        ),
-        (
-            "flac-tags",
-            Command::Specific(Box::new(FlacTagCollector {})),
-        ),
-    ]
-    .into_iter()
-    .collect();
-
-    let movie_commands = vec![("tree", Command::Specific(Box::new(MovieTreeViewer {})))]
-        .into_iter()
-        .collect();
-
-    let game_commands = vec![("copy-art", Command::Specific(Box::new(GameArtCopier {})))]
-        .into_iter()
-        .collect();
-
     let available_commands: BTreeMap<&'static str, Command> = vec![
-        ("music", Command::new_parent(music_commands)),
-        ("movies", Command::new_parent(movie_commands)),
-        ("games", Command::new_parent(game_commands)),
+        (
+            "music",
+            Command::new_parent(
+                vec![
+                    (
+                        "list-files",
+                        Command::Specific(Box::new(MusicFileLister {})),
+                    ),
+                    ("tracks", Command::Specific(Box::new(TrackLister {}))),
+                    ("tree", Command::Specific(Box::new(TreeViewer {}))),
+                    ("table-view", Command::Specific(Box::new(TableViewer {}))),
+                    ("conflicts", Command::Specific(Box::new(ConflictLister {}))),
+                    ("covers", Command::Specific(Box::new(AlbumCoverChecker {}))),
+                    ("json", Command::Specific(Box::new(JsonProducer {}))),
+                    ("dates", Command::Specific(Box::new(DateDisplayer {}))),
+                    ("length", Command::Specific(Box::new(LengthCalcer {}))),
+                    (
+                        "length-check",
+                        Command::Specific(Box::new(LengthChecker {})),
+                    ),
+                    (
+                        "flac-tags",
+                        Command::Specific(Box::new(FlacTagCollector {})),
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            ),
+        ),
+        (
+            "movies",
+            Command::new_parent(
+                vec![("tree", Command::Specific(Box::new(MovieTreeViewer {})))]
+                    .into_iter()
+                    .collect(),
+            ),
+        ),
+        (
+            "games",
+            Command::new_parent(
+                vec![("copy-art", Command::Specific(Box::new(GameArtCopier {})))]
+                    .into_iter()
+                    .collect(),
+            ),
+        ),
     ]
     .into_iter()
     .collect();
