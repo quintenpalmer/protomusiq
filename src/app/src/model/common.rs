@@ -2,12 +2,10 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path;
 
-use serde::{Deserialize, Serialize};
-
+use musiqcore::model::constants;
 use musiqlibrary::video;
 
 use super::augmented;
-use super::constants;
 use super::sortkeys;
 
 #[derive(Debug, Clone)]
@@ -96,17 +94,6 @@ impl AlbumSize {
             AlbumSize::Large => constants::LARGE_ICON_HEIGHT,
         }
     }
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum AlbumSizeWithOrig {
-    Micro,
-    Mini,
-    Small,
-    Centi,
-    Regular,
-    Large,
-    Original,
 }
 
 pub struct ListAndReversed<T> {

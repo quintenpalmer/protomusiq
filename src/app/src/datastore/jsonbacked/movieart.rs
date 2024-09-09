@@ -122,8 +122,9 @@ pub fn process_cache_and_get_movie_art(
                         );
                         let large_movie_art = image::imageops::resize(
                             &orig_movie_art,
-                            ((model::DVD_LARGE_ICON_HEIGHT as u32) * orig_width) / orig_height,
-                            model::DVD_LARGE_ICON_HEIGHT as u32,
+                            ((musiqcore::model::DVD_LARGE_ICON_HEIGHT as u32) * orig_width)
+                                / orig_height,
+                            musiqcore::model::DVD_LARGE_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
                         large_movie_art
@@ -138,8 +139,9 @@ pub fn process_cache_and_get_movie_art(
                         );
                         let semilarge_movie_art = image::imageops::resize(
                             &orig_movie_art,
-                            ((model::DVD_SEMILARGE_ICON_HEIGHT as u32) * orig_width) / orig_height,
-                            model::DVD_SEMILARGE_ICON_HEIGHT as u32,
+                            ((musiqcore::model::DVD_SEMILARGE_ICON_HEIGHT as u32) * orig_width)
+                                / orig_height,
+                            musiqcore::model::DVD_SEMILARGE_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
                         semilarge_movie_art
@@ -154,8 +156,9 @@ pub fn process_cache_and_get_movie_art(
                         );
                         let regular_movie_art = image::imageops::resize(
                             &orig_movie_art,
-                            ((model::DVD_REGULAR_ICON_HEIGHT as u32) * orig_width) / orig_height,
-                            model::DVD_REGULAR_ICON_HEIGHT as u32,
+                            ((musiqcore::model::DVD_REGULAR_ICON_HEIGHT as u32) * orig_width)
+                                / orig_height,
+                            musiqcore::model::DVD_REGULAR_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
                         regular_movie_art
@@ -170,8 +173,9 @@ pub fn process_cache_and_get_movie_art(
                         );
                         let small_movie_art = image::imageops::resize(
                             &orig_movie_art,
-                            ((model::DVD_SMALL_ICON_HEIGHT as u32) * orig_width) / orig_height,
-                            model::DVD_SMALL_ICON_HEIGHT as u32,
+                            ((musiqcore::model::DVD_SMALL_ICON_HEIGHT as u32) * orig_width)
+                                / orig_height,
+                            musiqcore::model::DVD_SMALL_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
                         small_movie_art
@@ -186,8 +190,9 @@ pub fn process_cache_and_get_movie_art(
                         );
                         let micro_movie_art = image::imageops::resize(
                             &orig_movie_art,
-                            ((model::DVD_MICRO_ICON_HEIGHT as u32) * orig_width) / orig_height,
-                            model::DVD_MICRO_ICON_HEIGHT as u32,
+                            ((musiqcore::model::DVD_MICRO_ICON_HEIGHT as u32) * orig_width)
+                                / orig_height,
+                            musiqcore::model::DVD_MICRO_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
                         micro_movie_art

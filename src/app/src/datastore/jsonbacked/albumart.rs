@@ -8,9 +8,10 @@ use std::sync::mpsc;
 use image;
 use image::io::Reader as ImageReader;
 
-use crate::model;
-
 use musiqcore::datastore::localfs;
+use musiqcore::model;
+
+use crate::model as cmodel;
 
 trait CachedAlbumImageInfo {
     fn has_art_for_size(
@@ -144,25 +145,10 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
     }
 }
 
-impl model::AlbumSizeWithOrig {
-    fn get_filename(&self) -> String {
-        match self {
-            model::AlbumSizeWithOrig::Micro => "micro.png",
-            model::AlbumSizeWithOrig::Mini => "mini.png",
-            model::AlbumSizeWithOrig::Centi => "centi.png",
-            model::AlbumSizeWithOrig::Small => "small.png",
-            model::AlbumSizeWithOrig::Regular => "regular.png",
-            model::AlbumSizeWithOrig::Large => "large.png",
-            model::AlbumSizeWithOrig::Original => "orig.jpg",
-        }
-        .to_string()
-    }
-}
-
 pub fn process_cache_and_get_album_art(
     library: &musiqlibrary::RawLibrary,
     app_data_path: PathBuf,
-) -> model::AlbumArt {
+) -> cmodel::AlbumArt {
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
@@ -469,7 +455,7 @@ pub fn process_cache_and_get_album_art(
 
     println!("all cache data existed for {} entries", found_cache_entries);
 
-    model::AlbumArt {
+    cmodel::AlbumArt {
         large_album_covers: large,
         album_covers: regular,
         small_album_covers: small,
@@ -483,7 +469,7 @@ pub fn process_cache_and_get_album_art(
 pub fn old_process_cache_and_get_album_art(
     library: &musiqlibrary::RawLibrary,
     app_data_path: PathBuf,
-) -> model::AlbumArt {
+) -> cmodel::AlbumArt {
     let mut large = BTreeMap::new();
     let mut regular = BTreeMap::new();
     let mut small = BTreeMap::new();
@@ -675,7 +661,7 @@ pub fn old_process_cache_and_get_album_art(
 
     println!("all cache data existed for {} entries", found_cache_entries);
 
-    model::AlbumArt {
+    cmodel::AlbumArt {
         large_album_covers: large,
         album_covers: regular,
         small_album_covers: small,
