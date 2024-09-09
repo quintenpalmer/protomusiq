@@ -96,25 +96,31 @@ fn main() {
                             vec![
                                 (
                                     "covers",
-                                    Command::Specific(Box::new(music::AlbumCoverChecker {})),
+                                    Command::Specific(Box::new(music::misc::AlbumCoverChecker {})),
                                 ),
-                                ("tracks", Command::Specific(Box::new(music::TrackLister {}))),
-                                ("json", Command::Specific(Box::new(music::JsonProducer {}))),
+                                (
+                                    "tracks",
+                                    Command::Specific(Box::new(music::misc::TrackLister {})),
+                                ),
+                                (
+                                    "json",
+                                    Command::Specific(Box::new(music::misc::JsonProducer {})),
+                                ),
                                 (
                                     "dates",
-                                    Command::Specific(Box::new(music::DateDisplayer {})),
+                                    Command::Specific(Box::new(music::misc::DateDisplayer {})),
                                 ),
                                 (
                                     "length",
-                                    Command::Specific(Box::new(music::LengthCalcer {})),
+                                    Command::Specific(Box::new(music::misc::LengthCalcer {})),
                                 ),
                                 (
                                     "length-check",
-                                    Command::Specific(Box::new(music::LengthChecker {})),
+                                    Command::Specific(Box::new(music::misc::LengthChecker {})),
                                 ),
                                 (
                                     "flac-tags",
-                                    Command::Specific(Box::new(music::FlacTagCollector {})),
+                                    Command::Specific(Box::new(music::misc::FlacTagCollector {})),
                                 ),
                             ]
                             .into_iter()
