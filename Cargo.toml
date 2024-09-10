@@ -6,7 +6,6 @@ members = [
   "src/webserver/",
   "src/app/",
   "src/inspector/",
-  "src/tui/",
   "src/playhistoryimport",
   "src/ytimporter",
   "src/musicbrainz",
