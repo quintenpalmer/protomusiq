@@ -3,8 +3,6 @@ use std::path;
 
 use musiqlibrary::video;
 
-use crate::model;
-
 use super::{common, sorts};
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
@@ -55,13 +53,13 @@ pub struct VideoLibraryState {
 
     pub series: BTreeMap<String, Vec<(u32, video::MovieID)>>,
 
-    pub art: model::MovieArt,
+    pub art: MovieArt,
 
     pub movie_sorts: sorts::MovieSorts,
 }
 
 impl VideoLibraryState {
-    pub fn new(movies: VideoLibrary, art: model::MovieArt) -> Self {
+    pub fn new(movies: VideoLibrary, art: MovieArt) -> Self {
         let movie_sorts = sorts::MovieSorts::new(
             &movies
                 .movies
@@ -99,7 +97,7 @@ impl VideoLibraryState {
         self.movies.movies.get(title).unwrap().clone()
     }
 
-    pub fn get_movie_cover(&self, size: model::MovieSize, title: MovieRelPath) -> Option<Vec<u8>> {
+    pub fn get_movie_cover(&self, size: common::MovieSize, title: MovieRelPath) -> Option<Vec<u8>> {
         self.art.get_movie_cover(size, title)
     }
 
@@ -131,15 +129,15 @@ pub struct MovieArt {
 impl MovieArt {
     pub fn get_movie_cover(
         &self,
-        album_size: model::MovieSize,
+        album_size: common::MovieSize,
         movie_key: MovieRelPath,
     ) -> Option<Vec<u8>> {
         match album_size {
-            model::MovieSize::Large => self.large_movie_covers.get(&movie_key).cloned(),
-            model::MovieSize::SemiLarge => self.semilarge_movie_covers.get(&movie_key).cloned(),
-            model::MovieSize::Small => self.small_movie_covers.get(&movie_key).cloned(),
-            model::MovieSize::Regular => self.regular_movie_covers.get(&movie_key).cloned(),
-            model::MovieSize::Micro => self.micro_movie_covers.get(&movie_key).cloned(),
+            common::MovieSize::Large => self.large_movie_covers.get(&movie_key).cloned(),
+            common::MovieSize::SemiLarge => self.semilarge_movie_covers.get(&movie_key).cloned(),
+            common::MovieSize::Small => self.small_movie_covers.get(&movie_key).cloned(),
+            common::MovieSize::Regular => self.regular_movie_covers.get(&movie_key).cloned(),
+            common::MovieSize::Micro => self.micro_movie_covers.get(&movie_key).cloned(),
         }
     }
 }
