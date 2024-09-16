@@ -4,7 +4,6 @@ use crate::model;
 #[derive(Debug, Clone)]
 pub struct PlayQueueInfo {
     pub playing: bool,
-    pub current_volume: f32,
     pub play_history: Vec<PlayQueueEntry>,
     pub current_playback: Option<CurrentPlayback>,
     pub play_queue: Vec<PlayQueueEntry>,
@@ -14,7 +13,6 @@ impl PlayQueueInfo {
     pub fn new() -> Self {
         PlayQueueInfo {
             playing: false,
-            current_volume: 1.0,
             play_history: Vec::new(),
             current_playback: None,
             play_queue: Vec::new(),

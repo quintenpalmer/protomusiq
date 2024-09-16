@@ -48,7 +48,7 @@ fn relay_msg(maybe_msg: Result<shared::SinkMessage, mpsc::TryRecvError>) -> bool
                 ureq::post("http://localhost:5269/pause").call().unwrap();
                 true
             }
-            shared::SinkMessage::LoadSong(full_path_for_music_file, next_thing, volume_to_set) => {
+            shared::SinkMessage::LoadSong(full_path_for_music_file, next_thing) => {
                 let path_str = full_path_for_music_file
                     .into_os_string()
                     .to_string_lossy()
@@ -61,15 +61,14 @@ fn relay_msg(maybe_msg: Result<shared::SinkMessage, mpsc::TryRecvError>) -> bool
                     None => "none".to_string(),
                 };
 
-                let volume_str = format!("{}", volume_to_set);
-                let payload = [path_str, next_thing, volume_str].join("\n");
+                let payload = [path_str, next_thing].join("\n");
 
                 ureq::post("http://localhost:5269/load")
                     .send_string(payload.as_str())
                     .unwrap();
                 true
             }
-            shared::SinkMessage::LoadNextSong(next_thing, volume_to_set) => {
+            shared::SinkMessage::LoadNextSong(next_thing) => {
                 let next_thing = match next_thing {
                     Some(shared::TrackPathOrPause::TrackPath(p)) => {
                         p.into_os_string().to_string_lossy().to_string()
@@ -78,8 +77,7 @@ fn relay_msg(maybe_msg: Result<shared::SinkMessage, mpsc::TryRecvError>) -> bool
                     None => "none".to_string(),
                 };
 
-                let volume_str = format!("{}", volume_to_set);
-                let payload = [next_thing, volume_str].join("\n");
+                let payload = [next_thing].join("\n");
 
                 ureq::post("http://localhost:5269/loadnextsong")
                     .send_string(payload.as_str())

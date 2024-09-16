@@ -28,14 +28,10 @@ pub fn handle_playback_request(
                             .send(shared::SinkMessage::LoadSong(
                                 current_playback.track.metadata.path.clone(),
                                 maybe_next_track,
-                                play_queue.current_volume,
                             ))
                             .unwrap(),
                         shared::TrackLoadType::NaturalNext => sink_client
-                            .send(shared::SinkMessage::LoadNextSong(
-                                maybe_next_track,
-                                play_queue.current_volume,
-                            ))
+                            .send(shared::SinkMessage::LoadNextSong(maybe_next_track))
                             .unwrap(),
                     };
                     let _ = mpris_client.send(shared::MprisMessage::SetMetadata(

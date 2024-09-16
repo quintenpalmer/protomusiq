@@ -106,8 +106,9 @@ impl SinkPlayback {
                 callback.send(shared::SinkCallbackMessage::Paused).unwrap();
                 true
             }
-            shared::SinkMessage::LoadSong(path, next_path, volume) => {
+            shared::SinkMessage::LoadSong(path, next_path) => {
                 self.manual_sink_status = Some(true);
+                let volume = self.sink.volume();
                 self.sink.stop();
                 self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
 
@@ -123,9 +124,10 @@ impl SinkPlayback {
                 callback.send(shared::SinkCallbackMessage::Playing).unwrap();
                 true
             }
-            shared::SinkMessage::LoadNextSong(next_path, volume) => match self.next_song {
+            shared::SinkMessage::LoadNextSong(next_path) => match self.next_song {
                 Some(shared::TrackPathOrPause::TrackPath(ref t)) => {
                     self.manual_sink_status = Some(true);
+                    let volume = self.sink.volume();
                     self.sink.stop();
                     self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
 
@@ -143,6 +145,7 @@ impl SinkPlayback {
                 }
                 Some(shared::TrackPathOrPause::Pause) | None => {
                     self.manual_sink_status = Some(false);
+                    let volume = self.sink.volume();
                     self.sink.stop();
                     self.sink = rodio::Sink::try_new(&self.stream_handle).unwrap();
 

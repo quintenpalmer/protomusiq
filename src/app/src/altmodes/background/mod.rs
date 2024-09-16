@@ -52,7 +52,6 @@ pub fn run_server() -> Result<(), Error> {
                             println!("lines: {:?}", lines);
                             let filename = lines[0];
                             let raw_next_thing = lines[1];
-                            let volume = lines[2];
 
                             let next_thing = if raw_next_thing == "none" {
                                 None
@@ -68,7 +67,6 @@ pub fn run_server() -> Result<(), Error> {
                                 .send(SinkMessage::LoadSong(
                                     path::PathBuf::from(filename),
                                     next_thing,
-                                    volume.parse::<f32>().unwrap(),
                                 ))
                                 .unwrap();
 
@@ -84,7 +82,6 @@ pub fn run_server() -> Result<(), Error> {
                             let lines: Vec<&str> = content.split('\n').collect();
                             println!("lines: {:?}", lines);
                             let raw_next_thing = lines[0];
-                            let volume = lines[1];
 
                             let next_thing = if raw_next_thing == "none" {
                                 None
@@ -97,10 +94,7 @@ pub fn run_server() -> Result<(), Error> {
                             };
 
                             sink_client
-                                .send(SinkMessage::LoadNextSong(
-                                    next_thing,
-                                    volume.parse::<f32>().unwrap(),
-                                ))
+                                .send(SinkMessage::LoadNextSong(next_thing))
                                 .unwrap();
 
                             Some(Response::from_string("let's load the next"))

@@ -51,8 +51,8 @@ pub enum BackendToGUIMessage {
 pub enum SinkMessage {
     PlayButton,
     PauseButton,
-    LoadSong(path::PathBuf, Option<TrackPathOrPause>, f32),
-    LoadNextSong(Option<TrackPathOrPause>, f32),
+    LoadSong(path::PathBuf, Option<TrackPathOrPause>),
+    LoadNextSong(Option<TrackPathOrPause>),
     SetNextSong(TrackPathOrPause),
     SetVolume(f32),
     Close,
