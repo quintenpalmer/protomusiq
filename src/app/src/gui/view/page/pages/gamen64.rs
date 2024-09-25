@@ -16,7 +16,8 @@ pub fn n64_list<'a>(
                 body_column = body_column.push({
                     let mut ret_row = line_row();
                     ret_row = ret_row.push(dark_button(h2(">")).on_press(
-                        message::Message::ExternalSpawn(message::ExternalSpawn::Mupen64(
+                        message::Message::ExternalSpawn(message::ExternalSpawn::LaunchEmulator(
+                            musiqcore::model::gl::consoles::GameConsole::Nintendo64,
                             n64_rom_path.path.clone(),
                         )),
                     ));

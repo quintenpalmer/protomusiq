@@ -17,56 +17,25 @@ pub fn exec_cmd(
                 .expect("Failed to execute command");
             Command::none()
         }
-        message::ExternalSpawn::MGBA(gba_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("mgba")
-                .current_dir(game_library.get_gba_prefix_path().clone().unwrap())
-                .arg(gba_rom_path.into_os_string())
+        message::ExternalSpawn::LaunchEmulator(console, game_rom_path) => {
+            let cwd = game_library
+                .get_console_prefix(&console)
+                .expect("no prefix dir for console");
+
+            let (spawn_command, raw_spawn_args) = console.get_spawn_command();
+
+            let mut spawn_args: Vec<ffi::OsString> = raw_spawn_args
+                .into_iter()
+                .map(|x| ffi::OsStr::new(x).to_os_string())
+                .collect();
+            spawn_args.push(game_rom_path.into_os_string());
+
+            let _wanted_to_be_detached = process::Command::new(spawn_command)
+                .current_dir(cwd)
+                .args(spawn_args)
                 .spawn()
                 .expect("Failed to execute command");
-            Command::none()
-        }
-        message::ExternalSpawn::ZSNES(snes_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("snes9x")
-                .current_dir(game_library.get_snes_prefix_path().clone().unwrap())
-                .args(vec![
-                    ffi::OsStr::new("-fullscreen"),
-                    ffi::OsStr::new("-xvideo"),
-                    snes_rom_path.into_os_string().as_os_str(),
-                ])
-                .spawn()
-                .expect("Failed to execute command");
-            Command::none()
-        }
-        message::ExternalSpawn::Mupen64(n64_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("mupen64plus")
-                .current_dir(game_library.get_n64_prefix_path().clone().unwrap())
-                .arg(n64_rom_path.into_os_string())
-                .spawn()
-                .expect("Failed to execute command");
-            Command::none()
-        }
-        message::ExternalSpawn::Desmume(nds_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("desmume")
-                .current_dir(game_library.get_nds_prefix_path().clone().unwrap())
-                .arg(nds_rom_path.into_os_string())
-                .spawn()
-                .expect("Failed to execute command");
-            Command::none()
-        }
-        message::ExternalSpawn::DolphinGC(ngc_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("dolphin-emu-nogui")
-                .current_dir(game_library.get_ngc_prefix_path().clone().unwrap())
-                .arg(ngc_rom_path.into_os_string())
-                .spawn()
-                .expect("Failed to execute command");
-            Command::none()
-        }
-        message::ExternalSpawn::DolphinWii(wii_rom_path) => {
-            let _wanted_to_be_detached = process::Command::new("dolphin-emu-nogui")
-                .current_dir(game_library.get_wii_prefix_path().clone().unwrap())
-                .arg(wii_rom_path.into_os_string())
-                .spawn()
-                .expect("Failed to execute command");
+
             Command::none()
         }
     }

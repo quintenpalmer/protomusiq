@@ -19,7 +19,8 @@ pub fn snes_list<'a>(
                 body_column = body_column.push({
                     let mut ret_row = line_row();
                     ret_row = ret_row.push(dark_button(h2(">")).on_press(
-                        message::Message::ExternalSpawn(message::ExternalSpawn::ZSNES(
+                        message::Message::ExternalSpawn(message::ExternalSpawn::LaunchEmulator(
+                            musiqcore::model::gl::consoles::GameConsole::SNES,
                             snes_rom_path.path.clone(),
                         )),
                     ));

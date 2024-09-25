@@ -78,12 +78,7 @@ pub enum VolumeRequest {
 #[derive(Debug, Clone)]
 pub enum ExternalSpawn {
     Mpv(path::PathBuf),
-    MGBA(path::PathBuf),
-    ZSNES(path::PathBuf),
-    Mupen64(path::PathBuf),
-    Desmume(path::PathBuf),
-    DolphinGC(path::PathBuf),
-    DolphinWii(path::PathBuf),
+    LaunchEmulator(musiqcore::model::gl::consoles::GameConsole, path::PathBuf),
 }
 
 pub struct MessageFuture {

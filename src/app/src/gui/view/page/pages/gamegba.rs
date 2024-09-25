@@ -17,7 +17,10 @@ pub fn gba_list<'a>(
                     let mut row = line_row();
                     row = row.push(
                         dark_button(h2(">")).on_press(message::Message::ExternalSpawn(
-                            message::ExternalSpawn::MGBA(gba_rom_path.path.clone()),
+                            message::ExternalSpawn::LaunchEmulator(
+                                musiqcore::model::gl::consoles::GameConsole::GameBoyAdvance,
+                                gba_rom_path.path.clone(),
+                            ),
                         )),
                     );
 
