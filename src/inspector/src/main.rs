@@ -153,10 +153,20 @@ fn main() {
         (
             "games",
             Command::new_parent(
-                vec![(
-                    "copy-art",
-                    Command::Specific(Box::new(games::GameArtCopier {})),
-                )]
+                vec![
+                    (
+                        "copy-art",
+                        Command::Specific(Box::new(games::GameArtCopier {})),
+                    ),
+                    (
+                        "list-consoles",
+                        Command::Flexible(Box::new(games::ConsoleLister {})),
+                    ),
+                    (
+                        "list-games",
+                        Command::Flexible(Box::new(games::ConsoleGameLister {})),
+                    ),
+                ]
                 .into_iter()
                 .collect(),
             ),

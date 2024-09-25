@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use super::commands::AppCmd;
+use super::commands::{AppCmd, FlexibleCmd};
 
 pub struct GameArtCopier {}
 
@@ -55,6 +55,48 @@ impl AppCmd for GameArtCopier {
                 }
                 _ => eprintln!("skipping console: {:?}", console),
             }
+        }
+    }
+}
+
+pub struct ConsoleLister {}
+
+impl FlexibleCmd for ConsoleLister {
+    fn flex_operate(&self, _args: Vec<String>) {
+        let consoles = musiqcore::model::gl::consoles::GameConsole::all();
+        for console in consoles.into_iter() {
+            println!("{}", console.full_name());
+        }
+    }
+}
+
+pub struct ConsoleGameLister {}
+
+impl FlexibleCmd for ConsoleGameLister {
+    fn flex_operate(&self, args: Vec<String>) {
+        if args.len() != 1 {
+            panic!("game lister needs <console>");
+        }
+
+        let console_str = args[0].as_str().to_string();
+
+        let console = musiqcore::model::gl::consoles::GameConsole::from_full_name(console_str)
+            .expect("unknown console provided");
+
+        let config_state = musiqcore::model::app::AppConfigState::get_default();
+
+        let game_library =
+            musiqcore::model::gl::GameLibraryState::new(musiqcore::model::gl::GameLibrary::new(
+                &musiqcore::model::gl::ImageMode::ExactMatch,
+                &config_state.games,
+            ));
+
+        for game in game_library
+            .get_generic_game_and_prefix(&console)
+            .expect("we don't know about that console")
+            .0
+        {
+            println!("{}", game.get_name());
         }
     }
 }
