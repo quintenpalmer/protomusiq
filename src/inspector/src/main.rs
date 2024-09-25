@@ -166,6 +166,10 @@ fn main() {
                         "list-games",
                         Command::Flexible(Box::new(games::ConsoleGameLister {})),
                     ),
+                    (
+                        "gen-desktop-file",
+                        Command::Flexible(Box::new(games::GameDesktopCreator {})),
+                    ),
                 ]
                 .into_iter()
                 .collect(),
