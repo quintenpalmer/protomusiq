@@ -25,6 +25,20 @@ impl GameConsole {
         .to_string()
     }
 
+    pub fn from_full_name(s: String) -> Option<Self> {
+        match s.as_str() {
+            "Game Boy" => Some(GameConsole::GameBoy),
+            "Game Boy Color" => Some(GameConsole::GameBoyColor),
+            "Game Boy Advance" => Some(GameConsole::GameBoyAdvance),
+            "Nintendo DS" => Some(GameConsole::NintendoDS),
+            "Super Nintendo Entertainment System" => Some(GameConsole::SNES),
+            "Nintendo 64" => Some(GameConsole::Nintendo64),
+            "GameCube" => Some(GameConsole::GameCube),
+            "Wii" => Some(GameConsole::Wii),
+            _ => None,
+        }
+    }
+
     pub fn all() -> Vec<Self> {
         vec![
             GameConsole::GameBoy,
