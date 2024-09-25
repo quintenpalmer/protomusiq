@@ -38,9 +38,6 @@ impl Command {
 
     pub fn operate_on_args(&self, mut args: Vec<String>) {
         eprintln!("operating on: {:?}", args);
-        if args.len() < 1 {
-            panic!("no arguments provided, and I don't actually know how to provide a useful help text");
-        }
         match self {
             Command::Specific(inner) => {
                 if args.len() < 1 {
