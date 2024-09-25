@@ -89,6 +89,19 @@ impl GameLibraryState {
         }
     }
 
+    pub fn get_console_prefix(&self, console: &consoles::GameConsole) -> Option<&path::PathBuf> {
+        match console {
+            consoles::GameConsole::GameBoy => self.get_gb_prefix_path(),
+            consoles::GameConsole::GameBoyColor => self.get_gbc_prefix_path(),
+            consoles::GameConsole::GameBoyAdvance => self.get_gba_prefix_path(),
+            consoles::GameConsole::NintendoDS => self.get_nds_prefix_path(),
+            consoles::GameConsole::SNES => self.get_snes_prefix_path(),
+            consoles::GameConsole::Nintendo64 => self.get_n64_prefix_path(),
+            consoles::GameConsole::GameCube => self.get_ngc_prefix_path(),
+            consoles::GameConsole::Wii => self.get_wii_prefix_path(),
+        }
+    }
+
     pub fn get_gb_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
             Some(ref v) => Some(&v.gb_prefix_dir),

@@ -39,6 +39,19 @@ impl GameConsole {
         }
     }
 
+    pub fn get_spawn_command(&self) -> (&'static str, Vec<&'static str>) {
+        match self {
+            GameConsole::GameBoy => ("mgba", Vec::new()),
+            GameConsole::GameBoyColor => ("mgba", Vec::new()),
+            GameConsole::GameBoyAdvance => ("mgba", Vec::new()),
+            GameConsole::NintendoDS => ("desmume", Vec::new()),
+            GameConsole::SNES => ("snes9x", vec!["-fullscreen", "-xvideo"]),
+            GameConsole::Nintendo64 => ("mupen64plus", Vec::new()),
+            GameConsole::GameCube => ("dolphin-emu-nogui", Vec::new()),
+            GameConsole::Wii => ("dolphin-emu-nogui", Vec::new()),
+        }
+    }
+
     pub fn all() -> Vec<Self> {
         vec![
             GameConsole::GameBoy,
