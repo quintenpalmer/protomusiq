@@ -2,6 +2,14 @@ use std::cmp;
 use std::env;
 use std::path;
 
+pub fn best_effort_path_to_string<P: AsRef<path::Path>>(p: P) -> String {
+    p.as_ref()
+        .to_path_buf()
+        .into_os_string()
+        .to_string_lossy()
+        .to_string()
+}
+
 pub fn get_default_config_path() -> path::PathBuf {
     let home_dir = env::var_os("HOME").unwrap();
     let config_path = path::Path::new(&home_dir)
