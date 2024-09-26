@@ -7,6 +7,8 @@ cargo check
 cargo doc
 cargo build --release
 
-cp ../../target/release/musiqinspector ~/.bin/
+cp ../../target/release/musiqinspector assets/
 
-cp ../../target/release/musiqinspector ~/storage/projects/buildexecs/musiqapp/assets/
+sh assets/inspector_install.sh
+
+cp -r assets/ ~/storage/projects/buildexecs/musiqapp/
