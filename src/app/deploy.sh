@@ -9,7 +9,7 @@ cargo build --release
 
 cp ../../target/release/musiqapp assets/
 
-sh assets/install.sh
+sh assets/app_install.sh
 
 cp -r assets/ ~/storage/projects/buildexecs/musiqapp/
 
