@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use std::sync::mpsc;
 
 use image;
-use image::io::Reader as ImageReader;
+use image::ImageReader;
 
 use musiqcore::datastore::localfs;
 use musiqcore::model;

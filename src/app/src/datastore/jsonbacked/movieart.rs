@@ -4,8 +4,8 @@ use std::io;
 use std::path;
 use std::sync::mpsc;
 
-use image::io::Reader as ImageReader;
 use image::GenericImageView;
+use image::ImageReader;
 
 use crate::model;
 
