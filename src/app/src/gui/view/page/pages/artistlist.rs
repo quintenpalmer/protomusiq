@@ -157,43 +157,43 @@ pub fn artist_list<'a>(
                 line_row()
                     .push(paragraph("Sort By: "))
                     .push(sort_button(
-                        "Name",
+                        model::ArtistSortKey::ByName.display_text(),
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Play Count",
+                        model::ArtistSortKey::ByPlayCount.display_text(),
                         model::ArtistSortKey::ByPlayCount,
                         model::ArtistSortKey::ByPlayCount.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Album Count",
+                        model::ArtistSortKey::ByAlbumCount.display_text(),
                         model::ArtistSortKey::ByAlbumCount,
                         model::ArtistSortKey::ByAlbumCount.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Track Count",
+                        model::ArtistSortKey::ByTrackCount.display_text(),
                         model::ArtistSortKey::ByTrackCount,
                         model::ArtistSortKey::ByTrackCount.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Track Length",
+                        model::ArtistSortKey::ByTrackDuration.display_text(),
                         model::ArtistSortKey::ByTrackDuration,
                         model::ArtistSortKey::ByTrackDuration.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Duration Played",
+                        model::ArtistSortKey::ByPlayedDuration.display_text(),
                         model::ArtistSortKey::ByPlayedDuration,
                         model::ArtistSortKey::ByPlayedDuration.default_order(),
                         sort_key,
                     ))
                     .push(sort_button(
-                        "Random",
+                        model::ArtistSortKey::Random.display_text(),
                         model::ArtistSortKey::Random,
                         model::ArtistSortKey::Random.default_order(),
                         sort_key,
@@ -259,7 +259,7 @@ fn get_sub_header_from_sort(
 }
 
 fn sort_button<'a>(
-    display_text: &'static str,
+    display_text: String,
     sort_key: model::ArtistSortKey,
     order: model::SortOrder,
     current_sort: &'a model::ArtistSortKey,

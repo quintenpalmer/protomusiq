@@ -204,6 +204,19 @@ impl ArtistSortKey {
         }
     }
 
+    pub fn display_text(&self) -> String {
+        match self {
+            ArtistSortKey::ByName => "Name",
+            ArtistSortKey::ByPlayCount => "Play Count",
+            ArtistSortKey::ByAlbumCount => "Album Count",
+            ArtistSortKey::ByTrackCount => "Track Count",
+            ArtistSortKey::ByTrackDuration => "Track Length",
+            ArtistSortKey::ByPlayedDuration => "Duration Played",
+            ArtistSortKey::Random => "Random",
+        }
+        .to_string()
+    }
+
     pub fn preferred_home() -> Self {
         ArtistSortKey::ByName
     }

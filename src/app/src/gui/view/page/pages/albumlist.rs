@@ -179,49 +179,49 @@ pub fn album_list<'a>(
                     line_row()
                         .push(paragraph("Sort By: "))
                         .push(sort_button(
-                            "Artist Name",
+                            model::AlbumSortKey::ByParent.display_text(),
                             model::AlbumSortKey::ByParent,
                             model::AlbumSortKey::ByParent.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Name",
+                            model::AlbumSortKey::ByName.display_text(),
                             model::AlbumSortKey::ByName,
                             model::AlbumSortKey::ByName.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Added",
+                            model::AlbumSortKey::ByLastMod.display_text(),
                             model::AlbumSortKey::ByLastMod,
                             model::AlbumSortKey::ByLastMod.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Length",
+                            model::AlbumSortKey::ByDuration.display_text(),
                             model::AlbumSortKey::ByDuration,
                             model::AlbumSortKey::ByDuration.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Total Play Count",
+                            model::AlbumSortKey::ByTotalPlayCount.display_text(),
                             model::AlbumSortKey::ByTotalPlayCount,
                             model::AlbumSortKey::ByTotalPlayCount.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Total Played Duration",
+                            model::AlbumSortKey::ByTotalPlayedDuration.display_text(),
                             model::AlbumSortKey::ByTotalPlayedDuration,
                             model::AlbumSortKey::ByTotalPlayedDuration.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Date",
+                            model::AlbumSortKey::ByDate.display_text(),
                             model::AlbumSortKey::ByDate,
                             model::AlbumSortKey::ByDate.default_order(),
                             sort_key,
                         ))
                         .push(sort_button(
-                            "Random",
+                            model::AlbumSortKey::Random.display_text(),
                             model::AlbumSortKey::Random,
                             model::AlbumSortKey::Random.default_order(),
                             sort_key,
@@ -287,7 +287,7 @@ fn get_sub_header_from_sort(
 }
 
 fn sort_button<'a>(
-    display_text: &'static str,
+    display_text: String,
     sort_key: model::AlbumSortKey,
     order: model::SortOrder,
     current_sort_key: &'a model::AlbumSortKey,
