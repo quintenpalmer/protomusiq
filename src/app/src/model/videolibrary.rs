@@ -24,6 +24,8 @@ impl MovieRelPath {
 
 pub struct VideoLibrary {
     pub movies: BTreeMap<MovieRelPath, video::MovieMetadata>,
+    // TODO either use this or drop it
+    #[allow(unused)]
     pub movie_id_to_path: BTreeMap<video::MovieID, MovieRelPath>,
 }
 

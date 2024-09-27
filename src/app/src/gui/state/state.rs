@@ -33,6 +33,8 @@ pub struct AppState {
     pub app_images: embedded::AppImages,
     pub messages: Vec<MessageInfo>,
 
+    // TODO either use this or drop it
+    #[allow(unused)]
     pub should_close: bool,
 }
 

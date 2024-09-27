@@ -36,6 +36,8 @@ pub struct Track {
     pub track_no: u32,
     pub disc_id: u32,
 
+    // TODO either use this or drop it
+    #[allow(unused)]
     pub genre_id: Option<u32>,
     pub duration: time::Duration,
     pub full_path: path::PathBuf,
