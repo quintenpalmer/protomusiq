@@ -104,112 +104,112 @@ impl GameLibraryState {
 
     pub fn get_gb_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gb_prefix_dir),
+            Some(ref v) => Some(&v.gb.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_gb_rom_paths(&self) -> Option<&Vec<GBGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gb_rom_paths),
+            Some(ref v) => Some(&v.gb.rom_paths),
             None => None,
         }
     }
 
     pub fn get_gbc_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gbc_prefix_dir),
+            Some(ref v) => Some(&v.gbc.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_gbc_rom_paths(&self) -> Option<&Vec<GBCGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gbc_rom_paths),
+            Some(ref v) => Some(&v.gbc.rom_paths),
             None => None,
         }
     }
 
     pub fn get_gba_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gba_prefix_dir),
+            Some(ref v) => Some(&v.gba.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_gba_rom_paths(&self) -> Option<&Vec<GBAGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gba_rom_paths),
+            Some(ref v) => Some(&v.gba.rom_paths),
             None => None,
         }
     }
 
     pub fn get_snes_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.snes_prefix_dir),
+            Some(ref v) => Some(&v.snes.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_snes_rom_paths(&self) -> Option<&Vec<SNESGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.snes_rom_paths),
+            Some(ref v) => Some(&v.snes.rom_paths),
             None => None,
         }
     }
 
     pub fn get_n64_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.n64_prefix_dir),
+            Some(ref v) => Some(&v.n64.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_n64_rom_paths(&self) -> Option<&Vec<N64Game>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.n64_rom_paths),
+            Some(ref v) => Some(&v.n64.rom_paths),
             None => None,
         }
     }
 
     pub fn get_nds_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.nds_prefix_dir),
+            Some(ref v) => Some(&v.nds.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_nds_rom_paths(&self) -> Option<&Vec<NDSGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.nds_rom_paths),
+            Some(ref v) => Some(&v.nds.rom_paths),
             None => None,
         }
     }
 
     pub fn get_ngc_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gamecube_prefix_dir),
+            Some(ref v) => Some(&v.gamecube.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_ngc_rom_paths(&self) -> Option<&Vec<GameCubeGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.gamecube_rom_paths),
+            Some(ref v) => Some(&v.gamecube.rom_paths),
             None => None,
         }
     }
 
     pub fn get_wii_prefix_path(&self) -> Option<&path::PathBuf> {
         match self.games.inner {
-            Some(ref v) => Some(&v.wii_prefix_dir),
+            Some(ref v) => Some(&v.wii.prefix_dir),
             None => None,
         }
     }
 
     pub fn get_wii_rom_paths(&self) -> Option<&Vec<WiiGame>> {
         match self.games.inner {
-            Some(ref v) => Some(&v.wii_rom_paths),
+            Some(ref v) => Some(&v.wii.rom_paths),
             None => None,
         }
     }
@@ -401,22 +401,38 @@ impl GameLibrary {
 
                 GameLibrary {
                     inner: Some(InnerGameLibrary {
-                        gb_prefix_dir: gb_prefix_dir,
-                        gb_rom_paths: gb_rom_paths,
-                        gbc_prefix_dir: gbc_prefix_dir,
-                        gbc_rom_paths: gbc_rom_paths,
-                        gba_prefix_dir: gba_prefix_dir,
-                        gba_rom_paths: gba_rom_paths,
-                        snes_prefix_dir: snes_prefix_dir,
-                        snes_rom_paths: snes_rom_paths,
-                        n64_prefix_dir: n64_prefix_dir,
-                        n64_rom_paths: n64_rom_paths,
-                        nds_prefix_dir: nds_prefix_dir,
-                        nds_rom_paths: nds_rom_paths,
-                        gamecube_prefix_dir: ngc_prefix_dir,
-                        gamecube_rom_paths: ngc_rom_paths,
-                        wii_prefix_dir: wii_prefix_dir,
-                        wii_rom_paths: wii_rom_paths,
+                        gb: ConsoleInfo {
+                            prefix_dir: gb_prefix_dir,
+                            rom_paths: gb_rom_paths,
+                        },
+                        gbc: ConsoleInfo {
+                            prefix_dir: gbc_prefix_dir,
+                            rom_paths: gbc_rom_paths,
+                        },
+                        gba: ConsoleInfo {
+                            prefix_dir: gba_prefix_dir,
+                            rom_paths: gba_rom_paths,
+                        },
+                        snes: ConsoleInfo {
+                            prefix_dir: snes_prefix_dir,
+                            rom_paths: snes_rom_paths,
+                        },
+                        n64: ConsoleInfo {
+                            prefix_dir: n64_prefix_dir,
+                            rom_paths: n64_rom_paths,
+                        },
+                        nds: ConsoleInfo {
+                            prefix_dir: nds_prefix_dir,
+                            rom_paths: nds_rom_paths,
+                        },
+                        gamecube: ConsoleInfo {
+                            prefix_dir: ngc_prefix_dir,
+                            rom_paths: ngc_rom_paths,
+                        },
+                        wii: ConsoleInfo {
+                            prefix_dir: wii_prefix_dir,
+                            rom_paths: wii_rom_paths,
+                        },
                     }),
                 }
             }
@@ -426,29 +442,19 @@ impl GameLibrary {
 }
 
 struct InnerGameLibrary {
-    pub gb_prefix_dir: path::PathBuf,
-    pub gb_rom_paths: Vec<GBGame>,
+    pub gb: ConsoleInfo<GBGame>,
+    pub gbc: ConsoleInfo<GBCGame>,
+    pub gba: ConsoleInfo<GBAGame>,
+    pub snes: ConsoleInfo<SNESGame>,
+    pub n64: ConsoleInfo<N64Game>,
+    pub nds: ConsoleInfo<NDSGame>,
+    pub gamecube: ConsoleInfo<GameCubeGame>,
+    pub wii: ConsoleInfo<WiiGame>,
+}
 
-    pub gbc_prefix_dir: path::PathBuf,
-    pub gbc_rom_paths: Vec<GBCGame>,
-
-    pub gba_prefix_dir: path::PathBuf,
-    pub gba_rom_paths: Vec<GBAGame>,
-
-    pub snes_prefix_dir: path::PathBuf,
-    pub snes_rom_paths: Vec<SNESGame>,
-
-    pub n64_prefix_dir: path::PathBuf,
-    pub n64_rom_paths: Vec<N64Game>,
-
-    pub nds_prefix_dir: path::PathBuf,
-    pub nds_rom_paths: Vec<NDSGame>,
-
-    pub gamecube_prefix_dir: path::PathBuf,
-    pub gamecube_rom_paths: Vec<GameCubeGame>,
-
-    pub wii_prefix_dir: path::PathBuf,
-    pub wii_rom_paths: Vec<WiiGame>,
+struct ConsoleInfo<T> {
+    pub prefix_dir: path::PathBuf,
+    pub rom_paths: Vec<T>,
 }
 
 pub trait GenericGame {
