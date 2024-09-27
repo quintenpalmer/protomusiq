@@ -203,6 +203,10 @@ impl ArtistSortKey {
             ArtistSortKey::Random => SortOrder::Regular,
         }
     }
+
+    pub fn preferred_home() -> Self {
+        ArtistSortKey::ByName
+    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]

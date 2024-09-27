@@ -46,8 +46,8 @@ pub fn music_home<'a>(app_images: &embedded::AppImages) -> Container<'a, message
     .on_press(
         message::ArtistNavMessage::ArtistList(
             0,
-            model::ArtistSortKey::ByName,
-            model::ArtistSortKey::ByName.default_order(),
+            model::ArtistSortKey::preferred_home(),
+            model::ArtistSortKey::preferred_home().default_order(),
         )
         .into_message(),
     );
