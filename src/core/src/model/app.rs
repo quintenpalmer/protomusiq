@@ -114,18 +114,23 @@ impl AppConfigState {
 pub struct GameConfig {
     pub preferred_region: String,
     pub image_path: path::PathBuf,
-    pub gb_path: path::PathBuf,
-    pub gbc_path: path::PathBuf,
-    pub gba_path: path::PathBuf,
-    pub snes_path: path::PathBuf,
-    pub n64_path: path::PathBuf,
-    pub nds_path: path::PathBuf,
-    pub gamecube: GameCubeWiiConfig,
+    pub metadata_path: path::PathBuf,
+    pub consoles: ConsoleConfig,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct GameCubeWiiConfig {
-    pub metadata_path: path::PathBuf,
-    pub gamecube_path: path::PathBuf,
-    pub wii_path: path::PathBuf,
+pub struct ConsoleConfig {
+    pub gb: ConsoleEntry,
+    pub gbc: ConsoleEntry,
+    pub gba: ConsoleEntry,
+    pub snes: ConsoleEntry,
+    pub n64: ConsoleEntry,
+    pub nds: ConsoleEntry,
+    pub gamecube: ConsoleEntry,
+    pub wii: ConsoleEntry,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct ConsoleEntry {
+    pub path: path::PathBuf,
 }

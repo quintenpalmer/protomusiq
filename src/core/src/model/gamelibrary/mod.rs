@@ -235,7 +235,7 @@ impl GameLibrary {
 
                 let (gb_prefix_dir, gb_rom_paths) = {
                     let rom_paths =
-                        games::gb::scan_for_gb_rom_files(&actual_games.gb_path).unwrap();
+                        games::gb::scan_for_gb_rom_files(&actual_games.consoles.gb.path).unwrap();
 
                     let mut sorted_rom_paths: Vec<GBGame> = rom_paths
                         .into_iter()
@@ -244,14 +244,15 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.gb_path.clone();
+                    let prefix_dir = actual_games.consoles.gb.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (gbc_prefix_dir, gbc_rom_paths) = {
                     let rom_paths =
-                        games::gbc::scan_for_gbc_rom_files(&actual_games.gbc_path).unwrap();
+                        games::gbc::scan_for_gbc_rom_files(&actual_games.consoles.gbc.path)
+                            .unwrap();
 
                     let mut sorted_rom_paths: Vec<GBCGame> = rom_paths
                         .into_iter()
@@ -260,14 +261,15 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.gbc_path.clone();
+                    let prefix_dir = actual_games.consoles.gbc.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (gba_prefix_dir, gba_rom_paths) = {
                     let rom_paths =
-                        games::gba::scan_for_gba_rom_files(&actual_games.gba_path).unwrap();
+                        games::gba::scan_for_gba_rom_files(&actual_games.consoles.gba.path)
+                            .unwrap();
 
                     let mut sorted_rom_paths: Vec<GBAGame> = rom_paths
                         .into_iter()
@@ -276,14 +278,15 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.gba_path.clone();
+                    let prefix_dir = actual_games.consoles.gba.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (snes_prefix_dir, snes_rom_paths) = {
                     let rom_paths =
-                        games::snes::scan_for_snes_rom_files(&actual_games.snes_path).unwrap();
+                        games::snes::scan_for_snes_rom_files(&actual_games.consoles.snes.path)
+                            .unwrap();
 
                     let mut sorted_rom_paths: Vec<SNESGame> = rom_paths
                         .into_iter()
@@ -292,14 +295,15 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.snes_path.clone();
+                    let prefix_dir = actual_games.consoles.snes.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (n64_prefix_dir, n64_rom_paths) = {
                     let rom_paths =
-                        games::n64::scan_for_n64_rom_files(&actual_games.n64_path).unwrap();
+                        games::n64::scan_for_n64_rom_files(&actual_games.consoles.n64.path)
+                            .unwrap();
 
                     let mut sorted_rom_paths: Vec<N64Game> = rom_paths
                         .into_iter()
@@ -308,14 +312,15 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.n64_path.clone();
+                    let prefix_dir = actual_games.consoles.n64.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (nds_prefix_dir, nds_rom_paths) = {
                     let rom_paths =
-                        games::nds::scan_for_nds_rom_files(&actual_games.nds_path).unwrap();
+                        games::nds::scan_for_nds_rom_files(&actual_games.consoles.nds.path)
+                            .unwrap();
 
                     let mut sorted_rom_paths: Vec<NDSGame> = rom_paths
                         .into_iter()
@@ -324,12 +329,12 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.nds_path.clone();
+                    let prefix_dir = actual_games.consoles.nds.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
-                let gamecube_metadata_path = actual_games.gamecube.metadata_path.clone();
+                let gamecube_metadata_path = actual_games.metadata_path.clone();
 
                 let gamecube_lookup_table = {
                     let file = fs::File::open(
@@ -345,7 +350,7 @@ impl GameLibrary {
 
                 let (ngc_prefix_dir, ngc_rom_paths) = {
                     let rom_paths = games::gamecube::scan_for_gamecube_rom_files(
-                        &actual_games.gamecube.gamecube_path,
+                        &actual_games.consoles.gamecube.path,
                     )
                     .unwrap();
 
@@ -364,14 +369,14 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.gamecube.gamecube_path.clone();
+                    let prefix_dir = actual_games.consoles.gamecube.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
 
                 let (wii_prefix_dir, wii_rom_paths) = {
                     let rom_paths =
-                        games::wii::scan_for_wii_rom_files(&actual_games.gamecube.wii_path)
+                        games::wii::scan_for_wii_rom_files(&actual_games.consoles.wii.path)
                             .unwrap();
 
                     let mut sorted_rom_paths: Vec<WiiGame> = rom_paths
@@ -389,7 +394,7 @@ impl GameLibrary {
 
                     sorted_rom_paths.sort_by_key(|x| x.name.clone().to_lowercase());
 
-                    let prefix_dir = actual_games.gamecube.wii_path.clone();
+                    let prefix_dir = actual_games.consoles.wii.path.clone();
 
                     (prefix_dir, sorted_rom_paths)
                 };
