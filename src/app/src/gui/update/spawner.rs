@@ -22,11 +22,11 @@ pub fn exec_cmd(
                 .get_console_prefix(&console)
                 .expect("no prefix dir for console");
 
-            let (spawn_command, raw_spawn_args) = console.get_spawn_command();
+            let (spawn_command, raw_spawn_args) = game_library.get_spawn_command(&console).unwrap();
 
             let mut spawn_args: Vec<ffi::OsString> = raw_spawn_args
                 .into_iter()
-                .map(|x| ffi::OsStr::new(x).to_os_string())
+                .map(|x| ffi::OsStr::new(&x).to_os_string())
                 .collect();
             spawn_args.push(game_rom_path.into_os_string());
 

@@ -25,6 +25,46 @@ impl GameLibraryState {
         }
     }
 
+    pub fn get_spawn_command(
+        &self,
+        console: &consoles::GameConsole,
+    ) -> Option<(String, Vec<String>)> {
+        match console {
+            consoles::GameConsole::GameBoy => match self.games.inner {
+                Some(ref v) => Some((v.gb.emu_cmd.clone(), v.gb.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::GameBoyColor => match self.games.inner {
+                Some(ref v) => Some((v.gbc.emu_cmd.clone(), v.gbc.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::GameBoyAdvance => match self.games.inner {
+                Some(ref v) => Some((v.gba.emu_cmd.clone(), v.gba.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::NintendoDS => match self.games.inner {
+                Some(ref v) => Some((v.nds.emu_cmd.clone(), v.nds.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::SNES => match self.games.inner {
+                Some(ref v) => Some((v.snes.emu_cmd.clone(), v.snes.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::Nintendo64 => match self.games.inner {
+                Some(ref v) => Some((v.n64.emu_cmd.clone(), v.n64.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::GameCube => match self.games.inner {
+                Some(ref v) => Some((v.gamecube.emu_cmd.clone(), v.gamecube.emu_cmd_args.clone())),
+                None => None,
+            },
+            consoles::GameConsole::Wii => match self.games.inner {
+                Some(ref v) => Some((v.wii.emu_cmd.clone(), v.wii.emu_cmd_args.clone())),
+                None => None,
+            },
+        }
+    }
+
     pub fn get_generic_game_and_prefix(
         &self,
         console: &consoles::GameConsole,
@@ -404,34 +444,90 @@ impl GameLibrary {
                         gb: ConsoleInfo {
                             prefix_dir: gb_prefix_dir,
                             rom_paths: gb_rom_paths,
+                            emu_cmd: actual_games.consoles.gb.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .gb
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         gbc: ConsoleInfo {
                             prefix_dir: gbc_prefix_dir,
                             rom_paths: gbc_rom_paths,
+                            emu_cmd: actual_games.consoles.gbc.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .gbc
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         gba: ConsoleInfo {
                             prefix_dir: gba_prefix_dir,
                             rom_paths: gba_rom_paths,
+                            emu_cmd: actual_games.consoles.gba.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .gba
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         snes: ConsoleInfo {
                             prefix_dir: snes_prefix_dir,
                             rom_paths: snes_rom_paths,
+                            emu_cmd: actual_games.consoles.snes.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .snes
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         n64: ConsoleInfo {
                             prefix_dir: n64_prefix_dir,
                             rom_paths: n64_rom_paths,
+                            emu_cmd: actual_games.consoles.n64.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .n64
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         nds: ConsoleInfo {
                             prefix_dir: nds_prefix_dir,
                             rom_paths: nds_rom_paths,
+                            emu_cmd: actual_games.consoles.nds.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .nds
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         gamecube: ConsoleInfo {
                             prefix_dir: ngc_prefix_dir,
                             rom_paths: ngc_rom_paths,
+                            emu_cmd: actual_games.consoles.gamecube.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .gamecube
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                         wii: ConsoleInfo {
                             prefix_dir: wii_prefix_dir,
                             rom_paths: wii_rom_paths,
+                            emu_cmd: actual_games.consoles.wii.emu_cmd.clone(),
+                            emu_cmd_args: actual_games
+                                .consoles
+                                .wii
+                                .emu_cmd_args
+                                .clone()
+                                .unwrap_or(Vec::new()),
                         },
                     }),
                 }
@@ -455,6 +551,8 @@ struct InnerGameLibrary {
 struct ConsoleInfo<T> {
     pub prefix_dir: path::PathBuf,
     pub rom_paths: Vec<T>,
+    pub emu_cmd: String,
+    pub emu_cmd_args: Vec<String>,
 }
 
 pub trait GenericGame {

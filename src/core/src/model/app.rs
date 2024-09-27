@@ -133,4 +133,6 @@ pub struct ConsoleConfig {
 #[derive(Deserialize, Debug, Clone)]
 pub struct ConsoleEntry {
     pub path: path::PathBuf,
+    pub emu_cmd: String,
+    pub emu_cmd_args: Option<Vec<String>>,
 }

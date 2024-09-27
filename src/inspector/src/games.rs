@@ -162,7 +162,7 @@ fn gen_game_desktop_file<'a>(
         .get_console_prefix(&console)
         .expect("no prefix dir for console");
 
-    let (spawn_command, spawn_args) = console.get_spawn_command();
+    let (spawn_command, spawn_args) = game_library.get_spawn_command(console).unwrap();
 
     let spawn_args_str = spawn_args.join(" ");
 
