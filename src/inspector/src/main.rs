@@ -94,6 +94,10 @@ fn main() {
                         Command::Flexible(Box::new(music::LibDiffer {})),
                     ),
                     (
+                        "csv-history",
+                        Command::Flexible(Box::new(music::CSVHistoryGenerator {})),
+                    ),
+                    (
                         "reconcile-tracker-files",
                         Command::Flexible(Box::new(music::TrackerReconciler {})),
                     ),

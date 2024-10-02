@@ -4,10 +4,12 @@ use musiqlibrary as library;
 
 use super::commands::AppCmd;
 
+mod csvhistory;
 mod difflibs;
 pub mod misc;
 mod reconcile;
 
+pub use csvhistory::CSVHistoryGenerator;
 pub use difflibs::LibDiffer;
 pub use reconcile::TrackerReconciler;
 
