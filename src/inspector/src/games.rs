@@ -171,7 +171,7 @@ fn gen_game_desktop_file<'a>(
         format!("Name={}", game.get_name()),
         //Comment=Play this game on Steam
         format!(
-            "Path=\"{}\"",
+            "Path={}",
             musiqcore::model::functions::best_effort_path_to_string(cwd)
         ),
         format!(
