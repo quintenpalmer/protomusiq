@@ -1,5 +1,9 @@
 set -x
 
+# Golden Sun
+musiqinspector games gen-desktop-file "Game Boy Advance"	"Golden Sun" >	"assets/applications/GBA Golden Sun.desktop"
+musiqinspector games gen-desktop-file "Game Boy Advance"	"Golden Sun - The Lost Age" >	"assets/applications/GBA Golden Sun The Lost Age.desktop"
+
 # Advance Wars
 musiqinspector games gen-desktop-file "Game Boy Advance"	"Advance Wars" >	"assets/applications/GBA Advance Wars.desktop"
 musiqinspector games gen-desktop-file "Game Boy Advance"	"Advance Wars 2 - Black Hole Rising" >	"assets/applications/GBA Advance Wars 2 Black Hole Rising.desktop"
