@@ -163,42 +163,49 @@ pub fn artist_list<'a>(
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::ByPlayCount.display_text(),
                         model::ArtistSortKey::ByPlayCount,
                         model::ArtistSortKey::ByPlayCount.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::ByAlbumCount.display_text(),
                         model::ArtistSortKey::ByAlbumCount,
                         model::ArtistSortKey::ByAlbumCount.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::ByTrackCount.display_text(),
                         model::ArtistSortKey::ByTrackCount,
                         model::ArtistSortKey::ByTrackCount.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::ByTrackDuration.display_text(),
                         model::ArtistSortKey::ByTrackDuration,
                         model::ArtistSortKey::ByTrackDuration.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::ByPlayedDuration.display_text(),
                         model::ArtistSortKey::ByPlayedDuration,
                         model::ArtistSortKey::ByPlayedDuration.default_order(),
                         sort_key,
+                        message_builder,
                     ))
                     .push(components::sort_button(
                         model::ArtistSortKey::Random.display_text(),
                         model::ArtistSortKey::Random,
                         model::ArtistSortKey::Random.default_order(),
                         sort_key,
+                        message_builder,
                     )),
             );
 
@@ -258,4 +265,8 @@ fn get_sub_header_from_sort(
         }
         model::ArtistSortKey::Random => info.artist_name.clone(),
     }
+}
+
+fn message_builder(sort_key: model::ArtistSortKey, order: model::SortOrder) -> message::Message {
+    message::ArtistNavMessage::ArtistList(0, sort_key, order).into_message()
 }
