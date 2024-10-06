@@ -263,7 +263,7 @@ fn sort_button<'a>(
     sort_key: model::ArtistSortKey,
     order: model::SortOrder,
     current_sort: &'a model::ArtistSortKey,
-) -> Button<'a, Message> {
+) -> Button<'a, message::Message> {
     let text_element = if &sort_key == current_sort {
         bright_paragraph(display_text)
     } else {
