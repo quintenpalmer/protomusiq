@@ -6,6 +6,8 @@ use crate::model;
 use crate::gui::message::{self, Message, NavRelMsg, PagifiedMovementMsg};
 use crate::state;
 
+use crate::gui::view::components;
+
 use super::super::super::common;
 use super::super::super::consts;
 use super::super::super::elements::*;
@@ -156,43 +158,43 @@ pub fn artist_list<'a>(
             let sort_order_component = line_row().push(
                 line_row()
                     .push(paragraph("Sort By: "))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByName.display_text(),
                         model::ArtistSortKey::ByName,
                         model::ArtistSortKey::ByName.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByPlayCount.display_text(),
                         model::ArtistSortKey::ByPlayCount,
                         model::ArtistSortKey::ByPlayCount.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByAlbumCount.display_text(),
                         model::ArtistSortKey::ByAlbumCount,
                         model::ArtistSortKey::ByAlbumCount.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByTrackCount.display_text(),
                         model::ArtistSortKey::ByTrackCount,
                         model::ArtistSortKey::ByTrackCount.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByTrackDuration.display_text(),
                         model::ArtistSortKey::ByTrackDuration,
                         model::ArtistSortKey::ByTrackDuration.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::ByPlayedDuration.display_text(),
                         model::ArtistSortKey::ByPlayedDuration,
                         model::ArtistSortKey::ByPlayedDuration.default_order(),
                         sort_key,
                     ))
-                    .push(sort_button(
+                    .push(components::sort_button(
                         model::ArtistSortKey::Random.display_text(),
                         model::ArtistSortKey::Random,
                         model::ArtistSortKey::Random.default_order(),
@@ -256,19 +258,4 @@ fn get_sub_header_from_sort(
         }
         model::ArtistSortKey::Random => info.artist_name.clone(),
     }
-}
-
-fn sort_button<'a>(
-    display_text: String,
-    sort_key: model::ArtistSortKey,
-    order: model::SortOrder,
-    current_sort: &'a model::ArtistSortKey,
-) -> Button<'a, message::Message> {
-    let text_element = if &sort_key == current_sort {
-        bright_paragraph(display_text)
-    } else {
-        dark_paragraph(display_text)
-    };
-    dark_button(text_element)
-        .on_press(message::ArtistNavMessage::ArtistList(0, sort_key, order).into_message())
 }
