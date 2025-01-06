@@ -11,6 +11,7 @@ use crate::model::LoadMode;
 pub struct AppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
+    pub show_path: Option<path::PathBuf>,
 
     pub games: Option<GameConfig>,
 
@@ -54,6 +55,7 @@ impl AppConfigState {
 pub struct RawAppConfigState {
     pub library_path: path::PathBuf,
     pub movie_path: path::PathBuf,
+    pub show_path: Option<path::PathBuf>,
 
     pub games: Option<GameConfig>,
 
@@ -81,6 +83,7 @@ impl RawAppConfigState {
         AppConfigState {
             library_path: self.library_path,
             movie_path: self.movie_path,
+            show_path: self.show_path,
             games: self.games,
             compressed_library_path: self.compressed_library_path,
             app_data_path: app_data_path.as_ref().to_path_buf(),
