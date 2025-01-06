@@ -6,6 +6,7 @@ mod commands;
 mod games;
 mod movies;
 mod music;
+mod shows;
 
 pub use commands::{AppCmd, FlexibleCmd};
 
@@ -149,6 +150,17 @@ fn main() {
                 vec![(
                     "tree",
                     Command::Specific(Box::new(movies::MovieTreeViewer {})),
+                )]
+                .into_iter()
+                .collect(),
+            ),
+        ),
+        (
+            "shows",
+            Command::new_parent(
+                vec![(
+                    "tree",
+                    Command::Specific(Box::new(shows::ShowTreeViewer {})),
                 )]
                 .into_iter()
                 .collect(),
