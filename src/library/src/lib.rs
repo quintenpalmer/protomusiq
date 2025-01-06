@@ -4,6 +4,7 @@ pub mod model;
 mod organizer;
 mod parser;
 mod scanner;
+pub mod shows;
 pub mod video;
 
 pub use claxon;
