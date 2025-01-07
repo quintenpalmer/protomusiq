@@ -318,7 +318,7 @@ fn show_breadcrumbs(
                         .clone();
                     ret.push((
                         series_name,
-                        message::ShowNavMessage::ShowList.into_message(),
+                        message::ShowNavMessage::ShowSeries(series_key.clone()).into_message(),
                     ));
                 }
             }
