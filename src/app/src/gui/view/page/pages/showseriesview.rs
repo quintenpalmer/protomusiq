@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::Message;
+use crate::gui::message::{self, Message};
 
 use super::super::super::common;
 use super::super::super::consts;
@@ -27,13 +27,23 @@ pub fn show_series_view<'a>(
             body_column = body_column.push(h1(show.get_name()));
 
             for season in show.get_seasons().values() {
-                body_column = body_column.push(dark_button(Container::new(bottom_label(
-                    album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
-                    bright_paragraph(common::abr_str(
-                        season.pretty_display(),
-                        consts::ICON_STR_LENGTH,
-                    )),
-                ))));
+                body_column = body_column.push(
+                    dark_button(Container::new(bottom_label(
+                        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small)
+                            .into(),
+                        bright_paragraph(common::abr_str(
+                            season.pretty_display(),
+                            consts::ICON_STR_LENGTH,
+                        )),
+                    )))
+                    .on_press(
+                        message::ShowNavMessage::ShowSeason(
+                            series_key.clone(),
+                            season.get_season_number(),
+                        )
+                        .into_message(),
+                    ),
+                );
             }
         }
         None => body_column = body_column.push(bright_paragraph("no show path")),

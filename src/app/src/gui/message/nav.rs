@@ -93,6 +93,7 @@ pub enum ShowNavMessage {
     Home,
     ShowList,
     ShowSeries(musiqlibrary::shows::ShowKey),
+    ShowSeason(musiqlibrary::shows::ShowKey, u32),
 }
 
 #[derive(Debug, Clone)]

@@ -25,6 +25,15 @@ pub struct ShowMetadata {
     pub title: String,                      // .title
 }
 
+impl ShowMetadata {
+    pub fn local_display_name(&self) -> String {
+        match self.episode_id {
+            Some(ref v) => v.clone(),
+            None => format!("Episode: {}", self.episode_sort),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct ShowKey {
     name: String,
@@ -87,6 +96,10 @@ impl Show {
 
     pub fn get_name(&self) -> String {
         self.name.clone()
+    }
+
+    pub fn get_season(&self, season_id: &u32) -> Option<&ShowSeason> {
+        self.seasons.get(season_id)
     }
 
     pub fn get_seasons(&self) -> &BTreeMap<u32, ShowSeason> {

@@ -323,6 +323,36 @@ fn show_breadcrumbs(
                 }
             }
         }
+        message::ShowNavMessage::ShowSeason(series_key, season_id) => {
+            ret.push((
+                "Show List".to_string(),
+                message::ShowNavMessage::ShowList.into_message(),
+            ));
+            match library.get_shows_if_exists() {
+                None => ret.push((
+                    "ILLEGAL STATE".to_string(),
+                    message::ShowNavMessage::ShowSeries(series_key.clone()).into_message(),
+                )),
+                Some(show_library) => {
+                    let series = show_library
+                        .get_structured_shows()
+                        .get_shows()
+                        .get(series_key)
+                        .unwrap();
+                    ret.push((
+                        series.get_name().clone(),
+                        message::ShowNavMessage::ShowSeries(series_key.clone()).into_message(),
+                    ));
+
+                    let season = series.get_season(season_id).unwrap();
+                    ret.push((
+                        season.pretty_display(),
+                        message::ShowNavMessage::ShowSeason(series_key.clone(), season_id.clone())
+                            .into_message(),
+                    ));
+                }
+            }
+        }
     }
     ret
 }

@@ -505,6 +505,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::ShowSeriesView(series_key.clone());
                 Command::none()
             }
+            message::ShowNavMessage::ShowSeason(series_key, season_id) => {
+                app.page_state.current_page = Page::ShowSeasonView(series_key.clone(), season_id);
+                Command::none()
+            }
         },
     }
 }

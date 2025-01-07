@@ -100,6 +100,9 @@ pub fn render_page<'a>(
         Page::ShowSeriesView(series_key) => {
             pages::showseriesview::show_series_view(show_library, app_images, series_key)
         }
+        Page::ShowSeasonView(series_key, season_id) => {
+            pages::showseasonview::show_season_view(show_library, series_key, season_id)
+        }
     };
 
     (message_sourced_breadcrumbs, ret_page)
