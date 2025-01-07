@@ -25,8 +25,13 @@ pub struct ShowMetadata {
     pub title: String,                      // .title
 }
 
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+pub struct ShowKey {
+    name: String,
+}
+
 pub struct Shows {
-    pub shows: BTreeMap<String, Show>,
+    pub shows: BTreeMap<ShowKey, Show>,
 }
 
 impl Shows {
@@ -34,11 +39,15 @@ impl Shows {
         let mut shows = BTreeMap::new();
 
         for show_metadata in vec.iter() {
-            let show = shows.entry(show_metadata.show.clone()).or_insert(Show {
-                name: show_metadata.show.clone(),
-                album: show_metadata.album.clone(),
-                seasons: BTreeMap::new(),
-            });
+            let show = shows
+                .entry(ShowKey {
+                    name: show_metadata.show.clone(),
+                })
+                .or_insert(Show {
+                    name: show_metadata.show.clone(),
+                    album: show_metadata.album.clone(),
+                    seasons: BTreeMap::new(),
+                });
 
             show.add(&show_metadata);
         }
