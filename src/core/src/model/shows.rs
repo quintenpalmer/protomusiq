@@ -33,7 +33,7 @@ impl ShowLibrary {
         ShowLibrary { shows: structured }
     }
 
-    pub fn get_shows(&self) -> &shows::Shows {
+    pub fn get_structured_shows(&self) -> &shows::Shows {
         &self.shows
     }
 }

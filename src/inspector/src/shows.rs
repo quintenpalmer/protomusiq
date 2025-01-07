@@ -11,8 +11,8 @@ impl AppCmd for ShowTreeViewer {
         let shows = shows::find_shows_in_dir(path.clone());
         let structured = shows::Shows::from_vec(&shows);
         println!("All Shows:");
-        let show_count = structured.shows.len() - 1;
-        for (show_index, show) in structured.shows.values().enumerate() {
+        let show_count = structured.get_shows().len() - 1;
+        for (show_index, show) in structured.get_shows().values().enumerate() {
             println!("\t{}Show: {}", tree_arm(show_index, show_count), show.name);
             let season_count = show.seasons.len() - 1;
             for (season_index, season) in show.seasons.values().enumerate() {

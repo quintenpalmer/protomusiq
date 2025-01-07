@@ -31,7 +31,7 @@ pub struct ShowKey {
 }
 
 pub struct Shows {
-    pub shows: BTreeMap<ShowKey, Show>,
+    shows: BTreeMap<ShowKey, Show>,
 }
 
 impl Shows {
@@ -53,6 +53,10 @@ impl Shows {
         }
 
         Shows { shows }
+    }
+
+    pub fn get_shows(&self) -> &BTreeMap<ShowKey, Show> {
+        &self.shows
     }
 }
 

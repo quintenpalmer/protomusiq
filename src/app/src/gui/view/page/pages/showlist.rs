@@ -18,7 +18,7 @@ pub fn show_list<'a>(
 
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
-            for show in show_library.get_shows().shows.values() {
+            for show in show_library.get_structured_shows().get_shows().values() {
                 body_column = body_column.push(dark_button(Container::new(bottom_label(
                     album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
                     bright_paragraph(common::abr_str(show.name.clone(), consts::ICON_STR_LENGTH)),
