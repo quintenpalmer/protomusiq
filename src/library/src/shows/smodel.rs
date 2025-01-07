@@ -101,6 +101,13 @@ pub struct ShowSeason {
 }
 
 impl ShowSeason {
+    pub fn pretty_display(&self) -> String {
+        match self.name {
+            Some(ref name) => format!("{} ({:02})", name, self.number),
+            None => format!("Season {}", self.number),
+        }
+    }
+
     fn add(&mut self, metadata: &ShowMetadata) {
         let maybe_conflict = self
             .episodes
