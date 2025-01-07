@@ -91,6 +91,7 @@ pub enum GameNavMessage {
 #[derive(Debug, Clone)]
 pub enum ShowNavMessage {
     Home,
+    ShowList,
 }
 #[derive(Debug, Clone)]
 pub enum NavRelMsg {

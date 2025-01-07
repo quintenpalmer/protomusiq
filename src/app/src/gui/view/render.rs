@@ -29,6 +29,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
     );
     let library = &app.library;
     let movie_library = &app.video_library;
+    let show_library = &app.show_library;
     let game_library = &app.game_library;
     let config = &app.config;
     let messages = &app.messages;
@@ -48,6 +49,7 @@ pub fn view_app(app: &state::AppState) -> Element<Message> {
         current_page_message,
         library,
         movie_library,
+        show_library,
         game_library,
         app_images,
         action_state,

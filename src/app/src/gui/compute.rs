@@ -282,12 +282,18 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
 }
 
 fn show_breadcrumbs(message: &message::ShowNavMessage) -> Vec<(String, Message)> {
-    let ret = vec![(
+    let mut ret = vec![(
         "Shows".to_string(),
         message::ShowNavMessage::Home.into_message(),
     )];
     match message {
         message::ShowNavMessage::Home => (),
+        message::ShowNavMessage::ShowList => {
+            ret.push((
+                "Show List".to_string(),
+                message::ShowNavMessage::ShowList.into_message(),
+            ));
+        }
     }
     ret
 }

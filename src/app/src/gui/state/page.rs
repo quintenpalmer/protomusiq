@@ -45,6 +45,7 @@ pub enum Page {
     GameCubeList,
     WiiList,
     ShowHome,
+    ShowList,
 }
 
 impl Page {
@@ -84,6 +85,7 @@ impl Page {
             Page::GameCubeList => "GameCubeList",
             Page::WiiList => "WiiList",
             Page::ShowHome => "ShowHome",
+            Page::ShowList => "ShowList",
         }
         .to_string()
     }

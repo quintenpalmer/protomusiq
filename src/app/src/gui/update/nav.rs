@@ -497,6 +497,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::ShowHome;
                 Command::none()
             }
+            message::ShowNavMessage::ShowList => {
+                app.page_state.current_page = Page::ShowList;
+                Command::none()
+            }
         },
     }
 }

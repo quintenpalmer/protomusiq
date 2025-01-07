@@ -17,6 +17,7 @@ pub fn render_page<'a>(
     page_current_history: &'a message::NavMessage,
     library: &'a model::LibraryState,
     movie_library: &'a model::VideoLibraryState,
+    show_library: &'a musiqcore::model::shows::ShowLibraryState,
     game_library: &'a musiqcore::model::gl::GameLibraryState,
     app_images: &embedded::AppImages,
     action_state: &'a ActionState,
@@ -93,7 +94,8 @@ pub fn render_page<'a>(
         Page::NDSList => pages::gamends::nds_list(game_library),
         Page::GameCubeList => pages::gamengc::ngc_list(game_library),
         Page::WiiList => pages::gamewii::wii_list(game_library),
-        Page::ShowHome => pages::showhome::show_home(),
+        Page::ShowHome => pages::showhome::show_home(app_images),
+        Page::ShowList => pages::showlist::show_list(show_library, app_images),
     };
 
     (message_sourced_breadcrumbs, ret_page)
