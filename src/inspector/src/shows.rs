@@ -24,10 +24,10 @@ impl AppCmd for ShowTreeViewer {
                     "\t{}\t{}Season: {}",
                     tree_stem(show_index, show_count),
                     tree_arm(season_index, season_count),
-                    pretty_number_and_name(season.number, &season.name)
+                    season.pretty_display()
                 );
-                let episode_count = season.episodes.len() - 1;
-                for (episode_index, episode) in season.episodes.values().enumerate() {
+                let episode_count = season.get_episodes().len() - 1;
+                for (episode_index, episode) in season.get_episodes().values().enumerate() {
                     println!(
                         "\t{}\t{}\t{}Episode: {}",
                         tree_stem(show_index, show_count),

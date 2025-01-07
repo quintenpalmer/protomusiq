@@ -95,12 +95,24 @@ impl Show {
 }
 
 pub struct ShowSeason {
-    pub number: u32,
-    pub name: Option<String>,
-    pub episodes: BTreeMap<u32, ShowMetadata>,
+    number: u32,
+    name: Option<String>,
+    episodes: BTreeMap<u32, ShowMetadata>,
 }
 
 impl ShowSeason {
+    pub fn get_season_number(&self) -> u32 {
+        self.number
+    }
+
+    pub fn get_episodes(&self) -> &BTreeMap<u32, ShowMetadata> {
+        &self.episodes
+    }
+
+    pub fn get_episode(&self, episode_id: &u32) -> Option<&ShowMetadata> {
+        self.episodes.get(episode_id)
+    }
+
     pub fn pretty_display(&self) -> String {
         match self.name {
             Some(ref name) => format!("{} ({:02})", name, self.number),
