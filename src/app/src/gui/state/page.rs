@@ -46,6 +46,7 @@ pub enum Page {
     WiiList,
     ShowHome,
     ShowList,
+    ShowSeriesView(musiqlibrary::shows::ShowKey),
 }
 
 impl Page {
@@ -86,6 +87,7 @@ impl Page {
             Page::WiiList => "WiiList",
             Page::ShowHome => "ShowHome",
             Page::ShowList => "ShowList",
+            Page::ShowSeriesView(_) => "ShowSeriesView",
         }
         .to_string()
     }

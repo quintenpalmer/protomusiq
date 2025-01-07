@@ -501,6 +501,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::ShowList;
                 Command::none()
             }
+            message::ShowNavMessage::ShowSeries(series_key) => {
+                app.page_state.current_page = Page::ShowSeriesView(series_key.clone());
+                Command::none()
+            }
         },
     }
 }

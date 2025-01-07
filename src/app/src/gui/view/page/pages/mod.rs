@@ -31,4 +31,5 @@ pub mod playlists;
 pub mod search;
 pub mod showhome;
 pub mod showlist;
+pub mod showseriesview;
 pub mod tracklist;

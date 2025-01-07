@@ -6,6 +6,7 @@ use crate::gui::view::consts;
 
 pub fn compute_breadcrumb(
     library: &model::LibraryState,
+    show_library: &musiqcore::model::shows::ShowLibraryState,
     page_current_history: &message::NavMessage,
 ) -> Vec<(String, Message)> {
     match page_current_history {
@@ -36,7 +37,7 @@ pub fn compute_breadcrumb(
         message::NavMessage::Music(music_message) => music_breadcrumbs(library, music_message),
         message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
         message::NavMessage::Game(game_message) => game_breadcrumbs(game_message),
-        message::NavMessage::Shows(show_message) => show_breadcrumbs(show_message),
+        message::NavMessage::Shows(show_message) => show_breadcrumbs(show_library, show_message),
         message::NavMessage::Playlist(playlist_message) => {
             playlist_breadcrumbs(library, playlist_message)
         }
@@ -281,7 +282,10 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
     ret
 }
 
-fn show_breadcrumbs(message: &message::ShowNavMessage) -> Vec<(String, Message)> {
+fn show_breadcrumbs(
+    library: &musiqcore::model::shows::ShowLibraryState,
+    message: &message::ShowNavMessage,
+) -> Vec<(String, Message)> {
     let mut ret = vec![(
         "Shows".to_string(),
         message::ShowNavMessage::Home.into_message(),
@@ -293,6 +297,31 @@ fn show_breadcrumbs(message: &message::ShowNavMessage) -> Vec<(String, Message)>
                 "Show List".to_string(),
                 message::ShowNavMessage::ShowList.into_message(),
             ));
+        }
+        message::ShowNavMessage::ShowSeries(series_key) => {
+            ret.push((
+                "Show List".to_string(),
+                message::ShowNavMessage::ShowList.into_message(),
+            ));
+            match library.get_shows_if_exists() {
+                None => ret.push((
+                    "ILLEGAL STATE".to_string(),
+                    message::ShowNavMessage::ShowSeries(series_key.clone()).into_message(),
+                )),
+                Some(show_library) => {
+                    let series_name = show_library
+                        .get_structured_shows()
+                        .get_shows()
+                        .get(series_key)
+                        .unwrap()
+                        .get_name()
+                        .clone();
+                    ret.push((
+                        series_name,
+                        message::ShowNavMessage::ShowList.into_message(),
+                    ));
+                }
+            }
         }
     }
     ret

@@ -4,7 +4,7 @@ use iced::Length;
 use crate::model;
 
 use crate::datastore::staticassets::embedded;
-use crate::gui::message::Message;
+use crate::gui::message::{self, Message};
 
 use super::super::super::common;
 use super::super::super::consts;
@@ -18,11 +18,15 @@ pub fn show_list<'a>(
 
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
-            for show in show_library.get_structured_shows().get_shows().values() {
-                body_column = body_column.push(dark_button(Container::new(bottom_label(
-                    album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small).into(),
-                    bright_paragraph(common::abr_str(show.name.clone(), consts::ICON_STR_LENGTH)),
-                ))))
+            for (show_key, show) in show_library.get_structured_shows().get_shows().iter() {
+                body_column = body_column.push(
+                    dark_button(Container::new(bottom_label(
+                        album_image(app_images.get_dvd_image().clone(), model::AlbumSize::Small)
+                            .into(),
+                        bright_paragraph(common::abr_str(show.get_name(), consts::ICON_STR_LENGTH)),
+                    )))
+                    .on_press(message::ShowNavMessage::ShowSeries(show_key.clone()).into_message()),
+                )
             }
         }
         None => (),

@@ -24,7 +24,8 @@ pub fn render_page<'a>(
     play_queue_visible: bool,
     player_info: &'a PlayerInfo,
 ) -> (Vec<(String, Message)>, Container<'a, Message>) {
-    let message_sourced_breadcrumbs = compute::compute_breadcrumb(library, page_current_history);
+    let message_sourced_breadcrumbs =
+        compute::compute_breadcrumb(library, show_library, page_current_history);
 
     let ret_page = match current_page {
         Page::Home(ref state) => pages::home::home_page(app_images, state),
@@ -96,6 +97,9 @@ pub fn render_page<'a>(
         Page::WiiList => pages::gamewii::wii_list(game_library),
         Page::ShowHome => pages::showhome::show_home(app_images),
         Page::ShowList => pages::showlist::show_list(show_library, app_images),
+        Page::ShowSeriesView(series_key) => {
+            pages::showseriesview::show_series_view(show_library, app_images, series_key)
+        }
     };
 
     (message_sourced_breadcrumbs, ret_page)

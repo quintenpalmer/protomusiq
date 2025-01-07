@@ -124,8 +124,11 @@ fn handle_breadcrumb_selection(
         return Some(message::NavMessage::Home.into_message());
     }
 
-    let breadcrumbs =
-        compute::compute_breadcrumb(&app.library, &app.page_state.page_current_history);
+    let breadcrumbs = compute::compute_breadcrumb(
+        &app.library,
+        &app.show_library,
+        &app.page_state.page_current_history,
+    );
 
     match breadcrumbs.get(breadcrumb_index - 1) {
         Some((_message, button_message)) => Some(button_message.clone()),

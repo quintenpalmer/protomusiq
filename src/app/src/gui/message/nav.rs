@@ -92,7 +92,9 @@ pub enum GameNavMessage {
 pub enum ShowNavMessage {
     Home,
     ShowList,
+    ShowSeries(musiqlibrary::shows::ShowKey),
 }
+
 #[derive(Debug, Clone)]
 pub enum NavRelMsg {
     BreadcrumbSelection(usize),
