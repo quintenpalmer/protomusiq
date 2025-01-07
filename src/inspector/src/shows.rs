@@ -13,9 +13,13 @@ impl AppCmd for ShowTreeViewer {
         println!("All Shows:");
         let show_count = structured.get_shows().len() - 1;
         for (show_index, show) in structured.get_shows().values().enumerate() {
-            println!("\t{}Show: {}", tree_arm(show_index, show_count), show.name);
-            let season_count = show.seasons.len() - 1;
-            for (season_index, season) in show.seasons.values().enumerate() {
+            println!(
+                "\t{}Show: {}",
+                tree_arm(show_index, show_count),
+                show.get_name()
+            );
+            let season_count = show.get_seasons().len() - 1;
+            for (season_index, season) in show.get_seasons().values().enumerate() {
                 println!(
                     "\t{}\t{}Season: {}",
                     tree_stem(show_index, show_count),

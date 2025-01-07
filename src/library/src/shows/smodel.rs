@@ -58,12 +58,17 @@ impl Shows {
     pub fn get_shows(&self) -> &BTreeMap<ShowKey, Show> {
         &self.shows
     }
+
+    pub fn get_show(&self, series_key: &ShowKey) -> Option<&Show> {
+        self.shows.get(series_key)
+    }
 }
 
 pub struct Show {
-    pub name: String,
-    pub album: String,
-    pub seasons: BTreeMap<u32, ShowSeason>,
+    name: String,
+    #[allow(unused)]
+    album: String,
+    seasons: BTreeMap<u32, ShowSeason>,
 }
 
 impl Show {
@@ -78,6 +83,14 @@ impl Show {
             });
 
         seasons.add(&metadata);
+    }
+
+    pub fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn get_seasons(&self) -> &BTreeMap<u32, ShowSeason> {
+        &self.seasons
     }
 }
 
