@@ -24,6 +24,12 @@ impl nav::MusicNavMessage {
     }
 }
 
+impl nav::ShowNavMessage {
+    pub fn into_message(self) -> top::Message {
+        top::Message::Nav(nav::NavMessage::Shows(self))
+    }
+}
+
 impl nav::MusicGenreNavMessage {
     pub fn into_message(self) -> top::Message {
         top::Message::Nav(nav::NavMessage::Music(nav::MusicNavMessage::Genres(self)))

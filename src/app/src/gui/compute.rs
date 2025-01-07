@@ -36,6 +36,7 @@ pub fn compute_breadcrumb(
         message::NavMessage::Music(music_message) => music_breadcrumbs(library, music_message),
         message::NavMessage::Movie(movie_message) => movie_breadcrumbs(movie_message),
         message::NavMessage::Game(game_message) => game_breadcrumbs(game_message),
+        message::NavMessage::Shows(show_message) => show_breadcrumbs(show_message),
         message::NavMessage::Playlist(playlist_message) => {
             playlist_breadcrumbs(library, playlist_message)
         }
@@ -277,5 +278,16 @@ fn game_breadcrumbs(message: &message::GameNavMessage) -> Vec<(String, Message)>
         )),
     }
 
+    ret
+}
+
+fn show_breadcrumbs(message: &message::ShowNavMessage) -> Vec<(String, Message)> {
+    let ret = vec![(
+        "Shows".to_string(),
+        message::ShowNavMessage::Home.into_message(),
+    )];
+    match message {
+        message::ShowNavMessage::Home => (),
+    }
     ret
 }

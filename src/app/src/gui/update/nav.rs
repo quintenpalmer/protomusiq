@@ -492,5 +492,11 @@ pub fn handle_nav(
                 Command::none()
             }
         },
+        NavMessage::Shows(show_message) => match show_message {
+            message::ShowNavMessage::Home => {
+                app.page_state.current_page = Page::ShowHome;
+                Command::none()
+            }
+        },
     }
 }

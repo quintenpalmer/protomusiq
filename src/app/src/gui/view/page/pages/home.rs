@@ -94,13 +94,26 @@ pub fn home_page<'a>(
             )))
             .on_press(message::GameNavMessage::GameHome.into_message());
 
+            let show_home = dark_button(Container::new(bottom_label(
+                album_image(
+                    app_images.get_show_tv_image().clone(),
+                    model::AlbumSize::Small,
+                )
+                .into(),
+                bright_paragraph(common::abr_str(
+                    "Shows".to_string(),
+                    consts::ICON_STR_LENGTH,
+                )),
+            )))
+            .on_press(message::ShowNavMessage::Home.into_message());
+
             let page = Container::new(
                 Scrollable::new(
                     Column::new()
                         .width(Length::Fill)
                         .push(h1("Home"))
-                        .push(Row::new().push(music_list).push(dvd).push(game_home))
-                        .push(Row::new().push(search).push(settings)),
+                        .push(Row::new().push(music_list).push(dvd).push(show_home))
+                        .push(Row::new().push(game_home).push(search).push(settings)),
                 )
                 .height(Length::Fill),
             );

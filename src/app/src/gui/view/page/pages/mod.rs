@@ -29,4 +29,5 @@ pub mod musichome;
 pub mod playlist;
 pub mod playlists;
 pub mod search;
+pub mod showhome;
 pub mod tracklist;

@@ -44,6 +44,7 @@ pub enum Page {
     NDSList,
     GameCubeList,
     WiiList,
+    ShowHome,
 }
 
 impl Page {
@@ -82,6 +83,7 @@ impl Page {
             Page::NDSList => "NDSList",
             Page::GameCubeList => "GameCubeList",
             Page::WiiList => "WiiList",
+            Page::ShowHome => "ShowHome",
         }
         .to_string()
     }

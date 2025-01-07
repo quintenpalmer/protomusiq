@@ -12,6 +12,7 @@ pub enum NavMessage {
     Music(MusicNavMessage),
     Movie(MovieNavMessage),
     Game(GameNavMessage),
+    Shows(ShowNavMessage),
 }
 
 #[derive(Debug, Clone)]
@@ -87,6 +88,10 @@ pub enum GameNavMessage {
     WiiList,
 }
 
+#[derive(Debug, Clone)]
+pub enum ShowNavMessage {
+    Home,
+}
 #[derive(Debug, Clone)]
 pub enum NavRelMsg {
     BreadcrumbSelection(usize),

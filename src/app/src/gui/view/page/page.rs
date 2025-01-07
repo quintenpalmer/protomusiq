@@ -93,6 +93,7 @@ pub fn render_page<'a>(
         Page::NDSList => pages::gamends::nds_list(game_library),
         Page::GameCubeList => pages::gamengc::ngc_list(game_library),
         Page::WiiList => pages::gamewii::wii_list(game_library),
+        Page::ShowHome => pages::showhome::show_home(),
     };
 
     (message_sourced_breadcrumbs, ret_page)
