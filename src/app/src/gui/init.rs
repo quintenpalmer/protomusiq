@@ -58,6 +58,9 @@ pub fn initialize_everything() -> state::App {
 
     let game_library_state = musiqcore::model::gl::GameLibraryState::new(game_library);
 
+    let show_library_state =
+        musiqcore::model::shows::ShowLibraryState::new(config_state.show_path.clone());
+
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
         loader::Loader::NoCache | loader::Loader::Json => {
@@ -181,6 +184,7 @@ pub fn initialize_everything() -> state::App {
             group_buttons_shuffle: false,
         },
         video_library: video_library_state,
+        show_library: show_library_state,
         game_library: game_library_state,
         config: config_state,
         player_info: state::PlayerInfo {

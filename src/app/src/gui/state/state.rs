@@ -26,6 +26,7 @@ pub struct AppState {
 
     pub library: model::LibraryState,
     pub video_library: model::VideoLibraryState,
+    pub show_library: musiqcore::model::shows::ShowLibraryState,
     pub game_library: musiqcore::model::gl::GameLibraryState,
 
     pub player_info: PlayerInfo,
