@@ -24,11 +24,15 @@ pub fn show_home<'a>(app_images: &embedded::AppImages) -> Container<'a, Message>
     )))
     .on_press(message::ShowNavMessage::ShowList.into_message());
 
-    let body_column = Column::new().push(line_row().push(show_list_link));
+    let body_column = Column::new()
+        .push(h1("List"))
+        .push(line_row().push(show_list_link));
 
     let body = Container::new(
         Column::new()
-            .push(h1("Shows"))
+            .padding(10)
+            .spacing(10)
+            .push(h2("Shows"))
             .push(Scrollable::new(body_column).height(Length::Fill)),
     );
 

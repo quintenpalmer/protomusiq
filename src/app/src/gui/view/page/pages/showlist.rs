@@ -14,7 +14,7 @@ pub fn show_list<'a>(
     show_library_state: &'a musiqcore::model::shows::ShowLibraryState,
     app_images: &embedded::AppImages,
 ) -> Container<'a, Message> {
-    let mut body_column = Column::new();
+    let mut body_column = Column::new().push(h1("All Shows"));
 
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
@@ -34,7 +34,9 @@ pub fn show_list<'a>(
 
     let body = Container::new(
         Column::new()
-            .push(h1("Show List"))
+            .padding(10)
+            .spacing(10)
+            .push(h2("Show List"))
             .push(Scrollable::new(body_column).height(Length::Fill)),
     );
 

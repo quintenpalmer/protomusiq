@@ -10,7 +10,7 @@ pub fn show_season_view<'a>(
     series_key: &musiqlibrary::shows::ShowKey,
     season_id: &u32,
 ) -> Container<'a, Message> {
-    let mut body_column = Column::new().padding(10).spacing(10);
+    let mut body_column = Column::new();
 
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
@@ -43,6 +43,8 @@ pub fn show_season_view<'a>(
 
     let body = Container::new(
         Column::new()
+            .padding(10)
+            .spacing(10)
             .push(h2("Show Season Episode(s):"))
             .push(Scrollable::new(body_column).height(Length::Fill)),
     );

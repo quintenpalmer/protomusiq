@@ -51,6 +51,8 @@ pub fn show_series_view<'a>(
 
     let body = Container::new(
         Column::new()
+            .padding(10)
+            .spacing(10)
             .push(h2("Show Season(s):"))
             .push(Scrollable::new(body_column).height(Length::Fill)),
     );
