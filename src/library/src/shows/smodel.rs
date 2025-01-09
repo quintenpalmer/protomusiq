@@ -128,8 +128,8 @@ impl ShowSeason {
 
     pub fn pretty_display(&self) -> String {
         match self.name {
-            Some(ref name) => format!("{} ({:02})", name, self.number),
-            None => format!("Season {}", self.number),
+            Some(ref name) => format!("{:02} : {}", self.number, name),
+            None => format!("Season {:02}", self.number),
         }
     }
 
