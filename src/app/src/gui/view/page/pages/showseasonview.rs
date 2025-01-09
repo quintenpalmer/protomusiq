@@ -10,7 +10,7 @@ pub fn show_season_view<'a>(
     series_key: &musiqlibrary::shows::ShowKey,
     season_id: &u32,
 ) -> Container<'a, Message> {
-    let mut body_column = Column::new();
+    let mut body_column = Column::new().padding(10).spacing(10);
 
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
@@ -25,20 +25,25 @@ pub fn show_season_view<'a>(
 
             body_column = body_column.push(h2(season.pretty_display()));
 
+            let mut episodes = Column::new().padding(3).spacing(1);
+
             for episode in season.get_episodes().values() {
-                body_column = body_column.push(
+                episodes = episodes.push(
                     Row::new()
-                        .push(h3(format!("{}", episode.episode_sort)))
-                        .push(h3(episode.local_display_name())),
+                        .padding(3)
+                        .push(h3(format!("{}", episode.episode_sort)).width(Length::Fixed(40.0)))
+                        .push(h3(episode.local_display_name()).width(Length::Fill)),
                 );
             }
+
+            body_column = body_column.push(episodes);
         }
         None => body_column = body_column.push(bright_paragraph("no show path")),
     }
 
     let body = Container::new(
         Column::new()
-            .push(h2("Show Season(s):"))
+            .push(h2("Show Season Episode(s):"))
             .push(Scrollable::new(body_column).height(Length::Fill)),
     );
 
