@@ -1,7 +1,7 @@
-use iced::widget::{Column, Container, Row, Scrollable};
+use iced::widget::{Column, Container, Scrollable, Space};
 use iced::Length;
 
-use crate::gui::message::Message;
+use crate::gui::message::{ExternalSpawn, Message};
 
 use super::super::super::elements::*;
 
@@ -28,9 +28,16 @@ pub fn show_season_view<'a>(
             let mut episodes = Column::new().padding(3).spacing(1);
 
             for episode in season.get_episodes().values() {
+                let play_button =
+                    Container::new(dark_button(h2(">")).on_press(Message::ExternalSpawn(
+                        ExternalSpawn::Mpv(episode.full_path.clone().to_path_buf()),
+                    )));
+
                 episodes = episodes.push(
-                    Row::new()
+                    line_row()
                         .padding(3)
+                        .push(play_button)
+                        .push(Space::with_width(10))
                         .push(h3(format!("{}", episode.episode_sort)).width(Length::Fixed(40.0)))
                         .push(h3(episode.local_display_name()).width(Length::Fill)),
                 );
