@@ -41,6 +41,14 @@ impl ShowMetadata {
             None => format!("Episode: {}", self.episode_sort),
         }
     }
+
+    pub fn get_key(&self) -> ShowEpisodeKey {
+        ShowEpisodeKey {
+            show: self.show.clone(),
+            season_number: self.season_number,
+            episode_sort: self.episode_sort,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
