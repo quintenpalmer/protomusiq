@@ -54,12 +54,18 @@ pub fn initialize_everything() -> state::App {
     );
     logger.print_elapsed("processing movie art (with cache)");
 
+    let show_tracker = datastore::jsonbacked::showtracker::ShowTracker::new(
+        &config_state.app_data_path.to_path_buf(),
+    );
+
     let video_library_state = model::VideoLibraryState::new(video_library, loaded_movie_images);
 
     let game_library_state = musiqcore::model::gl::GameLibraryState::new(game_library);
 
-    let show_library_state =
-        musiqcore::model::shows::ShowLibraryState::new(config_state.show_path.clone());
+    let show_library_state = musiqcore::model::shows::ShowLibraryState::new(
+        config_state.show_path.clone(),
+        show_tracker,
+    );
 
     let read_only_tracker: Box<dyn datastore::traits::LiveReadOnlyTrackCountReporter> = match loader
     {
