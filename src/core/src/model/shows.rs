@@ -24,6 +24,10 @@ impl ShowLibraryState {
     pub fn get_shows_if_exists(&self) -> &Option<ShowLibrary> {
         &self.inner
     }
+
+    pub fn get_shows_if_exists_mut(&mut self) -> &mut Option<ShowLibrary> {
+        &mut self.inner
+    }
 }
 
 pub struct ShowLibrary {
@@ -49,7 +53,7 @@ impl ShowLibrary {
         &self.shows
     }
 
-    pub fn get_tracker(&self) -> &jsonbacked::showtracker::ShowTracker {
-        &self.tracker
+    pub fn get_tracker_mut(&mut self) -> &mut jsonbacked::showtracker::ShowTracker {
+        &mut self.tracker
     }
 }
