@@ -73,3 +73,9 @@ impl nav::GameNavMessage {
         top::Message::Nav(nav::NavMessage::Game(self))
     }
 }
+
+impl top::ExternalSpawn {
+    pub fn into_message(self) -> top::Message {
+        top::Message::ExternalSpawn(self)
+    }
+}
