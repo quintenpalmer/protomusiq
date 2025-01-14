@@ -40,10 +40,10 @@ impl RawShowTrackedPayload {
     }
 
     pub fn from_btree_map(
-        views: BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
+        views: &BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
     ) -> Self {
         RawShowTrackedPayload {
-            views: views.into_iter().collect(),
+            views: views.iter().map(|(x, y)| (x.clone(), y.clone())).collect(),
         }
     }
 }
