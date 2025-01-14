@@ -1,5 +1,5 @@
 use std::collections::BTreeMap;
-use std::path;
+use std::{fs, io, path};
 
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
@@ -24,6 +24,29 @@ impl ShowTracker {
             show_tracker_json_file_path,
             tracked_show_views: tracked_show_views.to_btree_map(),
         }
+    }
+
+    pub fn mark_episode_viewed_now(&mut self, key: musiqlibrary::shows::ShowEpisodeKey) {
+        self.mark_episode_viewed_at(key, Local::now())
+    }
+
+    pub fn mark_episode_viewed_at(
+        &mut self,
+        key: musiqlibrary::shows::ShowEpisodeKey,
+        view_time: DateTime<Local>,
+    ) {
+        self.tracked_show_views
+            .entry(key)
+            .or_insert(Vec::new())
+            .push(view_time);
+
+        let raw_tracker = RawShowTrackedPayload::from_btree_map(&self.tracked_show_views);
+
+        serde_json::to_writer(
+            io::BufWriter::new(fs::File::create(&self.show_tracker_json_file_path).unwrap()),
+            &raw_tracker,
+        )
+        .unwrap();
     }
 }
 

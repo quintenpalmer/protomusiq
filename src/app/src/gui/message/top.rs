@@ -20,6 +20,7 @@ pub enum Message {
     NavRelative(NavRelMsg),
     HistoryNav(HistoryDirection),
     PlaybackRequest(shared::PlaybackRequest),
+    ExternalRequest(ExternalRequest),
     ErrorResponse(Result<(), String>),
     BackendCallback(shared::BackendToGUIMessage),
     ExternalSpawn(ExternalSpawn),
@@ -73,6 +74,11 @@ pub enum VolumeRequest {
     Up(f32),
     Down(f32),
     Set(f32),
+}
+
+#[derive(Debug, Clone)]
+pub enum ExternalRequest {
+    PlayShow(musiqlibrary::shows::ShowMetadata),
 }
 
 #[derive(Debug, Clone)]

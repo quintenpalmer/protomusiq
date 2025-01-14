@@ -6,6 +6,7 @@ use super::super::message::{self, Message};
 use super::super::state::AppState;
 
 use super::action;
+use super::external;
 use super::nav;
 use super::navrel;
 use super::playback;
@@ -26,6 +27,7 @@ pub fn update_state(app: &mut AppState, message: Message) -> Command<Message> {
     match message {
         Message::Action(action) => action::handle_action(app, action),
         Message::PlaybackRequest(internal) => playback::handle_playback_request(app, internal),
+        Message::ExternalRequest(external) => external::handle_external_request(app, external),
         Message::BackendCallback(callback) => match callback {
             shared::BackendToGUIMessage::PlayQueueState(new_play_queue) => {
                 playback::handle_set_play_queue(app, new_play_queue)
