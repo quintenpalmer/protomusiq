@@ -1,11 +1,20 @@
 use std::collections::BTreeMap;
 use std::{path, time};
 
+use serde::{Deserialize, Serialize};
+
 /// Possible Errors from Show Searching/Decoding
 #[derive(Debug)]
 pub enum Error {
     NonTextTitle,
     NonMP4File,
+}
+
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Deserialize, Serialize)]
+pub struct ShowEpisodeKey {
+    pub show: String,
+    pub season_number: u32,
+    pub episode_sort: u32,
 }
 
 #[derive(Debug, Clone)]

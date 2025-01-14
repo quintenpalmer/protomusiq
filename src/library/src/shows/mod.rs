@@ -4,7 +4,7 @@ mod smodel;
 pub use find::find_show_file_paths;
 pub use find::find_shows_in_dir;
 pub use smodel::ShowMetadata;
-pub use smodel::{Show, ShowKey, ShowSeason, Shows};
+pub use smodel::{Show, ShowEpisodeKey, ShowKey, ShowSeason, Shows};
 
 // Example output from ffprobe
 
