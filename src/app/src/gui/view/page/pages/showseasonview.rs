@@ -19,6 +19,8 @@ pub fn show_season_view<'a>(
                 .get_show(series_key)
                 .unwrap();
 
+            let tracker = show_library.get_tracker();
+
             body_column = body_column.push(h1(show.get_name()));
 
             let season = show.get_season(season_id).unwrap();
@@ -32,9 +34,16 @@ pub fn show_season_view<'a>(
                     Message::ExternalRequest(ExternalRequest::PlayShow(episode.clone())),
                 ));
 
+                let seen_element = match tracker.get_view_count_for_episode(episode.get_key()) {
+                    0 => h3("[  ]"),
+                    _ => h3("[#]"),
+                };
+
                 episodes = episodes.push(
                     line_row()
                         .padding(3)
+                        .push(seen_element)
+                        .push(Space::with_width(5))
                         .push(play_button)
                         .push(Space::with_width(10))
                         .push(h3(format!("{}", episode.episode_sort)).width(Length::Fixed(40.0)))

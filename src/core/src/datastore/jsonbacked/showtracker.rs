@@ -26,6 +26,13 @@ impl ShowTracker {
         }
     }
 
+    pub fn get_view_count_for_episode(&self, key: musiqlibrary::shows::ShowEpisodeKey) -> usize {
+        match self.tracked_show_views.get(&key) {
+            Some(views) => views.len(),
+            None => 0,
+        }
+    }
+
     pub fn mark_episode_viewed_now(&mut self, key: musiqlibrary::shows::ShowEpisodeKey) {
         self.mark_episode_viewed_at(key, Local::now())
     }

@@ -53,6 +53,10 @@ impl ShowLibrary {
         &self.shows
     }
 
+    pub fn get_tracker(&self) -> &jsonbacked::showtracker::ShowTracker {
+        &self.tracker
+    }
+
     pub fn get_tracker_mut(&mut self) -> &mut jsonbacked::showtracker::ShowTracker {
         &mut self.tracker
     }
