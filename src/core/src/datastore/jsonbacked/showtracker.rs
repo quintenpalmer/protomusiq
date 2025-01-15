@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 use crate::datastore::jsonbacked::common;
 
 pub struct ShowTracker {
-    pub show_tracker_json_file_path: path::PathBuf,
-    pub tracked_show_views: BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
+    show_tracker_json_file_path: path::PathBuf,
+    tracked_show_views: BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
 }
 
 impl ShowTracker {
