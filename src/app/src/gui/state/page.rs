@@ -48,6 +48,7 @@ pub enum Page {
     ShowList,
     ShowSeriesView(musiqlibrary::shows::ShowKey),
     ShowSeasonView(musiqlibrary::shows::ShowKey, u32),
+    ShowContinueWatching,
 }
 
 impl Page {
@@ -90,6 +91,7 @@ impl Page {
             Page::ShowList => "ShowList",
             Page::ShowSeriesView(_) => "ShowSeriesView",
             Page::ShowSeasonView(_, _) => "ShowSeasonView",
+            Page::ShowContinueWatching => "ShowContinueWatching",
         }
         .to_string()
     }

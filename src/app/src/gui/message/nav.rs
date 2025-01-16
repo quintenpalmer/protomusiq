@@ -94,6 +94,7 @@ pub enum ShowNavMessage {
     ShowList,
     ShowSeries(musiqlibrary::shows::ShowKey),
     ShowSeason(musiqlibrary::shows::ShowKey, u32),
+    ContinueWatching,
 }
 
 #[derive(Debug, Clone)]

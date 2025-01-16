@@ -509,6 +509,10 @@ pub fn handle_nav(
                 app.page_state.current_page = Page::ShowSeasonView(series_key.clone(), season_id);
                 Command::none()
             }
+            message::ShowNavMessage::ContinueWatching => {
+                app.page_state.current_page = Page::ShowContinueWatching;
+                Command::none()
+            }
         },
     }
 }

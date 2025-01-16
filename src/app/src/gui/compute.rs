@@ -353,6 +353,12 @@ fn show_breadcrumbs(
                 }
             }
         }
+        message::ShowNavMessage::ContinueWatching => {
+            ret.push((
+                "Continue Watching".to_string(),
+                message::ShowNavMessage::ContinueWatching.into_message(),
+            ));
+        }
     }
     ret
 }

@@ -24,9 +24,22 @@ pub fn show_home<'a>(app_images: &embedded::AppImages) -> Container<'a, Message>
     )))
     .on_press(message::ShowNavMessage::ShowList.into_message());
 
+    let recently_viewed_link = dark_button(Container::new(bottom_label(
+        album_image(
+            app_images.get_playlists_image().clone(),
+            model::AlbumSize::Small,
+        )
+        .into(),
+        bright_paragraph(common::abr_str(
+            "Continue Watching".to_string(),
+            consts::ICON_STR_LENGTH,
+        )),
+    )))
+    .on_press(message::ShowNavMessage::ContinueWatching.into_message());
+
     let body_column = Column::new()
         .push(h1("List"))
-        .push(line_row().push(show_list_link));
+        .push(line_row().push(show_list_link).push(recently_viewed_link));
 
     let body = Container::new(
         Column::new()

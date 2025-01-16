@@ -103,6 +103,9 @@ pub fn render_page<'a>(
         Page::ShowSeasonView(series_key, season_id) => {
             pages::showseasonview::show_season_view(show_library, series_key, season_id)
         }
+        Page::ShowContinueWatching => {
+            pages::showcontinue::show_continue_watching(show_library, app_images)
+        }
     };
 
     (message_sourced_breadcrumbs, ret_page)

@@ -29,6 +29,7 @@ pub mod musichome;
 pub mod playlist;
 pub mod playlists;
 pub mod search;
+pub mod showcontinue;
 pub mod showhome;
 pub mod showlist;
 pub mod showseasonview;
