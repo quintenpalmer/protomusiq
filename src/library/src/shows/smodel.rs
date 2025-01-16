@@ -56,6 +56,12 @@ pub struct ShowKey {
     name: String,
 }
 
+impl ShowKey {
+    pub fn raw_string(&self) -> &String {
+        &self.name
+    }
+}
+
 pub struct Shows {
     shows: BTreeMap<ShowKey, Show>,
 }

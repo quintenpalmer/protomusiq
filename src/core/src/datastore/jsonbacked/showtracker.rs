@@ -42,9 +42,10 @@ impl ShowTracker {
 
     pub fn get_show_most_recently_viewed(
         &self,
-        show_name: &String,
+        show_name: &musiqlibrary::shows::ShowKey,
     ) -> Option<&musiqlibrary::shows::ShowEpisodeKey> {
-        self.cached_most_recently_viewed_shows.get(show_name)
+        self.cached_most_recently_viewed_shows
+            .get(show_name.raw_string())
     }
 
     pub fn get_view_count_for_episode(&self, key: musiqlibrary::shows::ShowEpisodeKey) -> usize {
