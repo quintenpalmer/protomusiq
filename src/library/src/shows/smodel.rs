@@ -128,6 +128,11 @@ impl Show {
     pub fn get_seasons(&self) -> &BTreeMap<u32, ShowSeason> {
         &self.seasons
     }
+
+    pub fn get_first_season(&self) -> &ShowSeason {
+        let (first_key, _) = self.seasons.first_key_value().unwrap();
+        self.seasons.get(first_key).unwrap()
+    }
 }
 
 pub struct ShowSeason {
@@ -147,6 +152,11 @@ impl ShowSeason {
 
     pub fn get_episode(&self, episode_id: &u32) -> Option<&ShowMetadata> {
         self.episodes.get(episode_id)
+    }
+
+    pub fn get_first_episode(&self) -> &ShowMetadata {
+        let (first_key, _) = self.episodes.first_key_value().unwrap();
+        self.episodes.get(first_key).unwrap()
     }
 
     pub fn pretty_display(&self) -> String {

@@ -60,4 +60,20 @@ impl ShowLibrary {
     pub fn get_tracker_mut(&mut self) -> &mut jsonbacked::showtracker::ShowTracker {
         &mut self.tracker
     }
+
+    pub fn get_show_most_recently_viewed(
+        &self,
+        show_key: &musiqlibrary::shows::ShowKey,
+    ) -> musiqlibrary::shows::ShowEpisodeKey {
+        match self.tracker.get_show_most_recently_viewed(show_key) {
+            Some(ret) => ret.clone(),
+            None => self
+                .shows
+                .get_show(show_key)
+                .unwrap()
+                .get_first_season()
+                .get_first_episode()
+                .get_key(),
+        }
+    }
 }
