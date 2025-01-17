@@ -76,4 +76,20 @@ impl ShowLibrary {
                 .get_key(),
         }
     }
+
+    pub fn get_next_show_to_view(
+        &self,
+        show_key: &musiqlibrary::shows::ShowKey,
+    ) -> musiqlibrary::shows::ShowEpisodeKey {
+        let most_recently_viewed = self.get_show_most_recently_viewed(show_key);
+
+        self.next_episode(&most_recently_viewed)
+    }
+
+    fn next_episode(
+        &self,
+        show_key: &musiqlibrary::shows::ShowEpisodeKey,
+    ) -> musiqlibrary::shows::ShowEpisodeKey {
+        self.shows.next_episode(show_key)
+    }
 }

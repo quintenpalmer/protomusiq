@@ -97,6 +97,10 @@ impl Shows {
     pub fn get_show(&self, series_key: &ShowKey) -> Option<&Show> {
         self.shows.get(series_key)
     }
+
+    pub fn next_episode(&self, key: &ShowEpisodeKey) -> ShowEpisodeKey {
+        self.get_show(&key.show).unwrap().next_episode(key)
+    }
 }
 
 pub struct Show {
@@ -135,6 +139,27 @@ impl Show {
     pub fn get_first_season(&self) -> &ShowSeason {
         let (first_key, _) = self.seasons.first_key_value().unwrap();
         self.seasons.get(first_key).unwrap()
+    }
+
+    fn next_episode(&self, key: &ShowEpisodeKey) -> ShowEpisodeKey {
+        match self
+            .get_season(&key.season_number)
+            .unwrap()
+            .maybe_next_episode(key)
+        {
+            Some(v) => v,
+            None => match self.next_season(key) {
+                Some(season) => season.get_first_episode().get_key(),
+                None => key.clone(),
+            },
+        }
+    }
+
+    fn next_season(&self, key: &ShowEpisodeKey) -> Option<&ShowSeason> {
+        self.seasons
+            .range((key.episode_sort + 1)..)
+            .next()
+            .map(|x| x.1)
     }
 }
 
@@ -180,5 +205,12 @@ impl ShowSeason {
             ),
             None => (),
         }
+    }
+
+    fn maybe_next_episode(&self, key: &ShowEpisodeKey) -> Option<ShowEpisodeKey> {
+        self.episodes
+            .range((key.episode_sort + 1)..)
+            .next()
+            .map(|x| x.1.get_key())
     }
 }

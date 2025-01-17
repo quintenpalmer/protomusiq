@@ -19,7 +19,7 @@ pub fn show_continue_watching<'a>(
     match show_library_state.get_shows_if_exists() {
         Some(show_library) => {
             for (show_key, show) in show_library.get_structured_shows().get_shows().iter() {
-                let episode_key = show_library.get_show_most_recently_viewed(show_key);
+                let episode_key = show_library.get_next_show_to_view(show_key);
 
                 let episode = show_library
                     .get_structured_shows()
