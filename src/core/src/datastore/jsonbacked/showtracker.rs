@@ -21,17 +21,10 @@ impl ShowTracker {
                 vec!["data", "showtracker", "timestamps.json"],
             );
 
-        let mut cached_most_recently_viewed_shows = BTreeMap::new();
-
-        for (episode_key, _timestamp) in tracked_show_views_raw.views.iter() {
-            let found_episode = cached_most_recently_viewed_shows
-                .entry(episode_key.show.clone())
-                .or_insert(episode_key.clone());
-
-            *found_episode = cmp::max(found_episode.clone(), episode_key.clone());
-        }
-
         let tracked_show_views = tracked_show_views_raw.to_btree_map();
+
+        let cached_most_recently_viewed_shows =
+            ShowTracker::compute_cached_info(&tracked_show_views);
 
         ShowTracker {
             show_tracker_json_file_path,
@@ -69,6 +62,9 @@ impl ShowTracker {
             .or_insert(Vec::new())
             .push(view_time);
 
+        self.cached_most_recently_viewed_shows =
+            ShowTracker::compute_cached_info(&self.tracked_show_views);
+
         let raw_tracker = RawShowTrackedPayload::from_btree_map(&self.tracked_show_views);
 
         serde_json::to_writer(
@@ -76,6 +72,22 @@ impl ShowTracker {
             &raw_tracker,
         )
         .unwrap();
+    }
+
+    fn compute_cached_info(
+        tracked_show_views: &BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
+    ) -> BTreeMap<String, musiqlibrary::shows::ShowEpisodeKey> {
+        let mut cached_most_recently_viewed_shows = BTreeMap::new();
+
+        for (episode_key, _timestamp) in tracked_show_views.iter() {
+            let found_episode = cached_most_recently_viewed_shows
+                .entry(episode_key.show.clone())
+                .or_insert(episode_key.clone());
+
+            *found_episode = cmp::max(found_episode.clone(), episode_key.clone());
+        }
+
+        cached_most_recently_viewed_shows
     }
 }
 
