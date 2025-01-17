@@ -9,7 +9,8 @@ use crate::datastore::jsonbacked::common;
 pub struct ShowTracker {
     show_tracker_json_file_path: path::PathBuf,
     tracked_show_views: BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
-    cached_most_recently_viewed_shows: BTreeMap<String, musiqlibrary::shows::ShowEpisodeKey>,
+    cached_most_recently_viewed_shows:
+        BTreeMap<musiqlibrary::shows::ShowKey, musiqlibrary::shows::ShowEpisodeKey>,
 }
 
 impl ShowTracker {
@@ -37,8 +38,7 @@ impl ShowTracker {
         &self,
         show_name: &musiqlibrary::shows::ShowKey,
     ) -> Option<&musiqlibrary::shows::ShowEpisodeKey> {
-        self.cached_most_recently_viewed_shows
-            .get(show_name.raw_string())
+        self.cached_most_recently_viewed_shows.get(show_name)
     }
 
     pub fn get_view_count_for_episode(&self, key: musiqlibrary::shows::ShowEpisodeKey) -> usize {
@@ -76,7 +76,7 @@ impl ShowTracker {
 
     fn compute_cached_info(
         tracked_show_views: &BTreeMap<musiqlibrary::shows::ShowEpisodeKey, Vec<DateTime<Local>>>,
-    ) -> BTreeMap<String, musiqlibrary::shows::ShowEpisodeKey> {
+    ) -> BTreeMap<musiqlibrary::shows::ShowKey, musiqlibrary::shows::ShowEpisodeKey> {
         let mut cached_most_recently_viewed_shows = BTreeMap::new();
 
         for (episode_key, _timestamp) in tracked_show_views.iter() {

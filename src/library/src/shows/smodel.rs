@@ -12,7 +12,7 @@ pub enum Error {
 
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Deserialize, Serialize)]
 pub struct ShowEpisodeKey {
-    pub show: String,
+    pub show: ShowKey,
     pub season_number: u32,
     pub episode_sort: u32,
 }
@@ -44,14 +44,17 @@ impl ShowMetadata {
 
     pub fn get_key(&self) -> ShowEpisodeKey {
         ShowEpisodeKey {
-            show: self.show.clone(),
+            show: ShowKey {
+                name: self.show.clone(),
+            },
             season_number: self.season_number,
             episode_sort: self.episode_sort,
         }
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Deserialize, Serialize)]
+#[serde(transparent)]
 pub struct ShowKey {
     name: String,
 }
