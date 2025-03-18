@@ -98,7 +98,10 @@ pub fn find_movies_in_dir<P: AsRef<path::Path>>(movie_path: P) -> Vec<MovieMetad
 /// Recursively find the paths for all movie files in a directory
 pub fn find_movie_paths(current_path: path::PathBuf) -> Vec<path::PathBuf> {
     if current_path.is_file() {
-        let fileext = current_path.extension().unwrap().to_str().unwrap();
+        let fileext = match current_path.extension() {
+            Some(v) => v.to_str().unwrap(),
+            None => return Vec::new(),
+        };
 
         return match fileext {
             "m4v" | "mp4" => vec![current_path.clone()],
