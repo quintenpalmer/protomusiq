@@ -87,15 +87,11 @@ pub fn process_cache_and_get_movie_art(
                             "copying original movie art to cache dir for {:?}",
                             local_dir
                         );
-                        let movie_cover_bytes = fs::read(full_movie_cover_path.clone()).unwrap();
-                        fs::write(
-                            cached_orig_movie_art_path.clone(),
-                            movie_cover_bytes.clone(),
-                        )
-                        .unwrap();
+                        let movie_cover_bytes = fs::read(&full_movie_cover_path).unwrap();
+                        fs::write(cached_orig_movie_art_path, movie_cover_bytes).unwrap();
                     }
 
-                    let orig_movie_art = match ImageReader::open(full_movie_cover_path.clone())
+                    let orig_movie_art = match ImageReader::open(&full_movie_cover_path)
                         .unwrap()
                         .decode()
                     {
@@ -103,9 +99,7 @@ pub fn process_cache_and_get_movie_art(
                         Err(e) => {
                             println!("err: {:?}", e);
                             ImageReader::with_format(
-                                io::BufReader::new(
-                                    fs::File::open(full_movie_cover_path.clone()).unwrap(),
-                                ),
+                                io::BufReader::new(fs::File::open(&full_movie_cover_path).unwrap()),
                                 image::ImageFormat::Jpeg,
                             )
                             .decode()
@@ -127,9 +121,7 @@ pub fn process_cache_and_get_movie_art(
                             musiqcore::model::DVD_LARGE_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
-                        large_movie_art
-                            .save(cached_large_movie_art_path.clone())
-                            .unwrap();
+                        large_movie_art.save(&cached_large_movie_art_path).unwrap();
                     }
 
                     if !localfs::check_exists(&cached_semilarge_movie_art_path) {
@@ -145,7 +137,7 @@ pub fn process_cache_and_get_movie_art(
                             image::imageops::FilterType::Lanczos3,
                         );
                         semilarge_movie_art
-                            .save(cached_semilarge_movie_art_path.clone())
+                            .save(&cached_semilarge_movie_art_path)
                             .unwrap();
                     }
 
@@ -162,7 +154,7 @@ pub fn process_cache_and_get_movie_art(
                             image::imageops::FilterType::Lanczos3,
                         );
                         regular_movie_art
-                            .save(cached_regular_movie_art_path.clone())
+                            .save(&cached_regular_movie_art_path)
                             .unwrap();
                     }
 
@@ -178,9 +170,7 @@ pub fn process_cache_and_get_movie_art(
                             musiqcore::model::DVD_SMALL_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
-                        small_movie_art
-                            .save(cached_small_movie_art_path.clone())
-                            .unwrap();
+                        small_movie_art.save(&cached_small_movie_art_path).unwrap();
                     }
 
                     if !localfs::check_exists(&cached_micro_movie_art_path) {
@@ -195,9 +185,7 @@ pub fn process_cache_and_get_movie_art(
                             musiqcore::model::DVD_MICRO_ICON_HEIGHT as u32,
                             image::imageops::FilterType::Lanczos3,
                         );
-                        micro_movie_art
-                            .save(cached_micro_movie_art_path.clone())
-                            .unwrap();
+                        micro_movie_art.save(&cached_micro_movie_art_path).unwrap();
                     }
                 }
             }
