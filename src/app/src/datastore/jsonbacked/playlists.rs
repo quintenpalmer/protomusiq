@@ -335,7 +335,7 @@ impl InnerPlaylistData {
             playlists: raw
                 .playlists
                 .into_iter()
-                .map(|value| (value.id, value.clone()))
+                .map(|value| (value.id, value))
                 .collect(),
         }
     }

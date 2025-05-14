@@ -47,8 +47,7 @@ impl datastore::traits::LiveHistoryWriteDS for ForkWriter {
     ) {
         self.json
             .increment_tracks_with_dates(tracks_with_dates.clone());
-        self.sqlite
-            .increment_tracks_with_dates(tracks_with_dates.clone());
+        self.sqlite.increment_tracks_with_dates(tracks_with_dates);
     }
 }
 
