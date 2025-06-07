@@ -48,6 +48,23 @@ impl VideoLibrary {
             movie_id_to_path,
         }
     }
+
+    pub fn from_metadata_list(metadata: Vec<video::MovieMetadata>) -> Self {
+        let mut movie_btree = BTreeMap::new();
+        let mut movie_id_to_path = BTreeMap::new();
+
+        for movie in metadata.into_iter() {
+            let rel_path = MovieRelPath::from_metadata(&movie);
+            let id = movie.get_id();
+            movie_btree.insert(rel_path.clone(), movie);
+            movie_id_to_path.insert(id, rel_path);
+        }
+
+        VideoLibrary {
+            movies: movie_btree,
+            movie_id_to_path,
+        }
+    }
 }
 
 pub struct VideoLibraryState {
