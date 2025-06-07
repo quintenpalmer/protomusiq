@@ -81,7 +81,7 @@ impl MusicBrainzCacheInterface {
         );
 
         match serde_json::from_reader(io::BufReader::new(
-            fs::File::open(this_artist_cache_file.clone()).ok()?,
+            fs::File::open(&this_artist_cache_file).ok()?,
         )) {
             Ok(v) => v,
             Err(e) => {
@@ -103,7 +103,7 @@ impl MusicBrainzCacheInterface {
         );
 
         serde_json::to_writer_pretty(
-            io::BufWriter::new(fs::File::create(this_artist_cache_file.clone()).unwrap()),
+            io::BufWriter::new(fs::File::create(&this_artist_cache_file).unwrap()),
             artist,
         )
         .unwrap();
@@ -119,7 +119,7 @@ impl MusicBrainzCacheInterface {
         );
 
         serde_json::from_reader(io::BufReader::new(
-            fs::File::open(this_artist_cache_file.clone()).ok()?,
+            fs::File::open(&this_artist_cache_file).ok()?,
         ))
         .ok()
     }
@@ -136,7 +136,7 @@ impl MusicBrainzCacheInterface {
         );
 
         serde_json::to_writer_pretty(
-            io::BufWriter::new(fs::File::create(this_artist_cache_file.clone()).unwrap()),
+            io::BufWriter::new(fs::File::create(&this_artist_cache_file).unwrap()),
             artist,
         )
         .unwrap();

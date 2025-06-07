@@ -66,7 +66,7 @@ impl FilesystemCachedAlbumArt {
                     album.album_info.album_id,
                 );
 
-                let local_path = album.album_info.relative_path.clone().join("cover.jpg");
+                let local_path = album.album_info.relative_path.join("cover.jpg");
                 let local_dir = local_path.parent().unwrap();
                 let cache_album_dir = album_cache_path.join(local_dir);
                 localfs::confirm_dir(&cache_album_dir).unwrap();
@@ -114,7 +114,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
         album_size: model::AlbumSizeWithOrig,
     ) -> Vec<u8> {
         match self.get_cache_album_path(key, album_size) {
-            Some(full_album_size_path) => fs::read(full_album_size_path.clone()).unwrap(),
+            Some(full_album_size_path) => fs::read(&full_album_size_path).unwrap(),
             None => panic!("why didn't i know about this {:?}", key),
         }
     }
@@ -138,7 +138,7 @@ impl CachedAlbumImageInfo for FilesystemCachedAlbumArt {
     ) {
         match self.get_cache_album_path(key, album_size) {
             Some(full_album_size_path) => {
-                fs::write(full_album_size_path.clone(), bytes).unwrap();
+                fs::write(&full_album_size_path, bytes).unwrap();
             }
             None => panic!("why didn't i know about this {:?}", key),
         }
@@ -201,8 +201,8 @@ pub fn process_cache_and_get_album_art(
                 let has_orig = cached_album_art_checker
                     .has_art_for_size(&key, model::AlbumSizeWithOrig::Original);
 
-                let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");
-                let local_path = album.album_info.relative_path.clone().join("cover.jpg");
+                let full_album_cover_path = album.album_info.path.join("cover.jpg");
+                let local_path = album.album_info.relative_path.join("cover.jpg");
 
                 if has_micro
                     && has_mini
@@ -224,29 +224,25 @@ pub fn process_cache_and_get_album_art(
                             "copying original album art to cache dir for {:?}",
                             local_path
                         );
-                        let album_cover_bytes = fs::read(full_album_cover_path.clone()).unwrap();
+                        let album_cover_bytes = fs::read(&full_album_cover_path).unwrap();
 
                         cached_album_art_checker.write_art_for_size(
                             &key,
                             model::AlbumSizeWithOrig::Original,
-                            album_cover_bytes.clone(),
+                            album_cover_bytes,
                         );
                     }
 
-                    let orig_album_art = match ImageReader::open(full_album_cover_path.clone())
-                        .unwrap()
-                        .decode()
-                    {
-                        Ok(v) => v,
-                        Err(_e) => ImageReader::with_format(
-                            io::BufReader::new(
-                                fs::File::open(full_album_cover_path.clone()).unwrap(),
-                            ),
-                            image::ImageFormat::Png,
-                        )
-                        .decode()
-                        .unwrap(),
-                    };
+                    let orig_album_art =
+                        match ImageReader::open(&full_album_cover_path).unwrap().decode() {
+                            Ok(v) => v,
+                            Err(_e) => ImageReader::with_format(
+                                io::BufReader::new(fs::File::open(&full_album_cover_path).unwrap()),
+                                image::ImageFormat::Png,
+                            )
+                            .decode()
+                            .unwrap(),
+                        };
 
                     if !has_large {
                         println!(
@@ -489,8 +485,8 @@ pub fn old_process_cache_and_get_album_art(
                 album.album_info.album_id,
             );
 
-            let full_album_cover_path = album.album_info.path.clone().join("cover.jpg");
-            let local_path = album.album_info.relative_path.clone().join("cover.jpg");
+            let full_album_cover_path = album.album_info.path.join("cover.jpg");
+            let local_path = album.album_info.relative_path.join("cover.jpg");
             let local_dir = local_path.parent().unwrap();
             let cache_album_dir = album_cache_path.join(local_dir);
             localfs::confirm_dir(&cache_album_dir).unwrap();
@@ -522,26 +518,20 @@ pub fn old_process_cache_and_get_album_art(
                         "copying original album art to cache dir for {:?}",
                         local_path
                     );
-                    let album_cover_bytes = fs::read(full_album_cover_path.clone()).unwrap();
-                    fs::write(
-                        cached_orig_album_art_path.clone(),
-                        album_cover_bytes.clone(),
-                    )
-                    .unwrap();
+                    let album_cover_bytes = fs::read(&full_album_cover_path).unwrap();
+                    fs::write(&cached_orig_album_art_path, album_cover_bytes.clone()).unwrap();
                 }
 
-                let orig_album_art = match ImageReader::open(full_album_cover_path.clone())
-                    .unwrap()
-                    .decode()
-                {
-                    Ok(v) => v,
-                    Err(_e) => ImageReader::with_format(
-                        io::BufReader::new(fs::File::open(full_album_cover_path.clone()).unwrap()),
-                        image::ImageFormat::Png,
-                    )
-                    .decode()
-                    .unwrap(),
-                };
+                let orig_album_art =
+                    match ImageReader::open(&full_album_cover_path).unwrap().decode() {
+                        Ok(v) => v,
+                        Err(_e) => ImageReader::with_format(
+                            io::BufReader::new(fs::File::open(&full_album_cover_path).unwrap()),
+                            image::ImageFormat::Png,
+                        )
+                        .decode()
+                        .unwrap(),
+                    };
 
                 if !localfs::check_exists(&cached_large_album_art_path) {
                     println!(
@@ -554,9 +544,7 @@ pub fn old_process_cache_and_get_album_art(
                         model::LARGE_ICON_HEIGHT as u32,
                         image::imageops::FilterType::Lanczos3,
                     );
-                    large_album_art
-                        .save(cached_large_album_art_path.clone())
-                        .unwrap();
+                    large_album_art.save(&cached_large_album_art_path).unwrap();
                 }
 
                 if !localfs::check_exists(&cached_regular_album_art_path) {
@@ -571,7 +559,7 @@ pub fn old_process_cache_and_get_album_art(
                         image::imageops::FilterType::Lanczos3,
                     );
                     regular_album_art
-                        .save(cached_regular_album_art_path.clone())
+                        .save(&cached_regular_album_art_path)
                         .unwrap();
                 }
 
@@ -586,9 +574,7 @@ pub fn old_process_cache_and_get_album_art(
                         model::SMALL_ICON_HEIGHT as u32,
                         image::imageops::FilterType::Lanczos3,
                     );
-                    small_album_art
-                        .save(cached_small_album_art_path.clone())
-                        .unwrap();
+                    small_album_art.save(&cached_small_album_art_path).unwrap();
                 }
 
                 if !localfs::check_exists(&cached_centi_album_art_path) {
@@ -602,9 +588,7 @@ pub fn old_process_cache_and_get_album_art(
                         model::CENTI_ICON_HEIGHT as u32,
                         image::imageops::FilterType::Lanczos3,
                     );
-                    centi_album_art
-                        .save(cached_centi_album_art_path.clone())
-                        .unwrap();
+                    centi_album_art.save(&cached_centi_album_art_path).unwrap();
                 }
 
                 if !localfs::check_exists(&cached_mini_album_art_path) {
@@ -618,9 +602,7 @@ pub fn old_process_cache_and_get_album_art(
                         model::MINI_ICON_HEIGHT as u32,
                         image::imageops::FilterType::Lanczos3,
                     );
-                    mini_album_art
-                        .save(cached_mini_album_art_path.clone())
-                        .unwrap();
+                    mini_album_art.save(&cached_mini_album_art_path).unwrap();
                 }
 
                 if !localfs::check_exists(&cached_micro_album_art_path) {
@@ -634,9 +616,7 @@ pub fn old_process_cache_and_get_album_art(
                         model::MICRO_ICON_HEIGHT as u32,
                         image::imageops::FilterType::Lanczos3,
                     );
-                    micro_album_art
-                        .save(cached_micro_album_art_path.clone())
-                        .unwrap();
+                    micro_album_art.save(&cached_micro_album_art_path).unwrap();
                 }
             }
 

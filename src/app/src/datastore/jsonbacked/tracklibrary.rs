@@ -123,7 +123,7 @@ pub fn load_library_from_cache_and_scan(
     match load_mode {
         InnerLoadMode::NoCache => {
             println!("loading with no cache");
-            musiqlibrary::RawLibrary::new(lib_path.clone()).unwrap()
+            musiqlibrary::RawLibrary::new(&lib_path).unwrap()
         }
         InnerLoadMode::Cached(mode) => {
             println!("loading with a cache");
@@ -146,8 +146,7 @@ pub fn load_library_from_cache_and_scan(
                         }
                         true => {
                             println!("needs tracks migrated");
-                            let raw_library =
-                                musiqlibrary::RawLibrary::new(lib_path.clone()).unwrap();
+                            let raw_library = musiqlibrary::RawLibrary::new(&lib_path).unwrap();
 
                             let payload = CacheMetadataPayload::from_raw_library(&raw_library);
 
@@ -187,8 +186,7 @@ pub fn load_library_from_cache_and_scan(
                 cached_track_file_path_info.len()
             );
 
-            let storage_track_file_paths =
-                musiqlibrary::find_only_files(&lib_path.clone()).unwrap();
+            let storage_track_file_paths = musiqlibrary::find_only_files(&lib_path).unwrap();
 
             logger.print_elapsed("scanning library for files");
 
@@ -207,7 +205,7 @@ pub fn load_library_from_cache_and_scan(
             let organized = if left.len() > 0 || right.len() > 0 {
                 println!("found a diff so just loading entire library");
 
-                let ret = musiqlibrary::RawLibrary::new(lib_path.clone()).unwrap();
+                let ret = musiqlibrary::RawLibrary::new(&lib_path).unwrap();
 
                 logger.print_elapsed("loading the whole library with cache mismatch");
 
@@ -218,7 +216,7 @@ pub fn load_library_from_cache_and_scan(
                 logger.print_elapsed("deciding to load from metadata");
 
                 let ret = musiqlibrary::RawLibrary::from_track_list(
-                    Some(&lib_path.clone()),
+                    Some(&lib_path),
                     metadata_payload.get_full_track_list(),
                 )
                 .unwrap();

@@ -35,7 +35,8 @@ pub fn initialize_everything() -> state::App {
         jsonbacked::tracklibrary::load_library_from_cache_and_scan(&config_state, &loader);
     logger.print_elapsed("loading library (with cache)");
 
-    let video_library = model::VideoLibrary::new(&config_state.movie_path);
+    let video_library =
+        jsonbacked::movielibrary::load_library_from_cache_and_scan(&config_state, &loader);
     logger.print_elapsed("loading video library");
 
     let image_mode = musiqcore::model::gl::ImageMode::ExactMatch;

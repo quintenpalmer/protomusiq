@@ -7,7 +7,7 @@ edition = "2021"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 claxon = "0.4.3"
-id3 = "1.0.1"
+id3 = { version = "1.0.1", default-features = false }
 mp3-duration = "0.1.10"
 mp4ameta = "0.11.0"
 chrono = { version = "0.4", features = ["serde"] }
