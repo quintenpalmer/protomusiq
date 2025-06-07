@@ -3,7 +3,7 @@ use std::{fs, io, path, str, time};
 
 use chrono::NaiveDate;
 use mp4;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json;
 
 /// Possible Errors from Movie Searching/Decoding
@@ -14,7 +14,7 @@ pub enum Error {
 }
 
 /// Parsed and Normalized Movie Data
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MovieMetadata {
     pub title: String,
     pub path: path::PathBuf,
@@ -24,7 +24,7 @@ pub struct MovieMetadata {
     pub extra: Option<ExtraMetadata>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExtraMetadata {
     #[serde(with = "slash_date")]
     pub release: NaiveDate,
@@ -37,7 +37,7 @@ pub struct ExtraMetadata {
     pub series: Option<SeriesInfo>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SeriesInfo {
     pub index: u32,
     pub name: String,
@@ -232,7 +232,7 @@ fn find_extra_metadata(movie_path: &path::PathBuf) -> Option<ExtraMetadata> {
 
 mod slash_date {
     use chrono::NaiveDate;
-    use serde::{self, Deserialize, Deserializer};
+    use serde::{self, Deserialize, Deserializer, Serializer};
 
     const FORMAT: &str = "%Y/%m/%d";
 
@@ -243,5 +243,13 @@ mod slash_date {
         let s = String::deserialize(deserializer)?;
         let date = NaiveDate::parse_from_str(&s, FORMAT).map_err(serde::de::Error::custom)?;
         Ok(date)
+    }
+
+    pub fn serialize<'s, S>(naive_date: &'s NaiveDate, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let date = NaiveDate::format(&naive_date, FORMAT).to_string();
+        serializer.serialize_str(date.as_str())
     }
 }
